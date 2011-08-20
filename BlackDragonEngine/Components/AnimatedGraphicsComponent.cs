@@ -17,8 +17,8 @@ namespace BlackDragonEngine.Components
         protected bool flipped;
         protected string currentAnimation;
         protected string receivedAnimation;
-        protected float drawDepth = .91f;
-
+        new protected float drawDepth = .91f;
+               
         public override void Draw(GameObject obj, SpriteBatch spriteBatch)
         {
             SpriteEffects effects = SpriteEffects.None;
@@ -27,7 +27,7 @@ namespace BlackDragonEngine.Components
 
             spriteBatch.Draw(
                 animations[currentAnimation].Texture,
-                ShortcutProvider.Vector2Point(obj.Position),
+                obj.ScreenPosition,
                 animations[currentAnimation].FrameRectangle,
                 Color.White,
                 0,

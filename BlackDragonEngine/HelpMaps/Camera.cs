@@ -74,8 +74,8 @@ namespace BlackDragonEngine.Helpers
         }
 
         public static void Update()
-        {
-            Position = new Vector2(VariableProvider.Viewport.X, VariableProvider.Viewport.Y);            
+        {            
+            VariableProvider.Viewport.Location = new xTile.Dimensions.Location((int)position.X, (int)position.Y);
         }
         #endregion
     }

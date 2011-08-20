@@ -11,24 +11,43 @@ using System.Security.Cryptography;
 
 namespace BlackDragonEngine.Managers
 {
-    public static class SaveManager
-    {    
-        public static readonly string SaveFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\Project Black Dragon\saves\";        
+    public static class SaveManager<T>
+    {      
+        public static T CurrentSaveState;
+        public static readonly string SaveFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\DareToEscape\saves\";
+        public static EventHelper SaveHelper = new EventHelper();
 
-        public static void SaveSaveState<T>(T state, string saveSlot)
-        {            
-            FileStream fs = new FileStream(SaveFilePath + GetMD5Hash(saveSlot) + ".svf", FileMode.Create);
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(fs, state);
-            fs.Close();            
+        public static string CurrentSaveFile
+        {
+            get 
+            {
+                return SaveFilePath + GetMD5Hash(VariableProvider.SaveSlot) + ".svf";
+            }
         }
 
-        public static void LoadSaveState<T>(ref T state, string saveSlot)
+        public static void Save()
         {
+            SaveHelper.SaveHelp();
+            Save(VariableProvider.SaveSlot);                       
+        }
+
+        public static void Save(string saveSlot)
+        {            
+            if (!Directory.Exists(SaveFilePath))
+                Directory.CreateDirectory(SaveFilePath);
+            FileStream fs = new FileStream(SaveFilePath + GetMD5Hash(saveSlot) + ".svf", FileMode.Create);
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(fs, CurrentSaveState);
+            fs.Close(); 
+        }
+
+        public static void Load(string saveSlot)
+        {            
             FileStream fs = new FileStream(SaveFilePath + GetMD5Hash(saveSlot) + ".svf", FileMode.Open);
-            BinaryFormatter formatter = new BinaryFormatter();            
-            state = (T)formatter.Deserialize(fs);
-            fs.Close();            
+            BinaryFormatter formatter = new BinaryFormatter();
+            CurrentSaveState = (T)formatter.Deserialize(fs);
+            fs.Close();
+            SaveHelper.LoadHelp();
         }        
 
         public static string GetMD5Hash(string TextToHash)

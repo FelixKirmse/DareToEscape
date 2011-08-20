@@ -14,6 +14,9 @@ namespace BlackDragonEngine.Menus
         public Vector2 ItemPosition { get; set; }
         public bool IsSelected { get; set; }
 
+        public Color SelectedColor { get; set; }
+        public Color UnSelectedcolor { get; set; }
+
         private Color itemColor;
         private SpriteFont font;
 
@@ -22,6 +25,9 @@ namespace BlackDragonEngine.Menus
             ItemPosition = itemPosition;
             IsSelected = isSelected;
             this.font = font;
+
+            SelectedColor = Color.Red;
+            UnSelectedcolor = Color.White;
         }
 
         public MenuItem(string itemName, Vector2 itemPosition)
@@ -43,14 +49,21 @@ namespace BlackDragonEngine.Menus
             : this(itemName, Vector2.Zero, isSelected, FontProvider.GetFont(fontName))
         { 
         }
+
+        public MenuItem(string itemName, string fontName, bool isSelected, Color selectedColor, Color unSelectedColor)
+            : this(itemName, Vector2.Zero, isSelected, FontProvider.GetFont(fontName))
+        {
+            SelectedColor = selectedColor;
+            UnSelectedcolor = unSelectedColor;
+        }
         
 
         public void Update()
         {
             if (IsSelected)
-                itemColor = Color.Red;
+                itemColor = SelectedColor;
             else
-                itemColor = Color.White;
+                itemColor = UnSelectedcolor;
         }
 
         public void Draw(SpriteBatch spriteBatch)

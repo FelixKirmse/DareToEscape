@@ -23,10 +23,11 @@ namespace BlackDragonEngine.Controller
                 menu.PreviousMenuItem();
             }
 
-            menu.ResolveMouseSelection();            
+            if(menu.EnableMouseSelection)
+                menu.ResolveMouseSelection();            
 
-            if (InputMapper.STRICTACTION || ShortcutProvider.LeftButtonClickedNowButNotLastFrame())
-            {
+            if (InputMapper.STRICTACTION || (menu.EnableMouseSelection || ShortcutProvider.LeftButtonClickedNowButNotLastFrame()))
+            {                
                 menu.SelectMenuItem();
             }
         }

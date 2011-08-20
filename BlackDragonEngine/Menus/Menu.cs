@@ -15,6 +15,7 @@ namespace BlackDragonEngine.Menus
         protected List<MenuItem> menuItems = new List<MenuItem>();
         protected List<MenuLabel> menuLabels = new List<MenuLabel>();
         protected string fontName = "Mono21";
+        public bool EnableMouseSelection = true;
 
         public virtual void Update()
         {
@@ -113,6 +114,21 @@ namespace BlackDragonEngine.Menus
                     selectedItem = menuItem.ItemName;
                     break;
                 }
+            }
+        }
+
+        protected string SelectedItem
+        {
+            get
+            {
+                foreach (MenuItem menuItem in menuItems)
+                {
+                    if (menuItem.IsSelected)
+                    {
+                        return menuItem.ItemName;
+                    }
+                }
+                return null;
             }
         }
 

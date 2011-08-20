@@ -43,6 +43,7 @@ namespace BlackDragonEngine.Managers
 
         public static void Draw()
         {
+            CurrentMap.Update(VariableProvider.GameTime.ElapsedGameTime.Milliseconds);
             CurrentMap.Draw(VariableProvider.DisplayDevice, VariableProvider.Viewport);
         }
 

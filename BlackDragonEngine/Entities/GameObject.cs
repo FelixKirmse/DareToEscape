@@ -5,6 +5,8 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using BlackDragonEngine.Components;
+using BlackDragonEngine.Helpers;
+using BlackDragonEngine.Providers;
 
 namespace BlackDragonEngine.Entities
 {
@@ -15,6 +17,14 @@ namespace BlackDragonEngine.Entities
         public Rectangle PublicCollisionRectangle = new Rectangle(2, 14, 12, 12);       
 
         private List<Component> components = new List<Component>();
+
+        public Vector2 ScreenPosition
+        {
+            get 
+            {
+                return ShortcutProvider.Vector2Point(Camera.WorldToScreen(Position));
+            }
+        }
 
         public GameObject(List<Component> components)
         {
