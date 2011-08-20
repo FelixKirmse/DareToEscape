@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DareToEscape", "DareToEscape\DareToEscape\DareToEscape.csproj", "{7735B67A-3554-482E-BDB1-2A446B35C2AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DareToEscapeContent", "DareToEscape\DareToEscapeContent\DareToEscapeContent.contentproj", "{966EEE07-C1AD-4486-A73C-5CF3570C31D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackDragonEngine", "BlackDragonEngine\BlackDragonEngine.csproj", "{5540C64E-2DAA-4B51-A628-0328C36A8B21}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xTile", "xTile", "{C68D5880-E966-4B65-9751-7BD2650A4047}"
+	ProjectSection(SolutionItems) = preProject
+		xTile\xTile.dll = xTile\xTile.dll
+		xTile\xTile.Pipeline.dll = xTile\xTile.Pipeline.dll
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7735B67A-3554-482E-BDB1-2A446B35C2AB}.Debug|x86.ActiveCfg = Debug|x86
+		{7735B67A-3554-482E-BDB1-2A446B35C2AB}.Debug|x86.Build.0 = Debug|x86
+		{7735B67A-3554-482E-BDB1-2A446B35C2AB}.Release|x86.ActiveCfg = Release|x86
+		{7735B67A-3554-482E-BDB1-2A446B35C2AB}.Release|x86.Build.0 = Release|x86
+		{966EEE07-C1AD-4486-A73C-5CF3570C31D6}.Debug|x86.ActiveCfg = Debug|x86
+		{966EEE07-C1AD-4486-A73C-5CF3570C31D6}.Release|x86.ActiveCfg = Release|x86
+		{5540C64E-2DAA-4B51-A628-0328C36A8B21}.Debug|x86.ActiveCfg = Debug|x86
+		{5540C64E-2DAA-4B51-A628-0328C36A8B21}.Debug|x86.Build.0 = Debug|x86
+		{5540C64E-2DAA-4B51-A628-0328C36A8B21}.Release|x86.ActiveCfg = Release|x86
+		{5540C64E-2DAA-4B51-A628-0328C36A8B21}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
