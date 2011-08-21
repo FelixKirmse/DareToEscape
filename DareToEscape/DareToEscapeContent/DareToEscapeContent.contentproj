@@ -129,8 +129,31 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="textures\entities\checkpoint.png">
-      <Name>checkpoint</Name>
+    <Compile Include="textures\animations\entities\checkpoint\activated.png">
+      <Name>activated</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="textures\animations\entities\checkpoint\deactivated.png">
+      <Name>deactivated</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="textures\animations\entities\exit\idle.png">
+      <Name>idle</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="textures\entities\key.png">
+      <Name>key</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="textures\entities\lock.png">
+      <Name>lock</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

@@ -13,8 +13,36 @@ namespace BlackDragonEngine.Entities
     public class GameObject
     {
         public Vector2 Velocity;
-        public Vector2 Position;
-        public Rectangle PublicCollisionRectangle = new Rectangle(2, 14, 12, 12);       
+        private Vector2 position;
+        private Rectangle collisionRectangle;
+
+        public Vector2 Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
+        
+        public Rectangle CollisionRectangle 
+        {
+            get 
+            {
+                return new Rectangle((int)Position.X + collisionRectangle.X, (int)Position.Y + collisionRectangle.Y, collisionRectangle.Width, collisionRectangle.Height);
+            }
+            set { collisionRectangle = value; }             
+        }
+
+        public Vector2 CollisionCenter
+        {
+            get 
+            {
+                return new Vector2((CollisionRectangle.Right + CollisionRectangle.Left) / 2, (CollisionRectangle.Bottom + CollisionRectangle.Top) / 2);
+            }
+        }
+
+        public Rectangle GetCustomCollisionRectangle(Vector2 customPosition)
+        {
+            return new Rectangle((int)customPosition.X + collisionRectangle.X, (int)customPosition.Y + collisionRectangle.Y, collisionRectangle.Width, collisionRectangle.Height);
+        }
 
         private List<Component> components = new List<Component>();
 
@@ -24,6 +52,10 @@ namespace BlackDragonEngine.Entities
             {
                 return ShortcutProvider.Vector2Point(Camera.WorldToScreen(Position));
             }
+        }
+
+        public GameObject()
+        { 
         }
 
         public GameObject(List<Component> components)
@@ -56,19 +88,6 @@ namespace BlackDragonEngine.Entities
             {
                 component.Receive<T>(Message, obj);
             }
-        }
-
-        public Rectangle GetCollisionRectangle(Rectangle collisionRectangle)
-        {
-            if (PublicCollisionRectangle != collisionRectangle)
-                PublicCollisionRectangle = collisionRectangle;
-            return new Rectangle((int)Position.X + collisionRectangle.X, (int)Position.Y + collisionRectangle.Y, collisionRectangle.Width, collisionRectangle.Height);
-        }
-
-        public Vector2 GetCollisionCenter(Rectangle collisionRectangle)
-        {
-            Rectangle CollisionRectangle = GetCollisionRectangle(collisionRectangle);
-            return new Vector2((CollisionRectangle.Right + CollisionRectangle.Left) / 2, (CollisionRectangle.Bottom + CollisionRectangle.Top) / 2);
-        }
+        }        
     }
 }

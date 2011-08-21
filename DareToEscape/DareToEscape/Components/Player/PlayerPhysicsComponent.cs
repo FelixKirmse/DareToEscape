@@ -22,20 +22,41 @@ namespace DareToEscape.Components.Player
         private bool jumpThroughCheck = false;
         private bool inWater = false;
 
+        private bool setRectangle = true;
+
+        private bool noLeft = false;
+        private bool noRight = false;       
+
         public override void Update(GameObject obj)
         {
+            Vector2 wantedPosition = obj.Position;
+
+            if (setRectangle)
+            {
+                obj.CollisionRectangle = collisionRectangle;
+                setRectangle = false;
+            }
+
             Vector2 bottomLeftCorner, bottomRightCorner, topLeftCorner, topRightCorner, middleLeft, middleRight;            
 
             if (horiz != 0)
             {
+                obj.Send<bool>("GRAPHICS_SET_ONGROUND", onGround);
+                if ((horiz > 0 && noRight) || (horiz < 0 && noLeft))
+                {
+                    noRight = false;
+                    noLeft = false;
+                    obj.Send("GRAPHICS_PLAYANIMATION", "Idle");
+                    return;
+                }
                 for (int i = 0; i < Math.Abs(horiz); ++i)
                 {
                     if (inWater)
-                        obj.Position.X += (horiz / Math.Abs(horiz)) / 2;
+                        wantedPosition.X += (horiz / Math.Abs(horiz)) / 2;
                     else
-                        obj.Position.X += horiz / Math.Abs(horiz);
+                        wantedPosition.X += horiz / Math.Abs(horiz);
 
-                    Rectangle CollisionRectangle = obj.GetCollisionRectangle(collisionRectangle);
+                    Rectangle CollisionRectangle = obj.GetCustomCollisionRectangle(wantedPosition);
 
                     bottomLeftCorner = TileMap.GetCellByPixel(new Vector2(CollisionRectangle.Left, CollisionRectangle.Bottom));
                     bottomRightCorner = TileMap.GetCellByPixel(new Vector2(CollisionRectangle.Right, CollisionRectangle.Bottom));
@@ -49,28 +70,28 @@ namespace DareToEscape.Components.Player
                     if (!TileMap.CellIsPassable(bottomLeftCorner) || !TileMap.CellIsPassable(bottomRightCorner) || !TileMap.CellIsPassable(topRightCorner) || !TileMap.CellIsPassable(topLeftCorner) || !TileMap.CellIsPassable(middleRight) || !TileMap.CellIsPassable(middleLeft))
                     {
                         if (inWater)
-                            obj.Position.X -= (horiz / Math.Abs(horiz)) / 2;
+                            wantedPosition.X -= (horiz / Math.Abs(horiz)) / 2;
                         else
-                            obj.Position.X -= horiz / Math.Abs(horiz);                        
+                            wantedPosition.X -= horiz / Math.Abs(horiz);                        
                         horiz = 0;
                         break;
                     }
                 }
-            }            
-            obj.Send<bool>("GRAPHICS_SET_ONGROUND", onGround);
+                obj.Position = wantedPosition;
+            } 
         }
 
         private void gravityLoop(GameObject obj)
         {
-            Vector2 bottomLeftCorner, bottomRightCorner, topLeftCorner, topRightCorner, middleTop, middleBottom;
 
-            
+            Vector2 wantedPosition = obj.Position;
+            Vector2 bottomLeftCorner, bottomRightCorner, topLeftCorner, topRightCorner, middleTop, middleBottom;           
 
             if (gravity != 0)
             {
                 for (int i = 0; i < Math.Abs(gravity); ++i)
                 {
-                    Rectangle CollisionRectangle = obj.GetCollisionRectangle(collisionRectangle);
+                    Rectangle CollisionRectangle = obj.GetCustomCollisionRectangle(wantedPosition);
                     bool collisionWithSpecialBlock = false;
 
                     bottomLeftCorner = TileMap.GetCellByPixel(new Vector2(CollisionRectangle.Left, CollisionRectangle.Bottom + 1));
@@ -104,16 +125,16 @@ namespace DareToEscape.Components.Player
                     if (gravity < 0 && (!TileMap.CellIsPassable(topLeftCorner) || !TileMap.CellIsPassable(topRightCorner) || !TileMap.CellIsPassable(middleTop)))
                     {
                         gravity = 0;
-                        obj.Position.Y += 1;
+                        wantedPosition.Y += 1;
                         break;
                     }
 
                     if (gravity > 0)
                     {
                         if (inWater)
-                            obj.Position.Y += .5f;
+                            wantedPosition.Y += .5f;
                         else
-                            obj.Position.Y += 1;
+                            wantedPosition.Y += 1;
 
                         obj.Send("GRAPHICS_PLAYANIMATION", "JumpDown");
                     }
@@ -121,9 +142,9 @@ namespace DareToEscape.Components.Player
                     if (gravity < 0)
                     {
                         if (inWater)
-                            obj.Position.Y -= .5f;
+                            wantedPosition.Y -= .5f;
                         else
-                            obj.Position.Y -= 1;
+                            wantedPosition.Y -= 1;
                         obj.Send("GRAPHICS_PLAYANIMATION", "JumpUp");
                     }
                 }
@@ -132,7 +153,9 @@ namespace DareToEscape.Components.Player
                 obj.Send<int>("INPUT_SET_JUMPCOUNT", 0);
             jumpThroughCheck = false;
             inWater = false;
-            obj.Send<float>("INPUT_SET_GRAVITY", gravity);            
+            obj.Send<float>("INPUT_SET_GRAVITY", gravity);
+
+            obj.Position = wantedPosition;
         }
 
         public override void Receive<T>(string message, T obj)
@@ -168,6 +191,16 @@ namespace DareToEscape.Components.Player
                         case "INWATER":
                             if (obj is bool)
                                 inWater = (bool)(object)obj;
+                            break;
+
+                        case "NORIGHT":
+                            if (obj is bool)
+                                noRight = (bool)(object)obj;
+                            break;
+
+                        case "NOLEFT":
+                            if (obj is bool)
+                                noLeft = (bool)(object)obj;
                             break;
                     }
                 }

@@ -15,7 +15,7 @@ namespace DareToEscape.Components.Player
 
         private float gravity;        
         private bool onGround;
-        private int jumpCount;
+        private int jumpCount;        
 
         public override void Update(GameObject obj)
         {            
@@ -48,31 +48,31 @@ namespace DareToEscape.Components.Player
                 jumpCount = 1;
             }
 
+
             if (InputMapper.LEFT)
             {
                 obj.Send<float>("PHYSICS_SET_HORIZ", -5);
                 if (onGround)
                 {
-                    obj.Send("GRAPHICS_PLAYANIMATION", "Walk");                    
+                    obj.Send("GRAPHICS_PLAYANIMATION", "Walk");
                 }
                 obj.Send<bool>("GRAPHICS_SET_FLIPPED", true);
-                    
             }
             else if (InputMapper.RIGHT)
             {
                 obj.Send<float>("PHYSICS_SET_HORIZ", 5);
                 if (onGround)
                 {
-                    obj.Send("GRAPHICS_PLAYANIMATION", "Walk");                    
+                    obj.Send("GRAPHICS_PLAYANIMATION", "Walk");
                 }
                 obj.Send<bool>("GRAPHICS_SET_FLIPPED", false);
             }
             else
-            {                
+            {
                 obj.Send<float>("PHYSICS_SET_HORIZ", 0);
                 if (onGround)
                 {
-                    obj.Send("GRAPHICS_PLAYANIMATION", "Idle");                    
+                    obj.Send("GRAPHICS_PLAYANIMATION", "Idle");
                 }
             }
         }
@@ -100,7 +100,7 @@ namespace DareToEscape.Components.Player
                         case "JUMPCOUNT":
                             if (obj is int)
                                 jumpCount = (int)(object)obj;
-                            break;
+                            break;                        
                     }
                 }
             }

@@ -29,5 +29,26 @@ namespace DareToEscape.Helpers
             components.Add(new CheckPointGraphicsComponent());
             return new GameObject(components);
         }
+
+        public static GameObject CreateExit()
+        {
+            List<Component> components = new List<Component>();
+            components.Add(new ExitGraphicsComponent());
+            return new GameObject(components);
+        }
+
+        public static GameObject CreateKey()
+        {
+            List<Component> components = new List<Component>();
+            components.Add(new KeyGraphicsComponent());
+            return new GameObject(components);
+        }
+
+        public static GameObject CreateLock()
+        {
+            List<Component> components = new List<Component>();
+            components.Add(new LockGraphicsComponent());
+            return new GameObject(components);
+        }
     }
 }

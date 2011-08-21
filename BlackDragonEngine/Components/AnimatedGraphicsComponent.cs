@@ -10,7 +10,6 @@ using BlackDragonEngine.Providers;
 
 namespace BlackDragonEngine.Components
 {
-
     public class AnimatedGraphicsComponent : GraphicsComponent
     {
         protected Dictionary<string, AnimationStrip> animations;

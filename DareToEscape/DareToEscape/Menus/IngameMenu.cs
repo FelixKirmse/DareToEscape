@@ -35,7 +35,8 @@ namespace DareToEscape.Menus
             base.Update();
             if (InputMapper.STRICTCANCEL)
             {
-                StateManager.GamePaused = false;                
+                StateManager.GamePaused = false;
+                StateManager.GameState = GameStates.Ingame;
             }
         }
 

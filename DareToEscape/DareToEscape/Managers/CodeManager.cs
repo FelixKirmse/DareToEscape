@@ -25,14 +25,16 @@ namespace DareToEscape.Managers
             for (int y = 0; y < TileMap.MapHeight; ++y)
             {
                 for (int x = 0; x < TileMap.MapWidth; ++x)
-                {                    
+                {              
+      
+                    Vector2 location = new Vector2(x * TileMap.TileWidth, y * TileMap.TileHeight);
                     foreach (string codePart in TileMap.GetCellCodes(x,y))
                     {
                         string[] code = codePart.Split('_'); 
                         switch (code[0])
                         {
                             case "START":
-                                player.Position = new Vector2(x * TileMap.TileWidth, y * TileMap.TileHeight);
+                                player.Position = location;
                                 break;
 
                             case "SPAWN":
@@ -41,8 +43,28 @@ namespace DareToEscape.Managers
 
                             case "CHECKPOINT":                                
                                 GameObject checkPoint = Factory.CreateCheckPoint();
-                                checkPoint.Position = new Vector2(x * TileMap.TileWidth, y * TileMap.TileHeight);
+                                checkPoint.Position = location;
                                 EntityManager.AddEntity(checkPoint);
+                                break;
+
+                            case "EXIT":
+                                GameObject exit = Factory.CreateExit();
+                                exit.Position = location;
+                                EntityManager.AddEntity(exit);
+                                break;
+
+                            case "KEY":
+                                GameObject key = Factory.CreateKey();
+                                key.Position = location;
+                                EntityManager.AddEntity(key);
+                                key.Send("KEYSTRING", code[1]);
+                                break;
+
+                            case "LOCK":
+                                GameObject Lock = Factory.CreateLock();
+                                Lock.Position = location;
+                                EntityManager.AddEntity(Lock);
+                                Lock.Send("KEYSTRING", code[1]);
                                 break;
                         }
                     }
@@ -60,7 +82,7 @@ namespace DareToEscape.Managers
 
         private static void checkCodesUnderPlayer(GameObject player)
         {
-            Rectangle playerCollisionRectangle = player.GetCollisionRectangle(player.PublicCollisionRectangle);
+            Rectangle playerCollisionRectangle = player.CollisionRectangle;
             checkCodesUnderPlayer(player, TileMap.GetCellCodes
                 (
                     TileMap.GetCellByPixel(
@@ -106,13 +128,21 @@ namespace DareToEscape.Managers
                     case "WATER":
                         player.Send<bool>("PHYSICS_SET_INWATER", true);
                         break;
+
+                    case "WALKLEFT":
+                        player.Send("PHYSICS_SET_NORIGHT", true);
+                        break;
+
+                    case "WALKRIGHT":
+                        player.Send("PHYSICS_SET_NOLEFT", true);
+                        break;
                 }
             }
         }
 
         private static void checkCodesInPlayerCenter(GameObject player)
         {
-            Vector2 collisionCenter = player.GetCollisionCenter(player.PublicCollisionRectangle);
+            Vector2 collisionCenter = player.CollisionCenter;
 
             MapSquare square = TileMap.GetMapSquareAtPixel(collisionCenter);
             if ( square == null)
@@ -129,6 +159,7 @@ namespace DareToEscape.Managers
                     case "TRANSITION":
                         IngameManager.Activate();
                         LevelManager.LoadLevel(codeArray[1]);
+                        SaveManager<SaveState>.CurrentSaveState.Keys.Clear();
                         break;
 
                     case "DIALOG":

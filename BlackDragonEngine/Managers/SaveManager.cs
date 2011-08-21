@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using System.IO;
+using System.IO.Compression;
 using BlackDragonEngine.Helpers;
 using System.Runtime.Serialization.Formatters.Binary;
 using BlackDragonEngine.Providers;
 using System.Security.Cryptography;
+using System.Xml.Serialization;
 
 namespace BlackDragonEngine.Managers
 {
@@ -36,16 +38,20 @@ namespace BlackDragonEngine.Managers
             if (!Directory.Exists(SaveFilePath))
                 Directory.CreateDirectory(SaveFilePath);
             FileStream fs = new FileStream(SaveFilePath + GetMD5Hash(saveSlot) + ".svf", FileMode.Create);
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(fs, CurrentSaveState);
-            fs.Close(); 
+            GZipStream gzs = new GZipStream(fs, CompressionMode.Compress);
+            XmlSerializer xmls = new XmlSerializer(CurrentSaveState.GetType());            
+            xmls.Serialize(gzs, CurrentSaveState);            
+            gzs.Close();
+            fs.Close();
         }
 
         public static void Load(string saveSlot)
         {            
             FileStream fs = new FileStream(SaveFilePath + GetMD5Hash(saveSlot) + ".svf", FileMode.Open);
-            BinaryFormatter formatter = new BinaryFormatter();
-            CurrentSaveState = (T)formatter.Deserialize(fs);
+            GZipStream gzs = new GZipStream(fs, CompressionMode.Decompress);
+            XmlSerializer xmls = new XmlSerializer(CurrentSaveState.GetType());
+            CurrentSaveState = (T)xmls.Deserialize(gzs);
+            gzs.Close();
             fs.Close();
             SaveHelper.LoadHelp();
         }        

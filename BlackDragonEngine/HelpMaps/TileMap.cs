@@ -23,6 +23,12 @@ namespace BlackDragonEngine.HelpMaps
                 
         static private HelpMap map = new HelpMap();
 
+        public static HelpMap Map
+        {
+            get { return map; }
+            set { map = value; }
+        }
+
         public static SpriteFont font;        
         #endregion
 

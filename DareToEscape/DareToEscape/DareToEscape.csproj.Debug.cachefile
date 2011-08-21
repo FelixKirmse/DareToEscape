@@ -8,9 +8,13 @@ Content\textures\animations\player\idle.xnb
 Content\textures\animations\player\jumpdown.xnb
 Content\textures\animations\player\jumpup.xnb
 Content\textures\animations\player\walk.xnb
-Content\textures\entities\checkpoint.xnb
 Content\textures\tilesheets\misc.xnb
 Content\maps\TestLevel2.xnb
+Content\textures\animations\entities\checkpoint\activated.xnb
+Content\textures\animations\entities\checkpoint\deactivated.xnb
+Content\textures\animations\entities\exit\idle.xnb
+Content\textures\entities\key.xnb
+Content\textures\entities\lock.xnb
 Content\maps\TestLevel.map
 Content\maps\TestLevel2.map
 Content\textures\tilesheets\tilesheet.png

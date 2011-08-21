@@ -18,7 +18,7 @@ namespace DareToEscape.Helpers
         public static void OnLoad()
         {
             LevelManager.LoadLevel(SaveManager<SaveState>.CurrentSaveState.CurrentLevel);
-            VariableProvider.CurrentPlayer.Position = SaveManager<SaveState>.CurrentSaveState.PlayerPosition;
+            VariableProvider.CurrentPlayer.Position = SaveManager<SaveState>.CurrentSaveState.PlayerPosition;            
         }
     }
 }

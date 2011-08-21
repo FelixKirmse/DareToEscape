@@ -26,10 +26,16 @@ namespace BlackDragonEngine.Components
         protected Rectangle collisionRectangle = new Rectangle(2, 14, 12, 12);
         protected Vector2 direction;
 
+        protected bool setRectangle = true;
 
         public override void Update(GameObject obj)
         {
-            Vector2 collisionCenter = obj.GetCollisionCenter(collisionRectangle);
+            if (setRectangle)
+            {
+                setRectangle = false;
+                obj.CollisionRectangle = collisionRectangle;
+            }
+            Vector2 collisionCenter = obj.CollisionCenter;
 
             if (objectState == ObjectStates.IDLE)
             {
