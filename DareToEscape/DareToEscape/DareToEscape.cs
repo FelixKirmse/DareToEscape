@@ -12,6 +12,7 @@ using xTile.Display;
 using xTile.Dimensions;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.Helpers;
+using System.Diagnostics;
 
 
 namespace DareToEscape
@@ -57,7 +58,7 @@ namespace DareToEscape
         protected override void Update(GameTime gameTime)
         {
             if (IsActive)
-            {
+            {                
                 VariableProvider.GameTime = gameTime;
                 InputProvider.Update();
                 StateManager.Update();

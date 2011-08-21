@@ -38,7 +38,7 @@ namespace DareToEscape.Managers
                                 break;
 
                             case "SPAWN":
-                                SpawnManager.Spawn(code[1], x, y);
+                                SpawnManager.Spawn(code, location);
                                 break;
 
                             case "CHECKPOINT":                                
@@ -127,15 +127,7 @@ namespace DareToEscape.Managers
 
                     case "WATER":
                         player.Send<bool>("PHYSICS_SET_INWATER", true);
-                        break;
-
-                    case "WALKLEFT":
-                        player.Send("PHYSICS_SET_NORIGHT", true);
-                        break;
-
-                    case "WALKRIGHT":
-                        player.Send("PHYSICS_SET_NOLEFT", true);
-                        break;
+                        break;                    
                 }
             }
         }
@@ -174,6 +166,18 @@ namespace DareToEscape.Managers
                         SaveManager<SaveState>.Save();
                         TileMap.GetMapSquareAtPixel(collisionCenter).Codes.Remove("SAVE");
                         --i;
+                        break;
+
+                    case "WALKLEFT":
+                        player.Send("PHYSICS_SET_NORIGHT", true);
+                        break;
+
+                    case "WALKRIGHT":
+                        player.Send("PHYSICS_SET_NOLEFT", true);
+                        break;
+
+                    case "DEADLY":
+                        player.Send<string>("KILL", null);
                         break;
                 }
             }

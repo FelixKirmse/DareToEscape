@@ -50,5 +50,12 @@ namespace DareToEscape.Helpers
             components.Add(new LockGraphicsComponent());
             return new GameObject(components);
         }
+
+        public static GameObject CreateSmallTurret()
+        {
+            List<Component> components = new List<Component>();
+            components.Add(new SmallTurretComponent());
+            return new GameObject(components);
+        }
     }
 }

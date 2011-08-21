@@ -13,8 +13,8 @@ namespace BlackDragonEngine.Entities
     public class GameObject
     {
         public Vector2 Velocity;
-        private Vector2 position;
-        private Rectangle collisionRectangle;
+        protected Vector2 position;
+        protected Rectangle collisionRectangle;
 
         public Vector2 Position
         {
@@ -44,7 +44,7 @@ namespace BlackDragonEngine.Entities
             return new Rectangle((int)customPosition.X + collisionRectangle.X, (int)customPosition.Y + collisionRectangle.Y, collisionRectangle.Width, collisionRectangle.Height);
         }
 
-        private List<Component> components = new List<Component>();
+        protected List<Component> components = new List<Component>();
 
         public Vector2 ScreenPosition
         {
@@ -63,7 +63,7 @@ namespace BlackDragonEngine.Entities
             this.components = components;
         }
 
-        public void Update()
+        public virtual void Update()
         {
             foreach (Component component in components)
             {
@@ -71,7 +71,7 @@ namespace BlackDragonEngine.Entities
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             foreach (Component component in components)
             {

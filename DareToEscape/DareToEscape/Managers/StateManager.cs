@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using DareToEscape.Menus;
 using BlackDragonEngine.Managers;
+using DareToEscape.Helpers;
 
 namespace DareToEscape.Managers
 {
@@ -13,36 +14,46 @@ namespace DareToEscape.Managers
         public static GameStates GameState { get; set; }
         public static MenuStates MenuState { get; set; }
         public static bool GamePaused { get; set; }
+        public static bool PlayerDead { get; set; }
+        public static bool FastDead { get; set; }
 
         public static void Initialize()
         {
             GameState = GameStates.Titlescreen;
             MenuState = MenuStates.Main;
             GamePaused = false;
+            PlayerDead = false;
         }
 
         public static void Update()
         {
-            if (!GamePaused)
+            if (!PlayerDead)
             {
-                switch (GameState)
+                if (!GamePaused)
                 {
-                    case GameStates.Titlescreen:
-                        Titlescreen.Update();
-                        break;
+                    switch (GameState)
+                    {
+                        case GameStates.Titlescreen:
+                            Titlescreen.Update();
+                            break;
 
-                    case GameStates.Menu:
-                        MenuManager.Update();
-                        break;
+                        case GameStates.Menu:
+                            MenuManager.Update();
+                            break;
 
-                    case GameStates.Ingame:
-                        IngameManager.Update();
-                        break;
+                        case GameStates.Ingame:
+                            IngameManager.Update();
+                            break;
+                    }
+                }
+                else
+                {
+                    MenuManager.Update();
                 }
             }
             else 
             {
-                MenuManager.Update();
+                GeneralHelper.Update();
             }
         }
 
@@ -65,6 +76,9 @@ namespace DareToEscape.Managers
 
             if (GamePaused)
                 LevelManager.Draw();
+
+            if (PlayerDead)
+                GeneralHelper.Draw(spriteBatch);
         }
     }
 }

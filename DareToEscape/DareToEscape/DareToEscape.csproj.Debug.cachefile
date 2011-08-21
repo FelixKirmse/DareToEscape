@@ -15,6 +15,11 @@ Content\textures\animations\entities\checkpoint\deactivated.xnb
 Content\textures\animations\entities\exit\idle.xnb
 Content\textures\entities\key.xnb
 Content\textures\entities\lock.xnb
+Content\textures\entities\boss1.xnb
+Content\textures\entities\hugeturret.xnb
+Content\textures\entities\mediumturret.xnb
+Content\textures\entities\smallturret.xnb
+Content\textures\entities\bullet.xnb
 Content\maps\TestLevel.map
 Content\maps\TestLevel2.map
 Content\textures\tilesheets\tilesheet.png

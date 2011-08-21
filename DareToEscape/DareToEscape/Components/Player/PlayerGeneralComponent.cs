@@ -9,26 +9,14 @@ using DareToEscape.Helpers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.Helpers;
 using Microsoft.Xna.Framework;
+using DareToEscape.Managers;
 
 namespace DareToEscape.Components.Player
 {
     class PlayerGeneralComponent : Component
-    {
-        private bool dead;        
-
-        public PlayerGeneralComponent()
-        {
-            dead = false;
-        }
-
+    {   
         public override void Update(GameObject obj)
-        {            
-            if (dead)
-            {
-                SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
-                dead = false;
-            }
-
+        {    
             if (obj.ScreenPosition.X > 600)
                 Camera.Move(new Vector2((int)obj.ScreenPosition.X, 0) - new Vector2(600, 0) );
 
@@ -43,7 +31,11 @@ namespace DareToEscape.Components.Player
         }
 
         public override void Receive<T>(string message, T obj)
-        {            
+        {
+            if (message == "KILL")
+            {                
+                StateManager.PlayerDead = true;
+            }
         }
     }
 }

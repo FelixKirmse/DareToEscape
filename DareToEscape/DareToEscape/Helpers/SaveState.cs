@@ -13,9 +13,8 @@ namespace DareToEscape.Helpers
     {
         public string CurrentLevel { get; set; }
         public Vector2 PlayerPosition { get; set; }
-
-        public List<string> Keys = new List<string>();
-        
+        public List<string> Keys = new List<string>();        
         public HelpMap CodeMap { get; set; }
+        public bool FastDead { get; set; }
     }
 }

@@ -14,6 +14,12 @@ namespace BlackDragonEngine.Components
         protected Texture2D texture;
         protected float drawDepth = .82f;
 
+        public GraphicsComponent() { }
+        public GraphicsComponent(Texture2D texture)
+        {
+            this.texture = texture;
+        }
+
         public virtual void Draw(GameObject obj, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(
