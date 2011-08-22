@@ -13,6 +13,8 @@ using xTile.Dimensions;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.Helpers;
 using System.Diagnostics;
+using DareToEscape.Entities;
+using BlackDragonEngine;
 
 
 namespace DareToEscape
@@ -47,7 +49,7 @@ namespace DareToEscape
             MenuManager.Initialize();
 
             VariableProvider.DisplayDevice = new XnaDisplayDevice(Content, GraphicsDevice);
-            VariableProvider.Viewport = new xTile.Dimensions.Rectangle(new Size(800, 600));
+            VariableProvider.Viewport = new xTile.Dimensions.Rectangle(new Size(800, 600));            
         }
                
         protected override void UnloadContent()
@@ -63,6 +65,7 @@ namespace DareToEscape
                 InputProvider.Update();
                 StateManager.Update();
                 Camera.Update();
+                AudioManager.Update();
             }
             base.Update(gameTime);
         }
@@ -80,7 +83,17 @@ namespace DareToEscape
         public void OnLevelLoad()
         {            
             LevelManager.CurrentMap.Layers[LevelManager.CurrentMap.Properties["PlayerLayer"]].AfterDraw += IngameManager.OnAfterDraw;            
-            CodeManager.CheckCodes();            
+            CodeManager.CheckCodes();
+
+            if (!AudioManager.CurrentBgmCue.IsPlaying)
+            {
+                if (StateManager.GameState != GameStates.Tutorial)
+                    AudioManager.PlayBgm("Background");
+                else
+                    AudioManager.PlayBgm("Tutorial");
+            }                   
+            
+            Bullet.SpeedModifier = LevelManager.CurrentMap.Properties.ContainsKey("SpeedMod") ? (float)LevelManager.CurrentMap.Properties["SpeedMod"] : 1f;
         }
 
         public static void ToggleFullScreen()

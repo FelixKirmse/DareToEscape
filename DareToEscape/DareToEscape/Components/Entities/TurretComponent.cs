@@ -33,7 +33,7 @@ namespace DareToEscape.Components.Entities
 
         public override void Update(GameObject obj)
         {
-            if (PlayerInSight(VariableProvider.CurrentPlayer.CollisionCenter, obj))
+            if (ShootCondition(VariableProvider.CurrentPlayer.CollisionCenter, obj))
             {
                 elapsedWaveTime += ShortcutProvider.ElapsedMilliseconds;
                 if (elapsedWaveTime >= waveTimer)
@@ -73,7 +73,7 @@ namespace DareToEscape.Components.Entities
         {
             spriteBatch.Draw(
                 texture,
-                obj.ScreenPosition + RotationOrigin,
+                Camera.WorldToScreen(obj.Position + RotationOrigin),
                 null,
                 Color.White,
                 rotation,
@@ -88,7 +88,7 @@ namespace DareToEscape.Components.Entities
             }
         }
 
-        protected bool PlayerInSight(Vector2 playerPosition, GameObject turret)
+        protected virtual bool ShootCondition(Vector2 playerPosition, GameObject turret)
         {
             Vector2 direction = playerPosition - bulletOrigin;
             direction /= (TileMap.TileWidth * 4);

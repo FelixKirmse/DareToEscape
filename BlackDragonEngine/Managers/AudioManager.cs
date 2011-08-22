@@ -22,7 +22,7 @@ namespace BlackDragonEngine.Managers
         private static float bgmVolume = 1.0f;
         private static float sfxVolume = 1.0f;
 
-        private static Cue currentBgmCue;
+        public static Cue CurrentBgmCue;
         private static Cue currentSfxCue;
         #endregion
 
@@ -32,7 +32,7 @@ namespace BlackDragonEngine.Managers
             try
             {
                 audioEngine = new AudioEngine(parameters["settingsFile"]);
-                bgmBank = new WaveBank(audioEngine, parameters["bgmBank"]);
+                bgmBank = new WaveBank(audioEngine, parameters["bgmBank"]);                
                 sfxBank = new WaveBank(audioEngine, parameters["sfxBank"]);
                 soundBank = new SoundBank(audioEngine, parameters["soundBank"]);
             }
@@ -82,13 +82,13 @@ namespace BlackDragonEngine.Managers
         {
             if (audioEngine == null)
                 return;
-            if (currentBgmCue != null)
-                currentBgmCue.Stop(AudioStopOptions.AsAuthored);
+            if (CurrentBgmCue != null)
+                CurrentBgmCue.Stop(AudioStopOptions.AsAuthored);
 
-            currentBgmCue = GetCue(cueName);
+            CurrentBgmCue = GetCue(cueName);
 
-            if (currentBgmCue != null)
-                currentBgmCue.Play();
+            if (CurrentBgmCue != null)
+                CurrentBgmCue.Play();
         }
         #endregion
 

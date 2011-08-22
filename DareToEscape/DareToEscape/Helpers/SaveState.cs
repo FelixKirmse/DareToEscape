@@ -16,5 +16,6 @@ namespace DareToEscape.Helpers
         public List<string> Keys = new List<string>();        
         public HelpMap CodeMap { get; set; }
         public bool FastDead { get; set; }
+        public bool BossDead { get; set; }
     }
 }

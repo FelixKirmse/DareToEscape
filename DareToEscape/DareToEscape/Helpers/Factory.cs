@@ -57,5 +57,26 @@ namespace DareToEscape.Helpers
             components.Add(new SmallTurretComponent());
             return new GameObject(components);
         }
+
+        public static GameObject CreateMediumTurret()
+        {
+            List<Component> components = new List<Component>();
+            components.Add(new MediumTurretComponent());
+            return new GameObject(components);
+        }
+
+        public static GameObject CreateBoss1()
+        {
+            List<Component> components = new List<Component>();
+            components.Add(new Boss1Component());
+            return new GameObject(components);
+        }
+
+        public static GameObject CreateBossKiller()
+        {
+            List<Component> components = new List<Component>();
+            components.Add(new BossKillerComponent());
+            return new GameObject(components);
+        }
     }
 }

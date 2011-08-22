@@ -8,6 +8,7 @@ using BlackDragonEngine.Providers;
 using Microsoft.Xna.Framework.Graphics;
 using DareToEscape.Managers;
 using DareToEscape.Menus;
+using BlackDragonEngine.Managers;
 
 namespace DareToEscape.Helpers
 {
@@ -16,7 +17,7 @@ namespace DareToEscape.Helpers
         public static void LoadContent(ContentManager Content)
         {
             FontProvider.AddFont("Mono14", Content.Load<SpriteFont>(@"fonts/mono14"));
-            FontProvider.AddFont("Mono21", Content.Load<SpriteFont>(@"fonts/mono21"));
+            FontProvider.AddFont("Mono21", Content.Load<SpriteFont>(@"fonts/mono21"));                       
 
             VariableProvider.WhiteTexture = Content.Load<Texture2D>(@"textures/white");
 

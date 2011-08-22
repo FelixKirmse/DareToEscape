@@ -79,6 +79,7 @@ namespace DareToEscape.Menus
                     StateManager.GamePaused = false;
                     StateManager.GameState = GameStates.Ingame;
                     LevelManager.ReloadLevel();
+                    SaveManager<SaveState>.Save();
                     break;
 
                 case disableFastDead:

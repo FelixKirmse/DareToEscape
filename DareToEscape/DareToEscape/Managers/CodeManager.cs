@@ -11,6 +11,8 @@ using BlackDragonEngine.Managers;
 using BlackDragonEngine.Helpers;
 using DareToEscape.Providers;
 using DareToEscape.Helpers;
+using BlackDragonEngine.Dialogue;
+using BlackDragonEngine;
 
 namespace DareToEscape.Managers
 {
@@ -65,6 +67,12 @@ namespace DareToEscape.Managers
                                 Lock.Position = location;
                                 EntityManager.AddEntity(Lock);
                                 Lock.Send("KEYSTRING", code[1]);
+                                break;
+
+                            case "BOSSKILLER":
+                                GameObject bossKiller = Factory.CreateBossKiller();
+                                bossKiller.Position = location;
+                                EntityManager.AddEntity(bossKiller);                                
                                 break;
                         }
                     }
@@ -157,8 +165,7 @@ namespace DareToEscape.Managers
                     case "DIALOG":
                         if (InputMapper.STRICTACTION)
                         {
-                            // DialogManager.PlayDialog(DialogDictionaryProvider.GetDummyDialog(), "Test1");
-                            // StateManager.DialogState = DialogueStates.Active;
+                            DialogHelper.PlayDialog(codeArray[1]);
                         }
                         break;
 
@@ -178,6 +185,11 @@ namespace DareToEscape.Managers
 
                     case "DEADLY":
                         player.Send<string>("KILL", null);
+                        break;
+
+                    case "TRIGGER":
+                        if (codeArray[1] == "BOSS")
+                            GameVariableProvider.Boss.Send<string>("SHOOT", null);
                         break;
                 }
             }

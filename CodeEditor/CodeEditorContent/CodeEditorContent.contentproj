@@ -71,6 +71,11 @@
       <Importer>TideImporter</Importer>
       <Processor>TideProcessor</Processor>
     </Compile>
+    <Compile Include="maps\Tutorial.tide">
+      <Name>Tutorial</Name>
+      <Importer>TideImporter</Importer>
+      <Processor>TideProcessor</Processor>
+    </Compile>
     <None Include="textures\tilesheets\tilesheet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>tilesheet</Name>

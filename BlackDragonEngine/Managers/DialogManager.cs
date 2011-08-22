@@ -26,6 +26,8 @@ namespace BlackDragonEngine.Managers
         private static DialogueStates dialogState;
 
         private static SpriteFont font;
+
+        public static bool DrawMugshot = true;
         #endregion
 
         #region Properties
@@ -106,16 +108,17 @@ namespace BlackDragonEngine.Managers
                 SpriteEffects.None,
                 0.2f);
 
-            spriteBatch.Draw(
-                dialog[currentDialogue].MugShot,
-                ShortcutProvider.Vector2Point(mugShotPosition),
-                new Rectangle(0, 0, CurrentMugShot.Width, CurrentMugShot.Height),
-                Color.White,
-                0,
-                Vector2.Zero,
-                1,
-                SpriteEffects.None,
-                0.2f);
+            if(DrawMugshot)
+                spriteBatch.Draw(
+                    dialog[currentDialogue].MugShot,
+                    ShortcutProvider.Vector2Point(mugShotPosition),
+                    new Rectangle(0, 0, CurrentMugShot.Width, CurrentMugShot.Height),
+                    Color.White,
+                    0,
+                    Vector2.Zero,
+                    1,
+                    SpriteEffects.None,
+                    0.2f);
 
             spriteBatch.DrawString(
                 font,

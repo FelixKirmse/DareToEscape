@@ -20,7 +20,13 @@ Content\textures\entities\hugeturret.xnb
 Content\textures\entities\mediumturret.xnb
 Content\textures\entities\smallturret.xnb
 Content\textures\entities\bullet.xnb
+Content\textures\entities\bosskiller.xnb
+Content\maps\Tutorial.xnb
+Content\audio\DareToEscapeAudio.xgs
+Content\audio\Music.xwb
+Content\audio\Music.xsb
 Content\maps\TestLevel.map
 Content\maps\TestLevel2.map
+Content\maps\Tutorial.map
 Content\textures\tilesheets\tilesheet.png
 Content\textures\tilesheets\misc.png

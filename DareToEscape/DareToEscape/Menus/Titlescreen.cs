@@ -17,7 +17,7 @@ namespace DareToEscape.Menus
 
         public static void Update()
         {
-            if(InputProvider.KeyState.GetPressedKeys().Length > 0)        
+            if(InputProvider.KeyState.GetPressedKeys().Length > 0)              
                 StateManager.GameState = GameStates.Menu;
         }
 

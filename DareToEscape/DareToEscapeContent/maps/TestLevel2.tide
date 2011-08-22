@@ -3326,5 +3326,6 @@
   <Properties>
     <Property Key="PlayerLayer" Type="Int32"><![CDATA[0]]></Property>
     <Property Key="TileSize" Type="Int32"><![CDATA[16]]></Property>
+    <Property Key="SpeedMod" Type="Single"><![CDATA[1]]></Property>
   </Properties>
 </Map>

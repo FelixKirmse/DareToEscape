@@ -10,6 +10,7 @@ using BlackDragonEngine.Entities;
 using BlackDragonEngine.Components;
 using DareToEscape.Helpers;
 using BlackDragonEngine.Managers;
+using DareToEscape.Providers;
 
 namespace DareToEscape.Managers
 {
@@ -23,10 +24,25 @@ namespace DareToEscape.Managers
                     switch(codearray[2])
                     {
                         case "SMALL":
-                            GameObject turret = Factory.CreateSmallTurret();
-                            turret.Position = position;
-                            turret.Send<GameObject>("SET_" + codearray[3], turret);
-                            EntityManager.AddEntity(turret);
+                            GameObject smallTurret = Factory.CreateSmallTurret();
+                            smallTurret.Position = position;
+                            smallTurret.Send<GameObject>("SET_" + codearray[3], smallTurret);
+                            EntityManager.AddEntity(smallTurret);
+                            break;
+
+                        case "MEDIUM":
+                            GameObject mediumTurret = Factory.CreateMediumTurret();
+                            mediumTurret.Position = position;
+                            mediumTurret.Send<GameObject>("SET_" + codearray[3], mediumTurret);
+                            EntityManager.AddEntity(mediumTurret);
+                            break;
+
+                        case "BOSS1":
+                            GameObject boss1 = Factory.CreateBoss1();
+                            boss1.Position = position;
+                            boss1.Send<GameObject>("SET_" + codearray[3], boss1);
+                            EntityManager.AddEntity(boss1);
+                            GameVariableProvider.Boss = boss1;
                             break;
                     }
                     break;

@@ -1,3 +1,4 @@
 syntax: glob
 obj/
 bin/
+DareToEscape/DareToEscapeContent/audio/files/

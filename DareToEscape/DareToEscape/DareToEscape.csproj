@@ -110,6 +110,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Entities\Boss1Component.cs" />
+    <Compile Include="Components\Entities\BossKillerComponent.cs" />
     <Compile Include="Components\Entities\CheckPointGraphicsComponent.cs" />
     <Compile Include="Components\Entities\ExitGraphicsComponent.cs" />
     <Compile Include="Components\Entities\KeyGraphicsComponent.cs" />
@@ -122,9 +124,11 @@
     <Compile Include="Components\Player\PlayerPhysicsComponent.cs" />
     <Compile Include="Components\Player\PlayerSoundComponent.cs" />
     <Compile Include="Components\Player\PlayerGeneralComponent.cs" />
+    <Compile Include="Dialog\Tutorial\TutorialDialog.cs" />
     <Compile Include="Entities\Bullet.cs" />
     <Compile Include="GameStates.cs" />
     <Compile Include="Helpers\ContentLoader.cs" />
+    <Compile Include="Helpers\DialogHelper.cs" />
     <Compile Include="Helpers\Factory.cs" />
     <Compile Include="Helpers\GameInitializer.cs" />
     <Compile Include="Helpers\GeneralHelper.cs" />
@@ -142,6 +146,8 @@
     <Compile Include="DareToEscape.cs" />
     <Compile Include="Menus\Titlescreen.cs" />
     <Compile Include="Providers\AnimationDictionaryProvider.cs" />
+    <Compile Include="Providers\DialogDictionaryProvider.cs" />
+    <Compile Include="Providers\GameVariableProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

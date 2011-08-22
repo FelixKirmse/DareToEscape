@@ -17,6 +17,7 @@ namespace DareToEscape.Menus
     {        
         private const string newGame = "New Game";
         private const string resume = "Resume";
+        private const string tutorial = "Play tutorial";
         private const string fullScreen = "Toggle Fullscreen";
         private const string quit = "Quit";
 
@@ -24,6 +25,7 @@ namespace DareToEscape.Menus
         {
             menuItems.Add(new MenuItem(resume, fontName, File.Exists(SaveManager<SaveState>.CurrentSaveFile), new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(newGame, fontName, !File.Exists(SaveManager<SaveState>.CurrentSaveFile), new Color(255, 0, 0), new Color(0, 255, 0)));
+            menuItems.Add(new MenuItem(tutorial, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(fullScreen, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(quit, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
 
@@ -51,12 +53,22 @@ namespace DareToEscape.Menus
                     IngameManager.Activate();
                     LevelManager.LoadLevel("TestLevel");
                     SaveManager<SaveState>.Save();
+                    AudioManager.PlayBgm("Background");
                     break;
                 case resume:
                     StateManager.GameState = GameStates.Ingame;
                     IngameManager.Activate();
                     SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
+                    AudioManager.PlayBgm("Background");
                     break;  
+
+                case tutorial:
+                    StateManager.GameState = GameStates.Tutorial;
+                    IngameManager.Activate();
+                    LevelManager.LoadLevel("Tutorial");
+                    SaveManager<SaveState>.Save();
+                    AudioManager.PlayBgm("Tutorial");
+                    break;
               
                 case fullScreen:
                     DareToEscape.ToggleFullScreen();
