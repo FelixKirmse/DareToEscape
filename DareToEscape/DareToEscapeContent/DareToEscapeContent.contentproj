@@ -100,17 +100,26 @@
       <Importer>TideImporter</Importer>
       <Processor>TideProcessor</Processor>
     </Compile>
+    <Compile Include="maps\Level2.tide">
+      <Name>Level2</Name>
+      <Importer>TideImporter</Importer>
+      <Processor>TideProcessor</Processor>
+    </Compile>
+    <None Include="maps\Level2.map">
+      <Name>Level2</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="maps\TestLevel.map">
       <Name>TestLevel</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Compile Include="maps\TestLevel2.tide">
-      <Name>TestLevel2</Name>
+    <Compile Include="maps\Level1.tide">
+      <Name>Level1</Name>
       <Importer>TideImporter</Importer>
       <Processor>TideProcessor</Processor>
     </Compile>
-    <None Include="maps\TestLevel2.map">
-      <Name>TestLevel2</Name>
+    <None Include="maps\Level1.map">
+      <Name>Level1</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="maps\Tutorial.tide">
@@ -203,10 +212,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="audio\DareToEscapeAudio.xap">
-      <Name>DareToEscapeAudio</Name>
-      <Importer>XactImporter</Importer>
-      <Processor>XactProcessor</Processor>
+    <Compile Include="textures\entities\sign.png">
+      <Name>sign</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

@@ -74,6 +74,12 @@ namespace DareToEscape.Managers
                                 bossKiller.Position = location;
                                 EntityManager.AddEntity(bossKiller);                                
                                 break;
+
+                            case "DIALOG":
+                                GameObject sign = Factory.CreateSign();
+                                sign.Position = location;
+                                EntityManager.AddEntity(sign);
+                                break;
                         }
                     }
                 }
@@ -160,6 +166,14 @@ namespace DareToEscape.Managers
                         IngameManager.Activate();
                         LevelManager.LoadLevel(codeArray[1]);
                         SaveManager<SaveState>.CurrentSaveState.Keys.Clear();
+                        SaveManager<SaveState>.CurrentSaveState.BossDead = false;
+                        break;
+
+                    case "MAINMENU":
+                        StateManager.GameState = GameStates.Menu;
+                        StateManager.MenuState = MenuStates.Main;
+                        SaveManager<SaveState>.CurrentSaveState.Keys.Clear();
+                        SaveManager<SaveState>.CurrentSaveState.BossDead = false;
                         break;
 
                     case "DIALOG":
@@ -167,6 +181,23 @@ namespace DareToEscape.Managers
                         {
                             DialogHelper.PlayDialog(codeArray[1]);
                         }
+                        break;
+
+                    case "TUTORIALDIALOG":
+                        DialogManager.PlayDialog(DialogDictionaryProvider.TutorialDialog(), "Tutorial");
+                        square.Codes.Remove("TUTORIALDIALOG");
+                        break;
+
+                    case "TUTORIALFINISH":
+                        DialogManager.PlayDialog(DialogDictionaryProvider.TutorialDialogFinish(), "TutorialFinish");
+                        square.Codes.Remove("TUTORIALFINISH");
+                        square.Codes.Add("MAINMENU");
+                        break;
+
+                    case "GRATZ":
+                        DialogManager.PlayDialog(DialogDictionaryProvider.Gratz(), "Gratz");
+                        square.Codes.Remove("GRATZ");
+                        square.Codes.Add("MAINMENU");
                         break;
 
                     case "SAVE":
@@ -189,7 +220,8 @@ namespace DareToEscape.Managers
 
                     case "TRIGGER":
                         if (codeArray[1] == "BOSS")
-                            GameVariableProvider.Boss.Send<string>("SHOOT", null);
+                            foreach (GameObject boss in GameVariableProvider.Bosses)
+                                boss.Send<string>("SHOOT", null);
                         break;
                 }
             }

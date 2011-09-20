@@ -8,6 +8,6 @@ namespace DareToEscape.Providers
 {
     static class GameVariableProvider
     {
-        public static GameObject Boss { get; set; }
+        public static List<GameObject> Bosses = new List<GameObject>();        
     }
 }

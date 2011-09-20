@@ -42,7 +42,15 @@ namespace DareToEscape.Managers
                             boss1.Position = position;
                             boss1.Send<GameObject>("SET_" + codearray[3], boss1);
                             EntityManager.AddEntity(boss1);
-                            GameVariableProvider.Boss = boss1;
+                            GameVariableProvider.Bosses.Add(boss1);
+                            break;
+
+                            case "TUTORIALBOSS":
+                            GameObject tutorialBoss = Factory.CreateTutorialBoss();
+                            tutorialBoss.Position = position;
+                            tutorialBoss.Send<GameObject>("SET_" + codearray[3], tutorialBoss);
+                            EntityManager.AddEntity(tutorialBoss);
+                            GameVariableProvider.Bosses.Add(tutorialBoss);
                             break;
                     }
                     break;

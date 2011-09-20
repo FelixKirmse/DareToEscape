@@ -91,7 +91,7 @@ namespace DareToEscape.Components.Entities
         protected virtual bool ShootCondition(Vector2 playerPosition, GameObject turret)
         {
             Vector2 direction = playerPosition - bulletOrigin;
-            direction /= (TileMap.TileWidth * 4);
+            direction /= (TileMap.TileWidth * 16);
             Vector2 particlePosition = bulletOrigin;
 
             while (particlePosition != playerPosition)
@@ -110,6 +110,10 @@ namespace DareToEscape.Components.Entities
 
         protected void SetDown(GameObject obj)
         {
+            if(texture.Height != 16)
+                obj.Position += new Vector2(0, -texture.Height / 2);
+            if (texture.Height == 64)
+                obj.Position += new Vector2(0, -texture.Height / 4);
             bulletOrigin = obj.Position + RotationOrigin + new Vector2(0, -texture.Height / 2 );
             rotation = MathHelper.ToRadians(180);
         }
@@ -122,6 +126,10 @@ namespace DareToEscape.Components.Entities
 
         protected void SetRight(GameObject obj)
         {
+            if (texture.Height != 16) 
+                obj.Position += new Vector2(-texture.Width / 2, 0);
+            if(texture.Height == 64)
+                obj.Position += new Vector2(-texture.Width / 4, 0);
             bulletOrigin = obj.Position + RotationOrigin + new Vector2(-texture.Width / 2, 0);
             rotation = MathHelper.ToRadians(90);
         }

@@ -32,21 +32,10 @@ namespace DareToEscape.Helpers
              SaveManager<SaveState>.SaveHelper.OnLoad += SaveHelper.OnLoad;
 
              Camera.ViewPortHeight = 600;
-             Camera.ViewPortWidth = 800;
-
-             #region Sound init
-             Dictionary<string, string> parameters = new Dictionary<string, string>();
-             parameters.Add("settingsFile", @"Content/audio/DareToEscapeAudio.xgs");
-             parameters.Add("bgmBank", @"Content/audio/Music.xwb");
-             parameters.Add("sfxBank", @"Content/audio/Music.xwb");
-             parameters.Add("soundBank", @"Content/audio/Music.xsb");
-             parameters.Add("sfxCategory", "Default");
-             parameters.Add("bgmCategory", "Default");
-             AudioManager.Initialize(parameters);
-             #endregion
+             Camera.ViewPortWidth = 800;             
 
              DialogManager.DrawMugshot = false;
-
+             
              StateManager.Initialize();
          }         
     }

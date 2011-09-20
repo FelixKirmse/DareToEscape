@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BlackDragonEngine
 {   
-    public enum DialogueStates { Talking, Pause , Active, Inactive }
+    public enum DialogueStates { Talking, Pause, BreakPause, Active, Inactive }
 
     public static class EngineStates
     {

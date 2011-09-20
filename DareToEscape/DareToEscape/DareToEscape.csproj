@@ -119,6 +119,7 @@
     <Compile Include="Components\Entities\MediumTurretComponent.cs" />
     <Compile Include="Components\Entities\SmallTurretComponent.cs" />
     <Compile Include="Components\Entities\TurretComponent.cs" />
+    <Compile Include="Components\Entities\TutorialBossComponent.cs" />
     <Compile Include="Components\Player\PlayerGraphicsComponent.cs" />
     <Compile Include="Components\Player\PlayerInputComponent.cs" />
     <Compile Include="Components\Player\PlayerPhysicsComponent.cs" />

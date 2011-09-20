@@ -24,7 +24,7 @@ namespace DareToEscape.Managers
             MenuState = MenuStates.Main;
             GamePaused = false;
             PlayerDead = false;
-            AudioManager.PlayBgm("TitleMusic");
+            FastDead = true;            
             EngineStates.DialogState = DialogueStates.Inactive;
         }
 

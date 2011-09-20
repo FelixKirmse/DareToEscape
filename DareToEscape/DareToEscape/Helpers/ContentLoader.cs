@@ -22,6 +22,9 @@ namespace DareToEscape.Helpers
             VariableProvider.WhiteTexture = Content.Load<Texture2D>(@"textures/white");
 
             Titlescreen.TitleTexture = Content.Load<Texture2D>(@"textures/titlescreen");
+
+            DialogManager.Initialize();
+
         }
     }
 }

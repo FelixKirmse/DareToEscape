@@ -51,23 +51,20 @@ namespace DareToEscape.Menus
                 case newGame:
                     StateManager.GameState = GameStates.Ingame;
                     IngameManager.Activate();
-                    LevelManager.LoadLevel("TestLevel");
-                    SaveManager<SaveState>.Save();
-                    AudioManager.PlayBgm("Background");
+                    LevelManager.LoadLevel("Level1");
+                    SaveManager<SaveState>.Save();                    
                     break;
                 case resume:
                     StateManager.GameState = GameStates.Ingame;
                     IngameManager.Activate();
-                    SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
-                    AudioManager.PlayBgm("Background");
+                    SaveManager<SaveState>.Load(VariableProvider.SaveSlot);                    
                     break;  
 
                 case tutorial:
                     StateManager.GameState = GameStates.Tutorial;
                     IngameManager.Activate();
                     LevelManager.LoadLevel("Tutorial");
-                    SaveManager<SaveState>.Save();
-                    AudioManager.PlayBgm("Tutorial");
+                    SaveManager<SaveState>.Save();                    
                     break;
               
                 case fullScreen:

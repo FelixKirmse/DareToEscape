@@ -31,7 +31,7 @@ namespace DareToEscape.Components.Entities
                 if (setRectangle)
                 {
                     setRectangle = false;
-                    obj.CollisionRectangle = new Rectangle(-16, 0, 48, 16);
+                    obj.CollisionRectangle = new Rectangle(-16, -16, 48, 48);
                 }
 
                 if (SaveManager<SaveState>.CurrentSaveState.Keys.Contains(keystring))

@@ -7,6 +7,8 @@ using DareToEscape.Components;
 using DareToEscape.Components.Player;
 using BlackDragonEngine.Entities;
 using DareToEscape.Components.Entities;
+using BlackDragonEngine.Providers;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Helpers
 {
@@ -78,5 +80,20 @@ namespace DareToEscape.Helpers
             components.Add(new BossKillerComponent());
             return new GameObject(components);
         }
+
+        public static GameObject CreateSign()
+        {
+            List<Component> components = new List<Component>();
+            components.Add(new GraphicsComponent(VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/sign")));
+            return new GameObject(components);
+        }
+
+        public static GameObject CreateTutorialBoss()
+        {
+            List<Component> components = new List<Component>();
+            components.Add(new TutorialBossComponent());
+            return new GameObject(components);
+        }
+
     }
 }

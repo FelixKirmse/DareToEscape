@@ -22,8 +22,8 @@ namespace DareToEscape.Components.Entities
         public Boss1Component()
         {
             texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/boss1");
-            waveCount = 3;
-            waveTimer = 3000;
+            waveCount = 5;
+            waveTimer = 2000;
             bulletTimer = 125;
         }
 

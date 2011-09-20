@@ -66,13 +66,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="maps\TestLevel2.tide">
-      <Name>TestLevel2</Name>
+    <Compile Include="maps\Level1.tide">
+      <Name>Level1</Name>
       <Importer>TideImporter</Importer>
       <Processor>TideProcessor</Processor>
     </Compile>
     <Compile Include="maps\Tutorial.tide">
       <Name>Tutorial</Name>
+      <Importer>TideImporter</Importer>
+      <Processor>TideProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\Level2.tide">
+      <Name>Level2</Name>
       <Importer>TideImporter</Importer>
       <Processor>TideProcessor</Processor>
     </Compile>
