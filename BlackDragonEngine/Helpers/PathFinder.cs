@@ -46,43 +46,51 @@ namespace BlackDragonEngine.Helpers
             bool downLeft = true;
             bool downRight = true;
 
-            if ((X > 0) && (TileMap.CellIsPassable(X - 1, Y))) {
+            if ((X > 0) && (TileMap.CellIsPassable(X - 1, Y)))
+            {
                 adjacentNodes.Add(new PathNode(currentNode, endNode, new Vector2(X - 1, Y), CostStraight + currentNode.DirectCost));
             } else {
                 upLeft = false;
                 downLeft = false;
             }
 
-            if ((X < 49) && (TileMap.CellIsPassable(X + 1, Y))) {
+            if ((X < 49) && (TileMap.CellIsPassable(X + 1, Y)))
+            {
                 adjacentNodes.Add(new PathNode(currentNode, endNode, new Vector2(X + 1, Y), CostStraight + currentNode.DirectCost));
             } else {
                 upRight = false;
                 downRight = false;
             }
 
-            if ((Y > 0) && (TileMap.CellIsPassable(X, Y - 1))) {
+            if ((Y > 0) && (TileMap.CellIsPassable(X, Y - 1)))
+            {
                 adjacentNodes.Add(new PathNode(currentNode, endNode, new Vector2(X, Y - 1), CostStraight + currentNode.DirectCost));
             } else {
                 upLeft = false;
                 upRight = false;
             }
-            if ((Y < 49) && (TileMap.CellIsPassable(X, Y + 1))) {
+            if ((Y < 49) && (TileMap.CellIsPassable(X, Y + 1)))
+            {
                 adjacentNodes.Add(new PathNode(currentNode, endNode, new Vector2(X, Y + 1), CostStraight + currentNode.DirectCost));
             } else {                
                 downLeft = false;
                 downRight = false;
             }
 
-            if ((upLeft) && (TileMap.CellIsPassable(X - 1, Y - 1))) {
+            if ((upLeft) && (TileMap.CellIsPassable(X - 1, Y - 1)))
+            {
                 adjacentNodes.Add(new PathNode(currentNode, endNode, new Vector2(X - 1, Y - 1), CostDiagonal + currentNode.DirectCost));
             }
-            if ((upRight) && (TileMap.CellIsPassable(X + 1, Y - 1))) {
+            if ((upRight) && (TileMap.CellIsPassable(X + 1, Y - 1)))
+            {
                 adjacentNodes.Add(new PathNode(currentNode, endNode, new Vector2(X + 1, Y - 1), CostDiagonal + currentNode.DirectCost));
             }
-            if ((downLeft) && (TileMap.CellIsPassable(X - 1, Y + 1))) {
+            if ((downLeft) && (TileMap.CellIsPassable(X - 1, Y + 1)))
+            {
                 adjacentNodes.Add(new PathNode(currentNode, endNode, new Vector2(X - 1, Y + 1), CostDiagonal + currentNode.DirectCost));
             }
-            if ((downRight) && (TileMap.CellIsPassable(X + 1, Y + 1))) {
+            if ((downRight) && (TileMap.CellIsPassable(X + 1, Y + 1)))
+            {
                 adjacentNodes.Add(new PathNode(currentNode, endNode, new Vector2(X + 1, Y + 1), CostDiagonal + currentNode.DirectCost));
             }
             return adjacentNodes;
@@ -135,7 +143,8 @@ namespace BlackDragonEngine.Helpers
 
         public static List<Vector2> FindPath(Vector2 startTile, Vector2 endTile)
         {
-            if (!TileMap.CellIsPassable(endTile) || !TileMap.CellIsPassable(startTile)) {
+            if (!TileMap.CellIsPassable(endTile) || !TileMap.CellIsPassable(startTile))
+            {
                 return null;
             }
             openList.Clear();

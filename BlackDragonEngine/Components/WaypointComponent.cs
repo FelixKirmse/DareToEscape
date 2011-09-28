@@ -62,7 +62,7 @@ namespace BlackDragonEngine.Components
         }
 
         protected void changeDirection(Vector2 collisionCenter, GameObject obj)
-        {            
+        {
             direction = TileMap.GetCellCenter(currentGoal) - collisionCenter;            
             if (direction != Vector2.Zero)
                 direction.Normalize();
@@ -73,13 +73,13 @@ namespace BlackDragonEngine.Components
         {    
             obj.Position += speed * direction;
 
-            if (Vector2.Distance(collisionCenter, TileMap.GetCellCenter(currentGoal)) <= speed*2 && pathIndex != currentPath.Count - 1)
+            if (Vector2.Distance(collisionCenter, TileMap.GetCellCenter(currentGoal)) <= speed * 2 && pathIndex != currentPath.Count - 1)
             {
                 currentGoal = currentPath[++pathIndex];
                 changeDirection(collisionCenter, obj);
             }
 
-            if (Vector2.Distance(collisionCenter, TileMap.GetCellCenter(currentWaypoint)) <= speed*2)
+            if (Vector2.Distance(collisionCenter, TileMap.GetCellCenter(currentWaypoint)) <= speed * 2)
             {
                 objectState = ObjectStates.IDLE;
             }

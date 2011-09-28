@@ -22,7 +22,7 @@ namespace BlackDragonEngine.Managers
 
         public static void LoadLevel(string levelName)
         {
-            CurrentLevel = levelName;  
+            CurrentLevel = levelName;
             TileMap.LoadMap(new FileStream(Application.StartupPath + @"\Content\maps\" + levelName + ".map", FileMode.Open));
             Camera.UpdateWorldRectangle();
             if (OnLevelLoad != null)
@@ -30,7 +30,7 @@ namespace BlackDragonEngine.Managers
         }
 
         public static void Draw(SpriteBatch spriteBatch)
-        {            
+        {
             TileMap.Draw(spriteBatch);
         }
 

@@ -103,6 +103,7 @@
     <Compile Include="Controller\MenuController.cs" />
     <Compile Include="Dialogue\DialogScript.cs" />
     <Compile Include="Entities\GameObject.cs" />
+    <Compile Include="GameStates\GameState.cs" />
     <Compile Include="Helpers\EventInput.cs" />
     <Compile Include="Helpers\AnimationStrip.cs" />
     <Compile Include="Helpers\InputMapper.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Managers\AudioManager.cs" />
     <Compile Include="Managers\DialogManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
+    <Compile Include="Managers\GameStateManager.cs" />
     <Compile Include="Managers\LevelManager.cs" />
     <Compile Include="Managers\SaveManager.cs" />
     <Compile Include="Menus\Menu.cs" />
