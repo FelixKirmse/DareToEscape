@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using BlackDragonEngine.HelpMaps;
-using BlackDragonEngine.Providers;
-using xTile;
+using BlackDragonEngine.TileEngine;
 
 namespace BlackDragonEngine.Helpers
 {
@@ -70,12 +68,7 @@ namespace BlackDragonEngine.Helpers
 
         public static void UpdateWorldRectangle()
         {
-            WorldRectangle = new Rectangle(0, 0, TileMap.TileWidth * TileMap.MapWidth, TileMap.TileHeight * TileMap.MapHeight);
-        }
-
-        public static void Update()
-        {            
-            VariableProvider.Viewport.Location = new xTile.Dimensions.Location((int)position.X, (int)position.Y);
+            WorldRectangle = new Rectangle(0, 0, TileMap.TileWidth * TileMap.MapWidth, TileMap.MapHeight * TileMap.TileHeight);
         }
         #endregion
     }

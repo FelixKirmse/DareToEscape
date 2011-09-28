@@ -105,9 +105,6 @@
     <Reference Include="System.Net">
       <Private>False</Private>
     </Reference>
-    <Reference Include="xTile">
-      <HintPath>..\..\xTile\xTile.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\Entities\Boss1Component.cs" />

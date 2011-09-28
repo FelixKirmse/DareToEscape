@@ -31,8 +31,9 @@ namespace DareToEscape.Helpers
         }
 
         public static void Draw(SpriteBatch spriteBatch)
-        { 
-            
+        {
+            LevelManager.Draw(spriteBatch);
+            IngameManager.Draw(spriteBatch);
         }
     }
 }

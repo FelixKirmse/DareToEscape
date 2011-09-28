@@ -40,9 +40,6 @@
     <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.VideoImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
       <Private>False</Private>
     </Reference>
-    <Reference Include="xTile.Pipeline">
-      <HintPath>..\..\xTile\xTile.Pipeline.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="fonts\mono14.spritefont">
@@ -95,52 +92,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="maps\TestLevel.tide">
-      <Name>TestLevel</Name>
-      <Importer>TideImporter</Importer>
-      <Processor>TideProcessor</Processor>
-    </Compile>
-    <Compile Include="maps\Level2.tide">
-      <Name>Level2</Name>
-      <Importer>TideImporter</Importer>
-      <Processor>TideProcessor</Processor>
-    </Compile>
-    <None Include="maps\Level2.map">
-      <Name>Level2</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="maps\TestLevel.map">
-      <Name>TestLevel</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <Compile Include="maps\Level1.tide">
-      <Name>Level1</Name>
-      <Importer>TideImporter</Importer>
-      <Processor>TideProcessor</Processor>
-    </Compile>
-    <None Include="maps\Level1.map">
-      <Name>Level1</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <Compile Include="maps\Tutorial.tide">
-      <Name>Tutorial</Name>
-      <Importer>TideImporter</Importer>
-      <Processor>TideProcessor</Processor>
-    </Compile>
-    <None Include="maps\Tutorial.map">
-      <Name>Tutorial</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="textures\tilesheets\tilesheet.png">
       <Name>tilesheet</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="textures\tilesheets\misc.png">
-      <Name>misc</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

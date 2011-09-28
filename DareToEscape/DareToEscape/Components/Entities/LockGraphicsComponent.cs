@@ -9,7 +9,7 @@ using BlackDragonEngine.Managers;
 using BlackDragonEngine.Entities;
 using Microsoft.Xna.Framework;
 using DareToEscape.Helpers;
-using BlackDragonEngine.HelpMaps;
+using BlackDragonEngine.TileEngine;
 
 namespace DareToEscape.Components.Entities
 {

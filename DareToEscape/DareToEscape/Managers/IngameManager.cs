@@ -37,12 +37,6 @@ namespace DareToEscape.Managers
         public static void Draw(SpriteBatch spriteBatch)
         {
             EntityManager.Draw(spriteBatch);
-        }
-
-        public static void OnAfterDraw(object sender, xTile.Layers.LayerEventArgs e)
-        {
-            SpriteBatch spriteBatch = VariableProvider.DisplayDevice.SpriteBatchAlpha;
-            Draw(spriteBatch);
-        }
+        }        
     }
 }

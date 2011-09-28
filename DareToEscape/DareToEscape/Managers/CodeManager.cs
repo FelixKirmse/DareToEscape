@@ -5,7 +5,7 @@ using System.Text;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.Components;
 using Microsoft.Xna.Framework;
-using BlackDragonEngine.HelpMaps;
+using BlackDragonEngine.TileEngine;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.Helpers;

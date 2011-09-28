@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using DareToEscape.Entities;
 using BlackDragonEngine.Entities;
-using BlackDragonEngine.HelpMaps;
+using BlackDragonEngine.TileEngine;
 using BlackDragonEngine.Helpers;
 
 namespace DareToEscape.Components.Entities

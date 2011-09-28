@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using DareToEscape.Managers;
 using DareToEscape.Menus;
 using BlackDragonEngine.Managers;
+using BlackDragonEngine.TileEngine;
 
 namespace DareToEscape.Helpers
 {
@@ -25,6 +26,7 @@ namespace DareToEscape.Helpers
 
             DialogManager.Initialize();
 
+            TileMap.Initialize(Content.Load<Texture2D>(@"textures/tilesheets/tilesheet"));
         }
     }
 }

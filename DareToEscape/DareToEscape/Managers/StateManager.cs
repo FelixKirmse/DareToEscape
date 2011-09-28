@@ -83,12 +83,17 @@ namespace DareToEscape.Managers
 
                 case GameStates.Tutorial:
                 case GameStates.Ingame:
-                    LevelManager.Draw();
+                    LevelManager.Draw(spriteBatch);
+                    IngameManager.Draw(spriteBatch);
                     break;
             }
 
             if (GamePaused)
-                LevelManager.Draw();
+            {
+                LevelManager.Draw(spriteBatch);
+                IngameManager.Draw(spriteBatch);
+            }
+                
 
             if (PlayerDead)
                 GeneralHelper.Draw(spriteBatch);

@@ -91,9 +91,6 @@
     <Reference Include="System.Net">
       <Private>False</Private>
     </Reference>
-    <Reference Include="xTile">
-      <HintPath>..\xTile\xTile.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\AnimatedGraphicsComponent.cs" />
@@ -123,14 +120,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\FontProvider.cs" />
     <Compile Include="Providers\InputProvider.cs" />
-    <Compile Include="Providers\MapProvider.cs" />
     <Compile Include="Providers\ShortcutProvider.cs" />
     <Compile Include="Providers\VariableProvider.cs" />
     <Compile Include="States.cs" />
-    <Compile Include="HelpMaps\Camera.cs" />
-    <Compile Include="HelpMaps\Map.cs" />
-    <Compile Include="HelpMaps\MapSquare.cs" />
-    <Compile Include="HelpMaps\TileMap.cs" />
+    <Compile Include="Helpers\Camera.cs" />
+    <Compile Include="TileEngine\Map.cs" />
+    <Compile Include="TileEngine\MapSquare.cs" />
+    <Compile Include="TileEngine\TileMap.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

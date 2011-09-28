@@ -5,12 +5,13 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace BlackDragonEngine.HelpMaps
+namespace BlackDragonEngine.TileEngine
 {
     [Serializable]
     public class MapSquare
     {
-        #region Declarations        
+        #region Declarations
+        public int[] LayerTiles = new int[3];
         public List<string> Codes = new List<string>();
         public bool Passable = true;
         #endregion
@@ -20,8 +21,11 @@ namespace BlackDragonEngine.HelpMaps
         { 
         }
 
-        public MapSquare(bool passable)
-        {                      
+        public MapSquare(int background, int interactive, int foreground, bool passable)
+        {
+            LayerTiles[0] = background;
+            LayerTiles[1] = interactive;
+            LayerTiles[2] = foreground;            
             Passable = passable;
         }
         #endregion
