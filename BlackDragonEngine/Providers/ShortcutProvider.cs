@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.Management;
 
 namespace BlackDragonEngine.Providers
 {
@@ -133,5 +134,29 @@ namespace BlackDragonEngine.Providers
         {
             return new Vector2((int)vector.X, (int)vector.Y);
         }
+
+        public static Point GetMaximumScreenSizePrimary()
+        {            
+            var scope = new ManagementScope();
+            var q = new ObjectQuery("SELECT * FROM CIM_VideoControllerResolution");
+
+            var searcher = new ManagementObjectSearcher(scope, q);
+            
+            var results = searcher.Get();
+            UInt32 maxHResolution = 0;
+            UInt32 maxVResolution = 0;
+
+            foreach (var item in results)
+            {
+                if ((UInt32)item["HorizontalResolution"] > maxHResolution)
+                    maxHResolution = (UInt32)item["HorizontalResolution"];
+
+                if ((UInt32)item["VerticalResolution"] > maxVResolution)
+                    maxVResolution = (UInt32)item["VerticalResolution"];
+            }                
+            
+            return new Point((int)maxHResolution, (int)maxVResolution);
+        }
+
     }
 }

@@ -2,6 +2,6 @@
 
 namespace DareToEscape
 {
-    public enum GameStates { Titlescreen, Menu, Ingame, Tutorial }
-    public enum MenuStates { NewGame, LoadGame, Main, Ingame }
+    public enum GameStates { Titlescreen, Menu, Ingame, Tutorial, Editor }
+    public enum MenuStates { NewGame, LoadGame, Main, Ingame, EditorSelect, MapLoad }
 }

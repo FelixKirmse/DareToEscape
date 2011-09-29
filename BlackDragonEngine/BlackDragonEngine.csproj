@@ -76,6 +76,7 @@
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml">
       <Private>False</Private>
@@ -100,7 +101,6 @@
     <Compile Include="Components\PhysicsComponent.cs" />
     <Compile Include="Components\SoundComponent.cs" />
     <Compile Include="Components\WaypointComponent.cs" />
-    <Compile Include="Controller\MenuController.cs" />
     <Compile Include="Dialogue\DialogScript.cs" />
     <Compile Include="Entities\GameObject.cs" />
     <Compile Include="GameStates\GameState.cs" />

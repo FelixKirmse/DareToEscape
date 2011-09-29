@@ -123,6 +123,7 @@
     <Compile Include="Components\Player\PlayerSoundComponent.cs" />
     <Compile Include="Components\Player\PlayerGeneralComponent.cs" />
     <Compile Include="Dialog\Tutorial\TutorialDialog.cs" />
+    <Compile Include="Editor\MapEditor.cs" />
     <Compile Include="Entities\Bullet.cs" />
     <Compile Include="GameStates.cs" />
     <Compile Include="Helpers\ContentLoader.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Managers\MenuManager.cs" />
     <Compile Include="Managers\SpawnManager.cs" />
     <Compile Include="Managers\StateManager.cs" />
+    <Compile Include="Menus\EditorSelectChoiceMenu.cs" />
     <Compile Include="Menus\IngameMenu.cs" />
     <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

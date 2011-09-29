@@ -177,7 +177,7 @@ namespace DareToEscape.Managers
                         break;
 
                     case "DIALOG":
-                        if (InputMapper.STRICTACTION)
+                        if (InputMapper.StrictAction)
                         {
                             DialogHelper.PlayDialog(codeArray[1]);
                         }

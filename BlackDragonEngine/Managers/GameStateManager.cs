@@ -12,6 +12,11 @@ namespace BlackDragonEngine.Managers
     {
         private List<GameState> gameStates;
 
+        public GameStateManager()
+        {
+            gameStates = new List<GameState>();
+        }
+
         public GameState ActiveState
         {
             get

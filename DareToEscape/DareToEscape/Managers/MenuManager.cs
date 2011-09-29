@@ -11,11 +11,13 @@ namespace DareToEscape.Managers
     {
         private static MainMenu mainMenu;
         private static IngameMenu ingameMenu;
+        private static EditorSelectChoiceMenu editorMainMenu;
 
         public static void Initialize()
         {
             mainMenu = new MainMenu();
             ingameMenu = new IngameMenu();
+            editorMainMenu = new EditorSelectChoiceMenu();
         }
 
         public static void Update()
@@ -28,6 +30,10 @@ namespace DareToEscape.Managers
 
                 case MenuStates.Ingame:
                     ingameMenu.Update();
+                    break;
+
+                case MenuStates.EditorSelect:
+                    editorMainMenu.Update();
                     break;
             }
         }
@@ -42,6 +48,10 @@ namespace DareToEscape.Managers
 
                 case MenuStates.Ingame:
                     ingameMenu.Draw(spriteBatch);
+                    break;
+
+                case MenuStates.EditorSelect:
+                    editorMainMenu.Draw(spriteBatch);
                     break;
             }
         }

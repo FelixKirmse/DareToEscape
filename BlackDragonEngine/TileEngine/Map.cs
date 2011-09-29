@@ -10,7 +10,7 @@ namespace BlackDragonEngine.TileEngine
     {
         public List<MapSquare> MapCellRow = new List<MapSquare>();
 
-        public void AddRow(int background, int interactive, int foreground, bool passable)
+        public void AddRow(int? background, int? interactive, int? foreground, bool passable)
         {
             MapCellRow.Add(new MapSquare(background, interactive, foreground, passable));
         }

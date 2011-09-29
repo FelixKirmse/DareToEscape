@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using BlackDragonEngine.Providers;
-using BlackDragonEngine.Controller;
+using BlackDragonEngine.Helpers;
 
 namespace BlackDragonEngine.Menus
 {
@@ -19,7 +19,23 @@ namespace BlackDragonEngine.Menus
 
         public virtual void Update()
         {
-            MenuController.Update(this);
+            if (InputMapper.StrictDown)
+            {
+                NextMenuItem();
+            }
+
+            if (InputMapper.StrictUp)
+            {
+                PreviousMenuItem();
+            }
+
+            if (EnableMouseSelection)
+                ResolveMouseSelection();
+
+            if (InputMapper.StrictAction || (EnableMouseSelection || ShortcutProvider.LeftButtonClickedNowButNotLastFrame()))
+            {
+                SelectMenuItem();
+            }
             foreach (MenuItem menuItem in menuItems)
             {
                 menuItem.Update();

@@ -19,7 +19,7 @@ namespace DareToEscape.Helpers
         public static void Update()
         {
             elapsedSeconds += ShortcutProvider.ElapsedSeconds;
-            if (StateManager.FastDead ||elapsedSeconds >= timeToAutoResume || InputMapper.STRICTACTION)
+            if (StateManager.FastDead ||elapsedSeconds >= timeToAutoResume || InputMapper.StrictAction)
             {
                 if (SaveManager<SaveState>.CurrentSaveState.CurrentLevel != LevelManager.CurrentLevel)
                     LevelManager.ReloadLevel();

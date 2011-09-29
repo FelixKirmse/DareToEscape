@@ -35,7 +35,7 @@ namespace DareToEscape.Menus
         public override void Update()
         {            
             base.Update();
-            if (InputMapper.STRICTCANCEL)
+            if (InputMapper.StrictCancel)
             {
                 StateManager.GamePaused = false;
                 StateManager.GameState = GameStates.Ingame;

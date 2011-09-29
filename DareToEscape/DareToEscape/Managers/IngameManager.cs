@@ -22,7 +22,7 @@ namespace DareToEscape.Managers
         {
             if (!StateManager.GamePaused)
             {
-                if (InputMapper.STRICTCANCEL)
+                if (InputMapper.StrictCancel)
                 {
                     StateManager.GamePaused = true;
                     StateManager.MenuState = MenuStates.Ingame;

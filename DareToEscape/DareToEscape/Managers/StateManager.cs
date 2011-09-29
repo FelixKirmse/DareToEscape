@@ -7,6 +7,7 @@ using DareToEscape.Menus;
 using BlackDragonEngine.Managers;
 using DareToEscape.Helpers;
 using BlackDragonEngine;
+using DareToEscape.Editor;
 
 namespace DareToEscape.Managers
 {
@@ -50,6 +51,10 @@ namespace DareToEscape.Managers
                             case GameStates.Tutorial:
                             case GameStates.Ingame:
                                 IngameManager.Update();
+                                break;
+
+                            case GameStates.Editor:
+                                MapEditor.Update();
                                 break;
                         }
                     }

@@ -39,6 +39,13 @@ namespace DareToEscape
             
             base.Initialize();
         }
+
+        public static void ChangeResolution(Point size)
+        {
+            graphics.PreferredBackBufferWidth = size.X;
+            graphics.PreferredBackBufferHeight = size.Y;
+            graphics.ApplyChanges();     
+        }
         
         protected override void LoadContent()
         {

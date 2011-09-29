@@ -11,7 +11,7 @@ namespace BlackDragonEngine.TileEngine
     public class MapSquare
     {
         #region Declarations
-        public int[] LayerTiles = new int[3];
+        public int?[] LayerTiles = new int?[3];
         public List<string> Codes = new List<string>();
         public bool Passable = true;
         #endregion
@@ -21,7 +21,7 @@ namespace BlackDragonEngine.TileEngine
         { 
         }
 
-        public MapSquare(int background, int interactive, int foreground, bool passable)
+        public MapSquare(int? background, int? interactive, int? foreground, bool passable)
         {
             LayerTiles[0] = background;
             LayerTiles[1] = interactive;

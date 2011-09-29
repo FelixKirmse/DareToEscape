@@ -18,7 +18,7 @@ namespace BlackDragonEngine.Helpers
         public static Keys[] CancelKeys = new Keys[2];
 
         #region Normal Actionchecks
-        public static bool UP 
+        public static bool Up 
         {
             get
             {
@@ -26,7 +26,7 @@ namespace BlackDragonEngine.Helpers
             }
         }
 
-        public static bool DOWN
+        public static bool Down
         {
             get
             {
@@ -34,35 +34,35 @@ namespace BlackDragonEngine.Helpers
             }
         }
 
-        public static bool LEFT
+        public static bool Left
         {
             get
             {
                 return ShortcutProvider.AreAnyKeysDown(LeftKeys) || ShortcutProvider.LeftStickLeft();
             }
         }
-        public static bool RIGHT
+        public static bool Right
         {
             get
             {
                 return ShortcutProvider.AreAnyKeysDown(RightKeys) || ShortcutProvider.LeftStickRight();
             }
         }
-        public static bool JUMP
+        public static bool Jump
         {
             get
             {
                 return ShortcutProvider.AreAnyKeysDown(JumpKeys);
             }
         }
-        public static bool ACTION
+        public static bool Action
         {
             get
             {
                 return ShortcutProvider.AreAnyKeysDown(ActionKeys);
             }
         }
-        public static bool CANCEL
+        public static bool Cancel
         {
             get 
             {
@@ -72,7 +72,7 @@ namespace BlackDragonEngine.Helpers
         #endregion
 
         #region Strict Actionchecks
-        public static bool STRICTUP
+        public static bool StrictUp
         {
             get
             {
@@ -80,7 +80,7 @@ namespace BlackDragonEngine.Helpers
             }
         }
 
-        public static bool STRICTDOWN
+        public static bool StrictDown
         {
             get
             {
@@ -88,35 +88,35 @@ namespace BlackDragonEngine.Helpers
             }
         }
 
-        public static bool STRICTLEFT
+        public static bool StrictLeft
         {
             get
             {
                 return ShortcutProvider.AreAnyKeysDown(LeftKeys, true) || ShortcutProvider.LeftStickLeft();
             }
         }
-        public static bool STRICTRIGHT
+        public static bool StrictRight
         {
             get
             {
                 return ShortcutProvider.AreAnyKeysDown(RightKeys, true) || ShortcutProvider.LeftStickRight();
             }
         }
-        public static bool STRICTJUMP
+        public static bool StrictJump
         {
             get
             {
                 return ShortcutProvider.AreAnyKeysDown(JumpKeys, true);
             }
         }
-        public static bool STRICTACTION
+        public static bool StrictAction
         {
             get
             {
                 return ShortcutProvider.AreAnyKeysDown(ActionKeys, true);
             }
         }
-        public static bool STRICTCANCEL
+        public static bool StrictCancel
         {
             get
             {

@@ -19,7 +19,7 @@ namespace DareToEscape.Components.Player
 
         public override void Update(GameObject obj)
         {            
-            if (!InputMapper.JUMP && gravity < 0)
+            if (!InputMapper.Jump && gravity < 0)
             {
                 gravity += .45f;                
             }
@@ -27,7 +27,7 @@ namespace DareToEscape.Components.Player
             if (gravity < 10)
                 gravity += 0.5f;
 
-            if (InputMapper.STRICTJUMP && jumpCount == 1 && gravity > -5)
+            if (InputMapper.StrictJump && jumpCount == 1 && gravity > -5)
             {
                 gravity = -8;
                 jumpCount = 2;
@@ -35,7 +35,7 @@ namespace DareToEscape.Components.Player
             obj.Send<float>("PHYSICS_SET_GRAVITY", gravity);
             obj.Send<GameObject>("PHYSICS_RUN_GRAVITYLOOP", obj);
 
-            if (InputMapper.STRICTJUMP && onGround)
+            if (InputMapper.StrictJump && onGround)
             {
                 gravity = -10;
                 jumpCount = 1;
@@ -49,7 +49,7 @@ namespace DareToEscape.Components.Player
             }
 
 
-            if (InputMapper.LEFT)
+            if (InputMapper.Left)
             {
                 obj.Send<float>("PHYSICS_SET_HORIZ", -5);
                 if (onGround)
@@ -58,7 +58,7 @@ namespace DareToEscape.Components.Player
                 }
                 obj.Send<bool>("GRAPHICS_SET_FLIPPED", true);
             }
-            else if (InputMapper.RIGHT)
+            else if (InputMapper.Right)
             {
                 obj.Send<float>("PHYSICS_SET_HORIZ", 5);
                 if (onGround)

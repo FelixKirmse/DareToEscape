@@ -79,7 +79,7 @@ namespace BlackDragonEngine.Managers
                     dialogState = DialogueStates.Pause;
                 }
             }
-            else if (InputMapper.STRICTACTION)
+            else if (InputMapper.StrictAction)
             {
                 displayText = "";
                 currentChar = 0;
