@@ -93,6 +93,9 @@
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml">
       <Private>False</Private>
     </Reference>
@@ -123,7 +126,13 @@
     <Compile Include="Components\Player\PlayerSoundComponent.cs" />
     <Compile Include="Components\Player\PlayerGeneralComponent.cs" />
     <Compile Include="Dialog\Tutorial\TutorialDialog.cs" />
-    <Compile Include="Editor\MapEditor.cs" />
+    <Compile Include="Editor\EditorManager.cs" />
+    <Compile Include="Editor\MapEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editor\MapEditor.Designer.cs">
+      <DependentUpon>MapEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Entities\Bullet.cs" />
     <Compile Include="GameStates.cs" />
     <Compile Include="Helpers\ContentLoader.cs" />
@@ -138,7 +147,6 @@
     <Compile Include="Managers\MenuManager.cs" />
     <Compile Include="Managers\SpawnManager.cs" />
     <Compile Include="Managers\StateManager.cs" />
-    <Compile Include="Menus\EditorSelectChoiceMenu.cs" />
     <Compile Include="Menus\IngameMenu.cs" />
     <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -191,7 +199,11 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Editor\MapEditor.resx">
+      <DependentUpon>MapEditor.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

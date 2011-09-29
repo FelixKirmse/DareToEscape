@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.IO;
 using System.Xml.Serialization;
+using System.IO.Compression;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
 
@@ -177,6 +178,16 @@ namespace BlackDragonEngine.TileEngine
         {
             return map.Properties[propertyname];
         }
+
+        public static void SetMapProperty(string name, string value)
+        {
+            map.Properties.Add(name, value);  
+        }
+
+        public static void ClearProperties()
+        {
+            map.Properties.Clear();
+        }
         #endregion
 
         #region Drawing
@@ -249,23 +260,30 @@ namespace BlackDragonEngine.TileEngine
 
         #region Loading and Saving
         public static void SaveMap(FileStream fileStream) 
-        {            
-            XmlSerializer xmlSer = new XmlSerializer(map.GetType());           
-            xmlSer.Serialize(fileStream, map);
+        {
+            GZipStream gzs = new GZipStream(fileStream, CompressionMode.Compress);
+            XmlSerializer xmlSer = new XmlSerializer(map.GetType());  
+            xmlSer.Serialize(gzs, map);
+            gzs.Close();
             fileStream.Close();
         }
 
         public static void LoadMap(FileStream fileStream)
         {
-            try {
+            try 
+            {
                 map.MapCellColumns.Clear();
+                GZipStream gzs = new GZipStream(fileStream, CompressionMode.Decompress);
                 XmlSerializer xmlSer = new XmlSerializer(map.GetType());                
-                map = (Map)xmlSer.Deserialize(fileStream);
+                map = (Map)xmlSer.Deserialize(gzs);
+                gzs.Close();
                 fileStream.Close();
 
                 MapWidth = map.MapCellColumns.Count;
                 MapHeight = map.MapCellColumns[0].MapCellRow.Count;
-            } catch {
+            } 
+            catch 
+            {
                 ClearMap();
                 fileStream.Close();
             }

@@ -31,47 +31,50 @@ namespace DareToEscape.Managers
 
         public static void Update()
         {
-            if (EngineStates.DialogState == DialogueStates.Inactive)
+            if (GameState == GameStates.Editor)
             {
-                if (!PlayerDead)
+                EditorManager.Update();
+            }
+            else
+            {
+                if (EngineStates.DialogState == DialogueStates.Inactive)
                 {
-
-                    if (!GamePaused)
+                    if (!PlayerDead)
                     {
-                        switch (GameState)
+
+                        if (!GamePaused)
                         {
-                            case GameStates.Titlescreen:
-                                Titlescreen.Update();
-                                break;
+                            switch (GameState)
+                            {
+                                case GameStates.Titlescreen:
+                                    Titlescreen.Update();
+                                    break;
 
-                            case GameStates.Menu:
-                                MenuManager.Update();
-                                break;
+                                case GameStates.Menu:
+                                    MenuManager.Update();
+                                    break;
 
-                            case GameStates.Tutorial:
-                            case GameStates.Ingame:
-                                IngameManager.Update();
-                                break;
-
-                            case GameStates.Editor:
-                                MapEditor.Update();
-                                break;
+                                case GameStates.Tutorial:
+                                case GameStates.Ingame:
+                                    IngameManager.Update();
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            MenuManager.Update();
                         }
                     }
                     else
                     {
-                        MenuManager.Update();
+                        GeneralHelper.Update();
                     }
                 }
                 else
                 {
-                    GeneralHelper.Update();
+                    DialogManager.Update();
                 }
-            }
-            else 
-            {
-                DialogManager.Update();
-            }
+            }            
         }
 
         public static void Draw(SpriteBatch spriteBatch)
@@ -90,6 +93,11 @@ namespace DareToEscape.Managers
                 case GameStates.Ingame:
                     LevelManager.Draw(spriteBatch);
                     IngameManager.Draw(spriteBatch);
+                    break;
+
+                case GameStates.Editor:
+                    EditorManager.Draw(spriteBatch);
+                    LevelManager.Draw(spriteBatch);
                     break;
             }
 

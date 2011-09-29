@@ -19,32 +19,32 @@ namespace DareToEscape
 {    
     public class DareToEscape : Microsoft.Xna.Framework.Game
     {
-        static GraphicsDeviceManager graphics;
+        public static GraphicsDeviceManager Graphics;
         SpriteBatch spriteBatch;
 
         public DareToEscape()
         {
-            graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
         
         protected override void Initialize()
         {
             VariableProvider.Game = this;
-            GameInitializer.Initialize();
+            GameInitializer.Initialize();            
 
-            graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 600;
-            graphics.ApplyChanges();            
+            Graphics.PreferredBackBufferWidth = 800;
+            Graphics.PreferredBackBufferHeight = 600;
+            Graphics.ApplyChanges();            
             
             base.Initialize();
         }
 
         public static void ChangeResolution(Point size)
         {
-            graphics.PreferredBackBufferWidth = size.X;
-            graphics.PreferredBackBufferHeight = size.Y;
-            graphics.ApplyChanges();     
+            Graphics.PreferredBackBufferWidth = size.X;
+            Graphics.PreferredBackBufferHeight = size.Y;
+            Graphics.ApplyChanges();     
         }
         
         protected override void LoadContent()
@@ -52,6 +52,7 @@ namespace DareToEscape
             spriteBatch = new SpriteBatch(GraphicsDevice);
             ContentLoader.LoadContent(Content);
             MenuManager.Initialize();
+            Editor.EditorManager.Initialize();
         }
                
         protected override void UnloadContent()
@@ -87,8 +88,8 @@ namespace DareToEscape
 
         public static void ToggleFullScreen()
         {
-            graphics.IsFullScreen = !graphics.IsFullScreen;
-            graphics.ApplyChanges();
+            Graphics.IsFullScreen = !Graphics.IsFullScreen;
+            Graphics.ApplyChanges();
         }
     }
 }

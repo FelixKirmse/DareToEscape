@@ -7,6 +7,7 @@ using DareToEscape.Helpers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.Helpers;
+using BlackDragonEngine.TileEngine;
 
 namespace DareToEscape.Managers
 {
@@ -36,7 +37,7 @@ namespace DareToEscape.Managers
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            EntityManager.Draw(spriteBatch);
+            EntityManager.Draw(spriteBatch);           
         }        
     }
 }

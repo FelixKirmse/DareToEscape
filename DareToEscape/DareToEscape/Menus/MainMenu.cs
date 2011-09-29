@@ -10,6 +10,7 @@ using BlackDragonEngine.Managers;
 using Microsoft.Xna.Framework;
 using System.IO;
 using DareToEscape.Helpers;
+using DareToEscape.Editor;
 
 namespace DareToEscape.Menus
 {
@@ -70,7 +71,7 @@ namespace DareToEscape.Menus
                     break;
 
                 case editor:
-                    StateManager.MenuState = MenuStates.EditorSelect;
+                    EditorManager.Activate();
                     break;
               
                 case fullScreen:
