@@ -174,20 +174,7 @@ namespace BlackDragonEngine.TileEngine
         #endregion
 
         #region Information about the Map
-        public static string GetMapProperty(string propertyname)
-        {
-            return map.Properties[propertyname];
-        }
-
-        public static void SetMapProperty(string name, string value)
-        {
-            map.Properties.Add(name, value);  
-        }
-
-        public static void ClearProperties()
-        {
-            map.Properties.Clear();
-        }
+        
         #endregion
 
         #region Drawing

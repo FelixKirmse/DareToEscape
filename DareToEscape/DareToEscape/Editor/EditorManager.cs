@@ -112,12 +112,14 @@ namespace DareToEscape.Editor
             StateManager.GameState = GameStates.Menu;            
             editorForm.Hide();
             gameForm.Visible = true;
+            TileMap.EditorMode = false;
         }
 
         public static void JumpToLevel(string levelName)
         {
             Deactivate();
             StateManager.GameState = GameStates.Ingame;
+            IngameManager.Activate();
             LevelManager.LoadLevel(levelName);
         }
 

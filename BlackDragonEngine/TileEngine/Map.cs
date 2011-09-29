@@ -19,7 +19,6 @@ namespace BlackDragonEngine.TileEngine
     [Serializable]
     public class Map
     {
-        public List<MapRow> MapCellColumns = new List<MapRow>();
-        public Dictionary<string, string> Properties = new Dictionary<string, string>(); 
+        public List<MapRow> MapCellColumns = new List<MapRow>();        
     }
 }

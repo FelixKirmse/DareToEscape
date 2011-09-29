@@ -266,7 +266,7 @@ namespace DareToEscape.Editor
 
         private void startGameButton_Click(object sender, EventArgs e)
         {
-            EditorManager.JumpToLevel(currentMapName);
+            EditorManager.JumpToLevel(currentMapName.Replace(".map",""));
         }       
 
         private void tileMapWidthInput_Leave(object sender, EventArgs e)
