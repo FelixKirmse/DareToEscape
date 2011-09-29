@@ -23,6 +23,7 @@ namespace DareToEscape.Editor
         public DareToEscape Game;
         private string cwd;       
         private string currentMapName;
+        EditorItem currentItem;
 
         public MapEditor()
         {
@@ -40,76 +41,37 @@ namespace DareToEscape.Editor
         }
 
         private void LoadImageLists(bool createImages)
-        {
-            for (int i = 0; i < 2; ++i)
-            {
-                string filepath;
-                if (i == 0)
-                {
-                    TileMap.TileOffset = 0;
-                    filepath = Application.StartupPath + @"\Content\textures\TileSets\rpg.png";
-                    rpgListTiles.Images.Clear();
-                }
-                else 
-                {
-                    TileMap.TileOffset = 1;
-                    filepath = Application.StartupPath + @"\Content\textures\TileSets\platform.png";
-                    platformListTiles.Images.Clear();
-                }
-                Bitmap tileSheet = new Bitmap(filepath);
-                int tilecount = 0;
-                for (int y = 0; y < tileSheet.Height / (TileMap.TileHeight + TileMap.TileOffset); ++y)
-                {
-                    for (int x = 0; x < tileSheet.Width / (TileMap.TileWidth + TileMap.TileOffset); ++x)
-                    {
-
-                        if (!createImages)
-                        {
-                            if(i == 0)
-                                rpgListTiles.Images.Add(new Bitmap(Application.StartupPath + "/tiles/rpg/" + tilecount.ToString() + ".bmp"));
-                            else
-                                platformListTiles.Images.Add(new Bitmap(Application.StartupPath + "/tiles/platform/" + tilecount.ToString() + ".bmp"));
-
-                            
-                        }
-                        else
-                        {
-                            Bitmap newBitmap = tileSheet.Clone(new System.Drawing.Rectangle(x * (TileMap.TileWidth + TileMap.TileOffset), y * (TileMap.TileHeight + TileMap.TileOffset), TileMap.TileWidth, TileMap.TileHeight), System.Drawing.Imaging.PixelFormat.DontCare);
-
-                            if (i == 0)
-                                rpgListTiles.Images.Add(newBitmap);
-                            else
-                                platformListTiles.Images.Add(newBitmap);                            
-
-                            if(i == 0)
-                                newBitmap.Save(Application.StartupPath + "/tiles/rpg/" + tilecount.ToString() + ".bmp");
-                            else
-                                newBitmap.Save(Application.StartupPath + "/tiles/platform/" + tilecount.ToString() + ".bmp");                            
-                            
-                        }
-                        ++tilecount;
-                    }
-                }
-            }            
-        }
-
-        private void ChangeImageList(string mode) {
-            string filepath = "";
-            switch(mode)
-            {                
-                case "RPG":
-                    listTiles.SmallImageList = rpgListTiles;
-                    filepath = Application.StartupPath + @"\Content\textures\TileSets\rpg.png";
-                    break;
-                case "Platform":
-                    listTiles.SmallImageList = platformListTiles;
-                    filepath = Application.StartupPath + @"\Content\textures\TileSets\platform.png";
-                    break;
-            }
-
+        {            
+            string filepath;
+            
+            TileMap.TileOffset = 0;
+            filepath = Application.StartupPath + @"\Content\textures\tilesheets\tilesheet.png";
+            tileList.Images.Clear();            
+            
             Bitmap tileSheet = new Bitmap(filepath);
             int tilecount = 0;
-            listTiles.Clear();            
+            for (int y = 0; y < tileSheet.Height / (TileMap.TileHeight + TileMap.TileOffset); ++y)
+            {
+                for (int x = 0; x < tileSheet.Width / (TileMap.TileWidth + TileMap.TileOffset); ++x)
+                {
+
+                    if (!createImages)
+                    {
+                        tileList.Images.Add(new Bitmap(Application.StartupPath + "/Content/textures/editor/tiles/" + tilecount.ToString() + ".bmp"));
+                    }
+                    else
+                    {
+                        Bitmap newBitmap = tileSheet.Clone(new System.Drawing.Rectangle(x * (TileMap.TileWidth + TileMap.TileOffset), y * (TileMap.TileHeight + TileMap.TileOffset), TileMap.TileWidth, TileMap.TileHeight), System.Drawing.Imaging.PixelFormat.DontCare);                                                
+                        tileList.Images.Add(newBitmap);
+                        newBitmap.Save(Application.StartupPath + "/Content/textures/editor/tiles/" + tilecount.ToString() + ".bmp");  
+                    }
+                    ++tilecount;
+                }
+            }
+                        
+            listTiles.SmallImageList = tileList;                  
+            tilecount = 0;
+            listTiles.Clear();
 
             for (int y = 0; y < tileSheet.Height / (TileMap.TileHeight + TileMap.TileOffset); ++y)
             {
@@ -119,9 +81,8 @@ namespace DareToEscape.Editor
                     listTiles.Items.Add(new ListViewItem(itemName, tilecount++));
                 }
             }
-             
+                        
         }
-        
 
         private void FixScrollBarScales() {
             Camera.WorldRectangle = new XNARectangle(0, 0, TileMap.TileWidth * TileMap.MapWidth, TileMap.TileHeight * TileMap.MapHeight);
@@ -141,8 +102,7 @@ namespace DareToEscape.Editor
         {
             timerGameUpdate.Stop();
             LoadImageLists();
-            FixScrollBarScales();   
-                     
+            FixScrollBarScales();
             TileMap.EditorMode = true;
             backgroundToolStripMenuItem.Checked = true;                        
         }
@@ -156,9 +116,10 @@ namespace DareToEscape.Editor
         {
             if (listTiles.SelectedIndices.Count > 0) {                
                 EditorManager.DrawTile = listTiles.SelectedIndices[0];
-                tileIndexLabel.Text = "Selected Tile Index: "+listTiles.SelectedIndices[0].ToString();                
+                currentItem = EditorManager.GetEditorItemByName(listTiles.SelectedIndices[0].ToString());      
             }
-        }
+        }        
+
 
         private void radioPassable_CheckedChanged(object sender, EventArgs e)
         {

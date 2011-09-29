@@ -126,6 +126,7 @@
     <Compile Include="Components\Player\PlayerSoundComponent.cs" />
     <Compile Include="Components\Player\PlayerGeneralComponent.cs" />
     <Compile Include="Dialog\Tutorial\TutorialDialog.cs" />
+    <Compile Include="Editor\EditorItem.cs" />
     <Compile Include="Editor\EditorManager.cs" />
     <Compile Include="Editor\MapEditor.cs">
       <SubType>Form</SubType>

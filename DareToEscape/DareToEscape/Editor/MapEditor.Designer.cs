@@ -44,7 +44,7 @@
             this.backgroundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.interactiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.foregroundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rpgListTiles = new System.Windows.Forms.ImageList(this.components);
+            this.tileList = new System.Windows.Forms.ImageList(this.components);
             this.listTiles = new System.Windows.Forms.ListView();
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
@@ -59,12 +59,11 @@
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.cwdLabel = new System.Windows.Forms.Label();
             this.startGameButton = new System.Windows.Forms.Button();
-            this.tileIndexLabel = new System.Windows.Forms.Label();
             this.tileMapWidthInput = new System.Windows.Forms.TextBox();
             this.tileMapHeightInput = new System.Windows.Forms.TextBox();
             this.tileMapWidthLabel = new System.Windows.Forms.Label();
             this.tileMapHeightLabel = new System.Windows.Forms.Label();
-            this.platformListTiles = new System.Windows.Forms.ImageList(this.components);
+            this.entityList = new System.Windows.Forms.ImageList(this.components);
             this.layerSelectGroupBox = new System.Windows.Forms.GroupBox();
             this.foregroundRadioButton = new System.Windows.Forms.RadioButton();
             this.interactiveRadioButton = new System.Windows.Forms.RadioButton();
@@ -83,12 +82,16 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.leftClickGroupBox = new System.Windows.Forms.GroupBox();
+            this.smartLeftClick = new System.Windows.Forms.RadioButton();
+            this.plainLeftClick = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pctSurface)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBoxRightClick.SuspendLayout();
             this.layerSelectGroupBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.leftClickGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // pctSurface
@@ -212,21 +215,21 @@
             this.foregroundToolStripMenuItem.Text = "&Foreground";
             this.foregroundToolStripMenuItem.Click += new System.EventHandler(this.foregroundToolStripMenuItem_Click);
             // 
-            // rpgListTiles
+            // tileList
             // 
-            this.rpgListTiles.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
-            this.rpgListTiles.ImageSize = new System.Drawing.Size(28, 28);
-            this.rpgListTiles.TransparentColor = System.Drawing.Color.Transparent;
+            this.tileList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.tileList.ImageSize = new System.Drawing.Size(16, 16);
+            this.tileList.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // listTiles
             // 
             this.listTiles.AutoArrange = false;
             this.listTiles.HideSelection = false;
             this.listTiles.LabelWrap = false;
-            this.listTiles.Location = new System.Drawing.Point(195, 27);
+            this.listTiles.Location = new System.Drawing.Point(194, 42);
             this.listTiles.MultiSelect = false;
             this.listTiles.Name = "listTiles";
-            this.listTiles.Size = new System.Drawing.Size(327, 53);
+            this.listTiles.Size = new System.Drawing.Size(327, 37);
             this.listTiles.TabIndex = 2;
             this.listTiles.TileSize = new System.Drawing.Size(16, 16);
             this.listTiles.UseCompatibleStateImageBehavior = false;
@@ -362,14 +365,6 @@
             this.startGameButton.UseVisualStyleBackColor = true;
             this.startGameButton.Click += new System.EventHandler(this.startGameButton_Click);
             // 
-            // tileIndexLabel
-            // 
-            this.tileIndexLabel.AutoSize = true;
-            this.tileIndexLabel.Location = new System.Drawing.Point(11, 199);
-            this.tileIndexLabel.Name = "tileIndexLabel";
-            this.tileIndexLabel.Size = new System.Drawing.Size(0, 13);
-            this.tileIndexLabel.TabIndex = 11;
-            // 
             // tileMapWidthInput
             // 
             this.tileMapWidthInput.Location = new System.Drawing.Point(66, 89);
@@ -404,11 +399,11 @@
             this.tileMapHeightLabel.TabIndex = 15;
             this.tileMapHeightLabel.Text = "MapHeight";
             // 
-            // platformListTiles
+            // entityList
             // 
-            this.platformListTiles.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.platformListTiles.ImageSize = new System.Drawing.Size(28, 28);
-            this.platformListTiles.TransparentColor = System.Drawing.Color.Transparent;
+            this.entityList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.entityList.ImageSize = new System.Drawing.Size(28, 28);
+            this.entityList.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // layerSelectGroupBox
             // 
@@ -436,10 +431,12 @@
             // interactiveRadioButton
             // 
             this.interactiveRadioButton.AutoSize = true;
+            this.interactiveRadioButton.Checked = true;
             this.interactiveRadioButton.Location = new System.Drawing.Point(6, 43);
             this.interactiveRadioButton.Name = "interactiveRadioButton";
             this.interactiveRadioButton.Size = new System.Drawing.Size(75, 17);
             this.interactiveRadioButton.TabIndex = 1;
+            this.interactiveRadioButton.TabStop = true;
             this.interactiveRadioButton.Text = "Interactive";
             this.interactiveRadioButton.UseVisualStyleBackColor = true;
             this.interactiveRadioButton.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
@@ -447,12 +444,10 @@
             // backgroundRadioButton
             // 
             this.backgroundRadioButton.AutoSize = true;
-            this.backgroundRadioButton.Checked = true;
             this.backgroundRadioButton.Location = new System.Drawing.Point(6, 20);
             this.backgroundRadioButton.Name = "backgroundRadioButton";
             this.backgroundRadioButton.Size = new System.Drawing.Size(83, 17);
             this.backgroundRadioButton.TabIndex = 0;
-            this.backgroundRadioButton.TabStop = true;
             this.backgroundRadioButton.Text = "Background";
             this.backgroundRadioButton.UseVisualStyleBackColor = true;
             this.backgroundRadioButton.CheckedChanged += new System.EventHandler(this.backgroundRadioButton_CheckedChanged);
@@ -493,7 +488,7 @@
             this.editModeItemCheckBox.AutoSize = true;
             this.editModeItemCheckBox.Checked = true;
             this.editModeItemCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.editModeItemCheckBox.Location = new System.Drawing.Point(11, 187);
+            this.editModeItemCheckBox.Location = new System.Drawing.Point(9, 141);
             this.editModeItemCheckBox.Name = "editModeItemCheckBox";
             this.editModeItemCheckBox.Size = new System.Drawing.Size(155, 17);
             this.editModeItemCheckBox.TabIndex = 22;
@@ -568,7 +563,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(336, 11);
+            this.label2.Location = new System.Drawing.Point(336, 24);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(29, 13);
             this.label2.TabIndex = 24;
@@ -588,7 +583,7 @@
             this.listView1.AutoArrange = false;
             this.listView1.HideSelection = false;
             this.listView1.LabelWrap = false;
-            this.listView1.Location = new System.Drawing.Point(195, 112);
+            this.listView1.Location = new System.Drawing.Point(194, 118);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(327, 92);
@@ -597,11 +592,45 @@
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.SmallIcon;
             // 
+            // leftClickGroupBox
+            // 
+            this.leftClickGroupBox.Controls.Add(this.plainLeftClick);
+            this.leftClickGroupBox.Controls.Add(this.smartLeftClick);
+            this.leftClickGroupBox.Location = new System.Drawing.Point(367, 354);
+            this.leftClickGroupBox.Name = "leftClickGroupBox";
+            this.leftClickGroupBox.Size = new System.Drawing.Size(173, 69);
+            this.leftClickGroupBox.TabIndex = 27;
+            this.leftClickGroupBox.TabStop = false;
+            this.leftClickGroupBox.Text = "Left Click Mode";
+            // 
+            // smartLeftClick
+            // 
+            this.smartLeftClick.AutoSize = true;
+            this.smartLeftClick.Checked = true;
+            this.smartLeftClick.Location = new System.Drawing.Point(7, 21);
+            this.smartLeftClick.Name = "smartLeftClick";
+            this.smartLeftClick.Size = new System.Drawing.Size(52, 17);
+            this.smartLeftClick.TabIndex = 0;
+            this.smartLeftClick.TabStop = true;
+            this.smartLeftClick.Text = "Smart";
+            this.smartLeftClick.UseVisualStyleBackColor = true;
+            // 
+            // plainLeftClick
+            // 
+            this.plainLeftClick.AutoSize = true;
+            this.plainLeftClick.Location = new System.Drawing.Point(7, 44);
+            this.plainLeftClick.Name = "plainLeftClick";
+            this.plainLeftClick.Size = new System.Drawing.Size(48, 17);
+            this.plainLeftClick.TabIndex = 1;
+            this.plainLeftClick.Text = "Plain";
+            this.plainLeftClick.UseVisualStyleBackColor = true;
+            // 
             // MapEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1399, 685);
+            this.Controls.Add(this.leftClickGroupBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.label2);
@@ -614,7 +643,6 @@
             this.Controls.Add(this.tileMapWidthLabel);
             this.Controls.Add(this.tileMapHeightInput);
             this.Controls.Add(this.tileMapWidthInput);
-            this.Controls.Add(this.tileIndexLabel);
             this.Controls.Add(this.startGameButton);
             this.Controls.Add(this.cwdLabel);
             this.Controls.Add(this.cwdButton);
@@ -624,7 +652,9 @@
             this.Controls.Add(this.listTiles);
             this.Controls.Add(this.pctSurface);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "MapEditor";
             this.Text = "MapEditor";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MapEditor_FormClosed);
@@ -642,6 +672,8 @@
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.leftClickGroupBox.ResumeLayout(false);
+            this.leftClickGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -662,7 +694,7 @@
         private System.Windows.Forms.ToolStripMenuItem backgroundToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem interactiveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem foregroundToolStripMenuItem;
-        private System.Windows.Forms.ImageList rpgListTiles;
+        private System.Windows.Forms.ImageList tileList;
         private System.Windows.Forms.ListView listTiles;
         private System.Windows.Forms.VScrollBar vScrollBar1;
         private System.Windows.Forms.HScrollBar hScrollBar1;
@@ -675,12 +707,11 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowser;
         private System.Windows.Forms.Label cwdLabel;
         private System.Windows.Forms.Button startGameButton;
-        private System.Windows.Forms.Label tileIndexLabel;
         private System.Windows.Forms.TextBox tileMapWidthInput;
         private System.Windows.Forms.TextBox tileMapHeightInput;
         private System.Windows.Forms.Label tileMapWidthLabel;
         private System.Windows.Forms.Label tileMapHeightLabel;
-        private System.Windows.Forms.ImageList platformListTiles;
+        private System.Windows.Forms.ImageList entityList;
         private System.Windows.Forms.GroupBox layerSelectGroupBox;
         private System.Windows.Forms.RadioButton foregroundRadioButton;
         private System.Windows.Forms.RadioButton interactiveRadioButton;
@@ -703,5 +734,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.GroupBox leftClickGroupBox;
+        private System.Windows.Forms.RadioButton plainLeftClick;
+        private System.Windows.Forms.RadioButton smartLeftClick;
     }
 }

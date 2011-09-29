@@ -18,4 +18,10 @@ Content\textures\entities\lock.xnb
 Content\textures\entities\bullet.xnb
 Content\textures\entities\bosskiller.xnb
 Content\textures\entities\sign.xnb
+Content\textures\tilesheets\tilesheet.xnb
 Content\textures\tilesheets\tilesheet.png
+Content\textures\editor\tiles\0.bmp
+Content\textures\editor\tiles\1.bmp
+Content\textures\editor\tiles\2.bmp
+Content\textures\editor\tiles\3.bmp
+Content\textures\editor\tiles\4.bmp
