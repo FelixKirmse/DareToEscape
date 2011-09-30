@@ -143,10 +143,9 @@
     <Compile Include="Helpers\GeneralHelper.cs" />
     <Compile Include="Helpers\SaveHelper.cs" />
     <Compile Include="Helpers\SaveState.cs" />
-    <Compile Include="Managers\CodeManager.cs" />
     <Compile Include="Managers\IngameManager.cs" />
     <Compile Include="Managers\MenuManager.cs" />
-    <Compile Include="Managers\SpawnManager.cs" />
+    <Compile Include="Managers\CodeHandler.cs" />
     <Compile Include="Managers\StateManager.cs" />
     <Compile Include="Menus\IngameMenu.cs" />
     <Compile Include="Menus\MainMenu.cs" />

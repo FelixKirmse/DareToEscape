@@ -24,4 +24,14 @@ Content\textures\editor\tiles\0.bmp
 Content\textures\editor\tiles\1.bmp
 Content\textures\editor\tiles\2.bmp
 Content\textures\editor\tiles\3.bmp
-Content\textures\editor\tiles\4.bmp
+Content\textures\editor\entities\checkpoint.bmp
+Content\textures\editor\entities\exit.bmp
+Content\textures\editor\entities\key_blue.bmp
+Content\textures\editor\entities\key_green.bmp
+Content\textures\editor\entities\key_red.bmp
+Content\textures\editor\entities\key_yellow.bmp
+Content\textures\editor\entities\start.bmp
+Content\textures\editor\entities\lock_blue.bmp
+Content\textures\editor\entities\lock_green.bmp
+Content\textures\editor\entities\lock_red.bmp
+Content\textures\editor\entities\lock_yellow.bmp

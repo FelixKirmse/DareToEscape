@@ -22,12 +22,19 @@ namespace DareToEscape.Editor
     {
         public DareToEscape Game;
         private string cwd;       
-        private string currentMapName;
-        EditorItem currentItem;
+        private string currentMapName;        
+
+        private string loadLevel;
 
         public MapEditor()
         {
             InitializeComponent();            
+        }
+
+        public MapEditor(string levelName)
+        {
+            InitializeComponent();
+            loadLevel = levelName;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -81,7 +88,19 @@ namespace DareToEscape.Editor
                     listTiles.Items.Add(new ListViewItem(itemName, tilecount++));
                 }
             }
-                        
+
+            
+            tilecount = 0;
+            listEntities.Clear();
+            DirectoryInfo dirInfo = new DirectoryInfo(Application.StartupPath + @"\Content\textures\editor\entities");
+            var files = dirInfo.GetFiles();
+            tilecount = 0;
+            foreach (var file in files)
+            {
+                entityList.Images.Add(new Bitmap(file.FullName));
+                listEntities.Items.Add(new ListViewItem(file.Name.Replace(".bmp", ""), tilecount++));
+            }
+            listEntities.SmallImageList = entityList;        
         }
 
         private void FixScrollBarScales() {
@@ -116,7 +135,7 @@ namespace DareToEscape.Editor
         {
             if (listTiles.SelectedIndices.Count > 0) {                
                 EditorManager.DrawTile = listTiles.SelectedIndices[0];
-                currentItem = EditorManager.GetEditorItemByName(listTiles.SelectedIndices[0].ToString());      
+                EditorManager.CurrentItem = EditorManager.GetEditorItemByName(listTiles.SelectedIndices[0].ToString());      
             }
         }        
 
@@ -262,6 +281,14 @@ namespace DareToEscape.Editor
             timerGameUpdate.Start();
             openFileDialog.InitialDirectory = cwd;
             saveFileDialog.InitialDirectory = cwd;
+
+            if (loadLevel != null)
+            {
+                TileMap.LoadMap(new FileStream(cwd + @"/" + loadLevel + ".map", FileMode.Open));
+                currentMapName = loadLevel + ".map";
+                tileMapHeightInput.Text = TileMap.MapHeight.ToString();
+                tileMapWidthInput.Text = TileMap.MapWidth.ToString();            
+            }
         }
 
         private void startGameButton_Click(object sender, EventArgs e)
@@ -328,6 +355,7 @@ namespace DareToEscape.Editor
             {
                 EditorManager.FillMode = "RECTANGLEFILL";
                 getCodeRadio.Enabled = false;
+                smartLeftClick.Checked = false;
             }
             else
             {
@@ -439,6 +467,40 @@ namespace DareToEscape.Editor
         {
             TileMap.ClearMap();
             currentMapName = "";
+        }
+
+        private void deleteCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            EditorManager.RemoveTile = deleteCheckbox.Checked;
+        }
+
+        private void smartLeftClick_CheckedChanged(object sender, EventArgs e)
+        {
+            EditorManager.SmartInsert = smartLeftClick.Checked;
+        }
+
+        private void listEntities_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            EditorManager.CurrentItem = EditorManager.GetEditorItemByName(listEntities.SelectedItems[0].Text);
+        }        
+
+        private void playInEditorButton_Click(object sender, EventArgs e)
+        {
+            EditorManager.PlayLevel = !EditorManager.PlayLevel;
+            TileMap.EditorMode = !EditorManager.PlayLevel;
+            playInEditorButton.Text = EditorManager.PlayLevel ? "Return To Edit-Mode" : "Play Map in Editor";            
+            bool state = TileMap.EditorMode;
+            listTiles.Enabled = state;
+            listEntities.Enabled = state;
+            tileMapWidthInput.Enabled = state;
+            tileMapHeightInput.Enabled = state;
+            editModeItemCheckBox.Enabled = state;
+            groupBox3.Enabled = state;
+            leftClickGroupBox.Enabled = state;
+            groupBox2.Enabled = state;
+            layerSelectGroupBox.Enabled = state;
+            groupBoxRightClick.Enabled = state;
+            pctSurface.Focus();
         }        
     }
 }

@@ -111,6 +111,7 @@
     <Compile Include="Helpers\PathNode.cs" />
     <Compile Include="Helpers\EventHelper.cs" />
     <Compile Include="Managers\AudioManager.cs" />
+    <Compile Include="Managers\CodeManager.cs" />
     <Compile Include="Managers\DialogManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Managers\GameStateManager.cs" />

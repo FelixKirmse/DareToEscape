@@ -17,6 +17,7 @@ namespace DareToEscape.Components.Entities
         private bool setRectangle = true;
         private bool enabled = true;
         private string keystring;
+        private Color drawColor;
 
         public KeyGraphicsComponent()
         {
@@ -43,8 +44,19 @@ namespace DareToEscape.Components.Entities
 
         public override void Draw(GameObject obj, SpriteBatch spriteBatch)
         {
-            if(enabled)
-                base.Draw(obj, spriteBatch);
+            if (enabled)
+            {
+                spriteBatch.Draw(
+                texture,
+                obj.ScreenPosition,
+                null,
+                drawColor,
+                0f,
+                Vector2.Zero,
+                1f,
+                SpriteEffects.None,
+                drawDepth);
+            }
         }
 
         public override void Receive<T>(string message, T obj)
@@ -52,7 +64,32 @@ namespace DareToEscape.Components.Entities
             if (message == "KEYSTRING")
             {
                 if (obj is string)
+                {
                     keystring = (string)(object)obj;
+                    switch (keystring)
+                    { 
+                        case "RED":
+                            drawColor = Color.PaleVioletRed;
+                            break;
+                        
+                        case "BLUE":
+                            drawColor = Color.Blue;
+                            break;
+
+                        case "YELLOW":
+                            drawColor = Color.Yellow;
+                            break;
+
+                        case "GREEN":
+                            drawColor = Color.LightGreen;
+                            break;
+
+                        default:
+                            drawColor = Color.White;
+                            break;
+                    }
+                }
+                    
             }
         }
     }

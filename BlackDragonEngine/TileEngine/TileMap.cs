@@ -137,6 +137,26 @@ namespace BlackDragonEngine.TileEngine
         {
             return GetCellCodes((int)cell.X, (int)cell.Y);
         }
+
+        public static void AddCodeToCell(int cellX, int cellY, string code)
+        {
+            MapSquare square = GetMapSquareAtCell(cellX, cellY);
+            if (square != null)
+            {
+                if(!square.Codes.Contains(code))
+                    square.Codes.Add(code);
+            }                
+        }
+
+        public static void RemoveCodeFromCell(int cellX, int cellY, string code)
+        {
+            MapSquare square = GetMapSquareAtCell(cellX, cellY);
+            if (square != null)
+            {
+                if (square.Codes.Contains(code))
+                    square.Codes.Remove(code);
+            }  
+        }
         #endregion
 
         #region Information about MapSquare objects
@@ -155,7 +175,7 @@ namespace BlackDragonEngine.TileEngine
             }
         }
 
-        public static void SetTileAtCell(int tileX, int tileY, int layer, int tileIndex)
+        public static void SetTileAtCell(int tileX, int tileY, int layer, int? tileIndex)
         {
             if ((tileX >= 0) && (tileX < MapWidth) && (tileY >= 0) && (tileY < MapHeight)) {
                 map.MapCellColumns[tileX].MapCellRow[tileY].LayerTiles[layer] = tileIndex;                

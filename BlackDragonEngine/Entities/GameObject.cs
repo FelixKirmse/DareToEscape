@@ -63,6 +63,12 @@ namespace BlackDragonEngine.Entities
             this.components = components;
         }
 
+        public GameObject(Component component)
+        {
+            components = new List<Component>();
+            components.Add(component);
+        }
+
         public virtual void Update()
         {
             foreach (Component component in components)

@@ -81,10 +81,12 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.listEntities = new System.Windows.Forms.ListView();
             this.leftClickGroupBox = new System.Windows.Forms.GroupBox();
-            this.smartLeftClick = new System.Windows.Forms.RadioButton();
+            this.deleteCheckbox = new System.Windows.Forms.CheckBox();
             this.plainLeftClick = new System.Windows.Forms.RadioButton();
+            this.smartLeftClick = new System.Windows.Forms.RadioButton();
+            this.playInEditorButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pctSurface)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBoxRightClick.SuspendLayout();
@@ -367,7 +369,7 @@
             // 
             // tileMapWidthInput
             // 
-            this.tileMapWidthInput.Location = new System.Drawing.Point(66, 89);
+            this.tileMapWidthInput.Location = new System.Drawing.Point(64, 142);
             this.tileMapWidthInput.Name = "tileMapWidthInput";
             this.tileMapWidthInput.Size = new System.Drawing.Size(100, 20);
             this.tileMapWidthInput.TabIndex = 12;
@@ -375,7 +377,7 @@
             // 
             // tileMapHeightInput
             // 
-            this.tileMapHeightInput.Location = new System.Drawing.Point(66, 115);
+            this.tileMapHeightInput.Location = new System.Drawing.Point(64, 168);
             this.tileMapHeightInput.Name = "tileMapHeightInput";
             this.tileMapHeightInput.Size = new System.Drawing.Size(100, 20);
             this.tileMapHeightInput.TabIndex = 13;
@@ -384,7 +386,7 @@
             // tileMapWidthLabel
             // 
             this.tileMapWidthLabel.AutoSize = true;
-            this.tileMapWidthLabel.Location = new System.Drawing.Point(8, 92);
+            this.tileMapWidthLabel.Location = new System.Drawing.Point(6, 145);
             this.tileMapWidthLabel.Name = "tileMapWidthLabel";
             this.tileMapWidthLabel.Size = new System.Drawing.Size(56, 13);
             this.tileMapWidthLabel.TabIndex = 14;
@@ -393,7 +395,7 @@
             // tileMapHeightLabel
             // 
             this.tileMapHeightLabel.AutoSize = true;
-            this.tileMapHeightLabel.Location = new System.Drawing.Point(8, 118);
+            this.tileMapHeightLabel.Location = new System.Drawing.Point(6, 171);
             this.tileMapHeightLabel.Name = "tileMapHeightLabel";
             this.tileMapHeightLabel.Size = new System.Drawing.Size(59, 13);
             this.tileMapHeightLabel.TabIndex = 15;
@@ -488,7 +490,7 @@
             this.editModeItemCheckBox.AutoSize = true;
             this.editModeItemCheckBox.Checked = true;
             this.editModeItemCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.editModeItemCheckBox.Location = new System.Drawing.Point(9, 141);
+            this.editModeItemCheckBox.Location = new System.Drawing.Point(7, 194);
             this.editModeItemCheckBox.Name = "editModeItemCheckBox";
             this.editModeItemCheckBox.Size = new System.Drawing.Size(155, 17);
             this.editModeItemCheckBox.TabIndex = 22;
@@ -578,22 +580,24 @@
             this.label3.TabIndex = 26;
             this.label3.Text = "Entities";
             // 
-            // listView1
+            // listEntities
             // 
-            this.listView1.AutoArrange = false;
-            this.listView1.HideSelection = false;
-            this.listView1.LabelWrap = false;
-            this.listView1.Location = new System.Drawing.Point(194, 118);
-            this.listView1.MultiSelect = false;
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(327, 92);
-            this.listView1.TabIndex = 25;
-            this.listView1.TileSize = new System.Drawing.Size(16, 16);
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.SmallIcon;
+            this.listEntities.AutoArrange = false;
+            this.listEntities.HideSelection = false;
+            this.listEntities.LabelWrap = false;
+            this.listEntities.Location = new System.Drawing.Point(194, 118);
+            this.listEntities.MultiSelect = false;
+            this.listEntities.Name = "listEntities";
+            this.listEntities.Size = new System.Drawing.Size(327, 92);
+            this.listEntities.TabIndex = 25;
+            this.listEntities.TileSize = new System.Drawing.Size(32, 32);
+            this.listEntities.UseCompatibleStateImageBehavior = false;
+            this.listEntities.View = System.Windows.Forms.View.SmallIcon;
+            this.listEntities.SelectedIndexChanged += new System.EventHandler(this.listEntities_SelectedIndexChanged);
             // 
             // leftClickGroupBox
             // 
+            this.leftClickGroupBox.Controls.Add(this.deleteCheckbox);
             this.leftClickGroupBox.Controls.Add(this.plainLeftClick);
             this.leftClickGroupBox.Controls.Add(this.smartLeftClick);
             this.leftClickGroupBox.Location = new System.Drawing.Point(367, 354);
@@ -602,6 +606,27 @@
             this.leftClickGroupBox.TabIndex = 27;
             this.leftClickGroupBox.TabStop = false;
             this.leftClickGroupBox.Text = "Left Click Mode";
+            // 
+            // deleteCheckbox
+            // 
+            this.deleteCheckbox.AutoSize = true;
+            this.deleteCheckbox.Location = new System.Drawing.Point(74, 31);
+            this.deleteCheckbox.Name = "deleteCheckbox";
+            this.deleteCheckbox.Size = new System.Drawing.Size(86, 17);
+            this.deleteCheckbox.TabIndex = 2;
+            this.deleteCheckbox.Text = "Remove Tile";
+            this.deleteCheckbox.UseVisualStyleBackColor = true;
+            this.deleteCheckbox.CheckedChanged += new System.EventHandler(this.deleteCheckbox_CheckedChanged);
+            // 
+            // plainLeftClick
+            // 
+            this.plainLeftClick.AutoSize = true;
+            this.plainLeftClick.Location = new System.Drawing.Point(7, 44);
+            this.plainLeftClick.Name = "plainLeftClick";
+            this.plainLeftClick.Size = new System.Drawing.Size(48, 17);
+            this.plainLeftClick.TabIndex = 1;
+            this.plainLeftClick.Text = "Plain";
+            this.plainLeftClick.UseVisualStyleBackColor = true;
             // 
             // smartLeftClick
             // 
@@ -614,25 +639,27 @@
             this.smartLeftClick.TabStop = true;
             this.smartLeftClick.Text = "Smart";
             this.smartLeftClick.UseVisualStyleBackColor = true;
+            this.smartLeftClick.CheckedChanged += new System.EventHandler(this.smartLeftClick_CheckedChanged);
             // 
-            // plainLeftClick
+            // playInEditorButton
             // 
-            this.plainLeftClick.AutoSize = true;
-            this.plainLeftClick.Location = new System.Drawing.Point(7, 44);
-            this.plainLeftClick.Name = "plainLeftClick";
-            this.plainLeftClick.Size = new System.Drawing.Size(48, 17);
-            this.plainLeftClick.TabIndex = 1;
-            this.plainLeftClick.Text = "Plain";
-            this.plainLeftClick.UseVisualStyleBackColor = true;
+            this.playInEditorButton.Location = new System.Drawing.Point(9, 86);
+            this.playInEditorButton.Name = "playInEditorButton";
+            this.playInEditorButton.Size = new System.Drawing.Size(159, 23);
+            this.playInEditorButton.TabIndex = 28;
+            this.playInEditorButton.Text = "Play Map in Editor";
+            this.playInEditorButton.UseVisualStyleBackColor = true;
+            this.playInEditorButton.Click += new System.EventHandler(this.playInEditorButton_Click);
             // 
             // MapEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1399, 685);
+            this.Controls.Add(this.playInEditorButton);
             this.Controls.Add(this.leftClickGroupBox);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.listEntities);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.editModeItemCheckBox);
@@ -733,9 +760,11 @@
         private System.Windows.Forms.ToolStripMenuItem newMapToolStripMenuItem;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView listEntities;
         private System.Windows.Forms.GroupBox leftClickGroupBox;
         private System.Windows.Forms.RadioButton plainLeftClick;
         private System.Windows.Forms.RadioButton smartLeftClick;
+        private System.Windows.Forms.CheckBox deleteCheckbox;
+        private System.Windows.Forms.Button playInEditorButton;
     }
 }

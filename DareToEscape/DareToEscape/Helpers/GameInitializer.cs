@@ -37,6 +37,7 @@ namespace DareToEscape.Helpers
              DialogManager.DrawMugshot = false;
              
              StateManager.Initialize();
+             CodeHandler.BindEvents();
          }         
     }
 }

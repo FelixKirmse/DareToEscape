@@ -16,7 +16,8 @@ namespace DareToEscape.Menus
     {
         private const string resume = "Resume";
         private const string restartCheck = "Restart from last checkpoint";
-        private const string restartLevel = "Restart level";        
+        private const string restartLevel = "Restart level";
+        private const string mapeditor = "Edit this level";
         private const string toggleFullscreen = "Toggle fullscreen";
         private const string back = "Back to main menu";
 
@@ -24,7 +25,8 @@ namespace DareToEscape.Menus
         {
             menuItems.Add(new MenuItem(resume, fontName, true, new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(restartCheck, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(restartLevel, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));            
+            menuItems.Add(new MenuItem(restartLevel, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
+            menuItems.Add(new MenuItem(mapeditor, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0))); 
             menuItems.Add(new MenuItem(toggleFullscreen, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(back, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
 
@@ -56,6 +58,11 @@ namespace DareToEscape.Menus
                     SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
                     StateManager.GameState = GameStates.Ingame;
                     break;                
+
+                case mapeditor:
+                    StateManager.GamePaused = false;
+                    Editor.EditorManager.Activate(LevelManager.CurrentLevel);
+                    break;
 
                 case toggleFullscreen:
                     DareToEscape.ToggleFullScreen();

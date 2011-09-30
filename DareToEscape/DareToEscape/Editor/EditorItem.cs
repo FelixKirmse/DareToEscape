@@ -15,6 +15,7 @@ namespace DareToEscape.Editor
         public string CodeBelow { get; set; }
         public string CodeLeft { get; set; }
         public string CodeRight { get; set; }
+        public bool Unique { get; set; }
         public bool? Passable { get; set; }
         public int? TileID { get; set; }
     }
