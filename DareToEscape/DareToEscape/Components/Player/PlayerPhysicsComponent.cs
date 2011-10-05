@@ -10,6 +10,7 @@ using BlackDragonEngine.Components;
 using Microsoft.Xna.Framework.Input;
 using BlackDragonEngine.Managers;
 using DareToEscape.Helpers;
+using BlackDragonEngine.Providers;
 
 namespace DareToEscape.Components.Player
 {
@@ -51,7 +52,7 @@ namespace DareToEscape.Components.Player
                 }
                 for (int i = 0; i < Math.Abs(horiz); ++i)
                 {
-                    if (inWater)
+                    if (inWater || ShortcutProvider.IsKeyDown(Keys.LeftShift))
                         wantedPosition.X += (horiz / Math.Abs(horiz)) / 2;
                     else
                         wantedPosition.X += horiz / Math.Abs(horiz);

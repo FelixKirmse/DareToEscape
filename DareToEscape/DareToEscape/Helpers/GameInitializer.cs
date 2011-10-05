@@ -8,6 +8,7 @@ using BlackDragonEngine.Providers;
 using DareToEscape.Managers;
 using BlackDragonEngine.Managers;
 using Microsoft.Xna.Framework;
+using DareToEscape.Entities.BulletBehaviors;
 
 namespace DareToEscape.Helpers
 {
@@ -38,6 +39,7 @@ namespace DareToEscape.Helpers
              
              StateManager.Initialize();
              CodeHandler.BindEvents();
+             ReusableBehaviors.Initialize();
          }         
     }
 }

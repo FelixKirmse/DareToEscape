@@ -13,6 +13,7 @@ using System.Diagnostics;
 using DareToEscape.Entities;
 using BlackDragonEngine;
 using DareToEscape.Providers;
+using BlackDragonEngine.Scripting;
 
 
 namespace DareToEscape
@@ -26,6 +27,13 @@ namespace DareToEscape
         {
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            ScriptEngine engine = new ScriptEngine(this);
+            Components.Add(engine);
+            VariableProvider.ScriptEngine = engine;
+            BulletManager bulletManager = new BulletManager(this);
+            Components.Add(bulletManager);
+            GameVariableProvider.BulletManager = bulletManager;
         }
         
         protected override void Initialize()
@@ -40,13 +48,6 @@ namespace DareToEscape
             base.Initialize();
         }
 
-        public static void ChangeResolution(Point size)
-        {
-            Graphics.PreferredBackBufferWidth = size.X;
-            Graphics.PreferredBackBufferHeight = size.Y;
-            Graphics.ApplyChanges();     
-        }
-        
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -76,6 +77,7 @@ namespace DareToEscape
             GraphicsDevice.Clear(Color.Black);            
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             StateManager.Draw(spriteBatch);
+            GameVariableProvider.BulletManager.Draw(spriteBatch);
             spriteBatch.End();
             
             base.Draw(gameTime);

@@ -8,6 +8,7 @@ using BlackDragonEngine.Components;
 using Microsoft.Xna.Framework.Graphics;
 using BlackDragonEngine.Providers;
 using DareToEscape.Entities;
+using DareToEscape.Entities.BulletBehaviors;
 
 namespace DareToEscape.Components.Entities
 {
@@ -16,32 +17,20 @@ namespace DareToEscape.Components.Entities
         
         public MediumTurretComponent()
         {
-            texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/mediumturret");
-            waveTimer = 2000;
-            bulletTimer = 250;
-            waveCount = 10;
+            texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/mediumturret");            
         }
 
-        public override void Update(GameObject obj)
+        protected override IEnumerator<float> ShootBehavior()
         {
-            foreach (Bullet bullet in bullets)
+            for (int i = 0; i < 10; ++i)
             {
-                Vector2 direction = VariableProvider.CurrentPlayer.CollisionCenter - bullet.Position;
+                Bullet newBullet = new Bullet(ReusableBehaviors.TracingBehavior, bulletOrigin);
+                Vector2 direction = VariableProvider.CurrentPlayer.Position - bulletOrigin;
                 direction.Normalize();
-                bullet.Shoot(direction);
+                newBullet.Shoot(direction);
+                yield return 250f;
             }
-            base.Update(obj);
-        }
-        
-
-        protected override void ShootWave()
-        {
-            Bullet newBullet = new Bullet();
-            newBullet.Position = bulletOrigin;
-            Vector2 direction = VariableProvider.CurrentPlayer.CollisionCenter - newBullet.Position;
-            direction.Normalize();
-            newBullet.Shoot(direction);
-            bullets.Add(newBullet);  
+            yield return 2000f; 
         }        
     }
 }

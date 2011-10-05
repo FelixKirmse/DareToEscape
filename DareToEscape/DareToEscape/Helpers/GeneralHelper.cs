@@ -8,6 +8,7 @@ using BlackDragonEngine.Managers;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using BlackDragonEngine.Helpers;
+using DareToEscape.Providers;
 
 namespace DareToEscape.Helpers
 {
@@ -18,6 +19,8 @@ namespace DareToEscape.Helpers
 
         public static void Update()
         {
+            GameVariableProvider.BulletManager.ClearAllBullets();
+            VariableProvider.ScriptEngine.StopAllScripts();
             elapsedSeconds += ShortcutProvider.ElapsedSeconds;
             if (StateManager.FastDead ||elapsedSeconds >= timeToAutoResume || InputMapper.StrictAction)
             {

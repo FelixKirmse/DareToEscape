@@ -125,6 +125,7 @@
     <Compile Include="Providers\InputProvider.cs" />
     <Compile Include="Providers\ShortcutProvider.cs" />
     <Compile Include="Providers\VariableProvider.cs" />
+    <Compile Include="Scripting\ScriptEngine.cs" />
     <Compile Include="States.cs" />
     <Compile Include="Helpers\Camera.cs" />
     <Compile Include="TileEngine\Map.cs" />

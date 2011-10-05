@@ -16,57 +16,18 @@ namespace DareToEscape.Components.Entities
     class TurretComponent : GraphicsComponent
     {
         protected float rotation;
-        protected Vector2 RotationOrigin { get { return new Vector2(texture.Width / 2, texture.Height / 2); } }
-                
+        protected Vector2 RotationOrigin { get { return new Vector2(texture.Width / 2, texture.Height / 2); } }                
         protected Vector2 bulletOrigin;
-
-        protected float waveTimer = 2000f;
-        protected float bulletTimer = 166f;
-
-        protected float elapsedWaveTime;
-        protected float elapsedBulletTime;
-
-        protected int waveCount = 5;
-        protected int counter;
-
-        protected List<Bullet> bullets = new List<Bullet>();
 
         public override void Update(GameObject obj)
         {
             if (ShootCondition(VariableProvider.CurrentPlayer.CollisionCenter, obj))
             {
-                elapsedWaveTime += ShortcutProvider.ElapsedMilliseconds;
-                if (elapsedWaveTime >= waveTimer)
+                if (!VariableProvider.ScriptEngine.IsScriptRunning(ShootBehavior))
                 {
-                    elapsedBulletTime += ShortcutProvider.ElapsedMilliseconds;
-                    if (elapsedBulletTime >= bulletTimer)
-                    {
-                        ShootWave();
-                        counter++;
-                        elapsedBulletTime = 0;
-                        if (counter == waveCount)
-                        {
-                            elapsedWaveTime = 0;
-                            counter = 0;
-                        }
-                    }
+                    VariableProvider.ScriptEngine.ExecuteSript(ShootBehavior);
                 }
-            }
-            else
-            {
-                elapsedBulletTime = bulletTimer;
-                elapsedWaveTime = waveTimer;
-            }
-
-            for (int i = 0; i < bullets.Count; ++i)
-            {
-                bullets[i].Update();
-                if (!bullets[i].Active)
-                {
-                    bullets.RemoveAt(i);
-                    --i;
-                }
-            }
+            }            
         }
 
         public override void Draw(GameObject obj, SpriteBatch spriteBatch)
@@ -81,11 +42,6 @@ namespace DareToEscape.Components.Entities
                 1f,
                 SpriteEffects.None,
                 drawDepth);
-
-            foreach (Bullet bullet in bullets)
-            {
-                bullet.Draw(spriteBatch);
-            }
         }
 
         protected virtual bool ShootCondition(Vector2 playerPosition, GameObject turret)
@@ -103,7 +59,7 @@ namespace DareToEscape.Components.Entities
             return true;
         }
 
-        protected virtual void ShootWave()
+        protected virtual IEnumerator<float> ShootBehavior()
         {
             throw new NotImplementedException();
         }

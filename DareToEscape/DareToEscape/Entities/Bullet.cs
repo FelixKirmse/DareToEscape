@@ -8,16 +8,39 @@ using BlackDragonEngine.Components;
 using Microsoft.Xna.Framework.Graphics;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
+using DareToEscape.Providers;
+using DareToEscape.Entities.BulletBehaviors;
+using BlackDragonEngine.Helpers;
 
 namespace DareToEscape.Entities
 {
-    class Bullet : GameObject
+    public class Bullet : GameObject
     {
         private static Texture2D bulletTexture;
         public static float SpeedModifier = 1.0f;
-        private float baseSpeed = 2f;
-        public bool Active { get; private set; }
-        private Vector2 direction;
+        public float BaseSpeed = 2f;        
+        public bool Active { get; set; }
+        public Vector2 Direction;
+        private Vector2 lastDirection;
+        private Vector2 lastPosition;
+
+        public bool ChangedDirection
+        {
+            get
+            {
+                return Direction == lastDirection;            
+            }
+        }
+
+        public bool ChangedPosition
+        {
+            get
+            {
+                return Position == lastPosition;
+            }
+        }
+
+        private Behavior behavior;
 
         public Bullet()
         {
@@ -25,20 +48,46 @@ namespace DareToEscape.Entities
             bulletTexture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/bullet");
             components.Add(new GraphicsComponent(bulletTexture));
             Active = false;
+            behavior = ReusableBehaviors.StandardBehavior;
+        }
+
+        public Bullet(Vector2 position)
+            : this()
+        {
+            Position = position;
+        }
+
+        public Bullet(Behavior behavior)
+            : this()
+        {
+            this.behavior = behavior;
+        }
+
+        public Bullet(Behavior behavior, Vector2 position)
+            : this(position)
+        {
+            this.behavior = behavior;
         }
 
         public override void Update()
         {
             if (Active)
             {
-                position += direction * baseSpeed;
-                if (!TileMap.CellIsPassableByPixel(CollisionCenter))
-                    Active = false;
-                if (CollisionRectangle.Intersects(VariableProvider.CurrentPlayer.CollisionRectangle))
+                behavior.Update(this);
+
+                if (!TileMap.CellIsPassableByPixel(CollisionCenter) || !Camera.WorldRectangle.Contains((int)Position.X, (int)Position.Y))
+                {
+                    Active = false;   
+                }
+                    
+                if (CollisionRectangle.Intersects(((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionRect))
                 {
                     Active = false;
                     VariableProvider.CurrentPlayer.Send<string>("KILL", null);
                 }
+
+                lastDirection = Direction;
+                lastPosition = Position;
             }
             base.Update();
         }
@@ -52,7 +101,8 @@ namespace DareToEscape.Entities
         public void Shoot(Vector2 direction)
         {
             Active = true;
-            this.direction = direction;
+            this.Direction = direction;
+            GameVariableProvider.BulletManager.AddBullet(this);
         }
     }
 }

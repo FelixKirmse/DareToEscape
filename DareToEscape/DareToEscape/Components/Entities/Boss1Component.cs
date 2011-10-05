@@ -10,6 +10,7 @@ using BlackDragonEngine.Providers;
 using DareToEscape.Entities;
 using BlackDragonEngine.Managers;
 using DareToEscape.Helpers;
+using DareToEscape.Entities.BulletBehaviors;
 
 
 namespace DareToEscape.Components.Entities
@@ -18,12 +19,15 @@ namespace DareToEscape.Components.Entities
     {
         private bool shoot = false;
         private bool active = true;
+        protected float waveTimer;
+        protected float bulletTimer;
+        protected int waveCount;
 
         public Boss1Component()
         {
             texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/boss1");
             waveCount = 5;
-            waveTimer = 2000;
+            waveTimer = 1500;
             bulletTimer = 125;
         }
 
@@ -39,17 +43,17 @@ namespace DareToEscape.Components.Entities
                 base.Draw(obj, spriteBatch);
         }
 
-        protected override void ShootWave()
-        {
-            for (int i = 0; i < 20; ++i)
+        protected override IEnumerator<float> ShootBehavior()
+        {            
+            for (int j = 0; j < 1000; ++j)
             {
-                Bullet newBullet = new Bullet();
-                newBullet.Position = bulletOrigin;
+                Bullet newBullet = new Bullet(new Boss1Behavior(), bulletOrigin);                    
                 Vector2 direction = new Vector2(VariableProvider.RandomSeed.Next(-1000, 1000), VariableProvider.RandomSeed.Next(-1000, 1000));
                 direction.Normalize();
-                bullets.Add(newBullet);
+                direction *= (float)VariableProvider.RandomSeed.NextDouble() * VariableProvider.RandomSeed.Next(4);    
                 newBullet.Shoot(direction);
-            } 
+            }
+            yield return waveTimer;
         }
 
         protected override bool ShootCondition(Vector2 playerPosition, GameObject turret)

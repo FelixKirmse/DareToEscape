@@ -9,6 +9,7 @@ using BlackDragonEngine.Entities;
 using DareToEscape.Components.Entities;
 using BlackDragonEngine.Providers;
 using Microsoft.Xna.Framework.Graphics;
+using DareToEscape.Entities;
 
 namespace DareToEscape.Helpers
 {
@@ -22,7 +23,7 @@ namespace DareToEscape.Helpers
             components.Add(new PlayerPhysicsComponent());
             components.Add(new PlayerSoundComponent());
             components.Add(new PlayerGeneralComponent());
-            return new GameObject(components);
+            return new Player(components);
         }
 
         public static GameObject CreateCheckPoint()

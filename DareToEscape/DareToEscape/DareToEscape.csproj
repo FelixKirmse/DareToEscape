@@ -135,6 +135,12 @@
       <DependentUpon>MapEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Entities\Bullet.cs" />
+    <Compile Include="Entities\BulletBehaviors\Behavior.cs" />
+    <Compile Include="Entities\BulletBehaviors\ReusableBehaviors.cs" />
+    <Compile Include="Entities\BulletBehaviors\Boss1Behavior.cs" />
+    <Compile Include="Entities\BulletBehaviors\StandardBehavior.cs" />
+    <Compile Include="Entities\BulletBehaviors\TracingBehavior.cs" />
+    <Compile Include="Entities\Player.cs" />
     <Compile Include="GameStates.cs" />
     <Compile Include="Helpers\ContentLoader.cs" />
     <Compile Include="Helpers\DialogHelper.cs" />
@@ -143,6 +149,7 @@
     <Compile Include="Helpers\GeneralHelper.cs" />
     <Compile Include="Helpers\SaveHelper.cs" />
     <Compile Include="Helpers\SaveState.cs" />
+    <Compile Include="Managers\BulletManager.cs" />
     <Compile Include="Managers\IngameManager.cs" />
     <Compile Include="Managers\MenuManager.cs" />
     <Compile Include="Managers\CodeHandler.cs" />
@@ -204,6 +211,7 @@
       <DependentUpon>MapEditor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--
