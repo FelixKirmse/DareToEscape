@@ -112,6 +112,7 @@
   <ItemGroup>
     <Compile Include="Components\Entities\Boss1Component.cs" />
     <Compile Include="Components\Entities\BossKillerComponent.cs" />
+    <Compile Include="Components\Entities\BulletGraphicsComponent.cs" />
     <Compile Include="Components\Entities\CheckPointGraphicsComponent.cs" />
     <Compile Include="Components\Entities\ExitGraphicsComponent.cs" />
     <Compile Include="Components\Entities\KeyGraphicsComponent.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Entities\BulletBehaviors\ReusableBehaviors.cs" />
     <Compile Include="Entities\BulletBehaviors\Boss1Behavior.cs" />
     <Compile Include="Entities\BulletBehaviors\StandardBehavior.cs" />
+    <Compile Include="Entities\BulletBehaviors\GravityAffected.cs" />
     <Compile Include="Entities\BulletBehaviors\TracingBehavior.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="GameStates.cs" />

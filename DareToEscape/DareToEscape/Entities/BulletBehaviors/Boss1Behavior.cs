@@ -24,7 +24,7 @@ namespace DareToEscape.Entities.BulletBehaviors
                 if (bullet.ChangedPosition)
                 {
                     Vector2 direction = Player.GetNormalizedDirectionVector(bullet.Position);
-                    bullet.Direction = direction;
+                    bullet.Direction = direction;                    
                 }
             }
             else

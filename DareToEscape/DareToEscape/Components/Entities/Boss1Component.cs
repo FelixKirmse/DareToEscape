@@ -12,6 +12,8 @@ using BlackDragonEngine.Managers;
 using DareToEscape.Helpers;
 using DareToEscape.Entities.BulletBehaviors;
 
+using PlayerEnt = DareToEscape.Entities.Player;
+
 
 namespace DareToEscape.Components.Entities
 {
@@ -44,16 +46,21 @@ namespace DareToEscape.Components.Entities
         }
 
         protected override IEnumerator<float> ShootBehavior()
-        {            
-            for (int j = 0; j < 1000; ++j)
+        {
+            for (int i = 0; i < 20; ++i)
             {
-                Bullet newBullet = new Bullet(new Boss1Behavior(), bulletOrigin);                    
-                Vector2 direction = new Vector2(VariableProvider.RandomSeed.Next(-1000, 1000), VariableProvider.RandomSeed.Next(-1000, 1000));
-                direction.Normalize();
-                direction *= (float)VariableProvider.RandomSeed.NextDouble() * VariableProvider.RandomSeed.Next(4);    
-                newBullet.Shoot(direction);
+                for (int j = 0; j < 20; ++j)
+                {
+                    Bullet newBullet = new Bullet(new GravityAffected(), bulletOrigin, Color.Red);
+                    Vector2 direction = (((PlayerEnt)VariableProvider.CurrentPlayer).PlayerBulletCollisionRectCenter - bulletOrigin) + new Vector2(VariableProvider.RandomSeed.Next(-500,500),VariableProvider.RandomSeed.Next(-500,500)) ;
+                    direction.Normalize();                   
+                    newBullet.Shoot(direction);
+                    newBullet.BaseSpeed = (float)VariableProvider.RandomSeed.NextDouble() * VariableProvider.RandomSeed.Next(8);
+                }
+                yield return 125f;
             }
-            yield return waveTimer;
+
+            yield return 0;
         }
 
         protected override bool ShootCondition(Vector2 playerPosition, GameObject turret)

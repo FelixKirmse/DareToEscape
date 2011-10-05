@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using BlackDragonEngine.Entities;
 using Microsoft.Xna.Framework;
-using BlackDragonEngine.Components;
+using DareToEscape.Components.Entities;
 using Microsoft.Xna.Framework.Graphics;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
@@ -16,7 +16,7 @@ namespace DareToEscape.Entities
 {
     public class Bullet : GameObject
     {
-        private static Texture2D bulletTexture;
+        private Texture2D bulletTexture;
         public static float SpeedModifier = 1.0f;
         public float BaseSpeed = 2f;        
         public bool Active { get; set; }
@@ -44,9 +44,9 @@ namespace DareToEscape.Entities
 
         public Bullet()
         {
-            collisionRectangle = new Rectangle(0, 0, 7, 7);
+            collisionRectangle = new Rectangle(1, 1, 5, 5);
             bulletTexture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/bullet");
-            components.Add(new GraphicsComponent(bulletTexture));
+            components.Add(new BulletGraphicsComponent(bulletTexture));
             Active = false;
             behavior = ReusableBehaviors.StandardBehavior;
         }
@@ -67,6 +67,12 @@ namespace DareToEscape.Entities
             : this(position)
         {
             this.behavior = behavior;
+        }
+
+        public Bullet(Behavior behavior, Vector2 position, Color color)
+            : this(behavior, position)
+        {
+            Send("GRAPHICS_DRAWCOLOR", color);
         }
 
         public override void Update()
