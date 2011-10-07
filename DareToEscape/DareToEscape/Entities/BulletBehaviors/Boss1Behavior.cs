@@ -17,14 +17,13 @@ namespace DareToEscape.Entities.BulletBehaviors
 
             if (timer < 500f)
             {
-                bullet.Position += bullet.Direction * bullet.BaseSpeed * 2;
+                bullet.Position += bullet.DirectionVector * bullet.BaseSpeed * 2;
             }            
             else if (timer < 1500f)
             {
                 if (bullet.ChangedPosition)
-                {
-                    Vector2 direction = Player.GetNormalizedDirectionVector(bullet.Position);
-                    bullet.Direction = direction;                    
+                {                    
+                    bullet.Direction = bullet.DirectionAngleToPlayer;                    
                 }
             }
             else

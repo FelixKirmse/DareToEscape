@@ -31,12 +31,5 @@ namespace DareToEscape.Entities
                 return new Vector2((PlayerBulletCollisionRect.Right + PlayerBulletCollisionRect.Left) / 2, (PlayerBulletCollisionRect.Bottom + PlayerBulletCollisionRect.Top) / 2);
             }
         }
-
-        public static Vector2 GetNormalizedDirectionVector(Vector2 otherPosition)
-        {
-            Vector2 direction = ((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionRectCenter - otherPosition;
-            direction.Normalize();
-            return direction;
-        }
     }
 }

@@ -9,7 +9,7 @@ namespace DareToEscape.Entities.BulletBehaviors
     {
         public void Update(Bullet bullet)
         {
-            bullet.Position += bullet.Direction * bullet.BaseSpeed;
+            bullet.Position += bullet.DirectionVector * bullet.BaseSpeed;
         }
     }
 }

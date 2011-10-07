@@ -11,9 +11,8 @@ namespace DareToEscape.Entities.BulletBehaviors
     class TracingBehavior : Behavior
     {
         public void Update(Bullet bullet)
-        {
-            Vector2 direction = Player.GetNormalizedDirectionVector(bullet.Position);            
-            bullet.Position += direction * bullet.BaseSpeed;
+        {                        
+            bullet.Position += bullet.DirectionVectorToPlayer * bullet.BaseSpeed;
         }
     }
 }

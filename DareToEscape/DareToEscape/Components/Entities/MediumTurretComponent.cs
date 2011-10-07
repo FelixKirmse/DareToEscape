@@ -24,10 +24,8 @@ namespace DareToEscape.Components.Entities
         {
             for (int i = 0; i < 10; ++i)
             {
-                Bullet newBullet = new Bullet(ReusableBehaviors.TracingBehavior, bulletOrigin);
-                Vector2 direction = VariableProvider.CurrentPlayer.Position - bulletOrigin;
-                direction.Normalize();
-                newBullet.Shoot(direction);
+                Bullet newBullet = new Bullet(ReusableBehaviors.TracingBehavior, bulletOrigin);                
+                newBullet.Shoot(newBullet.DirectionAngleToPlayer);
                 yield return 250f;
             }
             yield return 2000f; 

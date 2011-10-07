@@ -20,9 +20,38 @@ namespace DareToEscape.Entities
         public static float SpeedModifier = 1.0f;
         public float BaseSpeed = 2f;        
         public bool Active { get; set; }
-        public Vector2 Direction;
-        private Vector2 lastDirection;
+        public float Direction { get; set; }
+        private float lastDirection { get; set; }
         private Vector2 lastPosition;
+
+        public Vector2 DirectionVectorToPlayer
+        {
+            get 
+            {
+                Vector2 direction = ((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionRectCenter - CollisionCenter;
+                float angle = (float)Math.Atan2(direction.Y, direction.X);
+                return new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+            }
+        }
+
+        public float DirectionAngleToPlayer
+        {
+            get 
+            {
+                Vector2 direction = ((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionRectCenter - CollisionCenter;
+                float radians = (float)Math.Atan2(direction.Y, direction.X);
+                return MathHelper.ToDegrees(radians);
+            }
+        }
+
+        public Vector2 DirectionVector
+        {
+            get 
+            {
+                float radians = MathHelper.ToRadians(Direction);
+                return new Vector2((float)Math.Cos(radians), (float)Math.Sin(radians));
+            }
+        }
 
         public bool ChangedDirection
         {
@@ -104,7 +133,7 @@ namespace DareToEscape.Entities
                 base.Draw(spriteBatch);
         }
 
-        public void Shoot(Vector2 direction)
+        public void Shoot(float direction)
         {
             Active = true;
             this.Direction = direction;

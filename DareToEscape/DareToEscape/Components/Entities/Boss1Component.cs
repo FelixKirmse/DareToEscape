@@ -48,8 +48,7 @@ namespace DareToEscape.Components.Entities
         protected override IEnumerator<float> ShootBehavior()
         {
             Bullet bullet = new Bullet(bulletOrigin);
-            Vector2 direction = bulletOrigin - VariableProvider.CurrentPlayer.Position;
-            direction.Normalize();
+            float direction = bullet.DirectionAngleToPlayer;
             yield return 1f;
         }
 
