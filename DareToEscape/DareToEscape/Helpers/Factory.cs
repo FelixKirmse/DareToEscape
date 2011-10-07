@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using BlackDragonEngine.Components;
 using DareToEscape.Components;
-using DareToEscape.Components.Player;
+using DareToEscape.Components.PlayerComponents;
 using BlackDragonEngine.Entities;
 using DareToEscape.Components.Entities;
 using BlackDragonEngine.Providers;

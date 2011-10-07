@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using System.IO;
 using BlackDragonEngine.TileEngine;
@@ -49,9 +45,8 @@ namespace DareToEscape.Editor
 
         private void LoadImageLists(bool createImages)
         {            
-            string filepath;
+            string filepath;            
             
-            TileMap.TileOffset = 0;
             filepath = Application.StartupPath + @"\Content\textures\tilesheets\tilesheet.png";
             tileList.Images.Clear();            
             
@@ -103,18 +98,11 @@ namespace DareToEscape.Editor
             listEntities.SmallImageList = entityList;        
         }
 
-        private void FixScrollBarScales() {
+        private void FixScrollBarScales()
+        {
             Camera.WorldRectangle = new XNARectangle(0, 0, TileMap.TileWidth * TileMap.MapWidth, TileMap.TileHeight * TileMap.MapHeight);
             Camera.ViewPortWidth = pctSurface.Width;
             Camera.ViewPortHeight = pctSurface.Height;
-
-            Camera.Move(Vector2.Zero);
-
-            vScrollBar1.Minimum = 0;
-            vScrollBar1.Maximum = Camera.WorldRectangle.Height - Camera.ViewPortHeight;
-
-            hScrollBar1.Minimum = 0;
-            hScrollBar1.Maximum = Camera.WorldRectangle.Width - Camera.ViewPortWidth;
         }
 
         private void MapEditor_Load(object sender, EventArgs e)
@@ -133,7 +121,8 @@ namespace DareToEscape.Editor
 
         private void listTiles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listTiles.SelectedIndices.Count > 0) {                
+            if (listTiles.SelectedIndices.Count > 0) 
+            {                
                 EditorManager.DrawTile = listTiles.SelectedIndices[0];
                 EditorManager.CurrentItem = EditorManager.GetEditorItemByName(listTiles.SelectedIndices[0].ToString());      
             }
@@ -181,6 +170,7 @@ namespace DareToEscape.Editor
             if(Form.ActiveForm == this)
             Game.Tick();
 
+            mapSizeLabel.Text = "Map size: " + TileMap.MapWidth + " x " + TileMap.MapHeight;
             coordLbl.Text = "MapCell: (" + EditorManager.CellCoords.X + @"|" + EditorManager.CellCoords.Y + ")";
             
         }
@@ -190,9 +180,7 @@ namespace DareToEscape.Editor
             openFileDialog.ShowDialog();            
             try 
             {
-                TileMap.LoadMap(new FileStream(cwd + @"/" + currentMapName, FileMode.Open));
-                tileMapHeightInput.Text = TileMap.MapHeight.ToString();
-                tileMapWidthInput.Text = TileMap.MapWidth.ToString();
+                TileMap.LoadMap(new FileStream(cwd + @"/" + currentMapName, FileMode.Open));                
             }
             catch 
             {
@@ -285,28 +273,14 @@ namespace DareToEscape.Editor
             if (loadLevel != null)
             {
                 TileMap.LoadMap(new FileStream(cwd + @"/" + loadLevel + ".map", FileMode.Open));
-                currentMapName = loadLevel + ".map";
-                tileMapHeightInput.Text = TileMap.MapHeight.ToString();
-                tileMapWidthInput.Text = TileMap.MapWidth.ToString();            
+                currentMapName = loadLevel + ".map";                        
             }
         }
 
         private void startGameButton_Click(object sender, EventArgs e)
         {
             EditorManager.JumpToLevel(currentMapName.Replace(".map",""));
-        }       
-
-        private void tileMapWidthInput_Leave(object sender, EventArgs e)
-        {
-            TileMap.MapWidth = Convert.ToInt32(tileMapWidthInput.Text);
-            TileMap.ClearMap();
-        }
-
-        private void tileMapHeightInput_Leave(object sender, EventArgs e)
-        {
-            TileMap.MapHeight = Convert.ToInt32(tileMapHeightInput.Text);
-            TileMap.ClearMap();
-        }
+        }  
   
         private void backgroundRadioButton_CheckedChanged(object sender, EventArgs e)
         {
@@ -392,7 +366,10 @@ namespace DareToEscape.Editor
             }
 
             MapSquare square = TileMap.GetMapSquareAtCell(cellX, cellY);
+            if (square == null)
+                square = new MapSquare(null, null, null, true);
             square.Codes = codeList;
+            TileMap.SetMapSquareAtCell(cellX, cellY, square);
         }
 
         private void addCodeButton_Click(object sender, EventArgs e)
@@ -491,15 +468,14 @@ namespace DareToEscape.Editor
             bool state = TileMap.EditorMode;
             listTiles.Enabled = state;
             listEntities.Enabled = state;
-            tileMapWidthInput.Enabled = state;
-            tileMapHeightInput.Enabled = state;
+            mapPropertiesGroupBox.Enabled = state;
             editModeItemCheckBox.Enabled = state;
             groupBox3.Enabled = state;
             leftClickGroupBox.Enabled = state;
             groupBox2.Enabled = state;
             layerSelectGroupBox.Enabled = state;
             groupBoxRightClick.Enabled = state;
-            pctSurface.Focus();
+            focusButton.Focus();
         }        
     }
 }

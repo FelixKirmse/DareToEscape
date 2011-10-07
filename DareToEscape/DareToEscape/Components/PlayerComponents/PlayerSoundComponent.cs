@@ -7,7 +7,7 @@ using BlackDragonEngine.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 
-namespace DareToEscape.Components.Player
+namespace DareToEscape.Components.PlayerComponents
 {
     class PlayerSoundComponent : SoundComponent
     {

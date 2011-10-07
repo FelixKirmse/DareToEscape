@@ -47,9 +47,15 @@ namespace DareToEscape.Components.Entities
 
         protected override IEnumerator<float> ShootBehavior()
         {
-            Bullet bullet = new Bullet(bulletOrigin);
-            float direction = bullet.DirectionAngleToPlayer;
-            yield return 1f;
+            int bulletNumber = 45;
+            float winkel = 0;
+            for (int i = 0; i < bulletNumber; ++i)
+            {
+                Bullet bullet = new Bullet(ReusableBehaviors.StandardBehavior, bulletOrigin, Color.Red);
+                bullet.Shoot(winkel + bullet.DirectionAngleToPlayer);
+                winkel += 360 / bulletNumber;               
+            }            
+            yield return 125f;
         }
 
         protected override bool ShootCondition(Vector2 playerPosition, GameObject turret)

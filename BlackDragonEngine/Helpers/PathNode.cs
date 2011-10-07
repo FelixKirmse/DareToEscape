@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
 
 namespace BlackDragonEngine.Helpers

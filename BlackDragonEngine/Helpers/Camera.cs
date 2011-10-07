@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using BlackDragonEngine.TileEngine;
 
 namespace BlackDragonEngine.Helpers
@@ -16,7 +12,14 @@ namespace BlackDragonEngine.Helpers
         #endregion
 
         #region Properties
-        public static Vector2 Position {
+        public static Vector2 ForcePosition
+        {
+            get { return position; }
+            set { position = value; }
+        }
+
+        public static Vector2 Position
+        {
             get { return position; }
             set { position = new Vector2(MathHelper.Clamp(value.X, worldRectangle.X, worldRectangle.Width - ViewPortWidth), MathHelper.Clamp(value.Y, worldRectangle.Y, worldRectangle.Height - ViewPortHeight)); }
         }

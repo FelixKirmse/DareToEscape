@@ -13,9 +13,10 @@ using BlackDragonEngine.Managers;
 using Microsoft.Xna.Framework.Input;
 using DareToEscape.Components;
 using DareToEscape.Components.Entities;
-using DareToEscape.Components.Player;
+using DareToEscape.Components.PlayerComponents;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.Components;
+using DareToEscape.Helpers;
 
 namespace DareToEscape.Editor
 {
@@ -41,9 +42,7 @@ namespace DareToEscape.Editor
         private static IntPtr drawSurface;
         private static Form parentForm;
         private static PictureBox pictureBox;
-        private static Control gameForm;
-        private static VScrollBar vscroll;
-        private static HScrollBar hscroll;
+        private static Control gameForm;        
         private static MapEditor editorForm;
         private static PresentationParameters orgPParams;
         private static DareToEscape game;
@@ -71,6 +70,8 @@ namespace DareToEscape.Editor
         public static void Activate()
         {            
             StateManager.GameState = GameStates.Editor;
+            VariableProvider.CurrentPlayer = Factory.CreatePlayer();
+            EntityManager.SetPlayer();
             if (editorForm == null)
                 editorForm = new MapEditor();
             editorForm.Show();
@@ -89,9 +90,6 @@ namespace DareToEscape.Editor
             gameForm.VisibleChanged += gameFormVisibleChanged;
             pictureBox.SizeChanged += pictureBoxSizeChanged;
             gameForm.Visible = false;
-
-            vscroll = (VScrollBar)parentForm.Controls["vScrollBar1"];
-            hscroll = (HScrollBar)parentForm.Controls["hScrollBar1"];
 
             Camera.ViewPortWidth = pictureBox.Width;
             Camera.ViewPortHeight = pictureBox.Height;
@@ -165,144 +163,139 @@ namespace DareToEscape.Editor
                 MouseState ms = InputProvider.MouseState;
                 if (!PlayLevel)
                 {
-                    Camera.Position = new Vector2(hscroll.Value, vscroll.Value);
+                    int mod = 1; ;
+                    if(ShortcutProvider.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift))
+                    {
+                        mod = 2;
+                    }
                     if (InputMapper.Up)
                     {
-                        Camera.Position -= new Vector2(0,5);
+                        Camera.ForcePosition -= new Vector2(0,5) * mod;
                     }
                     if (InputMapper.Down)
                     {
-                        Camera.Position += new Vector2(0, 5);
+                        Camera.ForcePosition += new Vector2(0, 5) * mod;
                     }
                     if (InputMapper.Left)
                     {
-                        Camera.Position -= new Vector2(5,0);
+                        Camera.ForcePosition -= new Vector2(5, 0) * mod;
                     }
                     if (InputMapper.Right)
                     {
-                        Camera.Position += new Vector2(5,0);
-                    }
-                    hscroll.Value = (int)Camera.Position.X;
-                    vscroll.Value = (int)Camera.Position.Y;                    
+                        Camera.ForcePosition += new Vector2(5, 0) * mod;
+                    }                                        
 
                     if ((ms.X > 0) && (ms.Y > 0) && (ms.X < Camera.ViewPortWidth) && (ms.Y < Camera.ViewPortHeight))
                     {
                         Vector2 mouseLoc = Camera.ScreenToWorld(new Vector2(ms.X, ms.Y));
-                        int cellX = (int)MathHelper.Clamp(TileMap.GetCellByPixelX((int)mouseLoc.X), 0, TileMap.MapWidth - 1);
-                        int cellY = (int)MathHelper.Clamp(TileMap.GetCellByPixelY((int)mouseLoc.Y), 0, TileMap.MapHeight - 1);
-
-                        if (Camera.WorldRectangle.Contains((int)mouseLoc.X, (int)mouseLoc.Y))
+                        int cellX = (int)MathHelper.Max(TileMap.GetCellByPixelX((int)mouseLoc.X), 0);
+                        int cellY = (int)MathHelper.Max(TileMap.GetCellByPixelY((int)mouseLoc.Y), 0);
+                        
+                        if (FillMode == "TILEFILL")
                         {
-                            if (FillMode == "TILEFILL")
+                            if (ShortcutProvider.LeftButtonClicked())
                             {
-                                if (ShortcutProvider.LeftButtonClicked())
-                                {
-                                    if (SmartInsert)
-                                        InsertEditorItem(cellX, cellY);
-                                    else if (!RemoveTile)
-                                        TileMap.SetTileAtCell(cellX, cellY, DrawLayer, DrawTile);
+                                if (SmartInsert)
+                                    InsertEditorItem(cellX, cellY);
+                                else if (!RemoveTile)
+                                    TileMap.SetTileAtCell(cellX, cellY, DrawLayer, DrawTile);
 
-                                    if(RemoveTile)
-                                    { 
-                                        TileMap.SetTileAtCell(cellX, cellY, DrawLayer, null);
-                                        TileMap.GetCellCodes(cellX, cellY).Clear();
-                                        TileMap.GetMapSquareAtCell(cellX, cellY).Passable = true;
-                                    }                                        
+                                if(RemoveTile)
+                                {
+                                    TileMap.RemoveMapSquareAtCell(cellX, cellY);
+                                }                                        
+                            }
+
+                            if (ShortcutProvider.RightButtonClicked())
+                            {
+                                if (SettingCode)
+                                {
+                                    ((MapEditor)parentForm).SetCodeList(cellX, cellY);
                                 }
-
-                                if (ShortcutProvider.RightButtonClicked())
+                                else if (MakePassable)
                                 {
-                                    if (SettingCode)
+                                    TileMap.GetMapSquareAtCell(cellX, cellY).Passable = true;
+                                }
+                                else if (MakeUnpassable)
+                                {
+                                    TileMap.GetMapSquareAtCell(cellX, cellY).Passable = false;
+                                }
+                                else if (GettingCode)
+                                {
+                                    ((MapEditor)parentForm).GetCodeList(TileMap.GetCellCodes(cellX, cellY));
+                                }
+                                if (InsertTile)
+                                {
+                                    TileMap.SetTileAtCell(cellX, cellY, DrawLayer, DrawTile);
+                                }
+                            }
+                        }
+                        else if (FillMode == "RECTANGLEFILL")
+                        {
+                            if (ShortcutProvider.LeftButtonClickedNowButNotLastFrame())
+                            {
+                                if (!WaitingForSecondClick)
+                                {
+                                    startCell = new Vector2(cellX, cellY);
+                                    WaitingForSecondClick = true;
+                                }
+                                else
+                                {
+                                    Vector2 endCell = new Vector2(cellX, cellY);
+                                    WaitingForSecondClick = false;
+
+                                    for (int cellx = (int)startCell.X; cellx <= endCell.X; ++cellx)
                                     {
-                                        ((MapEditor)parentForm).SetCodeList(cellX, cellY);
-                                    }
-                                    else if (MakePassable)
-                                    {
-                                        TileMap.GetMapSquareAtCell(cellX, cellY).Passable = true;
-                                    }
-                                    else if (MakeUnpassable)
-                                    {
-                                        TileMap.GetMapSquareAtCell(cellX, cellY).Passable = false;
-                                    }
-                                    else if (GettingCode)
-                                    {
-                                        ((MapEditor)parentForm).GetCodeList(TileMap.GetCellCodes(cellX, cellY));
-                                    }
-                                    if (InsertTile)
-                                    {
-                                        TileMap.SetTileAtCell(cellX, cellY, DrawLayer, DrawTile);
+                                        for (int celly = (int)startCell.Y; celly <= endCell.Y; ++celly)
+                                        {
+                                            if (SmartInsert)
+                                                InsertEditorItem(cellx, celly);
+                                            else if (!RemoveTile)
+                                                TileMap.SetTileAtCell(cellx, celly, DrawLayer, DrawTile);
+
+                                            if (RemoveTile)
+                                            {
+                                                TileMap.RemoveMapSquareAtCell(cellx, celly);
+                                            }
+                                        }
                                     }
                                 }
                             }
-                            else if (FillMode == "RECTANGLEFILL")
+                            if (ShortcutProvider.RightButtonClickedButNotLastFrame())
                             {
-                                if (ShortcutProvider.LeftButtonClickedNowButNotLastFrame())
+                                if (!WaitingForSecondClick)
                                 {
-                                    if (!WaitingForSecondClick)
-                                    {
-                                        startCell = new Vector2(cellX, cellY);
-                                        WaitingForSecondClick = true;
-                                    }
-                                    else
-                                    {
-                                        Vector2 endCell = new Vector2(cellX, cellY);
-                                        WaitingForSecondClick = false;
+                                    startCell = new Vector2(cellX, cellY);
+                                    WaitingForSecondClick = true;
+                                }
+                                else
+                                {
+                                    Vector2 endCell = new Vector2(cellX, cellY);
+                                    WaitingForSecondClick = false;
 
-                                        for (int cellx = (int)startCell.X; cellx <= endCell.X; ++cellx)
+                                    for (int cellx = (int)startCell.X; cellx <= endCell.X; ++cellx)
+                                    {
+                                        for (int celly = (int)startCell.Y; celly <= endCell.Y; ++celly)
                                         {
-                                            for (int celly = (int)startCell.Y; celly <= endCell.Y; ++celly)
+                                            if (SettingCode)
                                             {
-                                                if (SmartInsert)
-                                                    InsertEditorItem(cellx, celly);
-                                                else if (!RemoveTile)
-                                                    TileMap.SetTileAtCell(cellx, celly, DrawLayer, DrawTile);
-
-                                                if (RemoveTile)
-                                                {
-                                                    TileMap.SetTileAtCell(cellx, celly, DrawLayer, null);
-                                                    TileMap.GetCellCodes(cellx, celly).Clear();
-                                                    TileMap.GetMapSquareAtCell(cellx, celly).Passable = true;
-                                                }
+                                                ((MapEditor)parentForm).SetCodeList(cellx, celly);
+                                            }
+                                            else if (MakePassable)
+                                            {
+                                                TileMap.GetMapSquareAtCell(cellx, celly).Passable = true;
+                                            }
+                                            else if (MakeUnpassable)
+                                            {
+                                                TileMap.GetMapSquareAtCell(cellx, celly).Passable = false;
+                                            }
+                                            if (InsertTile)
+                                            {
+                                                TileMap.SetTileAtCell(cellx, celly, DrawLayer, DrawTile);
                                             }
                                         }
                                     }
-                                }
-                                if (ShortcutProvider.RightButtonClickedButNotLastFrame())
-                                {
-                                    if (!WaitingForSecondClick)
-                                    {
-                                        startCell = new Vector2(cellX, cellY);
-                                        WaitingForSecondClick = true;
-                                    }
-                                    else
-                                    {
-                                        Vector2 endCell = new Vector2(cellX, cellY);
-                                        WaitingForSecondClick = false;
-
-                                        for (int cellx = (int)startCell.X; cellx <= endCell.X; ++cellx)
-                                        {
-                                            for (int celly = (int)startCell.Y; celly <= endCell.Y; ++celly)
-                                            {
-                                                if (SettingCode)
-                                                {
-                                                    ((MapEditor)parentForm).SetCodeList(cellx, celly);
-                                                }
-                                                else if (MakePassable)
-                                                {
-                                                    TileMap.GetMapSquareAtCell(cellx, celly).Passable = true;
-                                                }
-                                                else if (MakeUnpassable)
-                                                {
-                                                    TileMap.GetMapSquareAtCell(cellx, celly).Passable = false;
-                                                }
-                                                if (InsertTile)
-                                                {
-                                                    TileMap.SetTileAtCell(cellx, celly, DrawLayer, DrawTile);
-                                                }                                                
-                                            }
-                                        }
-                                    }
-                                }
+                                }                                
                             }
                             CellCoords = new Vector2(cellX, cellY);
                         }
@@ -332,29 +325,30 @@ namespace DareToEscape.Editor
             if (CurrentItem == null)
                 return;
 
+            MapSquare mapSquare = TileMap.GetMapSquareAtCell(cellX, cellY);
+            if (mapSquare == null)
+            {
+                mapSquare = new MapSquare(null, null, null, CurrentItem.Passable == null ? true :  (bool)CurrentItem.Passable);
+            }
+
             if (CurrentItem.Unique)
             {
-                for (int x = 0; x < TileMap.MapWidth; ++x)
+                foreach (var item in TileMap.Map.MapData)
                 {
-                    for (int y = 0; y < TileMap.MapHeight; ++y)
-                    { 
-                        if(TileMap.GetCellCodes(x,y).Contains(CurrentItem.Code))
-                            TileMap.GetCellCodes(x,y).Remove(CurrentItem.Code);
-                    }
-                }
+                    if (TileMap.GetCellCodes(item.Key.X, item.Key.Y).Contains(CurrentItem.Code))
+                        TileMap.GetCellCodes(item.Key.X, item.Key.Y).Remove(CurrentItem.Code);  
+                }                
             }
 
             if (CurrentItem.Code != null)
-            {
-                if (RemoveTile)
-                    TileMap.RemoveCodeFromCell(cellX, cellY, CurrentItem.Code);
-                else
-                    TileMap.AddCodeToCell(cellX, cellY, CurrentItem.Code);
+             {                
+                if(!mapSquare.Codes.Contains(CurrentItem.Code))
+                    mapSquare.Codes.Add(CurrentItem.Code);                                   
             }
             if (CurrentItem.CodeAbove != null)
             {
                 if (RemoveTile)
-                    TileMap.RemoveCodeFromCell(cellX, cellY -1, CurrentItem.CodeAbove);
+                    TileMap.RemoveCodeFromCell(cellX, cellY - 1, CurrentItem.CodeAbove);
                 else
                     TileMap.AddCodeToCell(cellX, cellY - 1, CurrentItem.CodeAbove);
             }
@@ -378,21 +372,12 @@ namespace DareToEscape.Editor
                     TileMap.RemoveCodeFromCell(cellX + 1, cellY, CurrentItem.CodeRight);
                 else
                     TileMap.AddCodeToCell(cellX + 1, cellY, CurrentItem.CodeRight);
-            }
-            if (CurrentItem.Passable != null)
-            {
-                if (RemoveTile)
-                    TileMap.GetMapSquareAtCell(cellX, cellY).Passable = true;
-                else
-                    TileMap.GetMapSquareAtCell(cellX, cellY).Passable = (bool)CurrentItem.Passable;
-            }
+            }       
             if (CurrentItem.TileID != null)
             {
-                if (RemoveTile)
-                    TileMap.SetTileAtCell(cellX, cellY, DrawLayer, null);
-                else
-                    TileMap.SetTileAtCell(cellX, cellY, DrawLayer, CurrentItem.TileID);
-            }            
+                mapSquare.LayerTiles[DrawLayer] = CurrentItem.TileID;
+            }
+            TileMap.SetMapSquareAtCell(cellX, cellY, mapSquare);
         }
 
         public static EditorItem GetEditorItemByName(string name)

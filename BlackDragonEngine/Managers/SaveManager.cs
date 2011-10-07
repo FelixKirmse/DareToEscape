@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
 using System.IO;
 using System.IO.Compression;
 using BlackDragonEngine.Helpers;
-using System.Runtime.Serialization.Formatters.Binary;
 using BlackDragonEngine.Providers;
 using System.Security.Cryptography;
 using System.Xml.Serialization;

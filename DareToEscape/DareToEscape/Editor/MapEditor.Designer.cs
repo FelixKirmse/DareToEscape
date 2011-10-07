@@ -46,8 +46,6 @@
             this.foregroundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tileList = new System.Windows.Forms.ImageList(this.components);
             this.listTiles = new System.Windows.Forms.ListView();
-            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
-            this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
             this.groupBoxRightClick = new System.Windows.Forms.GroupBox();
             this.insertTileCheckBox = new System.Windows.Forms.CheckBox();
             this.getCodeRadio = new System.Windows.Forms.RadioButton();
@@ -59,10 +57,6 @@
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.cwdLabel = new System.Windows.Forms.Label();
             this.startGameButton = new System.Windows.Forms.Button();
-            this.tileMapWidthInput = new System.Windows.Forms.TextBox();
-            this.tileMapHeightInput = new System.Windows.Forms.TextBox();
-            this.tileMapWidthLabel = new System.Windows.Forms.Label();
-            this.tileMapHeightLabel = new System.Windows.Forms.Label();
             this.entityList = new System.Windows.Forms.ImageList(this.components);
             this.layerSelectGroupBox = new System.Windows.Forms.GroupBox();
             this.foregroundRadioButton = new System.Windows.Forms.RadioButton();
@@ -87,6 +81,16 @@
             this.plainLeftClick = new System.Windows.Forms.RadioButton();
             this.smartLeftClick = new System.Windows.Forms.RadioButton();
             this.playInEditorButton = new System.Windows.Forms.Button();
+            this.mapPropertiesGroupBox = new System.Windows.Forms.GroupBox();
+            this.removePropertiesButton = new System.Windows.Forms.Button();
+            this.addPropertyButton = new System.Windows.Forms.Button();
+            this.propertyNameInput = new System.Windows.Forms.TextBox();
+            this.propertyListBox = new System.Windows.Forms.ListBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.propertyValueInput = new System.Windows.Forms.TextBox();
+            this.mapSizeLabel = new System.Windows.Forms.Label();
+            this.focusButton = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pctSurface)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBoxRightClick.SuspendLayout();
@@ -94,6 +98,7 @@
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.leftClickGroupBox.SuspendLayout();
+            this.mapPropertiesGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // pctSurface
@@ -238,22 +243,6 @@
             this.listTiles.View = System.Windows.Forms.View.SmallIcon;
             this.listTiles.SelectedIndexChanged += new System.EventHandler(this.listTiles_SelectedIndexChanged);
             // 
-            // vScrollBar1
-            // 
-            this.vScrollBar1.LargeChange = 48;
-            this.vScrollBar1.Location = new System.Drawing.Point(1349, 27);
-            this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(17, 603);
-            this.vScrollBar1.TabIndex = 3;
-            // 
-            // hScrollBar1
-            // 
-            this.hScrollBar1.LargeChange = 48;
-            this.hScrollBar1.Location = new System.Drawing.Point(549, 630);
-            this.hScrollBar1.Name = "hScrollBar1";
-            this.hScrollBar1.Size = new System.Drawing.Size(800, 20);
-            this.hScrollBar1.TabIndex = 4;
-            // 
             // groupBoxRightClick
             // 
             this.groupBoxRightClick.Controls.Add(this.insertTileCheckBox);
@@ -261,7 +250,7 @@
             this.groupBoxRightClick.Controls.Add(this.radioUnpassable);
             this.groupBoxRightClick.Controls.Add(this.radioCode);
             this.groupBoxRightClick.Controls.Add(this.radioPassable);
-            this.groupBoxRightClick.Location = new System.Drawing.Point(9, 429);
+            this.groupBoxRightClick.Location = new System.Drawing.Point(373, 213);
             this.groupBoxRightClick.Name = "groupBoxRightClick";
             this.groupBoxRightClick.Size = new System.Drawing.Size(173, 103);
             this.groupBoxRightClick.TabIndex = 5;
@@ -330,7 +319,6 @@
             // 
             // timerGameUpdate
             // 
-            this.timerGameUpdate.Enabled = true;
             this.timerGameUpdate.Interval = 20;
             this.timerGameUpdate.Tick += new System.EventHandler(this.timerGameUpdate_Tick);
             // 
@@ -367,40 +355,6 @@
             this.startGameButton.UseVisualStyleBackColor = true;
             this.startGameButton.Click += new System.EventHandler(this.startGameButton_Click);
             // 
-            // tileMapWidthInput
-            // 
-            this.tileMapWidthInput.Location = new System.Drawing.Point(64, 142);
-            this.tileMapWidthInput.Name = "tileMapWidthInput";
-            this.tileMapWidthInput.Size = new System.Drawing.Size(100, 20);
-            this.tileMapWidthInput.TabIndex = 12;
-            this.tileMapWidthInput.Leave += new System.EventHandler(this.tileMapWidthInput_Leave);
-            // 
-            // tileMapHeightInput
-            // 
-            this.tileMapHeightInput.Location = new System.Drawing.Point(64, 168);
-            this.tileMapHeightInput.Name = "tileMapHeightInput";
-            this.tileMapHeightInput.Size = new System.Drawing.Size(100, 20);
-            this.tileMapHeightInput.TabIndex = 13;
-            this.tileMapHeightInput.Leave += new System.EventHandler(this.tileMapHeightInput_Leave);
-            // 
-            // tileMapWidthLabel
-            // 
-            this.tileMapWidthLabel.AutoSize = true;
-            this.tileMapWidthLabel.Location = new System.Drawing.Point(6, 145);
-            this.tileMapWidthLabel.Name = "tileMapWidthLabel";
-            this.tileMapWidthLabel.Size = new System.Drawing.Size(56, 13);
-            this.tileMapWidthLabel.TabIndex = 14;
-            this.tileMapWidthLabel.Text = "MapWidth";
-            // 
-            // tileMapHeightLabel
-            // 
-            this.tileMapHeightLabel.AutoSize = true;
-            this.tileMapHeightLabel.Location = new System.Drawing.Point(6, 171);
-            this.tileMapHeightLabel.Name = "tileMapHeightLabel";
-            this.tileMapHeightLabel.Size = new System.Drawing.Size(59, 13);
-            this.tileMapHeightLabel.TabIndex = 15;
-            this.tileMapHeightLabel.Text = "MapHeight";
-            // 
             // entityList
             // 
             this.entityList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
@@ -412,7 +366,7 @@
             this.layerSelectGroupBox.Controls.Add(this.foregroundRadioButton);
             this.layerSelectGroupBox.Controls.Add(this.interactiveRadioButton);
             this.layerSelectGroupBox.Controls.Add(this.backgroundRadioButton);
-            this.layerSelectGroupBox.Location = new System.Drawing.Point(188, 429);
+            this.layerSelectGroupBox.Location = new System.Drawing.Point(373, 320);
             this.layerSelectGroupBox.Name = "layerSelectGroupBox";
             this.layerSelectGroupBox.Size = new System.Drawing.Size(173, 103);
             this.layerSelectGroupBox.TabIndex = 19;
@@ -467,7 +421,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.rectangleSelectionCheckBox);
-            this.groupBox2.Location = new System.Drawing.Point(367, 429);
+            this.groupBox2.Location = new System.Drawing.Point(370, 429);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(173, 103);
             this.groupBox2.TabIndex = 21;
@@ -490,7 +444,7 @@
             this.editModeItemCheckBox.AutoSize = true;
             this.editModeItemCheckBox.Checked = true;
             this.editModeItemCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.editModeItemCheckBox.Location = new System.Drawing.Point(7, 194);
+            this.editModeItemCheckBox.Location = new System.Drawing.Point(9, 85);
             this.editModeItemCheckBox.Name = "editModeItemCheckBox";
             this.editModeItemCheckBox.Size = new System.Drawing.Size(155, 17);
             this.editModeItemCheckBox.TabIndex = 22;
@@ -574,7 +528,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(336, 96);
+            this.label3.Location = new System.Drawing.Point(141, 109);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(41, 13);
             this.label3.TabIndex = 26;
@@ -585,7 +539,7 @@
             this.listEntities.AutoArrange = false;
             this.listEntities.HideSelection = false;
             this.listEntities.LabelWrap = false;
-            this.listEntities.Location = new System.Drawing.Point(194, 118);
+            this.listEntities.Location = new System.Drawing.Point(9, 125);
             this.listEntities.MultiSelect = false;
             this.listEntities.Name = "listEntities";
             this.listEntities.Size = new System.Drawing.Size(327, 92);
@@ -600,7 +554,7 @@
             this.leftClickGroupBox.Controls.Add(this.deleteCheckbox);
             this.leftClickGroupBox.Controls.Add(this.plainLeftClick);
             this.leftClickGroupBox.Controls.Add(this.smartLeftClick);
-            this.leftClickGroupBox.Location = new System.Drawing.Point(367, 354);
+            this.leftClickGroupBox.Location = new System.Drawing.Point(373, 138);
             this.leftClickGroupBox.Name = "leftClickGroupBox";
             this.leftClickGroupBox.Size = new System.Drawing.Size(173, 69);
             this.leftClickGroupBox.TabIndex = 27;
@@ -643,19 +597,115 @@
             // 
             // playInEditorButton
             // 
-            this.playInEditorButton.Location = new System.Drawing.Point(9, 86);
+            this.playInEditorButton.Location = new System.Drawing.Point(371, 109);
             this.playInEditorButton.Name = "playInEditorButton";
-            this.playInEditorButton.Size = new System.Drawing.Size(159, 23);
+            this.playInEditorButton.Size = new System.Drawing.Size(150, 23);
             this.playInEditorButton.TabIndex = 28;
             this.playInEditorButton.Text = "Play Map in Editor";
             this.playInEditorButton.UseVisualStyleBackColor = true;
             this.playInEditorButton.Click += new System.EventHandler(this.playInEditorButton_Click);
+            // 
+            // mapPropertiesGroupBox
+            // 
+            this.mapPropertiesGroupBox.Controls.Add(this.label4);
+            this.mapPropertiesGroupBox.Controls.Add(this.propertyValueInput);
+            this.mapPropertiesGroupBox.Controls.Add(this.label1);
+            this.mapPropertiesGroupBox.Controls.Add(this.removePropertiesButton);
+            this.mapPropertiesGroupBox.Controls.Add(this.addPropertyButton);
+            this.mapPropertiesGroupBox.Controls.Add(this.propertyNameInput);
+            this.mapPropertiesGroupBox.Controls.Add(this.propertyListBox);
+            this.mapPropertiesGroupBox.Location = new System.Drawing.Point(9, 429);
+            this.mapPropertiesGroupBox.Name = "mapPropertiesGroupBox";
+            this.mapPropertiesGroupBox.Size = new System.Drawing.Size(356, 221);
+            this.mapPropertiesGroupBox.TabIndex = 24;
+            this.mapPropertiesGroupBox.TabStop = false;
+            this.mapPropertiesGroupBox.Text = "Map Properties";
+            // 
+            // removePropertiesButton
+            // 
+            this.removePropertiesButton.Location = new System.Drawing.Point(6, 52);
+            this.removePropertiesButton.Name = "removePropertiesButton";
+            this.removePropertiesButton.Size = new System.Drawing.Size(149, 23);
+            this.removePropertiesButton.TabIndex = 3;
+            this.removePropertiesButton.Text = "Remove selected properties";
+            this.removePropertiesButton.UseVisualStyleBackColor = true;
+            // 
+            // addPropertyButton
+            // 
+            this.addPropertyButton.Location = new System.Drawing.Point(242, 52);
+            this.addPropertyButton.Name = "addPropertyButton";
+            this.addPropertyButton.Size = new System.Drawing.Size(101, 23);
+            this.addPropertyButton.TabIndex = 2;
+            this.addPropertyButton.Text = "Add Property";
+            this.addPropertyButton.UseVisualStyleBackColor = true;
+            // 
+            // propertyNameInput
+            // 
+            this.propertyNameInput.Location = new System.Drawing.Point(48, 19);
+            this.propertyNameInput.Name = "propertyNameInput";
+            this.propertyNameInput.Size = new System.Drawing.Size(100, 20);
+            this.propertyNameInput.TabIndex = 1;
+            // 
+            // propertyListBox
+            // 
+            this.propertyListBox.FormattingEnabled = true;
+            this.propertyListBox.Location = new System.Drawing.Point(7, 81);
+            this.propertyListBox.Name = "propertyListBox";
+            this.propertyListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.propertyListBox.Size = new System.Drawing.Size(336, 134);
+            this.propertyListBox.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Name";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(186, 23);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(34, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Value";
+            // 
+            // propertyValueInput
+            // 
+            this.propertyValueInput.Location = new System.Drawing.Point(227, 21);
+            this.propertyValueInput.Name = "propertyValueInput";
+            this.propertyValueInput.Size = new System.Drawing.Size(100, 20);
+            this.propertyValueInput.TabIndex = 5;
+            // 
+            // mapSizeLabel
+            // 
+            this.mapSizeLabel.AutoSize = true;
+            this.mapSizeLabel.Location = new System.Drawing.Point(371, 535);
+            this.mapSizeLabel.Name = "mapSizeLabel";
+            this.mapSizeLabel.Size = new System.Drawing.Size(35, 13);
+            this.mapSizeLabel.TabIndex = 29;
+            this.mapSizeLabel.Text = "label5";
+            // 
+            // focusButton
+            // 
+            this.focusButton.AutoSize = true;
+            this.focusButton.Location = new System.Drawing.Point(-67, 663);
+            this.focusButton.Name = "focusButton";
+            this.focusButton.Size = new System.Drawing.Size(15, 14);
+            this.focusButton.TabIndex = 30;
+            this.focusButton.UseVisualStyleBackColor = true;
             // 
             // MapEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1399, 685);
+            this.Controls.Add(this.focusButton);
+            this.Controls.Add(this.mapSizeLabel);
+            this.Controls.Add(this.mapPropertiesGroupBox);
             this.Controls.Add(this.playInEditorButton);
             this.Controls.Add(this.leftClickGroupBox);
             this.Controls.Add(this.label3);
@@ -666,16 +716,10 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.coordLbl);
             this.Controls.Add(this.layerSelectGroupBox);
-            this.Controls.Add(this.tileMapHeightLabel);
-            this.Controls.Add(this.tileMapWidthLabel);
-            this.Controls.Add(this.tileMapHeightInput);
-            this.Controls.Add(this.tileMapWidthInput);
             this.Controls.Add(this.startGameButton);
             this.Controls.Add(this.cwdLabel);
             this.Controls.Add(this.cwdButton);
             this.Controls.Add(this.groupBoxRightClick);
-            this.Controls.Add(this.hScrollBar1);
-            this.Controls.Add(this.vScrollBar1);
             this.Controls.Add(this.listTiles);
             this.Controls.Add(this.pctSurface);
             this.Controls.Add(this.menuStrip1);
@@ -701,6 +745,8 @@
             this.groupBox3.PerformLayout();
             this.leftClickGroupBox.ResumeLayout(false);
             this.leftClickGroupBox.PerformLayout();
+            this.mapPropertiesGroupBox.ResumeLayout(false);
+            this.mapPropertiesGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -723,8 +769,6 @@
         private System.Windows.Forms.ToolStripMenuItem foregroundToolStripMenuItem;
         private System.Windows.Forms.ImageList tileList;
         private System.Windows.Forms.ListView listTiles;
-        private System.Windows.Forms.VScrollBar vScrollBar1;
-        private System.Windows.Forms.HScrollBar hScrollBar1;
         private System.Windows.Forms.GroupBox groupBoxRightClick;
         private System.Windows.Forms.RadioButton radioCode;
         private System.Windows.Forms.RadioButton radioPassable;
@@ -734,10 +778,6 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowser;
         private System.Windows.Forms.Label cwdLabel;
         private System.Windows.Forms.Button startGameButton;
-        private System.Windows.Forms.TextBox tileMapWidthInput;
-        private System.Windows.Forms.TextBox tileMapHeightInput;
-        private System.Windows.Forms.Label tileMapWidthLabel;
-        private System.Windows.Forms.Label tileMapHeightLabel;
         private System.Windows.Forms.ImageList entityList;
         private System.Windows.Forms.GroupBox layerSelectGroupBox;
         private System.Windows.Forms.RadioButton foregroundRadioButton;
@@ -766,5 +806,15 @@
         private System.Windows.Forms.RadioButton smartLeftClick;
         private System.Windows.Forms.CheckBox deleteCheckbox;
         private System.Windows.Forms.Button playInEditorButton;
+        private System.Windows.Forms.GroupBox mapPropertiesGroupBox;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox propertyValueInput;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button removePropertiesButton;
+        private System.Windows.Forms.Button addPropertyButton;
+        private System.Windows.Forms.TextBox propertyNameInput;
+        private System.Windows.Forms.ListBox propertyListBox;
+        private System.Windows.Forms.Label mapSizeLabel;
+        private System.Windows.Forms.CheckBox focusButton;
     }
 }

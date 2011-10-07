@@ -11,7 +11,7 @@ using BlackDragonEngine.Helpers;
 using Microsoft.Xna.Framework;
 using DareToEscape.Managers;
 
-namespace DareToEscape.Components.Player
+namespace DareToEscape.Components.PlayerComponents
 {
     class PlayerGeneralComponent : Component
     {   

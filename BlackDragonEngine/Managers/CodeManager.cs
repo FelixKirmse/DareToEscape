@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using BlackDragonEngine.Entities;
 using Microsoft.Xna.Framework;
 using BlackDragonEngine.Providers;
@@ -28,18 +25,15 @@ namespace BlackDragonEngine.Managers
 
             if (OnMapCodeCheck != null)
             {
-                for (int y = 0; y < TileMap.MapHeight; ++y)
+                foreach (var item in TileMap.Map.MapData)
                 {
-                    for (int x = 0; x < TileMap.MapWidth; ++x)
+                    Vector2 location = new Vector2(item.Key.X * TileMap.TileWidth, item.Key.Y * TileMap.TileHeight);
+                    foreach (string codePart in item.Value.Codes)
                     {
-                        Vector2 location = new Vector2(x * TileMap.TileWidth, y * TileMap.TileHeight);
-                        foreach (string codePart in TileMap.GetCellCodes(x, y))
-                        {
-                            string[] code = codePart.Split('_');
-                            OnMapCodeCheck(code, location, player);
-                        }
+                        string[] code = codePart.Split('_');
+                        OnMapCodeCheck(code, location, player);
                     }
-                }
+                }                
             }
         }
 

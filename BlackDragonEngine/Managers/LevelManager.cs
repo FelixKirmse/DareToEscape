@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BlackDragonEngine.TileEngine;
-using Microsoft.Xna.Framework;
+﻿using BlackDragonEngine.TileEngine;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using System.Windows.Forms;
-using BlackDragonEngine.Providers;
 using BlackDragonEngine.Helpers;
 
 namespace BlackDragonEngine.Managers

@@ -8,7 +8,7 @@ using BlackDragonEngine.Components;
 using BlackDragonEngine.Helpers;
 
 
-namespace DareToEscape.Components.Player
+namespace DareToEscape.Components.PlayerComponents
 {
     class PlayerInputComponent : InputComponent
     {

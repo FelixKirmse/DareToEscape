@@ -121,11 +121,11 @@
     <Compile Include="Components\Entities\SmallTurretComponent.cs" />
     <Compile Include="Components\Entities\TurretComponent.cs" />
     <Compile Include="Components\Entities\TutorialBossComponent.cs" />
-    <Compile Include="Components\Player\PlayerGraphicsComponent.cs" />
-    <Compile Include="Components\Player\PlayerInputComponent.cs" />
-    <Compile Include="Components\Player\PlayerPhysicsComponent.cs" />
-    <Compile Include="Components\Player\PlayerSoundComponent.cs" />
-    <Compile Include="Components\Player\PlayerGeneralComponent.cs" />
+    <Compile Include="Components\PlayerComponents\PlayerGraphicsComponent.cs" />
+    <Compile Include="Components\PlayerComponents\PlayerInputComponent.cs" />
+    <Compile Include="Components\PlayerComponents\PlayerPhysicsComponent.cs" />
+    <Compile Include="Components\PlayerComponents\PlayerSoundComponent.cs" />
+    <Compile Include="Components\PlayerComponents\PlayerGeneralComponent.cs" />
     <Compile Include="Dialog\Tutorial\TutorialDialog.cs" />
     <Compile Include="Editor\EditorItem.cs" />
     <Compile Include="Editor\EditorManager.cs" />

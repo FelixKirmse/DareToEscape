@@ -12,7 +12,7 @@ using BlackDragonEngine.Managers;
 using DareToEscape.Helpers;
 using BlackDragonEngine.Providers;
 
-namespace DareToEscape.Components.Player
+namespace DareToEscape.Components.PlayerComponents
 {
     class PlayerPhysicsComponent : PhysicsComponent
     {

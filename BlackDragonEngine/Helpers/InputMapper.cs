@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BlackDragonEngine.Providers;
+﻿using BlackDragonEngine.Providers;
 using Microsoft.Xna.Framework.Input;
 
 namespace BlackDragonEngine.Helpers

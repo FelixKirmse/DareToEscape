@@ -110,6 +110,7 @@
     <Compile Include="Helpers\PathFinder.cs" />
     <Compile Include="Helpers\PathNode.cs" />
     <Compile Include="Helpers\EventHelper.cs" />
+    <Compile Include="Helpers\SerializableDictionary.cs" />
     <Compile Include="Managers\AudioManager.cs" />
     <Compile Include="Managers\CodeManager.cs" />
     <Compile Include="Managers\DialogManager.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Scripting\ScriptEngine.cs" />
     <Compile Include="States.cs" />
     <Compile Include="Helpers\Camera.cs" />
+    <Compile Include="TileEngine\Coords.cs" />
     <Compile Include="TileEngine\Map.cs" />
     <Compile Include="TileEngine\MapSquare.cs" />
     <Compile Include="TileEngine\TileMap.cs" />

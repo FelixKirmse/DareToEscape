@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace BlackDragonEngine.TileEngine
 {
@@ -19,6 +15,12 @@ namespace BlackDragonEngine.TileEngine
         #region Constructor
         private MapSquare()
         { 
+        }
+
+        public MapSquare(int layer, int? tile)
+        {
+            LayerTiles[layer] = tile;
+            Passable = true;
         }
 
         public MapSquare(int? background, int? interactive, int? foreground, bool passable)

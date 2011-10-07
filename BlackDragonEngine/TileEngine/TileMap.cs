@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -17,35 +15,19 @@ namespace BlackDragonEngine.TileEngine
         #region Declarations
         public const int TileWidth = 16;
         public const int TileHeight = 16;        
-        public const int MapLayers = 3;
-
-        public static int MapWidth { get; set; }
-        public static int MapHeight { get; set; }   
-
-        public static int TileOffset = 0;
-                
-        static private Map map = new Map();
-                
+        public const int MapLayers = 3;        
+        public const int TileOffset = 0;                  
         public static bool EditorMode = false;
-
         public static SpriteFont spriteFont;
-        private static Texture2D tileSheet;        
-        #endregion
+        private static Texture2D tileSheet;
+
+        public static Map Map;
+        #endregion       
 
         #region Initialization
         public static void Initialize(Texture2D tileTexture) {
             tileSheet = tileTexture;
-
-            map.MapCellColumns.Clear();
-            for (int x = 0; x < MapWidth; ++x)
-            {
-                MapRow newColumn = new MapRow();
-                for (int y = 0; y < MapHeight; ++y)
-                {
-                    newColumn.AddRow(null, null, null, true);
-                }
-                map.MapCellColumns.Add(newColumn);
-            }
+            Map = new Map();
         }
         #endregion
 
@@ -112,7 +94,7 @@ namespace BlackDragonEngine.TileEngine
         public static bool CellIsPassable(int cellX, int cellY)
         {
             MapSquare square = GetMapSquareAtCell(cellX, cellY);
-            if (square == null) return false;
+            if (square == null) return true;
             else return square.Passable;
         }
 
@@ -143,9 +125,15 @@ namespace BlackDragonEngine.TileEngine
             MapSquare square = GetMapSquareAtCell(cellX, cellY);
             if (square != null)
             {
-                if(!square.Codes.Contains(code))
+                if (!square.Codes.Contains(code))
                     square.Codes.Add(code);
-            }                
+            }
+            else
+            {
+                square = new MapSquare(null, null, null, true);
+                square.Codes.Add(code);
+                SetMapSquareAtCell(cellX, cellY, square);
+            }
         }
 
         public static void RemoveCodeFromCell(int cellX, int cellY, string code)
@@ -160,25 +148,40 @@ namespace BlackDragonEngine.TileEngine
         #endregion
 
         #region Information about MapSquare objects
+        public static void RemoveMapSquareAtCell(int tileX, int tileY)
+        {
+            Map.MapData.Remove(new Coords(tileX, tileY));
+        }
+
         public static MapSquare GetMapSquareAtCell(int tileX, int tileY)
         {
-            if ((tileX >= 0) && (tileX < MapWidth) && (tileY >= 0) && (tileY < MapHeight)) {
-                return map.MapCellColumns[tileX].MapCellRow[tileY];                
+            if ((tileX >= 0) && (tileY >= 0)) 
+            {
+                return Map[tileX, tileY];                
             }
             else return null;
         }
 
         public static void SetMapSquareAtCell(int tileX, int tileY, MapSquare tile)
-        {
-            if ((tileX >= 0) && (tileX < MapWidth) && (tileY >= 0) && (tileY < MapHeight)) {
-                map.MapCellColumns[tileX].MapCellRow[tileY] = tile;               
+        {            
+            if ((tileX >= 0) && (tileY >= 0))
+            {
+                Map[tileX, tileY] = tile;               
             }
         }
 
         public static void SetTileAtCell(int tileX, int tileY, int layer, int? tileIndex)
         {
-            if ((tileX >= 0) && (tileX < MapWidth) && (tileY >= 0) && (tileY < MapHeight)) {
-                map.MapCellColumns[tileX].MapCellRow[tileY].LayerTiles[layer] = tileIndex;                
+            if ((tileX >= 0) && (tileY >= 0)) 
+            {
+                MapSquare square = GetMapSquareAtCell(tileX, tileY);
+                if (square == null)
+                {
+                    square = new MapSquare(layer, tileIndex);
+                    Map[tileX, tileY] = square;
+                    return;
+                }
+                Map[tileX, tileY].LayerTiles[layer] = tileIndex;                
             }
         }
 
@@ -194,7 +197,27 @@ namespace BlackDragonEngine.TileEngine
         #endregion
 
         #region Information about the Map
-        
+
+        public static int MapWidth { get { return Map.MapWidth; } }
+        public static int MapHeight { get { return Map.MapHeight; } }   
+
+        public static string GetMapProperty(string name)
+        {
+            if (Map.Properties.ContainsKey(name))
+                return Map.Properties[name];
+            else
+                return null;
+        }
+
+        public static void AddMapProperty(string name, string value)
+        {
+            Map.Properties.Add(name, value);
+        }
+
+        public static void RemoveMapProperty(string name)
+        {
+            Map.Properties.Remove(name);
+        }
         #endregion
 
         #region Drawing
@@ -206,41 +229,35 @@ namespace BlackDragonEngine.TileEngine
             int startY = GetCellByPixelY((int)Camera.Position.Y);
             int endY = GetCellByPixelY((int)Camera.Position.Y + Camera.ViewPortHeight);
 
-            for (int x = startX; x <= endX; ++x) 
+            foreach (var item in Map.MapData)
             {
-                for (int y = startY; y <= endY; ++y)
+                if (item.Key.X >= startX && item.Key.X <= endX && item.Key.Y >= startY && item.Key.Y <= endY)
                 {
                     for (int z = 0; z < MapLayers; ++z)
                     {
-                        if ((x >= 0) && (y >= 0) && (x < MapWidth) && (y < MapHeight)) 
+                        if (TileSourceRectangle(Map[item.Key].LayerTiles[z]) != null)
                         {
-                            if (TileSourceRectangle(map.MapCellColumns[x].MapCellRow[y].LayerTiles[z]) != null)
-                            {
-                                spriteBatch.Draw(tileSheet, CellScreenRectangle(x, y), TileSourceRectangle(map.MapCellColumns[x].MapCellRow[y].LayerTiles[z]), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 1f - ((float)z * 0.1f));
-                            }
+                            spriteBatch.Draw(tileSheet, CellScreenRectangle(item.Key.X, item.Key.Y), TileSourceRectangle(Map[item.Key].LayerTiles[z]), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 1f - ((float)z * 0.1f));
                         }
                     }
-                    if (EditorMode) {
-                        DrawEditModeItems(spriteBatch, x, y);
+                    if (EditorMode)
+                    {
+                        DrawEditModeItems(spriteBatch, item.Key.X, item.Key.Y);
                     }
                 }
-            }
+            }  
         }
 
         public static void DrawEditModeItems(SpriteBatch spriteBatch, int x, int y)
-        {
-            if ((x < 0) || (y < 0) || (x >= MapWidth) || (y >= MapHeight))
-            {
-                return;
-            }
+        {            
             if (!CellIsPassable(x, y)) 
             {
                 spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(x, y), new Rectangle(0,0, TileWidth, TileHeight), new Color(255, 0, 0, 80), 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
             }
-            if (map.MapCellColumns[x].MapCellRow[y].Codes.Count != 0)
+            if (Map[x, y].Codes.Count != 0)
             {
                 spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(x, y), new Rectangle(0, 0, TileWidth, TileHeight), new Color(0, 0, 255, 80), 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
-                spriteBatch.DrawString(spriteFont, map.MapCellColumns[x].MapCellRow[y].Codes.Count.ToString(), Camera.WorldToScreen(new Vector2(x*TileWidth, y*TileHeight)), Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);                 
+                spriteBatch.DrawString(spriteFont, Map[x, y].Codes.Count.ToString(), Camera.WorldToScreen(new Vector2(x * TileWidth, y * TileHeight)), Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);                 
             }
         }
 
@@ -269,8 +286,8 @@ namespace BlackDragonEngine.TileEngine
         public static void SaveMap(FileStream fileStream) 
         {
             GZipStream gzs = new GZipStream(fileStream, CompressionMode.Compress);
-            XmlSerializer xmlSer = new XmlSerializer(map.GetType());  
-            xmlSer.Serialize(gzs, map);
+            XmlSerializer xmlSer = new XmlSerializer(Map.GetType());  
+            xmlSer.Serialize(gzs, Map);
             gzs.Close();
             fileStream.Close();
         }
@@ -278,16 +295,12 @@ namespace BlackDragonEngine.TileEngine
         public static void LoadMap(FileStream fileStream)
         {
             try 
-            {
-                map.MapCellColumns.Clear();
+            {               
                 GZipStream gzs = new GZipStream(fileStream, CompressionMode.Decompress);
-                XmlSerializer xmlSer = new XmlSerializer(map.GetType());                
-                map = (Map)xmlSer.Deserialize(gzs);
+                XmlSerializer xmlSer = new XmlSerializer(Map.GetType());                
+                Map = (Map)xmlSer.Deserialize(gzs);
                 gzs.Close();
-                fileStream.Close();
-
-                MapWidth = map.MapCellColumns.Count;
-                MapHeight = map.MapCellColumns[0].MapCellRow.Count;
+                fileStream.Close();                
             } 
             catch 
             {
@@ -298,16 +311,7 @@ namespace BlackDragonEngine.TileEngine
 
         public static void ClearMap()
         {
-            map.MapCellColumns.Clear();
-            for (int x = 0; x < MapWidth; ++x)
-            {
-                MapRow newColumn = new MapRow();
-                for (int y = 0; y < MapHeight; ++y)
-                {
-                    newColumn.AddRow(null,null,null, true);
-                }
-                map.MapCellColumns.Add(newColumn);
-            }
+            Map = new Map();
         }
         #endregion
     }
