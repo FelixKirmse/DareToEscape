@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using BlackDragonEngine.TileEngine;
 using System.Windows.Forms;
@@ -11,11 +8,6 @@ using BlackDragonEngine.Providers;
 using DareToEscape.Managers;
 using BlackDragonEngine.Managers;
 using Microsoft.Xna.Framework.Input;
-using DareToEscape.Components;
-using DareToEscape.Components.Entities;
-using DareToEscape.Components.PlayerComponents;
-using BlackDragonEngine.Entities;
-using BlackDragonEngine.Components;
 using DareToEscape.Helpers;
 
 namespace DareToEscape.Editor

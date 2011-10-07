@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BlackDragonEngine.Components;
+﻿using BlackDragonEngine.Components;
 using BlackDragonEngine.Entities;
-using BlackDragonEngine.Managers;
-using DareToEscape.Helpers;
-using BlackDragonEngine.Providers;
 using BlackDragonEngine.Helpers;
 using Microsoft.Xna.Framework;
 using DareToEscape.Managers;

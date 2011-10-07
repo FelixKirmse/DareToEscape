@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BlackDragonEngine.Managers;
+﻿using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
-using DareToEscape.Managers;
 using DareToEscape.Providers;
 using BlackDragonEngine.Entities;
 

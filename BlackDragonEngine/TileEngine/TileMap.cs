@@ -25,7 +25,8 @@ namespace BlackDragonEngine.TileEngine
         #endregion       
 
         #region Initialization
-        public static void Initialize(Texture2D tileTexture) {
+        public static void Initialize(Texture2D tileTexture) 
+        {
             tileSheet = tileTexture;
             Map = new Map();
         }

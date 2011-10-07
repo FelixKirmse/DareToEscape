@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using BlackDragonEngine.Components;
 using BlackDragonEngine.Providers;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using DareToEscape.Entities;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.TileEngine;
 using BlackDragonEngine.Helpers;

@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DareToEscape.Providers;
+﻿using DareToEscape.Providers;
 using BlackDragonEngine.Managers;
-using BlackDragonEngine;
-using BlackDragonEngine.Dialogue;
-using DareToEscape.Dialog;
 
 namespace DareToEscape.Helpers
 {

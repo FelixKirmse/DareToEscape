@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using BlackDragonEngine.Entities;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using BlackDragonEngine.TileEngine;
 using BlackDragonEngine.Components;
 using Microsoft.Xna.Framework.Input;
-using BlackDragonEngine.Managers;
-using DareToEscape.Helpers;
 using BlackDragonEngine.Providers;
 
 namespace DareToEscape.Components.PlayerComponents

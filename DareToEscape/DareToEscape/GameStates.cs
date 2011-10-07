@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace DareToEscape
 {
     public enum GameStates { Titlescreen, Menu, Ingame, Tutorial, Editor }

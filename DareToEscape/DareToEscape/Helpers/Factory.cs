@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using BlackDragonEngine.Components;
-using DareToEscape.Components;
 using DareToEscape.Components.PlayerComponents;
 using BlackDragonEngine.Entities;
 using DareToEscape.Components.Entities;

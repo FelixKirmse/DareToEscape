@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using BlackDragonEngine.Entities;
 using Microsoft.Xna.Framework;
 using BlackDragonEngine.Components;
-using BlackDragonEngine.Providers;
 
 namespace DareToEscape.Entities
 {
