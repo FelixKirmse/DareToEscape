@@ -96,7 +96,7 @@ namespace DareToEscape.Editor
             Camera.ViewPortWidth = pictureBox.Width;
             Camera.ViewPortHeight = pictureBox.Height;
             Camera.UpdateWorldRectangle();
-            TileMap.spriteFont = FontProvider.GetFont("Mono14");
+            TileMap.spriteFont = FontProvider.GetFont("Mono8");
             pictureBox_SizeChanged(null, null);
         }
 
@@ -161,11 +161,29 @@ namespace DareToEscape.Editor
         public static void Update()
         {
             if (Form.ActiveForm == parentForm)
-            {                
-                Camera.Position = new Vector2(hscroll.Value, vscroll.Value);
+            {     
                 MouseState ms = InputProvider.MouseState;
                 if (!PlayLevel)
                 {
+                    Camera.Position = new Vector2(hscroll.Value, vscroll.Value);
+                    if (InputMapper.Up)
+                    {
+                        Camera.Position -= new Vector2(0,5);
+                    }
+                    if (InputMapper.Down)
+                    {
+                        Camera.Position += new Vector2(0, 5);
+                    }
+                    if (InputMapper.Left)
+                    {
+                        Camera.Position -= new Vector2(5,0);
+                    }
+                    if (InputMapper.Right)
+                    {
+                        Camera.Position += new Vector2(5,0);
+                    }
+                    hscroll.Value = (int)Camera.Position.X;
+                    vscroll.Value = (int)Camera.Position.Y;                    
 
                     if ((ms.X > 0) && (ms.Y > 0) && (ms.X < Camera.ViewPortWidth) && (ms.Y < Camera.ViewPortHeight))
                     {
@@ -234,9 +252,12 @@ namespace DareToEscape.Editor
                                         {
                                             for (int celly = (int)startCell.Y; celly <= endCell.Y; ++celly)
                                             {
-                                                if (!RemoveTile)
+                                                if (SmartInsert)
+                                                    InsertEditorItem(cellx, celly);
+                                                else if (!RemoveTile)
                                                     TileMap.SetTileAtCell(cellx, celly, DrawLayer, DrawTile);
-                                                else
+
+                                                if (RemoveTile)
                                                 {
                                                     TileMap.SetTileAtCell(cellx, celly, DrawLayer, null);
                                                     TileMap.GetCellCodes(cellx, celly).Clear();

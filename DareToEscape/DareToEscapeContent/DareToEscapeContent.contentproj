@@ -172,6 +172,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="fonts\mono8.spritefont">
+      <Name>mono8</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
     <None Include="textures\editor\tiles\0.bmp">
       <Name>0</Name>
       <Importer>TextureImporter</Importer>

@@ -354,8 +354,7 @@ namespace DareToEscape.Editor
             if (rectangleSelectionCheckBox.Checked)
             {
                 EditorManager.FillMode = "RECTANGLEFILL";
-                getCodeRadio.Enabled = false;
-                smartLeftClick.Checked = false;
+                getCodeRadio.Enabled = false;                
             }
             else
             {

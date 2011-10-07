@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using DareToEscape.Entities;
 using DareToEscape.Entities.BulletBehaviors;
 using BlackDragonEngine.Helpers;
+using PlayerEnt = DareToEscape.Entities.Player;
 
 namespace DareToEscape.Components.Entities
 {
@@ -32,25 +33,43 @@ namespace DareToEscape.Components.Entities
         // 66 + 200 rocken
         protected override IEnumerator<float> ShootBehavior()
         {
-            Vector2 center = ShortcutProvider.ScreenCenter;
-            for (int i = 0; i < 2; ++i)
+            for (int k = 0; k < 300; ++k)
             {
-                Color bulletColor = i == 0 ? Color.Red : i == 1 ? new Color(0, 255, 0, 255) : i == 2 ? Color.Blue : Color.Orange;                
-                float angle = i == 0 ? alpha += deg : gamma += deg;
-                angle = MathHelper.ToRadians(angle);
-                Bullet bullet = new Bullet(new Boss1Behavior(),new Vector2(center.X - 200, center.Y) , bulletColor);                
-                bullet.Shoot(new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)));                
-            }
+                Vector2 center = ShortcutProvider.ScreenCenter;
+                for (int i = 0; i < 2; ++i)
+                {
+                    Color bulletColor = i == 0 ? Color.Red : new Color(0, 255, 0, 255);
+                    float angle = i == 0 ? alpha += deg : gamma += deg;
+                    angle = MathHelper.ToRadians(angle);
+                    Bullet bullet = new Bullet(ReusableBehaviors.StandardBehavior, new Vector2(center.X - 200, center.Y), bulletColor);
+                    bullet.Shoot(new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)));
+                }
 
-            for (int i = 0; i < 2; ++i)
-            {
-                Color bulletColor = i == 0 ? Color.Blue : Color.Orange;
-                float angle = i == 0 ? beta -= deg :delta -= deg;
-                angle = MathHelper.ToRadians(angle);
-                Bullet bullet = new Bullet(new Boss1Behavior(), new Vector2(center.X + 200, center.Y), bulletColor);
-                bullet.Shoot(new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)));
+                for (int i = 0; i < 2; ++i)
+                {
+                    Color bulletColor = i == 0 ? Color.Blue : Color.Orange;
+                    float angle = i == 0 ? beta -= deg : delta -= deg;
+                    angle = MathHelper.ToRadians(angle);
+                    Bullet bullet = new Bullet(ReusableBehaviors.StandardBehavior, new Vector2(center.X + 200, center.Y), bulletColor);
+                    bullet.Shoot(new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)));
+                }
+                yield return 1f;
             }
-            yield return 0f;
+            yield return 250f;
+
+            for (int i = 0; i < 40; ++i)
+            {
+                for (int j = 0; j < 20; ++j)
+                {
+                    Bullet newBullet = new Bullet(ReusableBehaviors.StandardBehavior, bulletOrigin, Color.Red);
+                    Vector2 direction = (((PlayerEnt)VariableProvider.CurrentPlayer).PlayerBulletCollisionRectCenter - bulletOrigin) + new Vector2(VariableProvider.RandomSeed.Next(-500, 500), VariableProvider.RandomSeed.Next(-500, 500));
+                    direction.Normalize();
+                    newBullet.Shoot(direction);
+                    newBullet.BaseSpeed = VariableProvider.RandomSeed.Next(2, 4);
+                }
+                yield return 125f;   
+            }
+            yield return 1500f;
         }
     }
 }

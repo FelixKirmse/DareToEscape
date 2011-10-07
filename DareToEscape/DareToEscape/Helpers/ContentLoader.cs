@@ -18,6 +18,7 @@ namespace DareToEscape.Helpers
         public static void LoadContent(ContentManager Content)
         {
             FontProvider.AddFont("Mono14", Content.Load<SpriteFont>(@"fonts/mono14"));
+            FontProvider.AddFont("Mono8", Content.Load<SpriteFont>(@"fonts/mono8"));
             FontProvider.AddFont("Mono21", Content.Load<SpriteFont>(@"fonts/mono21"));                       
 
             VariableProvider.WhiteTexture = Content.Load<Texture2D>(@"textures/white");
