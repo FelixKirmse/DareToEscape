@@ -43,17 +43,28 @@ namespace DareToEscape.Components.Entities
 
         protected virtual bool ShootCondition(Vector2 playerPosition, GameObject turret)
         {
-            Vector2 direction = playerPosition - bulletOrigin;
-            direction /= (TileMap.TileWidth * 16);
-            Vector2 particlePosition = bulletOrigin;
+            float startX = Camera.Position.X;
+            float endX = Camera.Position.X + Camera.ViewPortWidth;
+            float startY = Camera.Position.Y;
+            float endY = Camera.Position.Y + Camera.ViewPortHeight;
 
-            while (particlePosition != playerPosition)
+            Vector2 pos = turret.Position;
+
+            if(pos.X >= startX && pos.X <= endX && pos.Y >= startY && pos.Y <= endY)
             {
-                if (!TileMap.CellIsPassableByPixel(particlePosition))
-                    return false;
-                particlePosition += direction;
+                Vector2 direction = playerPosition - bulletOrigin;
+                direction /= (TileMap.TileWidth * 32);
+                Vector2 particlePosition = bulletOrigin;
+
+                while (particlePosition != playerPosition)
+                {
+                    if (!TileMap.CellIsPassableByPixel(particlePosition))
+                        return false;
+                    particlePosition += direction;
+                }
+                return true;
             }
-            return true;
+            return false;            
         }
 
         protected virtual IEnumerator<float> ShootBehavior()

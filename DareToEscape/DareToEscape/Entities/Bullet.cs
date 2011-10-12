@@ -15,7 +15,7 @@ namespace DareToEscape.Entities
     {
         private Texture2D bulletTexture;
         public static float SpeedModifier = 1.0f;
-        public float BaseSpeed = 2f;        
+        public float BaseSpeed = 1f;        
         public bool Active { get; set; }
         public float Direction { get; set; }
         private float lastDirection { get; set; }
@@ -103,10 +103,9 @@ namespace DareToEscape.Entities
 
         public override void Update()
         {
+            behavior.Update(this);
             if (Active)
-            {
-                behavior.Update(this);
-
+            {    
                 if (!TileMap.CellIsPassableByPixel(CollisionCenter) || !Camera.WorldRectangle.Contains((int)Position.X, (int)Position.Y))
                 {
                     Active = false;   
@@ -117,6 +116,7 @@ namespace DareToEscape.Entities
                     Active = false;
                     VariableProvider.CurrentPlayer.Send<string>("KILL", null);
                 }
+                
 
                 lastDirection = Direction;
                 lastPosition = Position;

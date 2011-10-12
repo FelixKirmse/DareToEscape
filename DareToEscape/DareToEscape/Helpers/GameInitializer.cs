@@ -27,8 +27,8 @@ namespace DareToEscape.Helpers
              SaveManager<SaveState>.SaveHelper.OnSave += SaveHelper.OnSave;
              SaveManager<SaveState>.SaveHelper.OnLoad += SaveHelper.OnLoad;
 
-             Camera.ViewPortHeight = 600;
-             Camera.ViewPortWidth = 800;             
+             Camera.ViewPortHeight = 720;
+             Camera.ViewPortWidth = 1280;             
 
              DialogManager.DrawMugshot = false;
              

@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using BlackDragonEngine.Providers;
 using DareToEscape.Entities;
 using DareToEscape.Entities.BulletBehaviors;
+using System;
+using Microsoft.Xna.Framework;
 
 namespace DareToEscape.Components.Entities
 {
@@ -16,13 +18,17 @@ namespace DareToEscape.Components.Entities
 
         protected override IEnumerator<float> ShootBehavior()
         {
-            for (int i = 0; i < 10; ++i)
+            float frequency = .6f;
+            for (int i = 0; i < 25; ++i)
             {
-                Bullet newBullet = new Bullet(ReusableBehaviors.TracingBehavior, bulletOrigin);                
-                newBullet.Shoot(newBullet.DirectionAngleToPlayer);
-                yield return 250f;
-            }
-            yield return 2000f; 
+                int red = (int)(Math.Sin(frequency * i + 0) * 127 + 128);
+                int green = (int)(Math.Sin(frequency * i + (2 * Math.PI / 3)) * 127 + 128);
+                int blue = (int)(Math.Sin(frequency * i + (4 * Math.PI / 3)) * 127 + 128);
+                Bullet bullet = new Bullet(ReusableBehaviors.StandardBehavior, bulletOrigin, new Color(red, green, blue));
+                bullet.Shoot(VariableProvider.RandomSeed.Next(-1, 361));
+                bullet.BaseSpeed = 4f;
+            } 
+            yield return 0;
         }        
     }
 }

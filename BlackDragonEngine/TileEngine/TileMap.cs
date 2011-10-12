@@ -112,7 +112,7 @@ namespace BlackDragonEngine.TileEngine
         public static List<string> GetCellCodes(int cellX, int cellY)
         {
             MapSquare square = GetMapSquareAtCell(cellX, cellY);
-            if (square == null) return null;
+            if (square == null) return new List<string>();
             return square.Codes;
         }
 

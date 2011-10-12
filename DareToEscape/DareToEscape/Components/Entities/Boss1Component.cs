@@ -7,6 +7,7 @@ using DareToEscape.Entities;
 using BlackDragonEngine.Managers;
 using DareToEscape.Helpers;
 using DareToEscape.Entities.BulletBehaviors;
+using System;
 
 
 
@@ -40,18 +41,41 @@ namespace DareToEscape.Components.Entities
                 base.Draw(obj, spriteBatch);
         }
 
+
+        private int angle = 0;
+        private int angle2 = 1;
         protected override IEnumerator<float> ShootBehavior()
         {
-            int bulletNumber = 45;
-            float winkel = 0;
-            for (int i = 0; i < bulletNumber; ++i)
-            {
-                Bullet bullet = new Bullet(ReusableBehaviors.StandardBehavior, bulletOrigin, Color.Red);
-                bullet.Shoot(winkel + bullet.DirectionAngleToPlayer);
-                winkel += 360 / bulletNumber;               
-            }            
-            yield return 125f;
+            float frequency = .6f;
+            
+                for (int i = 0; i < 20; ++i)
+                {
+                    int red = (int)(Math.Sin(frequency * i + 0) * 127 + 128);
+                    int green = (int)(Math.Sin(frequency * i + (2 * Math.PI / 3)) * 127 + 128);
+                    int blue = (int)(Math.Sin(frequency * i + (4 * Math.PI / 3)) * 127 + 128);
+                    Bullet bullet = new Bullet(ReusableBehaviors.StandardBehavior, bulletOrigin, new Color(red, green, blue, 255));
+                    bullet.BaseSpeed = 2.8f;
+                    bullet.Shoot(angle);
+                    angle += 360 / 20;
+                }
+                angle += 4;
+                for (int i = 0; i < 20; ++i)
+                {
+                    int red = (int)(Math.Sin(frequency * i + 0) * 127 + 128);
+                    int green = (int)(Math.Sin(frequency * i + (2 * Math.PI / 3)) * 127 + 128);
+                    int blue = (int)(Math.Sin(frequency * i + (4 * Math.PI / 3)) * 127 + 128);
+                    Bullet bullet = new Bullet(ReusableBehaviors.StandardBehavior, bulletOrigin, new Color(red, green, blue, 255));
+                    bullet.BaseSpeed = 2.8f;
+                    bullet.Shoot(angle2);
+                    angle2 -= 360 / 20;
+                }
+                angle2 -= 4;
+                yield return 0;
+                        
+            //yield return 2000f;
         }
+
+        
 
         protected override bool ShootCondition(Vector2 playerPosition, GameObject turret)
         {

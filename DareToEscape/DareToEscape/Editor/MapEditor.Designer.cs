@@ -82,13 +82,13 @@
             this.smartLeftClick = new System.Windows.Forms.RadioButton();
             this.playInEditorButton = new System.Windows.Forms.Button();
             this.mapPropertiesGroupBox = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.propertyValueInput = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.removePropertiesButton = new System.Windows.Forms.Button();
             this.addPropertyButton = new System.Windows.Forms.Button();
             this.propertyNameInput = new System.Windows.Forms.TextBox();
             this.propertyListBox = new System.Windows.Forms.ListBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.propertyValueInput = new System.Windows.Forms.TextBox();
             this.mapSizeLabel = new System.Windows.Forms.Label();
             this.focusButton = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pctSurface)).BeginInit();
@@ -105,7 +105,7 @@
             // 
             this.pctSurface.Location = new System.Drawing.Point(549, 27);
             this.pctSurface.Name = "pctSurface";
-            this.pctSurface.Size = new System.Drawing.Size(800, 600);
+            this.pctSurface.Size = new System.Drawing.Size(1280, 720);
             this.pctSurface.TabIndex = 0;
             this.pctSurface.TabStop = false;
             // 
@@ -117,7 +117,7 @@
             this.layerToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1399, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1840, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -340,7 +340,7 @@
             // 
             this.cwdLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cwdLabel.AutoSize = true;
-            this.cwdLabel.Location = new System.Drawing.Point(13, 663);
+            this.cwdLabel.Location = new System.Drawing.Point(13, 736);
             this.cwdLabel.Name = "cwdLabel";
             this.cwdLabel.Size = new System.Drawing.Size(0, 13);
             this.cwdLabel.TabIndex = 9;
@@ -412,7 +412,7 @@
             // 
             this.coordLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.coordLbl.AutoSize = true;
-            this.coordLbl.Location = new System.Drawing.Point(-170, 592);
+            this.coordLbl.Location = new System.Drawing.Point(271, 592);
             this.coordLbl.Name = "coordLbl";
             this.coordLbl.Size = new System.Drawing.Size(16, 13);
             this.coordLbl.TabIndex = 20;
@@ -621,6 +621,31 @@
             this.mapPropertiesGroupBox.TabStop = false;
             this.mapPropertiesGroupBox.Text = "Map Properties";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(186, 23);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(34, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Value";
+            // 
+            // propertyValueInput
+            // 
+            this.propertyValueInput.Location = new System.Drawing.Point(227, 21);
+            this.propertyValueInput.Name = "propertyValueInput";
+            this.propertyValueInput.Size = new System.Drawing.Size(100, 20);
+            this.propertyValueInput.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Name";
+            // 
             // removePropertiesButton
             // 
             this.removePropertiesButton.Location = new System.Drawing.Point(6, 52);
@@ -655,31 +680,6 @@
             this.propertyListBox.Size = new System.Drawing.Size(336, 134);
             this.propertyListBox.TabIndex = 0;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 21);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Name";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(186, 23);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(34, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Value";
-            // 
-            // propertyValueInput
-            // 
-            this.propertyValueInput.Location = new System.Drawing.Point(227, 21);
-            this.propertyValueInput.Name = "propertyValueInput";
-            this.propertyValueInput.Size = new System.Drawing.Size(100, 20);
-            this.propertyValueInput.TabIndex = 5;
-            // 
             // mapSizeLabel
             // 
             this.mapSizeLabel.AutoSize = true;
@@ -702,7 +702,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1399, 685);
+            this.ClientSize = new System.Drawing.Size(1840, 758);
             this.Controls.Add(this.focusButton);
             this.Controls.Add(this.mapSizeLabel);
             this.Controls.Add(this.mapPropertiesGroupBox);

@@ -2,6 +2,7 @@
 using BlackDragonEngine.Entities;
 using Microsoft.Xna.Framework;
 using BlackDragonEngine.Components;
+using BlackDragonEngine.Providers;
 
 namespace DareToEscape.Entities
 {
@@ -25,6 +26,22 @@ namespace DareToEscape.Entities
             get 
             {
                 return new Vector2((PlayerBulletCollisionRect.Right + PlayerBulletCollisionRect.Left) / 2, (PlayerBulletCollisionRect.Bottom + PlayerBulletCollisionRect.Top) / 2);
+            }
+        }
+
+        public static float PlayerPosX
+        {
+            get 
+            {
+                return ((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionRectCenter.X;
+            }
+        }
+
+        public static float PlayerPosY
+        {
+            get
+            {
+                return ((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionRectCenter.Y;
             }
         }
     }

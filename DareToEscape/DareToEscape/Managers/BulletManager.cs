@@ -32,7 +32,7 @@ namespace DareToEscape.Managers
                 {
                     bullet.Update();
                 }
-                bullets.RemoveAll(s => !s.Active);
+                bullets.RemoveAll(s => !s.Active);                
             }
         }
 

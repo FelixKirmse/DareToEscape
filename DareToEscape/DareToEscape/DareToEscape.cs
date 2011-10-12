@@ -33,8 +33,8 @@ namespace DareToEscape
             VariableProvider.Game = this;
             GameInitializer.Initialize();            
 
-            Graphics.PreferredBackBufferWidth = 800;
-            Graphics.PreferredBackBufferHeight = 600;
+            Graphics.PreferredBackBufferWidth = 1280;
+            Graphics.PreferredBackBufferHeight = 720;
             Graphics.ApplyChanges();            
             
             base.Initialize();
