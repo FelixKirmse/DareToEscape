@@ -7,7 +7,7 @@ namespace DareToEscape.Managers
 {
     class BulletManager : GameComponent
     {
-        private readonly List<Bullet> bullets = new List<Bullet>();
+        public static readonly List<Bullet> bullets = new List<Bullet>();
 
         public BulletManager(Game game)
             : base(game)
@@ -40,6 +40,7 @@ namespace DareToEscape.Managers
         {
             if (StateManager.GameState == GameStates.Ingame || StateManager.GameState == GameStates.Editor)
             {
+                spriteBatch.DrawString(BlackDragonEngine.Providers.FontProvider.GetFont("Mono14"), bullets.Count.ToString(), new Vector2(100, 20), Color.White);
                 foreach (Bullet bullet in bullets)
                 {
                     bullet.Draw(spriteBatch);

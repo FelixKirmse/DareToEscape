@@ -2,7 +2,7 @@
 
 namespace DareToEscape.Entities.BulletBehaviors
 {
-    class Boss1Behavior : Behavior
+    class Boss1Behavior : IBehavior
     {
         private float timer;
 

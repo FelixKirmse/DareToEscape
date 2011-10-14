@@ -15,11 +15,18 @@ namespace DareToEscape.Entities
     {
         private Texture2D bulletTexture;
         public static float SpeedModifier = 1.0f;
-        public float BaseSpeed = 1f;        
+        public float BaseSpeed { get; set; }     
         public bool Active { get; set; }
         public float Direction { get; set; }
         private float lastDirection { get; set; }
         private Vector2 lastPosition;
+        public float TurnSpeed { get; set; }
+        public float Acceleration { get; set; }
+        public float SpeedLimit { get; set; }
+        public float LaunchSpeed { get; set; }
+        public bool AutomaticCollision { get; set; }
+        public int SpawnDelay { get; set; }
+        public int KillTime { get; set; }
 
         public Vector2 DirectionVectorToPlayer
         {
@@ -66,7 +73,7 @@ namespace DareToEscape.Entities
             }
         }
 
-        private Behavior behavior;
+        private IBehavior behavior;
 
         public Bullet()
         {
@@ -75,6 +82,12 @@ namespace DareToEscape.Entities
             components.Add(new BulletGraphicsComponent(bulletTexture));
             Active = false;
             behavior = ReusableBehaviors.StandardBehavior;
+            TurnSpeed = 0f;
+            BaseSpeed = 1f;
+            Acceleration = 0f;
+            SpeedLimit = 1f;
+            AutomaticCollision = false;
+            KillTime = -1;
         }
 
         public Bullet(Vector2 position)
@@ -83,19 +96,13 @@ namespace DareToEscape.Entities
             Position = position;
         }
 
-        public Bullet(Behavior behavior)
-            : this()
-        {
-            this.behavior = behavior;
-        }
-
-        public Bullet(Behavior behavior, Vector2 position)
+        public Bullet(IBehavior behavior, Vector2 position)
             : this(position)
         {
             this.behavior = behavior;
         }
 
-        public Bullet(Behavior behavior, Vector2 position, Color color)
+        public Bullet(IBehavior behavior, Vector2 position, Color color)
             : this(behavior, position)
         {
             Send("GRAPHICS_DRAWCOLOR", color);
@@ -103,25 +110,67 @@ namespace DareToEscape.Entities
 
         public override void Update()
         {
-            behavior.Update(this);
-            if (Active)
-            {    
-                if (!TileMap.CellIsPassableByPixel(CollisionCenter) || !Camera.WorldRectangle.Contains((int)Position.X, (int)Position.Y))
+            --KillTime;
+            if (KillTime == 0)
+                Active = false;            
+            if (SpawnDelay > 0)
+            {
+                --SpawnDelay;                
+            }
+            if (Active && SpawnDelay == 0)
+            {
+                behavior.Update(this);
+                if (AutomaticCollision)
                 {
-                    Active = false;   
+                    if (!TileMap.CellIsPassableByPixel(CollisionCenter) || !Camera.WorldRectangle.Contains((int)Position.X, (int)Position.Y))
+                    {
+                        Active = false;
+                    }
                 }
+                /*else if (!Camera.WorldRectangle.Contains((int)Position.X, (int)Position.Y))
+                {
+                    Active = false;
+                }*/
                     
                 if (CollisionRectangle.Intersects(((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionRect))
                 {
                     Active = false;
                     VariableProvider.CurrentPlayer.Send<string>("KILL", null);
-                }
-                
+                }              
 
                 lastDirection = Direction;
                 lastPosition = Position;
             }
             base.Update();
+        }
+
+        public void SetNewSpeedRules(float newSpeed, float speedLimit)
+        {
+            BaseSpeed = newSpeed;
+            LaunchSpeed = newSpeed;
+            SpeedLimit = speedLimit;
+        }
+
+        public void SetParameters(Parameters p)
+        {
+            SetParameters(p.NewSpeed, p.NewAngle, p.NewTurnSpeed, p.NewAcceleration, p.NewSpeedLimit);
+        }
+
+        public void SetParameters(float? newSpeed, float? angle, float turnSpeed, float acceleration, float speedLimit)
+        {
+            if (newSpeed != null)
+            {
+                BaseSpeed = (float)newSpeed;
+                LaunchSpeed = (float)newSpeed;
+            }
+            if (angle != null)
+            {
+                Direction = (float)angle;
+            }
+
+            TurnSpeed = turnSpeed;
+            Acceleration = acceleration;
+            SpeedLimit = speedLimit;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -130,11 +179,18 @@ namespace DareToEscape.Entities
                 base.Draw(spriteBatch);
         }
 
-        public void Shoot(float direction)
+        public void Shoot(float direction, float startingSpeed)
         {
+            LaunchSpeed = startingSpeed;
+            BaseSpeed = startingSpeed;
             Active = true;
             this.Direction = direction;
             GameVariableProvider.BulletManager.AddBullet(this);
+        }
+
+        public override string ToString()
+        {
+            return "BaseSpeed: " + BaseSpeed + " LaunchSpeed: " + LaunchSpeed + " Acceleration: " + Acceleration + " SpeedLimit: " + SpeedLimit + " TurnSpeed: " + TurnSpeed;
         }
     }
 }

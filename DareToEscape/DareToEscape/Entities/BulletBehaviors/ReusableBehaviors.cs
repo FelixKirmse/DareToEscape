@@ -3,8 +3,8 @@ namespace DareToEscape.Entities.BulletBehaviors
 {
     public static class ReusableBehaviors
     {
-        public static Behavior StandardBehavior;
-        public static Behavior TracingBehavior;
+        public static IBehavior StandardBehavior;
+        public static IBehavior TracingBehavior;
 
         public static void Initialize()
         {

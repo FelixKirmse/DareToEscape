@@ -1,7 +1,7 @@
 ﻿
 namespace DareToEscape.Entities.BulletBehaviors
 {
-    class TracingBehavior : Behavior
+    class TracingBehavior : IBehavior
     {
         public void Update(Bullet bullet)
         {                        

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace BlackDragonEngine.Scripting
 {
-    public delegate IEnumerator<float> Script();
+    public delegate IEnumerator<int> Script();    
 
     public class ScriptEngine : GameComponent
     {
@@ -58,10 +58,10 @@ namespace BlackDragonEngine.Scripting
 
         private class ScriptState
         {
-            private float sleepLength;
+            private int sleepLength;
             public Script Script { get; private set; }
             public Script OrgScript { get; private set; }
-            private IEnumerator<float> scriptEnumerator;
+            private IEnumerator<int> scriptEnumerator;
 
             public bool IsComplete
             {
@@ -85,9 +85,9 @@ namespace BlackDragonEngine.Scripting
                     sleepLength = scriptEnumerator.Current;
                 }
 
-                if (sleepLength > 0 && gameTime != null)
+                if (sleepLength > 0)
                 {
-                    sleepLength -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    --sleepLength;
                 }
                 else
                 {

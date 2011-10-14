@@ -1,7 +1,7 @@
 ﻿
 namespace DareToEscape.Entities.BulletBehaviors
 {
-    public interface Behavior
+    public interface IBehavior
     {
         void Update(Bullet bullet);
     }

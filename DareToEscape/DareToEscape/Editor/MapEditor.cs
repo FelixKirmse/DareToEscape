@@ -17,7 +17,7 @@ namespace DareToEscape.Editor
     public partial class MapEditor : Form
     {
         public DareToEscape Game;
-        private string cwd;       
+        private readonly string cwd = Application.StartupPath + "/Content/maps";       
         private string currentMapName;        
 
         private string loadLevel;
@@ -227,45 +227,8 @@ namespace DareToEscape.Editor
             }            
         }
 
-        
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            folderBrowser.ShowDialog();
-            cwd = folderBrowser.SelectedPath;
-            cwdLabel.Text = "Current Working Directory: " + cwd;
-            StreamWriter sw = new StreamWriter(Application.StartupPath + @"\config.cfg");
-            
-            sw.WriteLine(cwd);
-            sw.Close();
-        }
-
         private void MapEditor_Shown(object sender, EventArgs e)
-        {
-            try
-            {
-                StreamReader sr = new StreamReader(Application.StartupPath + @"\config.cfg");
-                cwd = sr.ReadLine();
-                sr.Close();
-                cwdLabel.Text = cwd;
-            }
-            catch {
-                folderBrowser.ShowDialog();
-                cwd = folderBrowser.SelectedPath;
-                cwdLabel.Text = cwd;
-                StreamWriter sw = new StreamWriter(Application.StartupPath + @"\config.cfg");                
-                sw.WriteLine(cwd);
-                sw.Close();
-            }
-            if (cwd == "")
-            {
-                folderBrowser.ShowDialog();
-                cwd = folderBrowser.SelectedPath;
-                cwdLabel.Text = cwd; 
-                StreamWriter sw = new StreamWriter(Application.StartupPath + @"\config.cfg");                
-                sw.WriteLine(cwd);
-                sw.Close();
-            }  
+        {            
             timerGameUpdate.Start();
             openFileDialog.InitialDirectory = cwd;
             saveFileDialog.InitialDirectory = cwd;

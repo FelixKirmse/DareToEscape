@@ -30,7 +30,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationVersion>1.0.0.1</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -61,17 +61,9 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>D7ACD6B6275713955112AE7E5169DB19D51CF030</ManifestCertificateThumbprint>
+    <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>DareToEscape_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>true</SignManifests>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
@@ -149,11 +141,15 @@
       <DependentUpon>MapEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Entities\Bullet.cs" />
-    <Compile Include="Entities\BulletBehaviors\Behavior.cs" />
+    <Compile Include="Entities\BulletBehaviors\ButterflyBarrage.cs" />
+    <Compile Include="Entities\BulletBehaviors\IBehavior.cs" />
+    <Compile Include="Entities\BulletBehaviors\ButterflyMayhem.cs" />
+    <Compile Include="Entities\BulletBehaviors\ParameterQueue.cs" />
     <Compile Include="Entities\BulletBehaviors\ReusableBehaviors.cs" />
     <Compile Include="Entities\BulletBehaviors\Boss1Behavior.cs" />
     <Compile Include="Entities\BulletBehaviors\StandardBehavior.cs" />
     <Compile Include="Entities\BulletBehaviors\PlayerTraps.cs" />
+    <Compile Include="Entities\BulletBehaviors\StarBarrage.cs" />
     <Compile Include="Entities\BulletBehaviors\TracingBehavior.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="GameStates.cs" />
@@ -225,9 +221,6 @@
     <EmbeddedResource Include="Editor\MapEditor.resx">
       <DependentUpon>MapEditor.cs</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DareToEscape_TemporaryKey.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

@@ -1,5 +1,6 @@
 Content\fonts\mono14.xnb
 Content\fonts\Mono21.xnb
+Content\fonts\mono8.xnb
 Content\textures\titlescreen.xnb
 Content\textures\white.xnb
 Content\textures\animations\player\idle.xnb
@@ -19,7 +20,6 @@ Content\textures\entities\lock.xnb
 Content\textures\entities\bullet.xnb
 Content\textures\entities\bosskiller.xnb
 Content\textures\entities\sign.xnb
-Content\fonts\mono8.xnb
 Content\textures\tilesheets\tilesheet.png
 Content\textures\editor\tiles\0.bmp
 Content\textures\editor\tiles\1.bmp

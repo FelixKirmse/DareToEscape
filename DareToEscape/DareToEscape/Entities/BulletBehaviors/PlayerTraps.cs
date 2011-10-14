@@ -2,43 +2,78 @@
 
 namespace DareToEscape.Entities.BulletBehaviors
 {
-    class PlayerTrap1 : Behavior
+    class PlayerTrap1 : IBehavior
     {
-        public int counter = 0;
+        private int frameCounter = 0;
+        private float angle;
+
+        public PlayerTrap1(float angle)
+        {
+            this.angle = angle;
+        }
+
         public void Update(Bullet bullet)
         {
-            bullet.Active = true;
-            if (counter < 110)
-            {
-                bullet.Position += bullet.DirectionVector * -3f;
-                bullet.Direction += MathHelper.ToRadians(.1f);
+            switch (frameCounter++)
+            { 
+                case 110:
+                    bullet.BaseSpeed = 0;
+                    bullet.TurnSpeed = 0;
+                    bullet.Direction = angle;
+                    bullet.Acceleration = 0;
+                    break;
+
+                case 380:
+                    bullet.BaseSpeed = -1;
+                    bullet.TurnSpeed = .2f;
+                    bullet.Direction = angle;
+                    break;
+
+                case 700:
+                    bullet.TurnSpeed = 0;
+                    bullet.LaunchSpeed = 0;
+                    bullet.Acceleration = -.5f;
+                    bullet.SpeedLimit = -3;
+                    break;
             }
-            else if (counter > 380)
-            {
-                bullet.Position += bullet.DirectionVector * -1f;
-                bullet.Direction += MathHelper.ToRadians(.2f);
-            }
-            ++counter;
+            ReusableBehaviors.StandardBehavior.Update(bullet);
         }
     }
 
-    class PlayerTrap2 : Behavior
+    class PlayerTrap2 : IBehavior
     {
-        public int counter = 0;
+        private int frameCounter = 0;
+        private float angle;
+
+        public PlayerTrap2(float angle)
+        {
+            this.angle = angle;
+        }
         public void Update(Bullet bullet)
         {
-            bullet.Active = true;
-            if (counter < 110)
+            switch (frameCounter++)
             {
-                bullet.Position += bullet.DirectionVector * -2f;
-                bullet.Direction += MathHelper.ToRadians(.05f);
+                case 110:
+                    bullet.BaseSpeed = 0;
+                    bullet.TurnSpeed = 0;
+                    bullet.Direction = angle;
+                    bullet.Acceleration = 0;
+                    break;
+
+                case 380:
+                    bullet.BaseSpeed = 1;
+                    bullet.LaunchSpeed = 1;
+                    bullet.TurnSpeed = .05f;
+                    bullet.Direction = angle;
+                    break;
+
+                case 700:
+                    bullet.TurnSpeed = 0;                    
+                    bullet.Acceleration = .5f;
+                    bullet.SpeedLimit = 3;
+                    break;
             }
-            else if (counter > 380)
-            {
-                bullet.Position += bullet.DirectionVector * 1f;
-                bullet.Direction += MathHelper.ToRadians(.05f);
-            }
-            ++counter;
+            ReusableBehaviors.StandardBehavior.Update(bullet);
         }
     }
 }

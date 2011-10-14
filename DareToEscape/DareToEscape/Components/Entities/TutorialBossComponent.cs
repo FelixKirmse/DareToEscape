@@ -9,24 +9,20 @@ namespace DareToEscape.Components.Entities
 {
     class TutorialBossComponent : Boss1Component
     {
-        private int waveCounter;
+       
         
         public TutorialBossComponent()                 
         {
-            texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/boss1");
-            waveCount = 8;
-            waveTimer = 1000;
-            bulletTimer = 64;
+            texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/boss1");            
         }
 
         int alpha = 0;
         int beta = 90;
         int gamma = 180;
-        int delta = 270;
-        int modifier = 1;
+        int delta = 270;        
         int deg = 66;
         // 66 + 200 rocken
-        protected override IEnumerator<float> ShootBehavior()
+        protected override IEnumerator<int> ShootBehavior()
         {
             for (int k = 0; k < 300; ++k)
             {
@@ -36,7 +32,7 @@ namespace DareToEscape.Components.Entities
                     Color bulletColor = i == 0 ? Color.Red : new Color(0, 255, 0, 255);
                     float angle = i == 0 ? alpha += deg : gamma += deg;                    
                     Bullet bullet = new Bullet(ReusableBehaviors.StandardBehavior, new Vector2(center.X - 200, center.Y), bulletColor);
-                    bullet.Shoot(angle);
+                    bullet.Shoot(angle, 2f);
                 }
 
                 for (int i = 0; i < 2; ++i)
@@ -44,11 +40,11 @@ namespace DareToEscape.Components.Entities
                     Color bulletColor = i == 0 ? Color.Blue : Color.Orange;
                     float angle = i == 0 ? beta -= deg : delta -= deg;                    
                     Bullet bullet = new Bullet(ReusableBehaviors.StandardBehavior, new Vector2(center.X + 200, center.Y), bulletColor);
-                    bullet.Shoot(angle);
+                    bullet.Shoot(angle, 2f);
                 }
-                yield return 1f;
+                yield return 1;
             }
-            yield return 500f;
+            yield return 30;
 
             for (int i = 0; i < 20; ++i)
             {
@@ -56,12 +52,11 @@ namespace DareToEscape.Components.Entities
                 {
                     Bullet newBullet = new Bullet(ReusableBehaviors.StandardBehavior, bulletOrigin, Color.Red);                    
                     float direction = newBullet.DirectionAngleToPlayer + VariableProvider.RandomSeed.Next(-40, 40);
-                    newBullet.Shoot(direction);
-                    newBullet.BaseSpeed = VariableProvider.RandomSeed.Next(2, 4);
+                    newBullet.Shoot(direction, VariableProvider.RandomSeed.Next(2, 4));                    
                 }
-                yield return 250f;   
+                yield return 15;   
             }
-            yield return 1500f;
+            yield return 90;
         }
     }
 }

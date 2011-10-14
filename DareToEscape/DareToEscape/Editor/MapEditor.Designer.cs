@@ -53,8 +53,6 @@
             this.radioCode = new System.Windows.Forms.RadioButton();
             this.radioPassable = new System.Windows.Forms.RadioButton();
             this.timerGameUpdate = new System.Windows.Forms.Timer(this.components);
-            this.cwdButton = new System.Windows.Forms.Button();
-            this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.cwdLabel = new System.Windows.Forms.Label();
             this.startGameButton = new System.Windows.Forms.Button();
             this.entityList = new System.Windows.Forms.ImageList(this.components);
@@ -321,20 +319,6 @@
             // 
             this.timerGameUpdate.Interval = 20;
             this.timerGameUpdate.Tick += new System.EventHandler(this.timerGameUpdate_Tick);
-            // 
-            // cwdButton
-            // 
-            this.cwdButton.Location = new System.Drawing.Point(9, 27);
-            this.cwdButton.Name = "cwdButton";
-            this.cwdButton.Size = new System.Drawing.Size(159, 23);
-            this.cwdButton.TabIndex = 8;
-            this.cwdButton.Text = "Change working directory";
-            this.cwdButton.UseVisualStyleBackColor = true;
-            this.cwdButton.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // folderBrowser
-            // 
-            this.folderBrowser.Description = "Select working directory";
             // 
             // cwdLabel
             // 
@@ -718,7 +702,6 @@
             this.Controls.Add(this.layerSelectGroupBox);
             this.Controls.Add(this.startGameButton);
             this.Controls.Add(this.cwdLabel);
-            this.Controls.Add(this.cwdButton);
             this.Controls.Add(this.groupBoxRightClick);
             this.Controls.Add(this.listTiles);
             this.Controls.Add(this.pctSurface);
@@ -774,8 +757,6 @@
         private System.Windows.Forms.RadioButton radioPassable;
         private System.Windows.Forms.Timer timerGameUpdate;
         private System.Windows.Forms.RadioButton radioUnpassable;
-        private System.Windows.Forms.Button cwdButton;
-        private System.Windows.Forms.FolderBrowserDialog folderBrowser;
         private System.Windows.Forms.Label cwdLabel;
         private System.Windows.Forms.Button startGameButton;
         private System.Windows.Forms.ImageList entityList;

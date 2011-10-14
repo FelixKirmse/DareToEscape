@@ -67,7 +67,7 @@ namespace DareToEscape.Components.Entities
             return false;            
         }
 
-        protected virtual IEnumerator<float> ShootBehavior()
+        protected virtual IEnumerator<int> ShootBehavior()
         {
             throw new NotImplementedException();
         }
