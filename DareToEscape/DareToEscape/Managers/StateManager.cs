@@ -5,13 +5,13 @@ using DareToEscape.Helpers;
 using BlackDragonEngine;
 using DareToEscape.Editor;
 
+
 namespace DareToEscape.Managers
 {
     static class StateManager
     {
         public static GameStates GameState { get; set; }
-        public static MenuStates MenuState { get; set; }
-        public static bool GamePaused { get; set; }
+        public static MenuStates MenuState { get; set; }        
         public static bool PlayerDead { get; set; }
         public static bool FastDead { get; set; }        
 
@@ -19,7 +19,7 @@ namespace DareToEscape.Managers
         {
             GameState = GameStates.Titlescreen;
             MenuState = MenuStates.Main;
-            GamePaused = false;
+            EngineStates.GameStates = EEngineStates.Running;
             PlayerDead = false;
             FastDead = true;            
             EngineStates.DialogState = DialogueStates.Inactive;
@@ -38,7 +38,7 @@ namespace DareToEscape.Managers
                     if (!PlayerDead)
                     {
 
-                        if (!GamePaused)
+                        if (EngineStates.GameStates == EEngineStates.Running)
                         {
                             switch (GameState)
                             {
@@ -97,7 +97,7 @@ namespace DareToEscape.Managers
                     break;
             }
 
-            if (GamePaused)
+            if (EngineStates.GameStates == EEngineStates.Paused)
             {
                 LevelManager.Draw(spriteBatch);
                 IngameManager.Draw(spriteBatch);

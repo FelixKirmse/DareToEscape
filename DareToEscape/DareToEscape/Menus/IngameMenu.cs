@@ -5,6 +5,7 @@ using BlackDragonEngine.Managers;
 using DareToEscape.Helpers;
 using BlackDragonEngine.Providers;
 using Microsoft.Xna.Framework;
+using BlackDragonEngine;
 
 namespace DareToEscape.Menus
 {
@@ -35,7 +36,7 @@ namespace DareToEscape.Menus
             base.Update();
             if (InputMapper.StrictCancel)
             {
-                StateManager.GamePaused = false;
+                EngineStates.GameStates = EEngineStates.Running;
                 StateManager.GameState = GameStates.Ingame;
             }
         }
@@ -45,18 +46,18 @@ namespace DareToEscape.Menus
             switch (SelectedItem)
             { 
                 case resume:
-                    StateManager.GamePaused = false;
+                    EngineStates.GameStates = EEngineStates.Running;
                     StateManager.GameState = GameStates.Ingame;
                     break;
 
                 case restartCheck:
-                    StateManager.GamePaused = false;
+                    EngineStates.GameStates = EEngineStates.Running;
                     SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
                     StateManager.GameState = GameStates.Ingame;
                     break;                
 
                 case mapeditor:
-                    StateManager.GamePaused = false;
+                    EngineStates.GameStates = EEngineStates.Running;
                     Editor.EditorManager.Activate(LevelManager.CurrentLevel);
                     break;
 
@@ -65,12 +66,12 @@ namespace DareToEscape.Menus
                     break;
 
                 case back:
-                    StateManager.GamePaused = false;
+                    EngineStates.GameStates = EEngineStates.Running;
                     StateManager.MenuState = MenuStates.Main;                    
                     break;
 
                 case restartLevel:
-                    StateManager.GamePaused = false;
+                    EngineStates.GameStates = EEngineStates.Running;
                     StateManager.GameState = GameStates.Ingame;
                     LevelManager.ReloadLevel();
                     SaveManager<SaveState>.Save();

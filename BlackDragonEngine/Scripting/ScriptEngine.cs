@@ -6,31 +6,41 @@ using Microsoft.Xna.Framework;
 
 namespace BlackDragonEngine.Scripting
 {
-    public delegate IEnumerator<int> Script();    
+    public delegate IEnumerator<int> Script(params float[] parameters);     
 
     public class ScriptEngine : GameComponent
     {
-        private static readonly Dictionary<Script, ScriptState> scripts = new Dictionary<Script, ScriptState>();
+        private static readonly List<ScriptState> scripts = new List<ScriptState>();        
 
         public ScriptEngine(Game game)
             : base(game)
-        {         
+        {           
         }
 
-        public void ExecuteSript(Script script)
+        public void ExecuteScript(Script script)
         {
             ScriptState scriptState = new ScriptState(script);
-            scriptState.Execute(null);
+            ExecuteScript(scriptState);
+        }
 
+        private void ExecuteScript(ScriptState scriptState)
+        {
+            scriptState.Execute();
             if (!scriptState.IsComplete)
             {
-                scripts.Add(script, scriptState);
+                scripts.Add(scriptState);
             }
         }
 
+        public void ExecuteScript(Script script, params float[] parameters)
+        {
+            ScriptState scriptState = new ScriptState(script, parameters);
+            ExecuteScript(scriptState);
+        }        
+
         public bool IsScriptRunning(Script script)
         {
-            return scripts.ContainsKey(script);
+            return scripts.Exists(s => s.Script == script);
         }
 
         public void StopAllScripts()
@@ -40,28 +50,22 @@ namespace BlackDragonEngine.Scripting
 
         public override void Update(GameTime gameTime)
         {
-            List<Script> scriptsToRemove = new List<Script>();
-            foreach (var scriptState in scripts)
+            if (EngineStates.GameStates == EEngineStates.Running)
             {
-                scriptState.Value.Execute(gameTime);
-                if (scriptState.Value.IsComplete)
+                for (int i = 0; i < scripts.Count; ++i)
                 {
-                    scriptsToRemove.Add(scriptState.Value.OrgScript);
+                    scripts[i].Execute();
                 }
-            }
-
-            foreach (var script in scriptsToRemove)
-            {
-                scripts.Remove(script);                
+                scripts.RemoveAll(s => s.IsComplete);
             }            
-        }
+        }        
 
         private class ScriptState
         {
             private int sleepLength;
-            public Script Script { get; private set; }
-            public Script OrgScript { get; private set; }
+            public Script Script { get; private set; }            
             private IEnumerator<int> scriptEnumerator;
+            private float[] scriptParameter;
 
             public bool IsComplete
             {
@@ -73,15 +77,21 @@ namespace BlackDragonEngine.Scripting
 
             public ScriptState(Script script)
             {
-                this.Script = script;
-                OrgScript = script;
+                this.Script = script;                
+                scriptParameter = null;
             }
 
-            public void Execute(GameTime gameTime)
+            public ScriptState(Script script, params float[] parameters)
+                : this(script)
+            {
+                scriptParameter = parameters;
+            }
+
+            public void Execute()
             {
                 if (scriptEnumerator == null)
                 {
-                    scriptEnumerator = Script();
+                    scriptEnumerator = Script(scriptParameter);
                     sleepLength = scriptEnumerator.Current;
                 }
 

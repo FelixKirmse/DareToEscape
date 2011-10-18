@@ -70,6 +70,10 @@ namespace DareToEscape.Components.PlayerComponents
                     obj.Send("GRAPHICS_PLAYANIMATION", "Idle");
                 }
             }
+           
+            obj.Send("PHYSICS_SET_FOCUSED", InputMapper.TriggeredAction("Focus"));
+            obj.Send("GRAPHICS_SET_FOCUSED", InputMapper.TriggeredAction("Focus"));
+            
         }
 
         public override void Receive<T>(string message, T obj)

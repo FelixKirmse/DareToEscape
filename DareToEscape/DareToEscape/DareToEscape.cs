@@ -6,7 +6,7 @@ using DareToEscape.Managers;
 using BlackDragonEngine.Managers;
 using DareToEscape.Providers;
 using BlackDragonEngine.Scripting;
-
+using BlackDragonEngine.Helpers;
 
 namespace DareToEscape
 {    
@@ -71,6 +71,7 @@ namespace DareToEscape
             StateManager.Draw(spriteBatch);
             GameVariableProvider.BulletManager.Draw(spriteBatch);
             spriteBatch.End();
+            DrawHelper.Draw(spriteBatch);
             
             base.Draw(gameTime);
         }

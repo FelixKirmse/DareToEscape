@@ -2,12 +2,14 @@
 using DareToEscape.Entities;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using BlackDragonEngine;
 
 namespace DareToEscape.Managers
 {
     class BulletManager : GameComponent
     {
-        public static readonly List<Bullet> bullets = new List<Bullet>();
+        public readonly List<Bullet> bullets = new List<Bullet>();
+        public static float CurrentDrawDepth = .82f;
 
         public BulletManager(Game game)
             : base(game)
@@ -26,11 +28,11 @@ namespace DareToEscape.Managers
 
         public override void Update(GameTime gameTime)
         {
-            if (StateManager.GameState == GameStates.Ingame || StateManager.GameState == GameStates.Editor && !StateManager.GamePaused)
+            if (StateManager.GameState == GameStates.Ingame || StateManager.GameState == GameStates.Editor && EngineStates.GameStates == EEngineStates.Running)
             {
                 foreach (var bullet in bullets)
                 {
-                    bullet.Update();
+                    bullet.Update();                    
                 }
                 bullets.RemoveAll(s => !s.Active);                
             }
@@ -44,7 +46,9 @@ namespace DareToEscape.Managers
                 foreach (Bullet bullet in bullets)
                 {
                     bullet.Draw(spriteBatch);
+                    CurrentDrawDepth -= .82e-5f;
                 }
+                CurrentDrawDepth = .82f;
             }
         }        
     }

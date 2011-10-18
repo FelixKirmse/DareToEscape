@@ -3,6 +3,7 @@ using DareToEscape.Helpers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.Helpers;
+using BlackDragonEngine;
 
 namespace DareToEscape.Managers
 {
@@ -16,11 +17,11 @@ namespace DareToEscape.Managers
 
         public static void Update()
         {
-            if (!StateManager.GamePaused)
+            if (EngineStates.GameStates == EEngineStates.Running)
             {
                 if (InputMapper.StrictCancel)
                 {
-                    StateManager.GamePaused = true;
+                    EngineStates.GameStates = EEngineStates.Paused;
                     StateManager.MenuState = MenuStates.Ingame;
                     StateManager.GameState = GameStates.Menu;
                     return;

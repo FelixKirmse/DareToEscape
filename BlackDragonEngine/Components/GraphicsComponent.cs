@@ -10,6 +10,10 @@ namespace BlackDragonEngine.Components
         protected float drawDepth = .82f;
 
         public GraphicsComponent() { }
+        /// <summary>
+        /// Directly sets the texture, useful for Entity that only have a GraphicsComponent
+        /// </summary>
+        /// <param name="texture"></param>
         public GraphicsComponent(Texture2D texture)
         {
             this.texture = texture;

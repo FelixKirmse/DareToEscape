@@ -2,11 +2,32 @@
 using Microsoft.Xna.Framework.Graphics;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.Components;
+using DareToEscape.Providers;
+using BlackDragonEngine.Helpers;
+using DareToEscape.Entities;
+using DareToEscape.Managers;
+
 namespace DareToEscape.Components.Entities
 {
     class BulletGraphicsComponent : GraphicsComponent
     {
         private Color drawColor;
+        private int bulletID;
+        private Rectangle sourceRect;
+        private BlendState blendState;
+
+        private float rotation;
+        private float Rotation
+        { 
+            get
+            { 
+                return rotation; 
+            } 
+            set 
+            {
+                rotation = value; 
+            }
+        }
 
         public BulletGraphicsComponent() 
             : base()
@@ -22,16 +43,47 @@ namespace DareToEscape.Components.Entities
 
         public override void Draw(GameObject obj, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(
+            //spriteBatch.Draw(BlackDragonEngine.Providers.VariableProvider.WhiteTexture, Camera.WorldToScreen(obj.CircleCollisionCenter), new Rectangle(0, 0, 1, 1), Color.White);
+
+            if (((Bullet)obj).BaseSpeed < 0)
+            {
+                Rotation += MathHelper.Pi;
+            }
+
+            blendState = bulletID == 172 ? BlendState.Additive : BlendState.AlphaBlend;
+            DrawHelper.AddNewJob(blendState,
                 texture,
-                obj.ScreenPosition,
-                null,
+                Camera.WorldToScreen(obj.Position + obj.BCircleLocalCenter),
+                sourceRect,
                 drawColor,
-                0f,
-                Vector2.Zero,
+                rotation,
+                new Vector2((float)sourceRect.Width / 2, (float)sourceRect.Height / 2),
                 1f,
                 SpriteEffects.None,
-                drawDepth);
+                BulletManager.CurrentDrawDepth);
+
+            /*if (bulletID == 172)
+            {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.Additive);                
+            }
+
+            spriteBatch.Draw(
+                texture,
+                Camera.WorldToScreen(obj.Position + obj.BCircleLocalCenter),
+                sourceRect,
+                drawColor,
+                rotation,
+                new Vector2((float)sourceRect.Width / 2,(float)sourceRect.Height / 2),  
+                1f,
+                SpriteEffects.None,
+                BulletManager.CurrentDrawDepth);
+
+            if (bulletID == 172)
+            {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+            }*/
         }
         
         public override void Receive<T>(string message, T obj)
@@ -44,7 +96,22 @@ namespace DareToEscape.Components.Entities
                     if (obj is Color)
                     {
                         drawColor = (Color)(object)obj;
+                    }                    
+                }
+
+                if (messageArray[1] == "BULLETID")
+                {
+                    if (obj is int)
+                    {
+                        bulletID = (int)(object)obj;
+                        sourceRect = BulletInformationProvider.GetSourceRectangle(bulletID);
                     }
+                }
+
+                if (messageArray[1] == "ROTATION")
+                {
+                    if (obj is float)
+                        Rotation = MathHelper.ToRadians((float)(object)obj + 90);
                 }
             }
         }

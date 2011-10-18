@@ -4,6 +4,7 @@ using BlackDragonEngine.Providers;
 using DareToEscape.Managers;
 using BlackDragonEngine.Managers;
 using DareToEscape.Entities.BulletBehaviors;
+using System.Collections.Generic;
 
 namespace DareToEscape.Helpers
 {
@@ -18,6 +19,8 @@ namespace DareToEscape.Helpers
              InputMapper.LeftKeys = new Keys[] { Keys.A, Keys.Left };
              InputMapper.RightKeys = new Keys[] { Keys.D, Keys.Right };
              InputMapper.CancelKeys = new Keys[] { Keys.Escape };
+             Keys[] focusKeys = { Keys.LeftShift, Keys.RightShift };
+             InputMapper.AddNewAction("Focus", new List<Keys>(focusKeys));
 
              VariableProvider.GenerateNewRandomSeed();
              VariableProvider.SaveSlot = "1";
@@ -34,7 +37,7 @@ namespace DareToEscape.Helpers
              
              StateManager.Initialize();
              CodeHandler.BindEvents();
-             ReusableBehaviors.Initialize();
+             ReusableBehaviors.Initialize(); 
          }         
     }
 }

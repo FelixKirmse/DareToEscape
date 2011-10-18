@@ -172,6 +172,7 @@
     <Compile Include="DareToEscape.cs" />
     <Compile Include="Menus\Titlescreen.cs" />
     <Compile Include="Providers\AnimationDictionaryProvider.cs" />
+    <Compile Include="Providers\BulletInformationProvider.cs" />
     <Compile Include="Providers\DialogDictionaryProvider.cs" />
     <Compile Include="Providers\GameVariableProvider.cs" />
   </ItemGroup>

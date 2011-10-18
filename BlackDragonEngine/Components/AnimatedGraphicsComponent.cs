@@ -6,14 +6,37 @@ using BlackDragonEngine.Helpers;
 
 namespace BlackDragonEngine.Components
 {
+    /// <summary>
+    /// Component used for handling animated sprites.
+    /// </summary>
     public class AnimatedGraphicsComponent : GraphicsComponent
-    {
+    {        
+        /// <summary>
+        /// Dictionary containing all animations
+        /// </summary>
         protected Dictionary<string, AnimationStrip> animations;
+        /// <summary>
+        /// Should the graphic be flipped?
+        /// </summary>
         protected bool flipped;
+        /// <summary>
+        /// Represents the animation that is currently being played
+        /// </summary>
         protected string currentAnimation;
+        /// <summary>
+        /// Represents the lates animation received by other components
+        /// </summary>
         protected string receivedAnimation;
+        /// <summary>
+        /// Drawdepth of the sprite
+        /// </summary>
         new protected float drawDepth = .91f;
                
+        /// <summary>
+        /// Draws the entity
+        /// </summary>
+        /// <param name="obj">The entity to draw</param>
+        /// <param name="spriteBatch">The spritebatch to use</param>
         public override void Draw(GameObject obj, SpriteBatch spriteBatch)
         {
             SpriteEffects effects = SpriteEffects.None;
@@ -32,11 +55,15 @@ namespace BlackDragonEngine.Components
                 drawDepth);
         }
 
+        /// <summary>
+        /// Updates the animation
+        /// </summary>
+        /// <param name="obj">The entity to update (not being used)</param>
         public override void Update(GameObject obj)
         {
             updateAnimation();
         }
-
+        
         public override void Receive<T>(string message, T obj)
         {         
             string[] messageParts = message.Split('_');
@@ -69,6 +96,9 @@ namespace BlackDragonEngine.Components
             }        
         }
 
+        /// <summary>
+        /// Updates the current Animation
+        /// </summary>
         protected void updateAnimation()
         {
             if (animations.ContainsKey(currentAnimation))
@@ -84,6 +114,10 @@ namespace BlackDragonEngine.Components
             }
         }
 
+        /// <summary>
+        /// Plays a new animation
+        /// </summary>
+        /// <param name="name">The name of the new animation</param>
         protected void PlayAnimation(string name)
         {
             if (name != null && animations.ContainsKey(name))

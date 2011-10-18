@@ -20,6 +20,7 @@ Content\textures\entities\lock.xnb
 Content\textures\entities\bullet.xnb
 Content\textures\entities\bosskiller.xnb
 Content\textures\entities\sign.xnb
+Content\textures\entities\bullets.xnb
 Content\textures\tilesheets\tilesheet.png
 Content\textures\editor\tiles\0.bmp
 Content\textures\editor\tiles\1.bmp
@@ -36,3 +37,4 @@ Content\textures\editor\entities\lock_blue.bmp
 Content\textures\editor\entities\lock_green.bmp
 Content\textures\editor\entities\lock_red.bmp
 Content\textures\editor\entities\lock_yellow.bmp
+Content\data\shotdata.txt

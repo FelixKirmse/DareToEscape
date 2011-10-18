@@ -18,11 +18,11 @@ namespace DareToEscape.Components.Entities
 
         public override void Update(GameObject obj)
         {
-            if (ShootCondition(VariableProvider.CurrentPlayer.CollisionCenter, obj))
+            if (ShootCondition(VariableProvider.CurrentPlayer.RectCollisionCenter, obj))
             {
                 if (!VariableProvider.ScriptEngine.IsScriptRunning(ShootBehavior))
                 {
-                    VariableProvider.ScriptEngine.ExecuteSript(ShootBehavior);
+                    VariableProvider.ScriptEngine.ExecuteScript(ShootBehavior);
                 }
             }            
         }
@@ -67,7 +67,7 @@ namespace DareToEscape.Components.Entities
             return false;            
         }
 
-        protected virtual IEnumerator<int> ShootBehavior()
+        protected virtual IEnumerator<int> ShootBehavior(params float[] parameters)
         {
             throw new NotImplementedException();
         }

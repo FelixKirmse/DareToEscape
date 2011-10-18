@@ -3,6 +3,7 @@ using BlackDragonEngine.Entities;
 using Microsoft.Xna.Framework;
 using BlackDragonEngine.Components;
 using BlackDragonEngine.Providers;
+using BlackDragonEngine.Helpers;
 
 namespace DareToEscape.Entities
 {
@@ -11,21 +12,22 @@ namespace DareToEscape.Entities
         public Player(List<Component> components)
             : base(components)
         {
-        }
+            collisionCircle = new BCircle(6, 9, 4);
+        }               
 
-        public Rectangle PlayerBulletCollisionRect
+        public BCircle PlayerBulletCollisionCircle
         {
             get
             {
-                return new Rectangle((int)position.X + 6, (int)position.Y + 9, 4, 4);
+                return CollisionCircle;
             }
         }
 
-        public Vector2 PlayerBulletCollisionRectCenter
+        public Vector2 PlayerBulletCollisionCircleCenter
         {
             get 
             {
-                return new Vector2((PlayerBulletCollisionRect.Right + PlayerBulletCollisionRect.Left) / 2, (PlayerBulletCollisionRect.Bottom + PlayerBulletCollisionRect.Top) / 2);
+                return CollisionCircle.Position;
             }
         }
 
@@ -33,7 +35,7 @@ namespace DareToEscape.Entities
         {
             get 
             {
-                return ((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionRectCenter.X;
+                return ((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter.X;
             }
         }
 
@@ -41,7 +43,7 @@ namespace DareToEscape.Entities
         {
             get
             {
-                return ((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionRectCenter.Y;
+                return ((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter.Y;
             }
         }
     }

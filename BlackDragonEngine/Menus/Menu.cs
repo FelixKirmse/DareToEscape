@@ -44,7 +44,7 @@ namespace BlackDragonEngine.Menus
             spriteBatch.Draw(
                 VariableProvider.WhiteTexture,
                 Vector2.Zero,
-                new Rectangle(0, 0, 800, 600),
+                new Rectangle(0,0,VariableProvider.Game.Window.ClientBounds.Width,VariableProvider.Game.Window.ClientBounds.Height) ,
                 new Color(0, 0, 0, 200),
                 0,
                 Vector2.Zero,

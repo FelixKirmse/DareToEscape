@@ -1,18 +1,25 @@
 ﻿using BlackDragonEngine.Entities;
 using BlackDragonEngine.Components;
 using DareToEscape.Providers;
+using Microsoft.Xna.Framework.Graphics;
+using BlackDragonEngine.Providers;
+using Microsoft.Xna.Framework;
+using DareToEscape.Entities;
+using BlackDragonEngine.Helpers;
 
 namespace DareToEscape.Components.PlayerComponents
 {
     class PlayerGraphicsComponent : AnimatedGraphicsComponent
     {        
         private bool onGround;
+        private bool focused;        
 
         public PlayerGraphicsComponent()
         {
             this.currentAnimation = "Idle";
             this.animations = AnimationDictionaryProvider.GetPlayerAnimations();
             this.drawDepth = .85f;
+            focused = false;
         }
 
         public override void Update(GameObject obj)
@@ -31,8 +38,7 @@ namespace DareToEscape.Components.PlayerComponents
             receivedAnimation = "";
 
             base.Update(obj);
-        }       
-
+        }  
 
         public override void Receive<T>(string message, T obj)
         {
@@ -47,6 +53,12 @@ namespace DareToEscape.Components.PlayerComponents
                         if (obj is bool)
                             onGround = (bool)(object)obj;
                     }
+
+                    if (messageParts[2] == "FOCUSED")
+                    {
+                        if (obj is bool)
+                            focused = (bool)(object)obj;
+                    }                   
                 } 
             }
 

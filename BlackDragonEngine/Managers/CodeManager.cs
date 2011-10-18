@@ -92,7 +92,7 @@ namespace BlackDragonEngine.Managers
 
         private static void checkCodesInPlayerCenter(GameObject player)
         {
-            Vector2 collisionCenter = player.CollisionCenter;
+            Vector2 collisionCenter = player.RectCollisionCenter;
 
             MapSquare square = TileMap.GetMapSquareAtPixel(collisionCenter);
             if ( square == null)

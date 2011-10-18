@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using DareToEscape.Menus;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.TileEngine;
+using DareToEscape.Providers;
 
 namespace DareToEscape.Helpers
 {
@@ -22,6 +23,8 @@ namespace DareToEscape.Helpers
             DialogManager.Initialize();
 
             TileMap.Initialize(Content.Load<Texture2D>(@"textures/tilesheets/tilesheet"));
+
+            BulletInformationProvider.LoadBulletData(Content);
         }
     }
 }

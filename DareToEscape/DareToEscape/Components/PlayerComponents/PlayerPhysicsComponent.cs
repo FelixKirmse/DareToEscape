@@ -6,6 +6,7 @@ using BlackDragonEngine.TileEngine;
 using BlackDragonEngine.Components;
 using Microsoft.Xna.Framework.Input;
 using BlackDragonEngine.Providers;
+using BlackDragonEngine.Helpers;
 
 namespace DareToEscape.Components.PlayerComponents
 {
@@ -14,14 +15,16 @@ namespace DareToEscape.Components.PlayerComponents
         private float gravity;
         private float horiz;
         private bool onGround;
-        private Rectangle collisionRectangle = new Rectangle(0, 0, 16, 24);
+        private Rectangle collisionRectangle = new Rectangle(0, 0, 16, 24);       
         private bool jumpThroughCheck = false;
         private bool inWater = false;
 
         private bool setRectangle = true;
 
         private bool noLeft = false;
-        private bool noRight = false;       
+        private bool noRight = false;
+
+        private bool focused = false;
 
         public override void Update(GameObject obj)
         {
@@ -47,7 +50,7 @@ namespace DareToEscape.Components.PlayerComponents
                 }
                 for (int i = 0; i < Math.Abs(horiz); ++i)
                 {
-                    if (inWater || ShortcutProvider.IsKeyDown(Keys.LeftShift))
+                    if (inWater || focused)
                         wantedPosition.X += (horiz / Math.Abs(horiz)) / 2;
                     else
                         wantedPosition.X += horiz / Math.Abs(horiz);
@@ -65,7 +68,7 @@ namespace DareToEscape.Components.PlayerComponents
 
                     if (!TileMap.CellIsPassable(bottomLeftCorner) || !TileMap.CellIsPassable(bottomRightCorner) || !TileMap.CellIsPassable(topRightCorner) || !TileMap.CellIsPassable(topLeftCorner) || !TileMap.CellIsPassable(middleRight) || !TileMap.CellIsPassable(middleLeft))
                     {
-                        if (inWater)
+                        if (inWater || focused)
                             wantedPosition.X -= (horiz / Math.Abs(horiz)) / 2;
                         else
                             wantedPosition.X -= horiz / Math.Abs(horiz);                        
@@ -197,6 +200,11 @@ namespace DareToEscape.Components.PlayerComponents
                         case "NOLEFT":
                             if (obj is bool)
                                 noLeft = (bool)(object)obj;
+                            break;
+
+                        case "FOCUSED":
+                            if (obj is bool)
+                                focused = (bool)(object)obj;
                             break;
                     }
                 }

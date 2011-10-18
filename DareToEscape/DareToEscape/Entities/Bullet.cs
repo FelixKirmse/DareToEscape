@@ -12,8 +12,7 @@ using BlackDragonEngine.Helpers;
 namespace DareToEscape.Entities
 {
     public class Bullet : GameObject
-    {
-        private Texture2D bulletTexture;
+    {        
         public static float SpeedModifier = 1.0f;
         public float BaseSpeed { get; set; }     
         public bool Active { get; set; }
@@ -32,7 +31,7 @@ namespace DareToEscape.Entities
         {
             get 
             {
-                Vector2 direction = ((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionRectCenter - CollisionCenter;
+                Vector2 direction = ((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter - CircleCollisionCenter;
                 float angle = (float)Math.Atan2(direction.Y, direction.X);
                 return new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
             }
@@ -42,7 +41,7 @@ namespace DareToEscape.Entities
         {
             get 
             {
-                Vector2 direction = ((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionRectCenter - CollisionCenter;
+                Vector2 direction = ((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter - CircleCollisionCenter;
                 float radians = (float)Math.Atan2(direction.Y, direction.X);
                 return MathHelper.ToDegrees(radians);
             }
@@ -75,38 +74,37 @@ namespace DareToEscape.Entities
 
         private IBehavior behavior;
 
-        public Bullet()
+        public Bullet(int id)
         {
-            collisionRectangle = new Rectangle(1, 1, 5, 5);
-            bulletTexture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/bullet");
-            components.Add(new BulletGraphicsComponent(bulletTexture));
+            collisionCircle = BulletInformationProvider.GetBCircle(id);
+            components.Add(new BulletGraphicsComponent(BulletInformationProvider.BulletSheet));
             Active = false;
             behavior = ReusableBehaviors.StandardBehavior;
             TurnSpeed = 0f;
             BaseSpeed = 1f;
             Acceleration = 0f;
             SpeedLimit = 1f;
-            AutomaticCollision = false;
+            AutomaticCollision = true;
             KillTime = -1;
+            Send("GRAPHICS_BULLETID", id);
         }
 
-        public Bullet(Vector2 position)
-            : this()
+        public Bullet()
+            : this(1)
+        { 
+        }
+
+        public Bullet(Vector2 position, int id)
+            : this(id)
         {
             Position = position;
-        }
+        }        
 
-        public Bullet(IBehavior behavior, Vector2 position)
-            : this(position)
+        public Bullet(IBehavior behavior, Vector2 position, int id)
+            : this(position, id)
         {
             this.behavior = behavior;
-        }
-
-        public Bullet(IBehavior behavior, Vector2 position, Color color)
-            : this(behavior, position)
-        {
-            Send("GRAPHICS_DRAWCOLOR", color);
-        }
+        } 
 
         public override void Update()
         {
@@ -122,7 +120,7 @@ namespace DareToEscape.Entities
                 behavior.Update(this);
                 if (AutomaticCollision)
                 {
-                    if (!TileMap.CellIsPassableByPixel(CollisionCenter) || !Camera.WorldRectangle.Contains((int)Position.X, (int)Position.Y))
+                    if (!TileMap.CellIsPassableByPixel(CircleCollisionCenter) || !Camera.WorldRectangle.Contains((int)Position.X, (int)Position.Y))
                     {
                         Active = false;
                     }
@@ -132,7 +130,7 @@ namespace DareToEscape.Entities
                     Active = false;
                 }*/
                     
-                if (CollisionRectangle.Intersects(((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionRect))
+                if (CollisionCircle.Intersects(((Player)VariableProvider.CurrentPlayer).PlayerBulletCollisionCircle))
                 {
                     Active = false;
                     VariableProvider.CurrentPlayer.Send<string>("KILL", null);
@@ -140,6 +138,8 @@ namespace DareToEscape.Entities
 
                 lastDirection = Direction;
                 lastPosition = Position;
+
+                Send("GRAPHICS_ROTATION", Direction);
             }
             base.Update();
         }

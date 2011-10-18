@@ -16,7 +16,7 @@ namespace DareToEscape.Components.Entities
             texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/mediumturret");            
         }
 
-        protected override IEnumerator<int> ShootBehavior()
+        protected override IEnumerator<int> ShootBehavior(params float[] parameters)
         {
             float frequency = .6f;
             for (int i = 0; i < 25; ++i)
@@ -24,7 +24,7 @@ namespace DareToEscape.Components.Entities
                 int red = (int)(Math.Sin(frequency * i + 0) * 127 + 128);
                 int green = (int)(Math.Sin(frequency * i + (2 * Math.PI / 3)) * 127 + 128);
                 int blue = (int)(Math.Sin(frequency * i + (4 * Math.PI / 3)) * 127 + 128);
-                Bullet bullet = new Bullet(ReusableBehaviors.StandardBehavior, bulletOrigin, new Color(red, green, blue));
+                Bullet bullet = new Bullet(ReusableBehaviors.StandardBehavior, bulletOrigin,1);
                 bullet.Shoot(VariableProvider.RandomSeed.Next(-1, 361), 4);                
             } 
             yield return 1;

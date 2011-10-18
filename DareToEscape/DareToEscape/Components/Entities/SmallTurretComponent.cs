@@ -12,11 +12,11 @@ namespace DareToEscape.Components.Entities
             texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/smallturret");
         }
 
-        protected override IEnumerator<int> ShootBehavior()
+        protected override IEnumerator<int> ShootBehavior(params float[] parameters)
         {            
             for (int i = 0; i < 5; ++i)
             {
-                Bullet newBullet = new Bullet(bulletOrigin);                
+                Bullet newBullet = new Bullet(bulletOrigin,1);                
                 newBullet.Shoot(newBullet.DirectionAngleToPlayer, 2f);
                 yield return 10;               
             }

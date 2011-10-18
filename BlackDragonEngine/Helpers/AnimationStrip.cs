@@ -4,7 +4,9 @@ using BlackDragonEngine.Providers;
 
 namespace BlackDragonEngine.Helpers
 {
-
+    /// <summary>
+    /// Class that helps handling Animations
+    /// </summary>
     public class AnimationStrip
     {
         #region Declarations

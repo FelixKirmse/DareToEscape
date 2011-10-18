@@ -1,4 +1,5 @@
 ﻿using BlackDragonEngine.Providers;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
 namespace BlackDragonEngine.Helpers
@@ -12,6 +13,8 @@ namespace BlackDragonEngine.Helpers
         public static Keys[] JumpKeys = new Keys[2];
         public static Keys[] ActionKeys = new Keys[2];
         public static Keys[] CancelKeys = new Keys[2];
+
+        private static readonly Dictionary<string, List<Keys>> CustomActions = new Dictionary<string, List<Keys>>();
 
         #region Normal Actionchecks
         public static bool Up 
@@ -118,6 +121,25 @@ namespace BlackDragonEngine.Helpers
             {
                 return ShortcutProvider.AreAnyKeysDown(CancelKeys, true);
             }
+        }
+        #endregion
+
+        #region CustomActionHandling
+        public static void AddNewAction(string name, List<Keys> keys)
+        {
+            CustomActions.Add(name, keys);
+        }
+
+        public static bool TriggeredAction(string name)
+        {
+            Keys[] keys = CustomActions[name].ToArray();
+            return ShortcutProvider.AreAnyKeysDown(keys);
+        }
+
+        public static bool TriggeredStrictAction(string name)
+        {
+            Keys[] keys = CustomActions[name].ToArray();
+            return ShortcutProvider.AreAnyKeysDown(keys, true);
         }
         #endregion
     }    
