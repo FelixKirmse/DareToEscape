@@ -318,6 +318,7 @@ namespace DareToEscape.Editor
                 return;
 
             MapSquare mapSquare = TileMap.GetMapSquareAtCell(cellX, cellY);
+            var codes = TileMap.GetCellCodes(cellX, cellY);
             if (mapSquare == null)
             {
                 mapSquare = new MapSquare(null, null, null, CurrentItem.Passable == null ? true :  (bool)CurrentItem.Passable);
@@ -334,8 +335,8 @@ namespace DareToEscape.Editor
 
             if (CurrentItem.Code != null)
              {                
-                if(!mapSquare.Codes.Contains(CurrentItem.Code))
-                    mapSquare.Codes.Add(CurrentItem.Code);                                   
+                if(!codes.Contains(CurrentItem.Code))
+                    codes.Add(CurrentItem.Code);                                   
             }
             if (CurrentItem.CodeAbove != null)
             {
@@ -370,6 +371,7 @@ namespace DareToEscape.Editor
                 mapSquare.LayerTiles[DrawLayer] = CurrentItem.TileID;
             }
             TileMap.SetMapSquareAtCell(cellX, cellY, mapSquare);
+            TileMap.SetCellCodes(cellX, cellY, codes);
         }
 
         public static EditorItem GetEditorItemByName(string name)

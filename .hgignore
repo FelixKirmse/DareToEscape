@@ -3,3 +3,5 @@ obj/
 bin/
 DareToEscape/DareToEscapeContent/audio/files/
 DareToEscape/DareToEscape/publish/
+_ReSharper
+_ReSharper.DareToEscape/

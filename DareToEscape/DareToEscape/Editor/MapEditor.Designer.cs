@@ -89,6 +89,7 @@
             this.propertyListBox = new System.Windows.Forms.ListBox();
             this.mapSizeLabel = new System.Windows.Forms.Label();
             this.focusButton = new System.Windows.Forms.CheckBox();
+            this.generateRandomMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pctSurface)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBoxRightClick.SuspendLayout();
@@ -177,7 +178,8 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clearMapToolStripMenuItem});
+            this.clearMapToolStripMenuItem,
+            this.generateRandomMapToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
@@ -185,7 +187,7 @@
             // clearMapToolStripMenuItem
             // 
             this.clearMapToolStripMenuItem.Name = "clearMapToolStripMenuItem";
-            this.clearMapToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.clearMapToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.clearMapToolStripMenuItem.Text = "&Clear Map";
             this.clearMapToolStripMenuItem.Click += new System.EventHandler(this.clearMapToolStripMenuItem_Click);
             // 
@@ -682,6 +684,13 @@
             this.focusButton.TabIndex = 30;
             this.focusButton.UseVisualStyleBackColor = true;
             // 
+            // generateRandomMapToolStripMenuItem
+            // 
+            this.generateRandomMapToolStripMenuItem.Name = "generateRandomMapToolStripMenuItem";
+            this.generateRandomMapToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.generateRandomMapToolStripMenuItem.Text = "Generate Random Map";
+            this.generateRandomMapToolStripMenuItem.Click += new System.EventHandler(this.generateRandomMapToolStripMenuItem_Click);
+            // 
             // MapEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -797,5 +806,6 @@
         private System.Windows.Forms.ListBox propertyListBox;
         private System.Windows.Forms.Label mapSizeLabel;
         private System.Windows.Forms.CheckBox focusButton;
+        private System.Windows.Forms.ToolStripMenuItem generateRandomMapToolStripMenuItem;
     }
 }

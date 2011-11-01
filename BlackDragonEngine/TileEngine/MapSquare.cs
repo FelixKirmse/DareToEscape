@@ -7,8 +7,7 @@ namespace BlackDragonEngine.TileEngine
     public class MapSquare
     {
         #region Declarations
-        public int?[] LayerTiles = new int?[3];
-        public List<string> Codes = new List<string>();
+        public int?[] LayerTiles = new int?[3];        
         public bool Passable = true;
         #endregion
 

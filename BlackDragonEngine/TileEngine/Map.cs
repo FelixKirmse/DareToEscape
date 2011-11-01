@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BlackDragonEngine.Helpers;
 
 namespace BlackDragonEngine.TileEngine
@@ -7,6 +8,7 @@ namespace BlackDragonEngine.TileEngine
     public class Map
     {
         public SerializableDictionary<Coords, MapSquare> MapData = new SerializableDictionary<Coords, MapSquare>();
+        public SerializableDictionary<Coords, List<string>> Codes = new SerializableDictionary<Coords, List<string>>();
         public SerializableDictionary<string, string> Properties = new SerializableDictionary<string, string>();               
 
         public int MapWidth

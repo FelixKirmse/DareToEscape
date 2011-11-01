@@ -104,6 +104,11 @@ namespace BlackDragonEngine.TileEngine
             return CellIsPassable((int)cell.X, (int)cell.Y);
         }
 
+        public static bool CellIsPassable(Coords cell)
+        {
+            return CellIsPassable(cell.X, cell.Y);
+        }
+
         public static bool CellIsPassableByPixel(Vector2 pixelLocation) 
         { 
             return CellIsPassable(GetCellByPixelX((int)pixelLocation.X), GetCellByPixelY((int)pixelLocation.Y));
@@ -111,9 +116,19 @@ namespace BlackDragonEngine.TileEngine
 
         public static List<string> GetCellCodes(int cellX, int cellY)
         {
-            MapSquare square = GetMapSquareAtCell(cellX, cellY);
-            if (square == null) return new List<string>();
-            return square.Codes;
+            var coords = new Coords(cellX, cellY);
+            if(!Map.Codes.ContainsKey(coords))
+                return new List<string>();
+            return Map.Codes[coords];
+        }
+
+        public static void SetCellCodes(int cellX, int cellY, List<string> codes)
+        {
+            var coords = new Coords(cellX, cellY);
+            if (Map.Codes.ContainsKey(coords))
+                Map.Codes[coords] = codes;
+            else
+                Map.Codes.Add(coords, codes);
         }
 
         public static List<string> GetCellCodes(Vector2 cell)
@@ -123,35 +138,41 @@ namespace BlackDragonEngine.TileEngine
 
         public static void AddCodeToCell(int cellX, int cellY, string code)
         {
-            MapSquare square = GetMapSquareAtCell(cellX, cellY);
-            if (square != null)
+            var coords = new Coords(cellX, cellY);
+            if (!Map.Codes.ContainsKey(coords))
             {
-                if (!square.Codes.Contains(code))
-                    square.Codes.Add(code);
+                var codeList = new List<string>();
+                codeList.Add(code);
+                Map.Codes.Add(coords, codeList);
             }
             else
             {
-                square = new MapSquare(null, null, null, true);
-                square.Codes.Add(code);
-                SetMapSquareAtCell(cellX, cellY, square);
-            }
+                Map.Codes[coords].Add(code);
+            }            
         }
 
         public static void RemoveCodeFromCell(int cellX, int cellY, string code)
         {
-            MapSquare square = GetMapSquareAtCell(cellX, cellY);
-            if (square != null)
-            {
-                if (square.Codes.Contains(code))
-                    square.Codes.Remove(code);
-            }  
+            var coords = new Coords(cellX, cellY);
+            if (Map.Codes.ContainsKey(coords))
+            {                
+                Map.Codes[coords].Remove(code);
+                if (Map.Codes[coords].Count == 0)
+                    Map.Codes.Remove(coords);
+            }            
         }
         #endregion
 
         #region Information about MapSquare objects
         public static void RemoveMapSquareAtCell(int tileX, int tileY)
+        {            
+            RemoveMapSquareAtCell(new Coords(tileX, tileY));            
+        }
+
+        public static void RemoveMapSquareAtCell(Coords coords)
         {
-            Map.MapData.Remove(new Coords(tileX, tileY));
+            Map.MapData.Remove(coords);
+            Map.Codes.Remove(coords);
         }
 
         public static MapSquare GetMapSquareAtCell(int tileX, int tileY)
@@ -184,6 +205,12 @@ namespace BlackDragonEngine.TileEngine
                 }
                 Map[tileX, tileY].LayerTiles[layer] = tileIndex;                
             }
+        }
+
+        public static void SetSolidTileAtCoords(Coords coords, int? tileIndex)
+        {
+            SetTileAtCell(coords.X, coords.Y, 0, tileIndex);
+            Map[coords].Passable = false;
         }
 
         public static MapSquare GetMapSquareAtPixel(int pixelX, int pixelY)
@@ -250,15 +277,16 @@ namespace BlackDragonEngine.TileEngine
         }
 
         public static void DrawEditModeItems(SpriteBatch spriteBatch, int x, int y)
-        {            
+        {
+            var coords = new Coords(x, y);
             if (!CellIsPassable(x, y)) 
             {
                 spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(x, y), new Rectangle(0,0, TileWidth, TileHeight), new Color(255, 0, 0, 80), 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
             }
-            if (Map[x, y].Codes.Count != 0)
+            if (Map.Codes.ContainsKey(coords) && Map.Codes[coords].Count != 0)
             {
                 spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(x, y), new Rectangle(0, 0, TileWidth, TileHeight), new Color(0, 0, 255, 80), 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
-                spriteBatch.DrawString(spriteFont, Map[x, y].Codes.Count.ToString(), Camera.WorldToScreen(new Vector2(x * TileWidth, y * TileHeight)), Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);                 
+                spriteBatch.DrawString(spriteFont, Map.Codes[coords].Count.ToString(), Camera.WorldToScreen(new Vector2(x * TileWidth, y * TileHeight)), Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);                 
             }
         }
 

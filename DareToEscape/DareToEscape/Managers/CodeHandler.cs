@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using BlackDragonEngine.Entities;
 using DareToEscape.Helpers;
 using BlackDragonEngine.Managers;
@@ -83,7 +84,7 @@ namespace DareToEscape.Managers
             }
         }
 
-        public static int OnCodeInPlayerCenterCheck(string[] codeArray, MapSquare square, Vector2 collisionCenter, int i, GameObject player)
+        public static int OnCodeInPlayerCenterCheck(string[] codeArray, List<string> codes, Vector2 collisionCenter, int i, GameObject player)
         {
             switch (codeArray[0])
             {
@@ -110,24 +111,24 @@ namespace DareToEscape.Managers
 
                 case "TUTORIALDIALOG":
                     DialogManager.PlayDialog(DialogDictionaryProvider.TutorialDialog(), "Tutorial");
-                    square.Codes.Remove("TUTORIALDIALOG");
+                    codes.Remove("TUTORIALDIALOG");
                     break;
 
                 case "TUTORIALFINISH":
                     DialogManager.PlayDialog(DialogDictionaryProvider.TutorialDialogFinish(), "TutorialFinish");
-                    square.Codes.Remove("TUTORIALFINISH");
-                    square.Codes.Add("MAINMENU");
+                    codes.Remove("TUTORIALFINISH");
+                    codes.Add("MAINMENU");
                     break;
 
                 case "GRATZ":
                     DialogManager.PlayDialog(DialogDictionaryProvider.Gratz(), "Gratz");
-                    square.Codes.Remove("GRATZ");
-                    square.Codes.Add("MAINMENU");
+                    codes.Remove("GRATZ");
+                    codes.Add("MAINMENU");
                     break;
 
                 case "SAVE":
                     SaveManager<SaveState>.Save();
-                    TileMap.GetMapSquareAtPixel(collisionCenter).Codes.Remove("SAVE");
+                    codes.Remove("SAVE");
                     --i;
                     break;
 

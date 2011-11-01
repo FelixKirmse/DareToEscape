@@ -165,6 +165,7 @@
     <Compile Include="Managers\MenuManager.cs" />
     <Compile Include="Managers\CodeHandler.cs" />
     <Compile Include="Managers\StateManager.cs" />
+    <Compile Include="MapTools\MapGenerator.cs" />
     <Compile Include="Menus\IngameMenu.cs" />
     <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

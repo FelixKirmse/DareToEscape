@@ -4,30 +4,31 @@ namespace BlackDragonEngine.TileEngine
 {
     public struct Coords
     {
-        private int x;
-        private int y;
+        public int X;
+        public int Y;
 
-        public int X
+        public static Coords Left
         {
-            get { return x; }
-            set 
-            {
-                x = (int)MathHelper.Max(0, value);
-            }
+            get { return new Coords(-1, 0); }
         }
-        public int Y 
+
+        public static Coords Right
         {
-            get { return y; }
-            set
-            {
-                y = (int)MathHelper.Max(0, value);
-            }
-        }   
+            get { return new Coords(1, 0); }
+        }
+
+        public static Coords Up
+        {
+            get { return new Coords(0, -1); }
+        }
+
+        public static Coords Down
+        {
+            get { return new Coords(0, 1); }
+        }        
 
         public Coords(int x, int y)
-        {
-            this.x = 0;
-            this.y = 0;
+        {            
             X = x;
             Y = y;
         }
@@ -36,22 +37,42 @@ namespace BlackDragonEngine.TileEngine
         {
             if (!(obj is Coords))
                 return false;
-            return (x == ((Coords)obj).X && y == ((Coords)obj).Y);
+            return (X == ((Coords)obj).X && Y == ((Coords)obj).Y);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() ^ (x*y);
+            return X ^ Y;
         }
 
-        public static bool operator == (Coords leftCoords, Coords rightCoords)
+        public static bool operator ==(Coords leftCoords, Coords rightCoords)
         {
             return (rightCoords.X == leftCoords.X && rightCoords.Y == leftCoords.Y);
         }
 
-        public static bool operator != (Coords leftCoords, Coords rightCoords)
+        public static bool operator !=(Coords leftCoords, Coords rightCoords)
         {
             return !(leftCoords == rightCoords);
+        }
+
+        public static Coords operator /(Coords coords, int divisor)
+        {
+            return new Coords(coords.X / divisor, coords.Y / divisor);
+        }
+
+        public static Coords operator +(Coords leftCoords, Coords rightCoords)
+        {
+            return new Coords(leftCoords.X + rightCoords.X, leftCoords.Y + rightCoords.Y);
+        }
+
+        public static Coords operator *(Coords coords, int multiplicator)
+        {
+            return new Coords(coords.X * multiplicator, coords.Y * multiplicator);
+        }
+
+        public override string ToString()
+        {
+            return X + "," + Y;
         }
     }
 }

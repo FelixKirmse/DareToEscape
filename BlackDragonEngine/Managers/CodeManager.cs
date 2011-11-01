@@ -8,7 +8,7 @@ namespace BlackDragonEngine.Managers
 {
     public delegate void OnMapCodeCheckHandler(string[] code, Vector2 location, GameObject player);
     public delegate void UnderPlayerCheckCodeHandler(string[] code, GameObject player);
-    public delegate int InPlayerCheckCodeHandler(string[] code, MapSquare square, Vector2 collisionCenter,int i, GameObject player);
+    public delegate int InPlayerCheckCodeHandler(string[] code, List<string> codes, Vector2 collisionCenter,int i, GameObject player);
 
     public static class CodeManager
     {
@@ -25,10 +25,10 @@ namespace BlackDragonEngine.Managers
 
             if (OnMapCodeCheck != null)
             {
-                foreach (var item in TileMap.Map.MapData)
+                foreach (var item in TileMap.Map.Codes)
                 {
                     Vector2 location = new Vector2(item.Key.X * TileMap.TileWidth, item.Key.Y * TileMap.TileHeight);
-                    foreach (string codePart in item.Value.Codes)
+                    foreach (string codePart in item.Value)
                     {
                         string[] code = codePart.Split('_');
                         OnMapCodeCheck(code, location, player);
@@ -94,17 +94,13 @@ namespace BlackDragonEngine.Managers
         {
             Vector2 collisionCenter = player.RectCollisionCenter;
 
-            MapSquare square = TileMap.GetMapSquareAtPixel(collisionCenter);
-            if ( square == null)
-            {
-                return;
-            }
+            var codes = TileMap.GetCellCodes(collisionCenter);            
 
-            for (int i = 0; i < square.Codes.Count; ++i )
+            for (int i = 0; i < codes.Count; ++i )
             {
-                string codePart = TileMap.GetMapSquareAtPixel(collisionCenter).Codes[i];
+                string codePart = codes[i];
                 string[] codeArray = codePart.Split('_');
-                i = OnCodeInPlayerCenterCheck(codeArray,square, collisionCenter, i, player);
+                i = OnCodeInPlayerCenterCheck(codeArray, codes, collisionCenter, i, player);
             }
         }        
     }

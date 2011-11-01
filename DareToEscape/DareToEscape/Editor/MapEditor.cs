@@ -328,11 +328,9 @@ namespace DareToEscape.Editor
                 codeList.Add(code);
             }
 
-            MapSquare square = TileMap.GetMapSquareAtCell(cellX, cellY);
-            if (square == null)
-                square = new MapSquare(null, null, null, true);
-            square.Codes = codeList;
-            TileMap.SetMapSquareAtCell(cellX, cellY, square);
+            var codes = TileMap.GetCellCodes(cellX, cellY);            
+            codes = codeList;
+            TileMap.SetCellCodes(cellX, cellY, codes);
         }
 
         private void addCodeButton_Click(object sender, EventArgs e)
@@ -439,6 +437,19 @@ namespace DareToEscape.Editor
             layerSelectGroupBox.Enabled = state;
             groupBoxRightClick.Enabled = state;
             focusButton.Focus();
+        }
+
+        private void generateRandomMapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var mapGen = new RandomMapGenerator();
+            mapGen.GenerateNewMap(50, 50, 500, 500);
+            mapGen.MakeWallsHollow();
+            //mapGen.FillNarrowPassages();    
+            //mapGen.RemoveIslands();
+            mapGen.RemoveOuterWall();  
+            mapGen.CleanUpSingleBlocks();
+            //mapGen.FillNarrowPassages();
+            //mapGen.MakeWallsHollow();
         }        
     }
 }
