@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BlackDragonEngine.Helpers;
 
 namespace BlackDragonEngine.TileEngine
@@ -13,15 +14,9 @@ namespace BlackDragonEngine.TileEngine
 
         public int MapWidth
         {
-            get 
+            get
             {
-                int maxX = 0;
-                foreach (var item in MapData)
-                {
-                    if (item.Key.X > maxX)
-                        maxX = item.Key.X;
-                }
-                return maxX;            
+                return MapData.Select(item => item.Key.X).Concat(new[] {0}).Max() + 1;
             }
         }
 
@@ -29,13 +24,7 @@ namespace BlackDragonEngine.TileEngine
         {
             get
             {
-                int maxY = 0;
-                foreach (var item in MapData)
-                {
-                    if (item.Key.Y > maxY)
-                        maxY = item.Key.Y;
-                }
-                return maxY;
+                return MapData.Select(item => item.Key.Y).Concat(new[] {0}).Max() + 1;
             }
         }
 
@@ -54,12 +43,9 @@ namespace BlackDragonEngine.TileEngine
 
         public MapSquare this[Coords coords]
         {
-            get
+            get 
             {
-                if (MapData.ContainsKey(coords))
-                    return MapData[coords];
-                else
-                    return null;                
+                return MapData.ContainsKey(coords) ? MapData[coords] : null;
             }
 
             set

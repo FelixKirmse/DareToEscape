@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using DareToEscape.MapTools;
 using Microsoft.Xna.Framework;
 using System.IO;
 using BlackDragonEngine.TileEngine;
@@ -18,13 +19,15 @@ namespace DareToEscape.Editor
     {
         public DareToEscape Game;
         private readonly string cwd = Application.StartupPath + "/Content/maps";       
-        private string currentMapName;        
+        private string currentMapName;
+        private bool _updateMapSize = true;
 
         private string loadLevel;
 
         public MapEditor()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            MapGenerator.OnGenerationFinished += () => _updateMapSize = true;
         }
 
         public MapEditor(string levelName)
@@ -100,7 +103,8 @@ namespace DareToEscape.Editor
 
         private void FixScrollBarScales()
         {
-            Camera.WorldRectangle = new XNARectangle(0, 0, TileMap.TileWidth * TileMap.MapWidth, TileMap.TileHeight * TileMap.MapHeight);
+            if(_updateMapSize)
+                Camera.UpdateWorldRectangle();
             Camera.ViewPortWidth = pctSurface.Width;
             Camera.ViewPortHeight = pctSurface.Height;
         }
@@ -167,10 +171,11 @@ namespace DareToEscape.Editor
         {
             FixScrollBarScales();
             
-            if(Form.ActiveForm == this)
+            if(ActiveForm == this)
             Game.Tick();
 
-            mapSizeLabel.Text = "Map size: " + TileMap.MapWidth + " x " + TileMap.MapHeight;
+            if(_updateMapSize)
+                mapSizeLabel.Text = "Map size: " + TileMap.MapWidth + " x " + TileMap.MapHeight;
             coordLbl.Text = "MapCell: (" + EditorManager.CellCoords.X + @"|" + EditorManager.CellCoords.Y + ")";
             
         }
@@ -441,15 +446,8 @@ namespace DareToEscape.Editor
 
         private void generateRandomMapToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var mapGen = new RandomMapGenerator();
-            mapGen.GenerateNewMap(50, 50, 500, 500);
-            mapGen.MakeWallsHollow();
-            //mapGen.FillNarrowPassages();    
-            //mapGen.RemoveIslands();
-            mapGen.RemoveOuterWall();  
-            mapGen.CleanUpSingleBlocks();
-            //mapGen.FillNarrowPassages();
-            //mapGen.MakeWallsHollow();
+            _updateMapSize = false;
+            MapGenerator.GenerateNewMap();
         }        
     }
 }

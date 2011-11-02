@@ -12,19 +12,13 @@ namespace BlackDragonEngine.Managers
 
         public static void Update()
         {
-            foreach (GameObject entity in Entities)
-            {
-                entity.Update();
-            }
+            Entities.ForEach(e => e.Update());
             player.Update();              
         }
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            foreach (GameObject entity in Entities)
-            {
-                entity.Draw(spriteBatch);
-            }
+            Entities.ForEach((e => e.Draw(spriteBatch)));
             player.Draw(spriteBatch);
         }
 

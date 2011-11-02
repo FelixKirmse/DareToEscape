@@ -96,7 +96,7 @@ namespace BlackDragonEngine.TileEngine
         {
             MapSquare square = GetMapSquareAtCell(cellX, cellY);
             if (square == null) return true;
-            else return square.Passable;
+            return square.Passable;
         }
 
         public static bool CellIsPassable(Vector2 cell)
@@ -125,6 +125,11 @@ namespace BlackDragonEngine.TileEngine
         public static void SetCellCodes(int cellX, int cellY, List<string> codes)
         {
             var coords = new Coords(cellX, cellY);
+            if (codes.Count == 0)
+            {
+                Map.Codes.Remove(coords);
+                return;
+            }
             if (Map.Codes.ContainsKey(coords))
                 Map.Codes[coords] = codes;
             else
@@ -138,17 +143,21 @@ namespace BlackDragonEngine.TileEngine
 
         public static void AddCodeToCell(int cellX, int cellY, string code)
         {
-            var coords = new Coords(cellX, cellY);
-            if (!Map.Codes.ContainsKey(coords))
+            AddCodeToCell(new Coords(cellX, cellY), code);
+        }
+
+        public static void AddCodeToCell(Coords cell, string code)
+        {
+            if (!Map.Codes.ContainsKey(cell))
             {
                 var codeList = new List<string>();
                 codeList.Add(code);
-                Map.Codes.Add(coords, codeList);
+                Map.Codes.Add(cell, codeList);
             }
             else
             {
-                Map.Codes[coords].Add(code);
-            }            
+                Map.Codes[cell].Add(code);
+            }
         }
 
         public static void RemoveCodeFromCell(int cellX, int cellY, string code)
@@ -181,7 +190,7 @@ namespace BlackDragonEngine.TileEngine
             {
                 return Map[tileX, tileY];                
             }
-            else return null;
+            return null;
         }
 
         public static void SetMapSquareAtCell(int tileX, int tileY, MapSquare tile)
@@ -196,7 +205,7 @@ namespace BlackDragonEngine.TileEngine
         {
             if ((tileX >= 0) && (tileY >= 0)) 
             {
-                MapSquare square = GetMapSquareAtCell(tileX, tileY);
+                var square = GetMapSquareAtCell(tileX, tileY);
                 if (square == null)
                 {
                     square = new MapSquare(layer, tileIndex);
@@ -273,20 +282,23 @@ namespace BlackDragonEngine.TileEngine
                         DrawEditModeItems(spriteBatch, item.Key.X, item.Key.Y);
                     }
                 }
-            }  
+            } 
+            if(EditorMode)
+            {
+                foreach(var cell in Map.Codes)
+                {
+                    var coords = cell.Key;
+                    spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(coords.X, coords.Y), new Rectangle(0, 0, TileWidth, TileHeight), new Color(0, 0, 255, 80), 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
+                    spriteBatch.DrawString(spriteFont, Map.Codes[coords].Count.ToString(), Camera.WorldToScreen(new Vector2(coords.X * TileWidth, coords.Y * TileHeight)), Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);
+                }
+            }
         }
 
         public static void DrawEditModeItems(SpriteBatch spriteBatch, int x, int y)
         {
-            var coords = new Coords(x, y);
             if (!CellIsPassable(x, y)) 
             {
                 spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(x, y), new Rectangle(0,0, TileWidth, TileHeight), new Color(255, 0, 0, 80), 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
-            }
-            if (Map.Codes.ContainsKey(coords) && Map.Codes[coords].Count != 0)
-            {
-                spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(x, y), new Rectangle(0, 0, TileWidth, TileHeight), new Color(0, 0, 255, 80), 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
-                spriteBatch.DrawString(spriteFont, Map.Codes[coords].Count.ToString(), Camera.WorldToScreen(new Vector2(x * TileWidth, y * TileHeight)), Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);                 
             }
         }
 

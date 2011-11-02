@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using DareToEscape.MapTools;
+using Microsoft.Xna.Framework.Graphics;
 using DareToEscape.Menus;
 using BlackDragonEngine.Managers;
 using DareToEscape.Helpers;
@@ -94,6 +95,10 @@ namespace DareToEscape.Managers
                 case GameStates.Editor:
                     EditorManager.Draw(spriteBatch);
                     LevelManager.Draw(spriteBatch);
+                    break;
+
+                case GameStates.GeneratingMap:
+                    MapGenerator.Draw(spriteBatch);
                     break;
             }
 

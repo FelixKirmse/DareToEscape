@@ -1,40 +1,44 @@
 ﻿using System;
-using Microsoft.Xna.Framework.Graphics;
-using BlackDragonEngine.TileEngine;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Xna.Framework;
 using BlackDragonEngine.Helpers;
-using BlackDragonEngine.Providers;
-using DareToEscape.Managers;
 using BlackDragonEngine.Managers;
-using Microsoft.Xna.Framework.Input;
+using BlackDragonEngine.Providers;
+using BlackDragonEngine.TileEngine;
 using DareToEscape.Helpers;
+using DareToEscape.Managers;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace DareToEscape.Editor
 {
-    static class EditorManager
+    internal static class EditorManager
     {
-        public static int DrawLayer = 0;
-        public static int DrawTile = 0;
-        public static bool SettingCode = false;
-        public static bool MakeUnpassable = false;
+        public static int DrawLayer;
+        public static int DrawTile;
+        public static bool SettingCode;
+        public static bool MakeUnpassable;
         public static bool MakePassable = true;
-        public static bool GettingCode = false;
-        public static bool InsertTile = false;
+        public static bool GettingCode;
+        public static bool InsertTile;
         public static Vector2 CellCoords = Vector2.Zero;
         public static string FillMode = "TILEFILL";
-        public static bool WaitingForSecondClick = false;
+        public static bool WaitingForSecondClick;
         private static Vector2 startCell;
-        public static bool RemoveTile = false;
+        public static bool RemoveTile;
         public static EditorItem CurrentItem;
         public static bool SmartInsert = true;
-        public static bool PlayLevel = false;
+        public static bool PlayLevel;
 
         #region Doing The Impossible
+
         private static IntPtr drawSurface;
         private static Form parentForm;
         private static PictureBox pictureBox;
-        private static Control gameForm;        
+        private static Control gameForm;
         private static MapEditor editorForm;
         private static PresentationParameters orgPParams;
         private static DareToEscape game;
@@ -45,13 +49,13 @@ namespace DareToEscape.Editor
 
         public static void Initialize()
         {
-            gameFormVisibleChanged = new EventHandler(gameForm_VisibleChanged);
-            pictureBoxSizeChanged = new EventHandler(pictureBox_SizeChanged);
-            preparingDeviceSettingsHandler = new EventHandler<PreparingDeviceSettingsEventArgs>(graphics_PreparingDeviceSettings);
-            resetDeviceSettingsHandler = new EventHandler<PreparingDeviceSettingsEventArgs>(graphics_resetDeviceSettings);
+            gameFormVisibleChanged = gameForm_VisibleChanged;
+            pictureBoxSizeChanged = pictureBox_SizeChanged;
+            preparingDeviceSettingsHandler = graphics_PreparingDeviceSettings;
+            resetDeviceSettingsHandler = graphics_resetDeviceSettings;
             orgPParams = DareToEscape.Graphics.GraphicsDevice.PresentationParameters.Clone();
-            DareToEscape.Graphics.PreparingDeviceSettings += resetDeviceSettingsHandler;            
-        }        
+            DareToEscape.Graphics.PreparingDeviceSettings += resetDeviceSettingsHandler;
+        }
 
         public static void Activate(string levelname)
         {
@@ -60,7 +64,7 @@ namespace DareToEscape.Editor
         }
 
         public static void Activate()
-        {            
+        {
             StateManager.GameState = GameStates.Editor;
             VariableProvider.CurrentPlayer = Factory.CreatePlayer();
             EntityManager.SetPlayer();
@@ -70,9 +74,9 @@ namespace DareToEscape.Editor
             drawSurface = editorForm.pctSurface.Handle;
             parentForm = editorForm;
             pictureBox = editorForm.pctSurface;
-            game = (DareToEscape)VariableProvider.Game;
+            game = (DareToEscape) VariableProvider.Game;
             editorForm.Game = game;
-            
+
             DareToEscape.Graphics.PreparingDeviceSettings -= resetDeviceSettingsHandler;
             DareToEscape.Graphics.PreparingDeviceSettings += preparingDeviceSettingsHandler;
             DareToEscape.Graphics.GraphicsDevice.Reset();
@@ -114,7 +118,7 @@ namespace DareToEscape.Editor
             Camera.ViewPortWidth = 800;
             Camera.ViewPortHeight = 600;
             DareToEscape.Graphics.ApplyChanges();
-            StateManager.GameState = GameStates.Menu;            
+            StateManager.GameState = GameStates.Menu;
             editorForm.Hide();
             gameForm.Visible = true;
             TileMap.EditorMode = false;
@@ -148,41 +152,42 @@ namespace DareToEscape.Editor
         #endregion
 
         #region Updating and Drawing
+
         public static void Update()
         {
             if (Form.ActiveForm == parentForm)
-            {     
-                MouseState ms = InputProvider.MouseState;
+            {
+                var ms = InputProvider.MouseState;
                 if (!PlayLevel)
                 {
-                    int mod = 1; ;
-                    if(ShortcutProvider.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift))
+                    var mod = 1;
+                    if (ShortcutProvider.IsKeyDown(Keys.LeftShift))
                     {
                         mod = 2;
                     }
                     if (InputMapper.Up)
                     {
-                        Camera.ForcePosition -= new Vector2(0,5) * mod;
+                        Camera.ForcePosition -= new Vector2(0, 5)*mod;
                     }
                     if (InputMapper.Down)
                     {
-                        Camera.ForcePosition += new Vector2(0, 5) * mod;
+                        Camera.ForcePosition += new Vector2(0, 5)*mod;
                     }
                     if (InputMapper.Left)
                     {
-                        Camera.ForcePosition -= new Vector2(5, 0) * mod;
+                        Camera.ForcePosition -= new Vector2(5, 0)*mod;
                     }
                     if (InputMapper.Right)
                     {
-                        Camera.ForcePosition += new Vector2(5, 0) * mod;
-                    }                                        
+                        Camera.ForcePosition += new Vector2(5, 0)*mod;
+                    }
 
                     if ((ms.X > 0) && (ms.Y > 0) && (ms.X < Camera.ViewPortWidth) && (ms.Y < Camera.ViewPortHeight))
                     {
                         Vector2 mouseLoc = Camera.ScreenToWorld(new Vector2(ms.X, ms.Y));
-                        int cellX = (int)MathHelper.Max(TileMap.GetCellByPixelX((int)mouseLoc.X), 0);
-                        int cellY = (int)MathHelper.Max(TileMap.GetCellByPixelY((int)mouseLoc.Y), 0);
-                        
+                        var cellX = (int) MathHelper.Max(TileMap.GetCellByPixelX((int) mouseLoc.X), 0);
+                        var cellY = (int) MathHelper.Max(TileMap.GetCellByPixelY((int) mouseLoc.Y), 0);
+
                         if (FillMode == "TILEFILL")
                         {
                             if (ShortcutProvider.LeftButtonClicked())
@@ -192,17 +197,17 @@ namespace DareToEscape.Editor
                                 else if (!RemoveTile)
                                     TileMap.SetTileAtCell(cellX, cellY, DrawLayer, DrawTile);
 
-                                if(RemoveTile)
+                                if (RemoveTile)
                                 {
                                     TileMap.RemoveMapSquareAtCell(cellX, cellY);
-                                }                                        
+                                }
                             }
 
                             if (ShortcutProvider.RightButtonClicked())
                             {
                                 if (SettingCode)
                                 {
-                                    ((MapEditor)parentForm).SetCodeList(cellX, cellY);
+                                    ((MapEditor) parentForm).SetCodeList(cellX, cellY);
                                 }
                                 else if (MakePassable)
                                 {
@@ -214,7 +219,7 @@ namespace DareToEscape.Editor
                                 }
                                 else if (GettingCode)
                                 {
-                                    ((MapEditor)parentForm).GetCodeList(TileMap.GetCellCodes(cellX, cellY));
+                                    ((MapEditor) parentForm).GetCodeList(TileMap.GetCellCodes(cellX, cellY));
                                 }
                                 if (InsertTile)
                                 {
@@ -233,12 +238,12 @@ namespace DareToEscape.Editor
                                 }
                                 else
                                 {
-                                    Vector2 endCell = new Vector2(cellX, cellY);
+                                    var endCell = new Vector2(cellX, cellY);
                                     WaitingForSecondClick = false;
 
-                                    for (int cellx = (int)startCell.X; cellx <= endCell.X; ++cellx)
+                                    for (var cellx = (int) startCell.X; cellx <= endCell.X; ++cellx)
                                     {
-                                        for (int celly = (int)startCell.Y; celly <= endCell.Y; ++celly)
+                                        for (var celly = (int) startCell.Y; celly <= endCell.Y; ++celly)
                                         {
                                             if (SmartInsert)
                                                 InsertEditorItem(cellx, celly);
@@ -262,16 +267,16 @@ namespace DareToEscape.Editor
                                 }
                                 else
                                 {
-                                    Vector2 endCell = new Vector2(cellX, cellY);
+                                    var endCell = new Vector2(cellX, cellY);
                                     WaitingForSecondClick = false;
 
-                                    for (int cellx = (int)startCell.X; cellx <= endCell.X; ++cellx)
+                                    for (var cellx = (int) startCell.X; cellx <= endCell.X; ++cellx)
                                     {
-                                        for (int celly = (int)startCell.Y; celly <= endCell.Y; ++celly)
+                                        for (var celly = (int) startCell.Y; celly <= endCell.Y; ++celly)
                                         {
                                             if (SettingCode)
                                             {
-                                                ((MapEditor)parentForm).SetCodeList(cellx, celly);
+                                                ((MapEditor) parentForm).SetCodeList(cellx, celly);
                                             }
                                             else if (MakePassable)
                                             {
@@ -287,7 +292,7 @@ namespace DareToEscape.Editor
                                             }
                                         }
                                     }
-                                }                                
+                                }
                             }
                             CellCoords = new Vector2(cellX, cellY);
                         }
@@ -310,6 +315,7 @@ namespace DareToEscape.Editor
             }
             EntityManager.Draw(spriteBatch);
         }
+
         #endregion
 
         public static void InsertEditorItem(int cellX, int cellY)
@@ -318,54 +324,76 @@ namespace DareToEscape.Editor
                 return;
 
             MapSquare mapSquare = TileMap.GetMapSquareAtCell(cellX, cellY);
-            var codes = TileMap.GetCellCodes(cellX, cellY);
+            List<string> codes = TileMap.GetCellCodes(cellX, cellY);
             if (mapSquare == null)
             {
-                mapSquare = new MapSquare(null, null, null, CurrentItem.Passable == null ? true :  (bool)CurrentItem.Passable);
+                mapSquare = new MapSquare(null, null, null,
+                                          CurrentItem.Passable == null || (bool) CurrentItem.Passable);
             }
 
             if (CurrentItem.Unique)
             {
-                foreach (var item in TileMap.Map.MapData)
-                {
-                    if (TileMap.GetCellCodes(item.Key.X, item.Key.Y).Contains(CurrentItem.Code))
-                        TileMap.GetCellCodes(item.Key.X, item.Key.Y).Remove(CurrentItem.Code);  
-                }                
+                var codesToRemove = (from item in TileMap.Map.Codes where TileMap.GetCellCodes(item.Key.X, item.Key.Y).Contains(CurrentItem.Code) select item.Key).ToList();
+                codesToRemove.ForEach(coords => TileMap.RemoveCodeFromCell(coords.X, coords.Y, CurrentItem.Code));
             }
 
             if (CurrentItem.Code != null)
-             {                
-                if(!codes.Contains(CurrentItem.Code))
-                    codes.Add(CurrentItem.Code);                                   
+            {
+                if (!codes.Contains(CurrentItem.Code))
+                    codes.Add(CurrentItem.Code);
             }
             if (CurrentItem.CodeAbove != null)
             {
                 if (RemoveTile)
                     TileMap.RemoveCodeFromCell(cellX, cellY - 1, CurrentItem.CodeAbove);
                 else
-                    TileMap.AddCodeToCell(cellX, cellY - 1, CurrentItem.CodeAbove);
+                {
+                    List<string> otherCodes = TileMap.GetCellCodes(cellX, cellY - 1);
+                    if (!otherCodes.Contains(CurrentItem.CodeAbove))
+                    {
+                        TileMap.AddCodeToCell(cellX, cellY - 1, CurrentItem.CodeAbove);
+                    }
+                }
             }
             if (CurrentItem.CodeBelow != null)
             {
                 if (RemoveTile)
                     TileMap.RemoveCodeFromCell(cellX, cellY + 1, CurrentItem.CodeBelow);
                 else
-                    TileMap.AddCodeToCell(cellX, cellY + 1, CurrentItem.CodeBelow);
+                {
+                    List<string> otherCodes = TileMap.GetCellCodes(cellX, cellY + 1);
+                    if (!otherCodes.Contains(CurrentItem.CodeBelow))
+                    {
+                        TileMap.AddCodeToCell(cellX, cellY + 1, CurrentItem.CodeBelow);
+                    }
+                }
             }
             if (CurrentItem.CodeLeft != null)
             {
                 if (RemoveTile)
                     TileMap.RemoveCodeFromCell(cellX - 1, cellY, CurrentItem.CodeLeft);
                 else
-                    TileMap.AddCodeToCell(cellX - 1, cellY, CurrentItem.CodeLeft);
+                {
+                    List<string> otherCodes = TileMap.GetCellCodes(cellX - 1, cellY);
+                    if (!otherCodes.Contains(CurrentItem.CodeLeft))
+                    {
+                        TileMap.AddCodeToCell(cellX - 1, cellY, CurrentItem.CodeLeft);
+                    }
+                }
             }
             if (CurrentItem.CodeRight != null)
             {
                 if (RemoveTile)
                     TileMap.RemoveCodeFromCell(cellX + 1, cellY, CurrentItem.CodeRight);
                 else
-                    TileMap.AddCodeToCell(cellX + 1, cellY, CurrentItem.CodeRight);
-            }       
+                {
+                    List<string> otherCodes = TileMap.GetCellCodes(cellX + 1, cellY);
+                    if (!otherCodes.Contains(CurrentItem.CodeRight))
+                    {
+                        TileMap.AddCodeToCell(cellX + 1, cellY, CurrentItem.CodeRight);
+                    }
+                }
+            }
             if (CurrentItem.TileID != null)
             {
                 mapSquare.LayerTiles[DrawLayer] = CurrentItem.TileID;
@@ -376,15 +404,15 @@ namespace DareToEscape.Editor
 
         public static EditorItem GetEditorItemByName(string name)
         {
-            EditorItem item = new EditorItem();
+            var item = new EditorItem();
             switch (name)
-            { 
+            {
                 case "0":
                     item.Passable = false;
                     item.TileID = 0;
                     item.Type = ItemType.Tile;
                     break;
-                
+
                 case "1":
                     item.Passable = true;
                     item.Code = "JUMPTHROUGH";
@@ -412,7 +440,7 @@ namespace DareToEscape.Editor
                     item.Code = "START";
                     item.Unique = true;
                     break;
-                
+
                 default:
                     item.Code = name.ToUpper();
                     item.Type = ItemType.Entity;
