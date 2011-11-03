@@ -26,7 +26,7 @@ namespace DareToEscape.Entities.BulletBehaviors
 
         public void AddTask(int modOnFrame, float? newSpeed, float? newAngle, float newTurnSpeed, float newAcceleration, float newSpeedLimit)
         {
-            Parameters newParams = new Parameters(modOnFrame, newSpeed, newAngle, newTurnSpeed, newAcceleration, newSpeedLimit);
+            var newParams = new Parameters(modOnFrame, newSpeed, newAngle, newTurnSpeed, newAcceleration, newSpeedLimit);
             paramQueue.Enqueue(newParams);
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
@@ -92,6 +93,8 @@ namespace DareToEscape.MapTools
             TileMap.AddCodeToCell(new Coords(cell.X, cell.Y - 1), "JUMPTHROUGHTOP");
             TileMap.SetTileAtCell(cell.X, cell.Y, 0, 1);
         }
+
+        
 
         private static bool CellHasNeighborToLeftOrRight(Coords cell)
         {
