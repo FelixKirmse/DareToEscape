@@ -2,6 +2,6 @@
 {
     public interface IBehavior
     {
-        void Update(Bullet bullet);
+        void Update(ref Bullet bullet);
     }
 }

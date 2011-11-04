@@ -7,8 +7,8 @@ namespace BlackDragonEngine.Managers
 {
     public static class EntityManager
     {
-        private static GameObject player;
-        public static List<GameObject> Entities = new List<GameObject>();
+        private static IGameObject player;
+        private static readonly List<IGameObject> Entities = new List<IGameObject>();
 
         public static void Update()
         {

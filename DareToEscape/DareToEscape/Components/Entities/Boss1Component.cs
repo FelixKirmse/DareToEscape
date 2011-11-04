@@ -32,8 +32,6 @@ namespace DareToEscape.Components.Entities
         public Boss1Component()
         {
             texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/boss1");
-            phase = 6;
-            phaseTimer = 90595;
         }
 
         private int phaseTimer

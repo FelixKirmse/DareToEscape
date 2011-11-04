@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using BlackDragonEngine;
 using BlackDragonEngine.Helpers;
@@ -13,12 +12,11 @@ namespace DareToEscape.Managers
 {
     internal class BulletManager : GameComponent
     {
-        public  static float CurrentDrawDepth = .82f;
         private readonly List<Bullet> _bullets = new List<Bullet>();
         private readonly int _processorCount;
         private int _counter;
         private readonly Task[] _tasks;
-        StringBuilder sb = new StringBuilder();
+        readonly StringBuilder _sb = new StringBuilder();
 
         public BulletManager(Game game)
             : base(game)
@@ -44,9 +42,9 @@ namespace DareToEscape.Managers
                 return;
             
             var bulletCount = _bullets.Count;
+            if (bulletCount == 0) return;
             var bulletsToProcess = bulletCount / _processorCount;
             
-            //Split up the bullets to update among all available cores using Tasks and a lambda expression
             for (var i = 0; i < _processorCount; ++i )
             {
                 var x = i;
@@ -55,21 +53,19 @@ namespace DareToEscape.Managers
                                                for(var j = bulletsToProcess * x; j < bulletsToProcess * x + bulletsToProcess; ++j)
                                                {
                                                    if (_bullets[j].Active)
-                                                        _bullets[j].Update();
+                                                        _bullets[j] = _bullets[j].Update();
                                                }
                                            });
             }
             
-            //Update the remaining bullets (if any)
             for (var i = bulletsToProcess * _processorCount; i < bulletCount; ++i)
             {
                 if (_bullets[i].Active)
-                    _bullets[i].Update();
+                    _bullets[i] = _bullets[i].Update();
             }
-            //Wait for all tasks to finish
+            
             Task.WaitAll(_tasks);
-
-            //This is an attempt to reduce the load per frame, originally _bullets.RemoveAll(s => !s.Active) ran every frame.
+            
             ++_counter;
             if (_counter != 300) return;
             _counter = 0;
@@ -79,17 +75,15 @@ namespace DareToEscape.Managers
         public void Draw(SpriteBatch spriteBatch)
         {
             if (StateManager.GameState != GameStates.Ingame && StateManager.GameState != GameStates.Editor) return;
-            sb.Clear();
-            spriteBatch.DrawString(FontProvider.GetFont("Mono14"), sb.Append(_bullets.Count).ToString(), new Vector2(100, 20),
+            _sb.Clear();
+            spriteBatch.DrawString(FontProvider.GetFont("Mono14"), _sb.Append(_bullets.Count).ToString(), new Vector2(100, 20),
                                    Color.White);
             
             foreach (var bullet in _bullets)
             {
                 if (!Camera.ViewPort.Contains(bullet.CircleCollisionCenter.ToPoint())) continue;
-                bullet.Draw(spriteBatch);
-                CurrentDrawDepth -= .82e-5f;
+                bullet.Draw();
             }
-            CurrentDrawDepth = .82f;
         }
     }
 }

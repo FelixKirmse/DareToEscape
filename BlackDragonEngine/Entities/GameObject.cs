@@ -10,7 +10,7 @@ namespace BlackDragonEngine.Entities
     /// <summary>
     /// Barebone GameObject class
     /// </summary>
-    public class GameObject
+    public class GameObject : IGameObject
     {
         /// <summary>
         /// Velocity of the Object [DEPRECATED]

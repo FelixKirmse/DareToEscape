@@ -6,7 +6,7 @@ namespace DareToEscape.Entities.BulletBehaviors
     {
         #region IBehavior Members
 
-        public void Update(Bullet bullet)
+        public void Update(ref Bullet bullet)
         {
             if (bullet.LaunchSpeed > bullet.SpeedLimit)
             {

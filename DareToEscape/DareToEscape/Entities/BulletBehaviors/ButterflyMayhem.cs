@@ -15,7 +15,7 @@
 
         #region IBehavior Members
 
-        public void Update(Bullet bullet)
+        public void Update(ref Bullet bullet)
         {
             switch (frameCounter++)
             {
@@ -33,7 +33,7 @@
                     bullet.SpeedLimit = 0f;
                     break;
             }
-            ReusableBehaviors.StandardBehavior.Update(bullet);
+            ReusableBehaviors.StandardBehavior.Update(ref bullet);
         }
 
         #endregion

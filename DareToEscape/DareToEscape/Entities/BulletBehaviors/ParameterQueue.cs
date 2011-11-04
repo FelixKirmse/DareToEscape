@@ -24,7 +24,7 @@ namespace DareToEscape.Entities.BulletBehaviors
 
         #region IBehavior Members
 
-        public void Update(Bullet bullet)
+        public void Update(ref Bullet bullet)
         {
             frameCounter++;
             if (paramQueue.Count > 0)
@@ -37,7 +37,7 @@ namespace DareToEscape.Entities.BulletBehaviors
                     behavior = p.NewBehavior;
                 }
             }
-            behavior.Update(bullet);
+            behavior.Update(ref bullet);
         }
 
         #endregion
@@ -52,13 +52,13 @@ namespace DareToEscape.Entities.BulletBehaviors
 
     public struct Parameters
     {
-        public int ModOnFrame;
-        public float NewAcceleration;
+        public readonly int ModOnFrame;
+        public readonly float NewAcceleration;
         public float? NewAngle;
-        public IBehavior NewBehavior;
+        public readonly IBehavior NewBehavior;
         public float? NewSpeed;
-        public float NewSpeedLimit;
-        public float NewTurnSpeed;
+        public readonly float NewSpeedLimit;
+        public readonly float NewTurnSpeed;
 
         public Parameters(int modOnFrame, float? newSpeed, float? newAngle, float newTurnSpeed, float newAcceleration,
                           float newSpeedLimit)

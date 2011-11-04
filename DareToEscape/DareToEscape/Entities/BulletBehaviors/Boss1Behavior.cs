@@ -8,7 +8,7 @@ namespace DareToEscape.Entities.BulletBehaviors
 
         #region IBehavior Members
 
-        public void Update(Bullet bullet)
+        public void Update(ref Bullet bullet)
         {
             timer += ShortcutProvider.ElapsedMilliseconds;
 
@@ -25,7 +25,7 @@ namespace DareToEscape.Entities.BulletBehaviors
             }
             else
             {
-                ReusableBehaviors.StandardBehavior.Update(bullet);
+                ReusableBehaviors.StandardBehavior.Update(ref bullet);
             }
         }
 

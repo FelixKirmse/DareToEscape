@@ -4,7 +4,7 @@
     {
         #region IBehavior Members
 
-        public void Update(Bullet bullet)
+        public void Update(ref Bullet bullet)
         {
             bullet.Position += bullet.DirectionVectorToPlayer*bullet.BaseSpeed;
         }

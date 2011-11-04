@@ -103,6 +103,7 @@
     <Compile Include="Components\WaypointComponent.cs" />
     <Compile Include="Dialogue\DialogScript.cs" />
     <Compile Include="Entities\GameObject.cs" />
+    <Compile Include="Entities\IGameObject.cs" />
     <Compile Include="Helpers\BCircle.cs" />
     <Compile Include="Helpers\DrawHelper.cs" />
     <Compile Include="Helpers\EventInput.cs" />

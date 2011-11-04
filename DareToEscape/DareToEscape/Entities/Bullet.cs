@@ -1,9 +1,7 @@
 ﻿using System;
-using BlackDragonEngine.Entities;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
-using DareToEscape.Components.Entities;
 using DareToEscape.Entities.BulletBehaviors;
 using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
@@ -11,49 +9,48 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Entities
 {
-    public class Bullet : GameObject
+    public struct Bullet
     {
-        public static float SpeedModifier = 1.0f;
-        private readonly IBehavior behavior;
-        private Vector2 lastPosition;
-
-        public Bullet(int id)
-        {
-            collisionCircle = BulletInformationProvider.GetBCircle(id);
-            components.Add(new BulletGraphicsComponent(BulletInformationProvider.BulletSheet));
-            Active = false;
-            behavior = ReusableBehaviors.StandardBehavior;
-            TurnSpeed = 0f;
-            BaseSpeed = 1f;
-            Acceleration = 0f;
-            SpeedLimit = 1f;
-            AutomaticCollision = false;
-            KillTime = -1;
-            Send("GRAPHICS_BULLETID", id);
-            _directionVector = new Vector2();
-        }
-
-        public Bullet()
-            : this(1)
-        {
-        }
-
-        public Bullet(Vector2 position, int id)
-            : this(id)
-        {
-            Position = position;
-        }
-
-        public Bullet(IBehavior behavior, Vector2 position, int id)
-            : this(position, id)
-        {
-            this.behavior = behavior;
-        }
-
+        #region Fields
+        private readonly IBehavior _behavior;
+        private Vector2 _lastPosition;
+        private float _lastDirection;
+        public float TurnSpeed;
+        public float Acceleration;
+        public float SpeedLimit;
+        public float LaunchSpeed;
+        public bool AutomaticCollision;
+        public int SpawnDelay;
+        public int KillTime;
         private float _directionInDegrees;
         private Vector2 _directionVector;
-        public float BaseSpeed { get; set; }
-        public bool Active { get; set; }
+        public float BaseSpeed;
+        public bool Active;
+        public Vector2 Position;
+        private BCircle _collisionCircle;
+        private readonly BlendState _blendState;
+        private readonly Texture2D _texture;
+        private Rectangle _sourceRect;
+        private float _rotation;
+        #endregion
+
+        #region Properties
+
+        private BCircle CollisionCircle
+        {
+            get { return new BCircle(Position + _collisionCircle.Position, _collisionCircle.Radius); }
+        }
+
+        private Vector2 BCircleLocalCenter
+        {
+            get { return _collisionCircle.Position; }
+        }
+
+        public Vector2 CircleCollisionCenter
+        {
+            get { return Position + _collisionCircle.Position; }
+        }
+
         public float Direction
         {
             get { return _directionInDegrees; }
@@ -66,20 +63,13 @@ namespace DareToEscape.Entities
                 _directionInDegrees = value;
             }
         }
-        private float LastDirection { get; set; }
-        public float TurnSpeed { get; set; }
-        public float Acceleration { get; set; }
-        public float SpeedLimit { get; set; }
-        public float LaunchSpeed { get; set; }
-        public bool AutomaticCollision { get; set; }
-        public int SpawnDelay { get; set; }
-        public int KillTime { get; set; }
+        
 
         public Vector2 DirectionVectorToPlayer
         {
             get
             {
-                Vector2 direction = ((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter -
+                var direction = ((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter -
                                     CircleCollisionCenter;
                 var angle = (float) Math.Atan2(direction.Y, direction.X);
                 return new Vector2((float) Math.Cos(angle), (float) Math.Sin(angle));
@@ -90,7 +80,7 @@ namespace DareToEscape.Entities
         {
             get
             {
-                Vector2 direction = ((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter -
+                var direction = ((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter -
                                     CircleCollisionCenter;
                 var radians = (float) Math.Atan2(direction.Y, direction.X);
                 return MathHelper.ToDegrees(radians);
@@ -102,17 +92,58 @@ namespace DareToEscape.Entities
             get { return _directionVector; }
         }
 
-        public bool ChangedDirection
+        private bool ChangedDirection
         {
-            get { return Direction == LastDirection; }
+            get { return Direction == _lastDirection; }
         }
 
         public bool ChangedPosition
         {
-            get { return Position == lastPosition; }
+            get { return Position == _lastPosition; }
+        }
+        #endregion
+
+        #region constructors
+
+        private Bullet(int id)
+            : this()
+        {
+            _collisionCircle = BulletInformationProvider.GetBCircle(id);
+            _texture = BulletInformationProvider.BulletSheet;
+            Active = false;
+            _behavior = ReusableBehaviors.StandardBehavior;
+            TurnSpeed = 0f;
+            BaseSpeed = 1f;
+            Acceleration = 0f;
+            SpeedLimit = 1f;
+            AutomaticCollision = true;
+            KillTime = -1;
+            _sourceRect = BulletInformationProvider.GetSourceRectangle(id);
+            _directionVector = new Vector2();
+            _blendState = BlendState.AlphaBlend;
         }
 
-        public override void Update()
+
+        public Bullet(Vector2 position, int id)
+            : this(id)
+        {
+            Position = position;
+        }
+
+        public Bullet(IBehavior behavior, Vector2 position, int id)
+            : this(position, id)
+        {
+            _behavior = behavior;
+        }
+
+        public Bullet(IBehavior behavior, Vector2 position, int id, BlendState blendState)
+            : this(behavior, position, id)
+        {
+            _blendState = blendState;
+        }
+        #endregion
+
+        public Bullet Update()
         {
             --KillTime;
             if (KillTime == 0)
@@ -121,34 +152,43 @@ namespace DareToEscape.Entities
             {
                 --SpawnDelay;
             }
-            if (Active && SpawnDelay == 0)
+            if (!Active || SpawnDelay != 0) return this;
+
+            _behavior.Update(ref this);
+            
+            if (AutomaticCollision)
             {
-                behavior.Update(this);
-                if (AutomaticCollision)
-                {
-                    if (!TileMap.CellIsPassableByPixel(CircleCollisionCenter) ||
-                        !Camera.WorldRectangle.Contains((int) Position.X, (int) Position.Y))
-                    {
-                        Active = false;
-                    }
-                }
-                /*else if (!Camera.WorldRectangle.Contains((int)Position.X, (int)Position.Y))
+                if (!TileMap.CellIsPassableByPixel(CircleCollisionCenter) ||
+                    !Camera.WorldRectangle.Contains((int) Position.X, (int) Position.Y))
                 {
                     Active = false;
-                }*/
-
-                if (CollisionCircle.Intersects(((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircle))
-                {
-                    Active = false;
-                    //VariableProvider.CurrentPlayer.Send<string>("KILL", null);
                 }
-
-                LastDirection = Direction;
-                lastPosition = Position;
-
-                Send("GRAPHICS_ROTATION", Direction);
             }
-            base.Update();
+
+            if (CollisionCircle.Intersects(((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircle))
+            {
+                Active = false;
+                //VariableProvider.CurrentPlayer.Send<string>("KILL", null);
+            }
+
+            _lastDirection = Direction;
+            _lastPosition = Position;
+            _rotation = _directionInDegrees;
+            return this;
+        }
+
+        public void Draw()
+        {
+            DrawHelper.AddNewJob(_blendState,
+                                 _texture,
+                                 Camera.WorldToScreen(Position + BCircleLocalCenter),
+                                 _sourceRect,
+                                 Color.White,
+                                 BaseSpeed < 0 ? _rotation += MathHelper.Pi : _rotation,
+                                 new Vector2((float)_sourceRect.Width / 2, (float)_sourceRect.Height / 2),
+                                 1f,
+                                 SpriteEffects.None,
+                                 0);
         }
 
         public void SetNewSpeedRules(float newSpeed, float speedLimit)
@@ -180,12 +220,6 @@ namespace DareToEscape.Entities
             SpeedLimit = speedLimit;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            if (Active)
-                base.Draw(spriteBatch);
-        }
-
         public void Shoot(float direction, float startingSpeed)
         {
             LaunchSpeed = startingSpeed;
@@ -197,7 +231,7 @@ namespace DareToEscape.Entities
 
         public override string ToString()
         {
-            return "BaseSpeed: " + BaseSpeed + " LaunchSpeed: " + LaunchSpeed + " Acceleration: " + Acceleration +
+            return "Position: " + Position +" BaseSpeed: " + BaseSpeed + " LaunchSpeed: " + LaunchSpeed + " Acceleration: " + Acceleration +
                    " SpeedLimit: " + SpeedLimit + " TurnSpeed: " + TurnSpeed;
         }
     }
