@@ -16,7 +16,8 @@ namespace DareToEscape.Entities.BulletBehaviors
             {
                 bullet.BaseSpeed = MathHelper.Min(bullet.SpeedLimit, bullet.BaseSpeed + bullet.Acceleration);
             }
-            bullet.Direction += bullet.TurnSpeed;
+            if(bullet.TurnSpeed != 0f)
+                bullet.Direction += bullet.TurnSpeed;
             bullet.Position += bullet.DirectionVector*bullet.BaseSpeed;
         }
 

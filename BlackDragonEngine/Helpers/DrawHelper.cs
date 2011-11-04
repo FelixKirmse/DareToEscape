@@ -38,7 +38,7 @@ namespace BlackDragonEngine.Helpers
 
             if (alphaJobCount > 0)
             {
-                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+                spriteBatch.Begin();
                 for (int i = 0; i < alphaJobCount; ++i)
                 {
                     DrawOptions o = alphaBlendStateBatch.Dequeue();
@@ -50,7 +50,7 @@ namespace BlackDragonEngine.Helpers
 
             if (addJobCount > 0)
             {
-                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.Additive);
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
                 for (int i = 0; i < addJobCount; ++i)
                 {
                     DrawOptions o = addBlendStateBatch.Dequeue();

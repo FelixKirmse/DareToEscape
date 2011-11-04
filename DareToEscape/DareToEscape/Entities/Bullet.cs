@@ -27,9 +27,10 @@ namespace DareToEscape.Entities
             BaseSpeed = 1f;
             Acceleration = 0f;
             SpeedLimit = 1f;
-            AutomaticCollision = true;
+            AutomaticCollision = false;
             KillTime = -1;
             Send("GRAPHICS_BULLETID", id);
+            _directionVector = new Vector2();
         }
 
         public Bullet()
@@ -49,10 +50,23 @@ namespace DareToEscape.Entities
             this.behavior = behavior;
         }
 
+        private float _directionInDegrees;
+        private Vector2 _directionVector;
         public float BaseSpeed { get; set; }
         public bool Active { get; set; }
-        public float Direction { get; set; }
-        private float lastDirection { get; set; }
+        public float Direction
+        {
+            get { return _directionInDegrees; }
+            set
+            {
+                if (!ChangedDirection) return;
+                var radian = MathHelper.ToRadians(value);
+                _directionVector.X = (float) Math.Cos(radian);
+                _directionVector.Y = (float) Math.Sin(radian);
+                _directionInDegrees = value;
+            }
+        }
+        private float LastDirection { get; set; }
         public float TurnSpeed { get; set; }
         public float Acceleration { get; set; }
         public float SpeedLimit { get; set; }
@@ -85,16 +99,12 @@ namespace DareToEscape.Entities
 
         public Vector2 DirectionVector
         {
-            get
-            {
-                float radians = MathHelper.ToRadians(Direction);
-                return new Vector2((float) Math.Cos(radians), (float) Math.Sin(radians));
-            }
+            get { return _directionVector; }
         }
 
         public bool ChangedDirection
         {
-            get { return Direction == lastDirection; }
+            get { return Direction == LastDirection; }
         }
 
         public bool ChangedPosition
@@ -133,7 +143,7 @@ namespace DareToEscape.Entities
                     //VariableProvider.CurrentPlayer.Send<string>("KILL", null);
                 }
 
-                lastDirection = Direction;
+                LastDirection = Direction;
                 lastPosition = Position;
 
                 Send("GRAPHICS_ROTATION", Direction);

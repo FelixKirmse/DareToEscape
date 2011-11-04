@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using BlackDragonEngine;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
@@ -16,7 +17,8 @@ namespace DareToEscape.Managers
         private readonly List<Bullet> _bullets = new List<Bullet>();
         private readonly int _processorCount;
         private int _counter;
-        private readonly Task[] _tasks; 
+        private readonly Task[] _tasks;
+        StringBuilder sb = new StringBuilder();
 
         public BulletManager(Game game)
             : base(game)
@@ -77,13 +79,13 @@ namespace DareToEscape.Managers
         public void Draw(SpriteBatch spriteBatch)
         {
             if (StateManager.GameState != GameStates.Ingame && StateManager.GameState != GameStates.Editor) return;
-
-            spriteBatch.DrawString(FontProvider.GetFont("Mono14"), _bullets.Count.ToString(), new Vector2(100, 20),
+            sb.Clear();
+            spriteBatch.DrawString(FontProvider.GetFont("Mono14"), sb.Append(_bullets.Count).ToString(), new Vector2(100, 20),
                                    Color.White);
-
-            //Using some LINQ to only draw bullets in the viewport
-            foreach (var bullet in _bullets.Where(bullet => Camera.ViewPort.Contains(bullet.CircleCollisionCenter.ToPoint())))
+            
+            foreach (var bullet in _bullets)
             {
+                if (!Camera.ViewPort.Contains(bullet.CircleCollisionCenter.ToPoint())) continue;
                 bullet.Draw(spriteBatch);
                 CurrentDrawDepth -= .82e-5f;
             }

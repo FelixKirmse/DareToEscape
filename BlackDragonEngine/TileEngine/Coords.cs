@@ -33,9 +33,7 @@
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Coords))
-                return false;
-            return (X == ((Coords) obj).X && Y == ((Coords) obj).Y);
+            return obj is Coords && this == (Coords) obj;
         }
 
         public override int GetHashCode()
