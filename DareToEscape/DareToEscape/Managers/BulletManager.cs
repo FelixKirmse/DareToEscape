@@ -81,7 +81,7 @@ namespace DareToEscape.Managers
             
             foreach (var bullet in _bullets)
             {
-                if (!Camera.ViewPort.Contains(bullet.CircleCollisionCenter.ToPoint())) continue;
+                if (!bullet.Active || !Camera.ViewPort.Contains(bullet.CircleCollisionCenter.ToPoint())) continue;
                 bullet.Draw();
             }
         }

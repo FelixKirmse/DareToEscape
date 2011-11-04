@@ -173,7 +173,7 @@ namespace DareToEscape.Entities
 
             _lastDirection = Direction;
             _lastPosition = Position;
-            _rotation = _directionInDegrees;
+            _rotation = MathHelper.ToRadians(_directionInDegrees);
             return this;
         }
 
@@ -184,7 +184,7 @@ namespace DareToEscape.Entities
                                  Camera.WorldToScreen(Position + BCircleLocalCenter),
                                  _sourceRect,
                                  Color.White,
-                                 BaseSpeed < 0 ? _rotation += MathHelper.Pi : _rotation,
+                                 BaseSpeed < 0 ? _rotation += MathHelper.PiOver2 : _rotation,
                                  new Vector2((float)_sourceRect.Width / 2, (float)_sourceRect.Height / 2),
                                  1f,
                                  SpriteEffects.None,
