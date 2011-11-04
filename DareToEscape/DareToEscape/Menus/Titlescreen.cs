@@ -1,17 +1,17 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using BlackDragonEngine.Providers;
 using DareToEscape.Managers;
-using BlackDragonEngine.Providers;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Menus
 {
-    static class Titlescreen
+    internal static class Titlescreen
     {
         public static Texture2D TitleTexture { get; set; }
 
         public static void Update()
         {
-            if(InputProvider.KeyState.GetPressedKeys().Length > 0)              
+            if (InputProvider.KeyState.GetPressedKeys().Length > 0)
                 StateManager.GameState = GameStates.Menu;
         }
 

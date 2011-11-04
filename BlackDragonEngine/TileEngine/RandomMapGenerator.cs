@@ -11,12 +11,12 @@ namespace BlackDragonEngine.TileEngine
 
     public class RandomMapGenerator
     {
+        public const int MaxDiggers = 100;
         private readonly List<Digger> _diggers = new List<Digger>();
         private readonly Random _rand = VariableProvider.RandomSeed;
+        public int AddedDiggers;
         private int _height;
         private int _width;
-        public int AddedDiggers;
-        public const int MaxDiggers = 100;
 
 
         public void GenerateNewMap(int minWidth, int minHeight, int maxWidth, int maxHeight)
@@ -36,7 +36,7 @@ namespace BlackDragonEngine.TileEngine
             }
 
             AddDigger(new Coords(2, 2));
-            TileMap.AddCodeToCell(2,2,"START");
+            TileMap.AddCodeToCell(2, 2, "START");
             do
             {
                 for (int i = 0; i < _diggers.Count; ++i)
@@ -60,7 +60,7 @@ namespace BlackDragonEngine.TileEngine
 
         public void RemoveCellsByCondition(CellCondition condition)
         {
-           ManipulateCellsByCondition(TileMap.RemoveMapSquareAtCell, condition);
+            ManipulateCellsByCondition(TileMap.RemoveMapSquareAtCell, condition);
         }
 
         public void ManipulateCellsByCondition(CustomAction action, CellCondition condition)

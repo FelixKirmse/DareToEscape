@@ -1,20 +1,19 @@
-﻿using DareToEscape.MapTools;
-using Microsoft.Xna.Framework.Graphics;
-using DareToEscape.Menus;
+﻿using BlackDragonEngine;
 using BlackDragonEngine.Managers;
-using DareToEscape.Helpers;
-using BlackDragonEngine;
 using DareToEscape.Editor;
-
+using DareToEscape.Helpers;
+using DareToEscape.MapTools;
+using DareToEscape.Menus;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Managers
 {
-    static class StateManager
+    internal static class StateManager
     {
         public static GameStates GameState { get; set; }
-        public static MenuStates MenuState { get; set; }        
+        public static MenuStates MenuState { get; set; }
         public static bool PlayerDead { get; set; }
-        public static bool FastDead { get; set; }        
+        public static bool FastDead { get; set; }
 
         public static void Initialize()
         {
@@ -22,7 +21,7 @@ namespace DareToEscape.Managers
             MenuState = MenuStates.Main;
             EngineStates.GameStates = EEngineStates.Running;
             PlayerDead = false;
-            FastDead = true;            
+            FastDead = true;
             EngineStates.DialogState = DialogueStates.Inactive;
         }
 
@@ -38,7 +37,6 @@ namespace DareToEscape.Managers
                 {
                     if (!PlayerDead)
                     {
-
                         if (EngineStates.GameStates == EEngineStates.Running)
                         {
                             switch (GameState)
@@ -71,7 +69,7 @@ namespace DareToEscape.Managers
                 {
                     DialogManager.Update();
                 }
-            }            
+            }
         }
 
         public static void Draw(SpriteBatch spriteBatch)
@@ -107,7 +105,7 @@ namespace DareToEscape.Managers
                 LevelManager.Draw(spriteBatch);
                 IngameManager.Draw(spriteBatch);
             }
-                
+
 
             if (PlayerDead)
                 GeneralHelper.Draw(spriteBatch);

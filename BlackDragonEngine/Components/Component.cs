@@ -11,6 +11,7 @@ namespace BlackDragonEngine.Components
         /// <param name="message">The message that was received</param>
         /// <param name="obj">The attachment to the message</param>
         public abstract void Receive<T>(string message, T obj);
+
         public abstract void Update(GameObject obj);
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using BlackDragonEngine.Entities;
-using Microsoft.Xna.Framework;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.TileEngine;
-
+using Microsoft.Xna.Framework;
 
 namespace BlackDragonEngine.Components
 {
@@ -14,61 +13,66 @@ namespace BlackDragonEngine.Components
     public class WaypointComponent : PhysicsComponent
     {
         /// <summary>
-        /// The possible states the object can be in 
+        /// Disregard this, WTF?!
         /// </summary>
-        protected enum ObjectStates { IDLE, WALKING };
+        protected Rectangle collisionRectangle = new Rectangle(2, 14, 12, 12);
+
         /// <summary>
-        /// The current ObjectState
+        /// The waypoint that needs to be reached to finish the path
         /// </summary>
-        protected ObjectStates objectState;
+        protected Vector2 currentGoal;
+
         /// <summary>
         /// The current path to the next waypoint
         /// </summary>
         protected List<Vector2> currentPath;
-        /// <summary>
-        /// A list of waypoints
-        /// </summary>
-        protected List<Vector2> waypoints;
 
         /// <summary>
         /// The current waypoint to head to
         /// </summary>
         protected Vector2 currentWaypoint;
-        /// <summary>
-        /// The waypoint that needs to be reached to finish the path
-        /// </summary>
-        protected Vector2 currentGoal;
-        /// <summary>
-        /// The current path index
-        /// </summary>
-        protected int pathIndex = 0;
-        /// <summary>
-        /// The current waypoint index
-        /// </summary>
-        protected int waypointIndex = 0;
-        /// <summary>
-        /// Speed at which to move the entity towards the current goal
-        /// </summary>
-        protected float speed = 1;
-        /// <summary>
-        /// Disregard this, WTF?!
-        /// </summary>
-        protected Rectangle collisionRectangle = new Rectangle(2, 14, 12, 12);
+
         /// <summary>
         /// The current direction to head to
         /// </summary>
         protected Vector2 direction;
+
+        /// <summary>
+        /// The current ObjectState
+        /// </summary>
+        protected ObjectStates objectState;
+
+        /// <summary>
+        /// The current path index
+        /// </summary>
+        protected int pathIndex;
+
         /// <summary>
         /// The fuck is this?
         /// </summary>
         protected bool setRectangle = true;
 
         /// <summary>
+        /// Speed at which to move the entity towards the current goal
+        /// </summary>
+        protected float speed = 1;
+
+        /// <summary>
+        /// The current waypoint index
+        /// </summary>
+        protected int waypointIndex;
+
+        /// <summary>
+        /// A list of waypoints
+        /// </summary>
+        protected List<Vector2> waypoints;
+
+        /// <summary>
         /// Updates the given object
         /// </summary>
         /// <param name="obj">The object to update</param>
         public override void Update(GameObject obj)
-        {            
+        {
             if (setRectangle)
             {
                 setRectangle = false;
@@ -93,7 +97,7 @@ namespace BlackDragonEngine.Components
         /// <param name="collisionCenter">The objects collisioncenter</param>
         /// <param name="obj">The object to update</param>
         protected virtual void idleUpdate(Vector2 collisionCenter, GameObject obj)
-        {            
+        {
             do
             {
                 currentWaypoint = getNextWaypoint();
@@ -112,7 +116,7 @@ namespace BlackDragonEngine.Components
         /// <param name="obj">The object to update</param>
         protected void changeDirection(Vector2 collisionCenter, GameObject obj)
         {
-            direction = TileMap.GetCellCenter(currentGoal) - collisionCenter;            
+            direction = TileMap.GetCellCenter(currentGoal) - collisionCenter;
             if (direction != Vector2.Zero)
                 direction.Normalize();
             determineAnimation(obj);
@@ -124,16 +128,17 @@ namespace BlackDragonEngine.Components
         /// <param name="collisionCenter">The objects collisioncenter</param>
         /// <param name="obj">The object to update</param>
         protected virtual void walkingUpdate(Vector2 collisionCenter, GameObject obj)
-        {    
-            obj.Position += speed * direction;
+        {
+            obj.Position += speed*direction;
 
-            if (Vector2.Distance(collisionCenter, TileMap.GetCellCenter(currentGoal)) <= speed * 2 && pathIndex != currentPath.Count - 1)
+            if (Vector2.Distance(collisionCenter, TileMap.GetCellCenter(currentGoal)) <= speed*2 &&
+                pathIndex != currentPath.Count - 1)
             {
                 currentGoal = currentPath[++pathIndex];
                 changeDirection(collisionCenter, obj);
             }
 
-            if (Vector2.Distance(collisionCenter, TileMap.GetCellCenter(currentWaypoint)) <= speed * 2)
+            if (Vector2.Distance(collisionCenter, TileMap.GetCellCenter(currentWaypoint)) <= speed*2)
             {
                 objectState = ObjectStates.IDLE;
             }
@@ -180,5 +185,18 @@ namespace BlackDragonEngine.Components
             obj.Send("GRAPHICS_SET_FLIPPED", flipped);
             obj.Send("GRAPHICS_PLAYANIMATION", animation);
         }
+
+        #region Nested type: ObjectStates
+
+        /// <summary>
+        /// The possible states the object can be in 
+        /// </summary>
+        protected enum ObjectStates
+        {
+            IDLE,
+            WALKING
+        };
+
+        #endregion
     }
 }

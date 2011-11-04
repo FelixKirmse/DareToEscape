@@ -1,12 +1,12 @@
 ﻿using BlackDragonEngine.Components;
+using BlackDragonEngine.Entities;
 using BlackDragonEngine.Providers;
 using DareToEscape.Providers;
-using BlackDragonEngine.Entities;
 using Microsoft.Xna.Framework;
 
 namespace DareToEscape.Components.Entities
 {
-    class CheckPointGraphicsComponent : AnimatedGraphicsComponent
+    internal class CheckPointGraphicsComponent : AnimatedGraphicsComponent
     {
         private bool setRectangle = true;
 

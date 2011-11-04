@@ -1,15 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BlackDragonEngine.Entities;
-using DareToEscape.Helpers;
-using BlackDragonEngine.Managers;
-using DareToEscape.Providers;
-using BlackDragonEngine.TileEngine;
 using BlackDragonEngine.Helpers;
+using BlackDragonEngine.Managers;
+using DareToEscape.Helpers;
+using DareToEscape.Providers;
+using Microsoft.Xna.Framework;
 
 namespace DareToEscape.Managers
 {
-    static class CodeHandler
+    internal static class CodeHandler
     {
         public static void BindEvents()
         {
@@ -19,7 +18,7 @@ namespace DareToEscape.Managers
         }
 
         public static void OnMapCodeCheck(string[] code, Vector2 location, GameObject player)
-        {            
+        {
             switch (code[0])
             {
                 case "START":
@@ -71,20 +70,21 @@ namespace DareToEscape.Managers
         }
 
         public static void OnCodeUnderPlayerCheck(string[] codeArray, GameObject player)
-        {            
+        {
             switch (codeArray[0])
             {
                 case "JUMPTHROUGHTOP":
-                    player.Send<bool>("PHYSICS_SET_JUMPTHROUGHCHECK", true);
+                    player.Send("PHYSICS_SET_JUMPTHROUGHCHECK", true);
                     break;
 
                 case "WATER":
-                    player.Send<bool>("PHYSICS_SET_INWATER", true);
+                    player.Send("PHYSICS_SET_INWATER", true);
                     break;
             }
         }
 
-        public static int OnCodeInPlayerCenterCheck(string[] codeArray, List<string> codes, Vector2 collisionCenter, int i, GameObject player)
+        public static int OnCodeInPlayerCenterCheck(string[] codeArray, List<string> codes, Vector2 collisionCenter,
+                                                    int i, GameObject player)
         {
             switch (codeArray[0])
             {
@@ -157,36 +157,36 @@ namespace DareToEscape.Managers
         public static void Spawn(string[] codearray, Vector2 position)
         {
             switch (codearray[1])
-            { 
+            {
                 case "TURRET":
-                    switch(codearray[2])
+                    switch (codearray[2])
                     {
                         case "SMALL":
                             GameObject smallTurret = Factory.CreateSmallTurret();
                             smallTurret.Position = position;
-                            smallTurret.Send<GameObject>("SET_" + codearray[3], smallTurret);
+                            smallTurret.Send("SET_" + codearray[3], smallTurret);
                             EntityManager.AddEntity(smallTurret);
                             break;
 
                         case "MEDIUM":
                             GameObject mediumTurret = Factory.CreateMediumTurret();
                             mediumTurret.Position = position;
-                            mediumTurret.Send<GameObject>("SET_" + codearray[3], mediumTurret);
+                            mediumTurret.Send("SET_" + codearray[3], mediumTurret);
                             EntityManager.AddEntity(mediumTurret);
                             break;
 
                         case "BOSS1":
                             GameObject boss1 = Factory.CreateBoss1();
                             boss1.Position = position;
-                            boss1.Send<GameObject>("SET_" + codearray[3], boss1);
+                            boss1.Send("SET_" + codearray[3], boss1);
                             EntityManager.AddEntity(boss1);
                             GameVariableProvider.Bosses.Add(boss1);
                             break;
 
-                            case "TUTORIALBOSS":
+                        case "TUTORIALBOSS":
                             GameObject tutorialBoss = Factory.CreateTutorialBoss();
                             tutorialBoss.Position = position;
-                            tutorialBoss.Send<GameObject>("SET_" + codearray[3], tutorialBoss);
+                            tutorialBoss.Send("SET_" + codearray[3], tutorialBoss);
                             EntityManager.AddEntity(tutorialBoss);
                             GameVariableProvider.Bosses.Add(tutorialBoss);
                             break;

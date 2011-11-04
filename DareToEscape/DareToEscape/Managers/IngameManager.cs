@@ -1,13 +1,13 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using DareToEscape.Helpers;
-using BlackDragonEngine.Providers;
-using BlackDragonEngine.Managers;
+﻿using BlackDragonEngine;
 using BlackDragonEngine.Helpers;
-using BlackDragonEngine;
+using BlackDragonEngine.Managers;
+using BlackDragonEngine.Providers;
+using DareToEscape.Helpers;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Managers
 {
-    static class IngameManager
+    internal static class IngameManager
     {
         public static void Activate()
         {
@@ -27,13 +27,13 @@ namespace DareToEscape.Managers
                     return;
                 }
                 CodeManager.CheckPlayerCodes();
-                EntityManager.Update();                
+                EntityManager.Update();
             }
         }
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            EntityManager.Draw(spriteBatch);           
-        }        
+            EntityManager.Draw(spriteBatch);
+        }
     }
 }

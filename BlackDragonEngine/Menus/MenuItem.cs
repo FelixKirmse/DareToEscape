@@ -1,22 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BlackDragonEngine.Providers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using BlackDragonEngine.Providers;
 
 namespace BlackDragonEngine.Menus
 {
     public class MenuItem
     {
-        public string ItemName { get; set; }
-        public Vector2 ItemPosition { get; set; }
-        public bool IsSelected { get; set; }
-
-        public Color SelectedColor { get; set; }
-        public Color UnSelectedcolor { get; set; }
-
+        private readonly SpriteFont font;
         private Color itemColor;
-        private SpriteFont font;
 
-        public MenuItem(string itemName, Vector2 itemPosition, bool isSelected, SpriteFont font) {
+        public MenuItem(string itemName, Vector2 itemPosition, bool isSelected, SpriteFont font)
+        {
             ItemName = itemName;
             ItemPosition = itemPosition;
             IsSelected = isSelected;
@@ -33,17 +27,17 @@ namespace BlackDragonEngine.Menus
 
         public MenuItem(string itemName)
             : this(itemName, Vector2.Zero, false, FontProvider.GetFont("Pericles14"))
-        { 
+        {
         }
 
         public MenuItem(string itemName, string fontName)
             : this(itemName, Vector2.Zero, false, FontProvider.GetFont(fontName))
-        { 
+        {
         }
 
         public MenuItem(string itemName, string fontName, bool isSelected)
             : this(itemName, Vector2.Zero, isSelected, FontProvider.GetFont(fontName))
-        { 
+        {
         }
 
         public MenuItem(string itemName, string fontName, bool isSelected, Color selectedColor, Color unSelectedColor)
@@ -52,7 +46,14 @@ namespace BlackDragonEngine.Menus
             SelectedColor = selectedColor;
             UnSelectedcolor = unSelectedColor;
         }
-        
+
+        public string ItemName { get; set; }
+        public Vector2 ItemPosition { get; set; }
+        public bool IsSelected { get; set; }
+
+        public Color SelectedColor { get; set; }
+        public Color UnSelectedcolor { get; set; }
+
 
         public void Update()
         {

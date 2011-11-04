@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
@@ -10,17 +9,13 @@ using Microsoft.Xna.Framework.Graphics;
 namespace DareToEscape.MapTools
 {
     public delegate void MapGenerated();
+
     public static class MapGenerator
     {
         private static RandomMapGenerator _mapGen;
         private static int _mapSize;
         private static int _cellCounter;
         private static Task _task;
-
-        private enum GenerationState
-        {
-            Digging, Hollowing, WallRemoving, SingleRemoving, PlacingPlatforms
-        }
 
         private static GenerationState _state;
         public static event MapGenerated OnGenerationFinished;
@@ -29,18 +24,19 @@ namespace DareToEscape.MapTools
         public static void Draw(SpriteBatch spriteBatch)
         {
             string drawString = null;
-            switch(_state)
+            switch (_state)
             {
                 case GenerationState.Digging:
-                    drawString = "Digging... " + Math.Round(((float)_mapGen.AddedDiggers/RandomMapGenerator.MaxDiggers)*100f) + "%";
+                    drawString = "Digging... " +
+                                 Math.Round(((float) _mapGen.AddedDiggers/RandomMapGenerator.MaxDiggers)*100f) + "%";
                     break;
 
                 case GenerationState.PlacingPlatforms:
-                    drawString = "Placing platforms... " + Math.Round(((float)_cellCounter / _mapSize) * 100f) + "%";
+                    drawString = "Placing platforms... " + Math.Round(((float) _cellCounter/_mapSize)*100f) + "%";
                     break;
 
                 case GenerationState.Hollowing:
-                    drawString = "Making walls hollow... " + Math.Round(((float)_cellCounter/_mapSize)*100f) + "%";
+                    drawString = "Making walls hollow... " + Math.Round(((float) _cellCounter/_mapSize)*100f) + "%";
                     break;
 
                 case GenerationState.WallRemoving:
@@ -48,7 +44,8 @@ namespace DareToEscape.MapTools
                     break;
 
                 case GenerationState.SingleRemoving:
-                    drawString = "Removing single blocks... " + Math.Round(((float)_cellCounter / _mapSize) * 100f) + "%";;
+                    drawString = "Removing single blocks... " + Math.Round(((float) _cellCounter/_mapSize)*100f) + "%";
+                    ;
                     break;
             }
             spriteBatch.DrawString(FontProvider.GetFont("Mono14"), drawString,
@@ -62,22 +59,23 @@ namespace DareToEscape.MapTools
             _task = Task.Factory.StartNew(() =>
                                               {
                                                   _cellCounter = 0;
-                                                  var previousState = StateManager.GameState;
+                                                  GameStates previousState = StateManager.GameState;
                                                   StateManager.GameState = GameStates.GeneratingMap;
                                                   _task.Wait(32);
                                                   _state = GenerationState.Digging;
                                                   _mapGen.GenerateNewMap(50, 50, 500, 500);
                                                   _state = GenerationState.PlacingPlatforms;
-                                                  _mapSize = TileMap.MapWidth * TileMap.MapHeight;
-                                                  _mapGen.ManipulateCellsByCondition(PlacePlatform, CellHasNeighborToLeftOrRight);
+                                                  _mapSize = TileMap.MapWidth*TileMap.MapHeight;
+                                                  _mapGen.ManipulateCellsByCondition(PlacePlatform,
+                                                                                     CellHasNeighborToLeftOrRight);
                                                   _state = GenerationState.Hollowing;
                                                   _cellCounter = 0;
-                                                  _mapSize = TileMap.MapWidth * TileMap.MapHeight;
+                                                  _mapSize = TileMap.MapWidth*TileMap.MapHeight;
                                                   _mapGen.RemoveCellsByCondition(CellSurroundedByBlocks);
                                                   _state = GenerationState.WallRemoving;
                                                   _mapGen.RemoveOuterWall();
                                                   _state = GenerationState.SingleRemoving;
-                                                  _mapSize = TileMap.MapWidth * TileMap.MapHeight * 2;
+                                                  _mapSize = TileMap.MapWidth*TileMap.MapHeight*2;
                                                   _cellCounter = 0;
                                                   _mapGen.RemoveCellsByCondition(CellOnlyHasOneNeighbor);
                                                   _mapGen.RemoveCellsByCondition(CellSurroundedByAir);
@@ -94,7 +92,6 @@ namespace DareToEscape.MapTools
             TileMap.SetTileAtCell(cell.X, cell.Y, 0, 1);
         }
 
-        
 
         private static bool CellHasNeighborToLeftOrRight(Coords cell)
         {
@@ -173,5 +170,18 @@ namespace DareToEscape.MapTools
             }
             return true;
         }
+
+        #region Nested type: GenerationState
+
+        private enum GenerationState
+        {
+            Digging,
+            Hollowing,
+            WallRemoving,
+            SingleRemoving,
+            PlacingPlatforms
+        }
+
+        #endregion
     }
 }

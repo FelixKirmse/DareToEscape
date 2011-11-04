@@ -1,12 +1,10 @@
-﻿﻿using System;
+﻿using System;
 using System.Runtime.InteropServices;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace EventInput
 {
-
     /// <summary>
     ///  CREDITS INFINIMINER
     ///  http://code.google.com/p/infiniminer/
@@ -60,7 +58,7 @@ namespace EventInput
 
     public class KeyEventArgs : EventArgs
     {
-        private Keys keyCode;
+        private readonly Keys keyCode;
 
         public KeyEventArgs(Keys keyCode)
         {
@@ -74,10 +72,26 @@ namespace EventInput
     }
 
     public delegate void CharEnteredHandler(object sender, CharacterEventArgs e);
+
     public delegate void KeyEventHandler(object sender, KeyEventArgs e);
 
     public static class EventInput
     {
+        //various Win32 constants that we need
+        private const int GWL_WNDPROC = -4;
+        private const int WM_KEYDOWN = 0x100;
+        private const int WM_KEYUP = 0x101;
+        private const int WM_CHAR = 0x102;
+        private const int WM_IME_SETCONTEXT = 0x0281;
+        private const int WM_INPUTLANGCHANGE = 0x51;
+        private const int WM_GETDLGCODE = 0x87;
+        private const int WM_IME_COMPOSITION = 0x10f;
+        private const int DLGC_WANTALLKEYS = 4;
+        private static bool initialized;
+        private static IntPtr prevWndProc;
+        private static WndProc hookProcDelegate;
+        private static IntPtr hIMC;
+
         /// <summary>
         /// Event raised when a character has been entered.
         /// </summary>
@@ -93,36 +107,19 @@ namespace EventInput
         /// </summary>
         public static event KeyEventHandler KeyUp;
 
-        delegate IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
-
-        static bool initialized;
-        static IntPtr prevWndProc;
-        static WndProc hookProcDelegate;
-        static IntPtr hIMC;
-
-        //various Win32 constants that we need
-        const int GWL_WNDPROC = -4;
-        const int WM_KEYDOWN = 0x100;
-        const int WM_KEYUP = 0x101;
-        const int WM_CHAR = 0x102;
-        const int WM_IME_SETCONTEXT = 0x0281;
-        const int WM_INPUTLANGCHANGE = 0x51;
-        const int WM_GETDLGCODE = 0x87;
-        const int WM_IME_COMPOSITION = 0x10f;
-        const int DLGC_WANTALLKEYS = 4;
-
         //Win32 functions that we're using
         [DllImport("Imm32.dll")]
-        static extern IntPtr ImmGetContext(IntPtr hWnd);
+        private static extern IntPtr ImmGetContext(IntPtr hWnd);
 
         [DllImport("Imm32.dll")]
-        static extern IntPtr ImmAssociateContext(IntPtr hWnd, IntPtr hIMC);
+        private static extern IntPtr ImmAssociateContext(IntPtr hWnd, IntPtr hIMC);
 
         [DllImport("user32.dll")]
-        static extern IntPtr CallWindowProc(IntPtr lpPrevWndFunc, IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        private static extern IntPtr CallWindowProc(IntPtr lpPrevWndFunc, IntPtr hWnd, uint Msg, IntPtr wParam,
+                                                    IntPtr lParam);
 
         [DllImport("user32.dll")]
-        static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
         /// <summary>
         /// Initialize the TextInput with the given GameWindow.
@@ -133,37 +130,37 @@ namespace EventInput
             if (initialized)
                 throw new InvalidOperationException("TextInput.Initialize can only be called once!");
 
-            hookProcDelegate = new WndProc(HookProc);
-            prevWndProc = (IntPtr)SetWindowLong(window.Handle, GWL_WNDPROC,
-                (int)Marshal.GetFunctionPointerForDelegate(hookProcDelegate));
+            hookProcDelegate = HookProc;
+            prevWndProc = (IntPtr) SetWindowLong(window.Handle, GWL_WNDPROC,
+                                                 (int) Marshal.GetFunctionPointerForDelegate(hookProcDelegate));
 
             hIMC = ImmGetContext(window.Handle);
             initialized = true;
         }
 
-        static IntPtr HookProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
+        private static IntPtr HookProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
         {
             IntPtr returnCode = CallWindowProc(prevWndProc, hWnd, msg, wParam, lParam);
 
             switch (msg)
             {
                 case WM_GETDLGCODE:
-                    returnCode = (IntPtr)(returnCode.ToInt32() | DLGC_WANTALLKEYS);
+                    returnCode = (IntPtr) (returnCode.ToInt32() | DLGC_WANTALLKEYS);
                     break;
 
                 case WM_KEYDOWN:
                     if (KeyDown != null)
-                        KeyDown(null, new KeyEventArgs((Keys)wParam));
+                        KeyDown(null, new KeyEventArgs((Keys) wParam));
                     break;
 
                 case WM_KEYUP:
                     if (KeyUp != null)
-                        KeyUp(null, new KeyEventArgs((Keys)wParam));
+                        KeyUp(null, new KeyEventArgs((Keys) wParam));
                     break;
 
                 case WM_CHAR:
                     if (CharEntered != null)
-                        CharEntered(null, new CharacterEventArgs((char)wParam, lParam.ToInt32()));
+                        CharEntered(null, new CharacterEventArgs((char) wParam, lParam.ToInt32()));
                     break;
 
                 case WM_IME_SETCONTEXT:
@@ -173,13 +170,17 @@ namespace EventInput
 
                 case WM_INPUTLANGCHANGE:
                     ImmAssociateContext(hWnd, hIMC);
-                    returnCode = (IntPtr)1;
+                    returnCode = (IntPtr) 1;
                     break;
             }
 
             return returnCode;
         }
+
+        #region Nested type: WndProc
+
+        private delegate IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+
+        #endregion
     }
 }
-
-

@@ -1,5 +1,5 @@
-﻿using BlackDragonEngine.Providers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using BlackDragonEngine.Providers;
 using Microsoft.Xna.Framework.Input;
 
 namespace BlackDragonEngine.Helpers
@@ -17,114 +17,85 @@ namespace BlackDragonEngine.Helpers
         private static readonly Dictionary<string, List<Keys>> CustomActions = new Dictionary<string, List<Keys>>();
 
         #region Normal Actionchecks
-        public static bool Up 
+
+        public static bool Up
         {
-            get
-            {
-                return ShortcutProvider.AreAnyKeysDown(UpKeys) || ShortcutProvider.LeftStickUp();
-            }
+            get { return ShortcutProvider.AreAnyKeysDown(UpKeys) || ShortcutProvider.LeftStickUp(); }
         }
 
         public static bool Down
         {
-            get
-            {
-                return ShortcutProvider.AreAnyKeysDown(DownKeys) || ShortcutProvider.LeftStickDown();
-            }
+            get { return ShortcutProvider.AreAnyKeysDown(DownKeys) || ShortcutProvider.LeftStickDown(); }
         }
 
         public static bool Left
         {
-            get
-            {
-                return ShortcutProvider.AreAnyKeysDown(LeftKeys) || ShortcutProvider.LeftStickLeft();
-            }
+            get { return ShortcutProvider.AreAnyKeysDown(LeftKeys) || ShortcutProvider.LeftStickLeft(); }
         }
+
         public static bool Right
         {
-            get
-            {
-                return ShortcutProvider.AreAnyKeysDown(RightKeys) || ShortcutProvider.LeftStickRight();
-            }
+            get { return ShortcutProvider.AreAnyKeysDown(RightKeys) || ShortcutProvider.LeftStickRight(); }
         }
+
         public static bool Jump
         {
-            get
-            {
-                return ShortcutProvider.AreAnyKeysDown(JumpKeys);
-            }
+            get { return ShortcutProvider.AreAnyKeysDown(JumpKeys); }
         }
+
         public static bool Action
         {
-            get
-            {
-                return ShortcutProvider.AreAnyKeysDown(ActionKeys);
-            }
+            get { return ShortcutProvider.AreAnyKeysDown(ActionKeys); }
         }
+
         public static bool Cancel
         {
-            get 
-            {
-                return ShortcutProvider.AreAnyKeysDown(CancelKeys);
-            }
+            get { return ShortcutProvider.AreAnyKeysDown(CancelKeys); }
         }
+
         #endregion
 
         #region Strict Actionchecks
+
         public static bool StrictUp
         {
-            get
-            {
-                return ShortcutProvider.AreAnyKeysDown(UpKeys, true) || ShortcutProvider.LeftStickUp();
-            }
+            get { return ShortcutProvider.AreAnyKeysDown(UpKeys, true) || ShortcutProvider.LeftStickUp(); }
         }
 
         public static bool StrictDown
         {
-            get
-            {
-                return ShortcutProvider.AreAnyKeysDown(DownKeys, true) || ShortcutProvider.LeftStickDown();
-            }
+            get { return ShortcutProvider.AreAnyKeysDown(DownKeys, true) || ShortcutProvider.LeftStickDown(); }
         }
 
         public static bool StrictLeft
         {
-            get
-            {
-                return ShortcutProvider.AreAnyKeysDown(LeftKeys, true) || ShortcutProvider.LeftStickLeft();
-            }
+            get { return ShortcutProvider.AreAnyKeysDown(LeftKeys, true) || ShortcutProvider.LeftStickLeft(); }
         }
+
         public static bool StrictRight
         {
-            get
-            {
-                return ShortcutProvider.AreAnyKeysDown(RightKeys, true) || ShortcutProvider.LeftStickRight();
-            }
+            get { return ShortcutProvider.AreAnyKeysDown(RightKeys, true) || ShortcutProvider.LeftStickRight(); }
         }
+
         public static bool StrictJump
         {
-            get
-            {
-                return ShortcutProvider.AreAnyKeysDown(JumpKeys, true);
-            }
+            get { return ShortcutProvider.AreAnyKeysDown(JumpKeys, true); }
         }
+
         public static bool StrictAction
         {
-            get
-            {
-                return ShortcutProvider.AreAnyKeysDown(ActionKeys, true);
-            }
+            get { return ShortcutProvider.AreAnyKeysDown(ActionKeys, true); }
         }
+
         public static bool StrictCancel
         {
-            get
-            {
-                return ShortcutProvider.AreAnyKeysDown(CancelKeys, true);
-            }
+            get { return ShortcutProvider.AreAnyKeysDown(CancelKeys, true); }
         }
+
         #endregion
 
         #region CustomActionHandling
+
         public static void AddNewAction(string name, List<Keys> keys)
         {
             CustomActions.Add(name, keys);
@@ -141,6 +112,7 @@ namespace BlackDragonEngine.Helpers
             Keys[] keys = CustomActions[name].ToArray();
             return ShortcutProvider.AreAnyKeysDown(keys, true);
         }
+
         #endregion
-    }    
+    }
 }

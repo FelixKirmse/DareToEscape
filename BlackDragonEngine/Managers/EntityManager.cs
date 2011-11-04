@@ -7,13 +7,13 @@ namespace BlackDragonEngine.Managers
 {
     public static class EntityManager
     {
-        private static GameObject player;        
+        private static GameObject player;
         public static List<GameObject> Entities = new List<GameObject>();
 
         public static void Update()
         {
             Entities.ForEach(e => e.Update());
-            player.Update();              
+            player.Update();
         }
 
         public static void Draw(SpriteBatch spriteBatch)
@@ -35,6 +35,6 @@ namespace BlackDragonEngine.Managers
         public static void ClearEntities()
         {
             Entities.Clear();
-        }        
+        }
     }
 }

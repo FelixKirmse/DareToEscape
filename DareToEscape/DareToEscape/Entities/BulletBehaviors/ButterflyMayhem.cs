@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DareToEscape.Entities.BulletBehaviors
+﻿namespace DareToEscape.Entities.BulletBehaviors
 {
-    class ButterflyMayhem : IBehavior
+    internal class ButterflyMayhem : IBehavior
     {
-        private int modifier;
-        private float speedMod;
+        private readonly int modifier;
+        private readonly float speedMod;
         private int frameCounter;
 
         public ButterflyMayhem(int modifier, float speedMod)
@@ -18,16 +13,18 @@ namespace DareToEscape.Entities.BulletBehaviors
             frameCounter = 0;
         }
 
+        #region IBehavior Members
+
         public void Update(Bullet bullet)
         {
             switch (frameCounter++)
-            { 
+            {
                 case 60:
                     bullet.LaunchSpeed = 2f;
                     bullet.BaseSpeed = 2f;
-                    bullet.TurnSpeed = 1 * modifier;
+                    bullet.TurnSpeed = 1*modifier;
                     bullet.Acceleration = .2f;
-                    bullet.SpeedLimit = 2 + (speedMod / 3);
+                    bullet.SpeedLimit = 2 + (speedMod/3);
                     break;
 
                 case 120:
@@ -35,8 +32,10 @@ namespace DareToEscape.Entities.BulletBehaviors
                     bullet.Acceleration = 0f;
                     bullet.SpeedLimit = 0f;
                     break;
-            }            
+            }
             ReusableBehaviors.StandardBehavior.Update(bullet);
         }
+
+        #endregion
     }
 }

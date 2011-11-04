@@ -1,22 +1,20 @@
-﻿using BlackDragonEngine.Entities;
-using BlackDragonEngine.Components;
+﻿using BlackDragonEngine.Components;
+using BlackDragonEngine.Entities;
 using BlackDragonEngine.Helpers;
-
 
 namespace DareToEscape.Components.PlayerComponents
 {
-    class PlayerInputComponent : InputComponent
+    internal class PlayerInputComponent : InputComponent
     {
-
-        private float gravity;        
+        private float gravity;
+        private int jumpCount;
         private bool onGround;
-        private int jumpCount;        
 
         public override void Update(GameObject obj)
-        {            
+        {
             if (!InputMapper.Jump && gravity < 0)
             {
-                gravity += .45f;                
+                gravity += .45f;
             }
 
             if (gravity < 10)
@@ -27,15 +25,15 @@ namespace DareToEscape.Components.PlayerComponents
                 gravity = -8;
                 jumpCount = 2;
             }
-            obj.Send<float>("PHYSICS_SET_GRAVITY", gravity);
-            obj.Send<GameObject>("PHYSICS_RUN_GRAVITYLOOP", obj);
+            obj.Send("PHYSICS_SET_GRAVITY", gravity);
+            obj.Send("PHYSICS_RUN_GRAVITYLOOP", obj);
 
             if (InputMapper.StrictJump && onGround)
             {
                 gravity = -10;
                 jumpCount = 1;
                 onGround = false;
-                obj.Send<bool>("PHYSICS_SET_ONGROUND", false);
+                obj.Send("PHYSICS_SET_ONGROUND", false);
             }
 
             if (gravity > 0 && jumpCount != 2)
@@ -51,7 +49,7 @@ namespace DareToEscape.Components.PlayerComponents
                 {
                     obj.Send("GRAPHICS_PLAYANIMATION", "Walk");
                 }
-                obj.Send<bool>("GRAPHICS_SET_FLIPPED", true);
+                obj.Send("GRAPHICS_SET_FLIPPED", true);
             }
             else if (InputMapper.Right)
             {
@@ -60,7 +58,7 @@ namespace DareToEscape.Components.PlayerComponents
                 {
                     obj.Send("GRAPHICS_PLAYANIMATION", "Walk");
                 }
-                obj.Send<bool>("GRAPHICS_SET_FLIPPED", false);
+                obj.Send("GRAPHICS_SET_FLIPPED", false);
             }
             else
             {
@@ -70,10 +68,9 @@ namespace DareToEscape.Components.PlayerComponents
                     obj.Send("GRAPHICS_PLAYANIMATION", "Idle");
                 }
             }
-           
+
             obj.Send("PHYSICS_SET_FOCUSED", InputMapper.TriggeredAction("Focus"));
             obj.Send("GRAPHICS_SET_FOCUSED", InputMapper.TriggeredAction("Focus"));
-            
         }
 
         public override void Receive<T>(string message, T obj)
@@ -85,21 +82,21 @@ namespace DareToEscape.Components.PlayerComponents
                 if (messageParts[1] == "SET")
                 {
                     switch (messageParts[2])
-                    { 
+                    {
                         case "GRAVITY":
                             if (obj is float)
-                                gravity = (float)(object)obj;
-                            break;                       
+                                gravity = (float) (object) obj;
+                            break;
 
                         case "ONGROUND":
                             if (obj is bool)
-                                onGround = (bool)(object)obj;
+                                onGround = (bool) (object) obj;
                             break;
 
                         case "JUMPCOUNT":
                             if (obj is int)
-                                jumpCount = (int)(object)obj;
-                            break;                        
+                                jumpCount = (int) (object) obj;
+                            break;
                     }
                 }
             }

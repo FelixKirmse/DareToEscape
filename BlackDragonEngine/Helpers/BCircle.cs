@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace BlackDragonEngine.Helpers
 {
@@ -13,20 +9,20 @@ namespace BlackDragonEngine.Helpers
 
         public BCircle(Vector2 position, float radius)
         {
-            this.Position = position;
-            this.Radius = radius;
+            Position = position;
+            Radius = radius;
         }
 
         public BCircle(float x, float y, float radius)
             : this(new Vector2(x, y), radius)
-        { 
+        {
         }
 
         public bool Intersects(BCircle otherCircle)
         {
-            float radiiSum = this.Radius * this.Radius + otherCircle.Radius * otherCircle.Radius;
+            float radiiSum = Radius*Radius + otherCircle.Radius*otherCircle.Radius;
             float distance;
-            Vector2.DistanceSquared(ref this.Position, ref otherCircle.Position, out distance);            
+            Vector2.DistanceSquared(ref Position, ref otherCircle.Position, out distance);
             return radiiSum >= distance;
         }
     }

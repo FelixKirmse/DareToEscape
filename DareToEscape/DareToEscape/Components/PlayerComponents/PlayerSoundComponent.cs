@@ -1,13 +1,12 @@
-﻿using BlackDragonEngine.Entities;
-using BlackDragonEngine.Components;
+﻿using BlackDragonEngine.Components;
+using BlackDragonEngine.Entities;
 
 namespace DareToEscape.Components.PlayerComponents
 {
-    class PlayerSoundComponent : SoundComponent
+    internal class PlayerSoundComponent : SoundComponent
     {
         public override void Update(GameObject obj)
         {
-            
         }
 
         public override void Receive<T>(string message, T desiredPosition)
@@ -16,7 +15,6 @@ namespace DareToEscape.Components.PlayerComponents
 
             if (messageParts[0] == "SOUND")
             {
-
             }
         }
     }

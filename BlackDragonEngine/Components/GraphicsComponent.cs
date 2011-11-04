@@ -1,15 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BlackDragonEngine.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using BlackDragonEngine.Entities;
 
 namespace BlackDragonEngine.Components
 {
     public class GraphicsComponent : Component
     {
-        protected Texture2D texture;
         protected float drawDepth = .82f;
+        protected Texture2D texture;
 
-        public GraphicsComponent() { }
+        public GraphicsComponent()
+        {
+        }
+
         /// <summary>
         /// Directly sets the texture, useful for Entity that only have a GraphicsComponent
         /// </summary>
@@ -32,7 +35,11 @@ namespace BlackDragonEngine.Components
                 SpriteEffects.None,
                 drawDepth);
         }
-        public override void Update(GameObject obj) { }
+
+        public override void Update(GameObject obj)
+        {
+        }
+
         public override void Receive<T>(string message, T obj)
         {
         }

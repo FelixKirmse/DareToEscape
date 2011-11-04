@@ -1,13 +1,13 @@
-﻿using BlackDragonEngine.Providers;
-using DareToEscape.Managers;
+﻿using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Managers;
-using Microsoft.Xna.Framework.Graphics;
-using BlackDragonEngine.Helpers;
+using BlackDragonEngine.Providers;
+using DareToEscape.Managers;
 using DareToEscape.Providers;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Helpers
 {
-    static class GeneralHelper
+    internal static class GeneralHelper
     {
         private static float timeToAutoResume = 3f;
         private static float elapsedSeconds;
@@ -17,15 +17,15 @@ namespace DareToEscape.Helpers
             GameVariableProvider.BulletManager.ClearAllBullets();
             VariableProvider.ScriptEngine.StopAllScripts();
             elapsedSeconds += ShortcutProvider.ElapsedSeconds;
-            if (StateManager.FastDead ||elapsedSeconds >= timeToAutoResume || InputMapper.StrictAction)
+            if (StateManager.FastDead || elapsedSeconds >= timeToAutoResume || InputMapper.StrictAction)
             {
                 if (SaveManager<SaveState>.CurrentSaveState.CurrentLevel != LevelManager.CurrentLevel)
                     LevelManager.ReloadLevel();
-                else 
+                else
                     SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
                 StateManager.PlayerDead = false;
                 elapsedSeconds = 0f;
-            }                
+            }
         }
 
         public static void Draw(SpriteBatch spriteBatch)

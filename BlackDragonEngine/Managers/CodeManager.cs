@@ -1,18 +1,20 @@
 ﻿using System.Collections.Generic;
 using BlackDragonEngine.Entities;
-using Microsoft.Xna.Framework;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
+using Microsoft.Xna.Framework;
 
 namespace BlackDragonEngine.Managers
 {
     public delegate void OnMapCodeCheckHandler(string[] code, Vector2 location, GameObject player);
+
     public delegate void UnderPlayerCheckCodeHandler(string[] code, GameObject player);
-    public delegate int InPlayerCheckCodeHandler(string[] code, List<string> codes, Vector2 collisionCenter,int i, GameObject player);
+
+    public delegate int InPlayerCheckCodeHandler(
+        string[] code, List<string> codes, Vector2 collisionCenter, int i, GameObject player);
 
     public static class CodeManager
     {
-
         public static event OnMapCodeCheckHandler OnMapCodeCheck;
         public static event UnderPlayerCheckCodeHandler OnCodeUnderPlayerCheck;
         public static event InPlayerCheckCodeHandler OnCodeInPlayerCenterCheck;
@@ -27,13 +29,13 @@ namespace BlackDragonEngine.Managers
             {
                 foreach (var item in TileMap.Map.Codes)
                 {
-                    Vector2 location = new Vector2(item.Key.X * TileMap.TileWidth, item.Key.Y * TileMap.TileHeight);
+                    var location = new Vector2(item.Key.X*TileMap.TileWidth, item.Key.Y*TileMap.TileHeight);
                     foreach (string codePart in item.Value)
                     {
                         string[] code = codePart.Split('_');
                         OnMapCodeCheck(code, location, player);
                     }
-                }                
+                }
             }
         }
 
@@ -41,9 +43,9 @@ namespace BlackDragonEngine.Managers
         public static void CheckPlayerCodes()
         {
             GameObject player = VariableProvider.CurrentPlayer;
-            if(OnCodeInPlayerCenterCheck != null)
-                checkCodesInPlayerCenter(player);   
-            if(OnCodeUnderPlayerCheck != null)
+            if (OnCodeInPlayerCenterCheck != null)
+                checkCodesInPlayerCenter(player);
+            if (OnCodeUnderPlayerCheck != null)
                 checkCodesUnderPlayer(player);
         }
 
@@ -51,35 +53,35 @@ namespace BlackDragonEngine.Managers
         {
             Rectangle playerCollisionRectangle = player.CollisionRectangle;
             checkCodesUnderPlayer(player, TileMap.GetCellCodes
-                (
-                    TileMap.GetCellByPixel(
-                        new Vector2(
-                            playerCollisionRectangle.Left,
-                            playerCollisionRectangle.Bottom
-                            )
-                    )
-                ));
+                                              (
+                                                  TileMap.GetCellByPixel(
+                                                      new Vector2(
+                                                          playerCollisionRectangle.Left,
+                                                          playerCollisionRectangle.Bottom
+                                                          )
+                                                      )
+                                              ));
             checkCodesUnderPlayer(player, TileMap.GetCellCodes
-                (
-                    TileMap.GetCellByPixel(
-                        new Vector2(
-                            playerCollisionRectangle.Right,
-                            playerCollisionRectangle.Bottom
-                            )
-                    )
-                ));
+                                              (
+                                                  TileMap.GetCellByPixel(
+                                                      new Vector2(
+                                                          playerCollisionRectangle.Right,
+                                                          playerCollisionRectangle.Bottom
+                                                          )
+                                                      )
+                                              ));
             checkCodesUnderPlayer(player, TileMap.GetCellCodes
-                (
-                    TileMap.GetCellByPixel(
-                        new Vector2(
-                            playerCollisionRectangle.Center.X,
-                            playerCollisionRectangle.Bottom
-                            )
-                    )
-                ));
+                                              (
+                                                  TileMap.GetCellByPixel(
+                                                      new Vector2(
+                                                          playerCollisionRectangle.Center.X,
+                                                          playerCollisionRectangle.Bottom
+                                                          )
+                                                      )
+                                              ));
         }
 
-        private static void checkCodesUnderPlayer(GameObject player, List<string> codes )
+        private static void checkCodesUnderPlayer(GameObject player, List<string> codes)
         {
             if (codes == null)
                 return;
@@ -93,15 +95,16 @@ namespace BlackDragonEngine.Managers
         private static void checkCodesInPlayerCenter(GameObject player)
         {
             Vector2 collisionCenter = player.RectCollisionCenter;
+            collisionCenter /= TileMap.TileWidth;
 
-            var codes = TileMap.GetCellCodes(collisionCenter);            
+            List<string> codes = TileMap.GetCellCodes(collisionCenter);
 
-            for (int i = 0; i < codes.Count; ++i )
+            for (int i = 0; i < codes.Count; ++i)
             {
                 string codePart = codes[i];
                 string[] codeArray = codePart.Split('_');
                 i = OnCodeInPlayerCenterCheck(codeArray, codes, collisionCenter, i, player);
             }
-        }        
+        }
     }
 }

@@ -1,21 +1,21 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace DareToEscape.Entities.BulletBehaviors
+﻿namespace DareToEscape.Entities.BulletBehaviors
 {
-    class PlayerTrap1 : IBehavior
+    internal class PlayerTrap1 : IBehavior
     {
-        private int frameCounter = 0;
-        private float angle;
+        private readonly float angle;
+        private int frameCounter;
 
         public PlayerTrap1(float angle)
         {
             this.angle = angle;
         }
 
+        #region IBehavior Members
+
         public void Update(Bullet bullet)
         {
             switch (frameCounter++)
-            { 
+            {
                 case 110:
                     bullet.BaseSpeed = 0;
                     bullet.TurnSpeed = 0;
@@ -38,17 +38,22 @@ namespace DareToEscape.Entities.BulletBehaviors
             }
             ReusableBehaviors.StandardBehavior.Update(bullet);
         }
+
+        #endregion
     }
 
-    class PlayerTrap2 : IBehavior
+    internal class PlayerTrap2 : IBehavior
     {
-        private int frameCounter = 0;
-        private float angle;
+        private readonly float angle;
+        private int frameCounter;
 
         public PlayerTrap2(float angle)
         {
             this.angle = angle;
         }
+
+        #region IBehavior Members
+
         public void Update(Bullet bullet)
         {
             switch (frameCounter++)
@@ -68,12 +73,14 @@ namespace DareToEscape.Entities.BulletBehaviors
                     break;
 
                 case 700:
-                    bullet.TurnSpeed = 0;                    
+                    bullet.TurnSpeed = 0;
                     bullet.Acceleration = .5f;
                     bullet.SpeedLimit = 3;
                     break;
             }
             ReusableBehaviors.StandardBehavior.Update(bullet);
         }
+
+        #endregion
     }
 }

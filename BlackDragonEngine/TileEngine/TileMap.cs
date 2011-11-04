@@ -1,95 +1,103 @@
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
+using System.Xml.Serialization;
+using BlackDragonEngine.Helpers;
+using BlackDragonEngine.Providers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.IO;
-using System.Xml.Serialization;
-using System.IO.Compression;
-using BlackDragonEngine.Helpers;
-using BlackDragonEngine.Providers;
 
 namespace BlackDragonEngine.TileEngine
-{   
+{
     public static class TileMap
     {
         #region Declarations
+
         public const int TileWidth = 16;
-        public const int TileHeight = 16;        
-        public const int MapLayers = 3;        
-        public const int TileOffset = 0;                  
-        public static bool EditorMode = false;
+        public const int TileHeight = 16;
+        public const int MapLayers = 3;
+        public const int TileOffset = 0;
+        public static bool EditorMode;
         public static SpriteFont spriteFont;
         private static Texture2D tileSheet;
 
         public static Map Map;
-        #endregion       
+
+        #endregion
 
         #region Initialization
-        public static void Initialize(Texture2D tileTexture) 
+
+        public static void Initialize(Texture2D tileTexture)
         {
             tileSheet = tileTexture;
             Map = new Map();
         }
+
         #endregion
 
         #region Tile and Tile Sheet Handling
-        public static int TilesPerRow 
+
+        public static int TilesPerRow
         {
-            get { return tileSheet.Width / (TileWidth + TileOffset); }
+            get { return tileSheet.Width/(TileWidth + TileOffset); }
         }
 
-        public static Rectangle? TileSourceRectangle(int? tileIndex) 
+        public static Rectangle? TileSourceRectangle(int? tileIndex)
         {
             if (tileIndex == null)
                 return null;
-            return new Rectangle(((int)tileIndex % TilesPerRow) * (TileWidth + TileOffset), ((int)tileIndex / TilesPerRow) * (TileHeight + TileOffset), TileWidth, TileHeight);
+            return new Rectangle(((int) tileIndex%TilesPerRow)*(TileWidth + TileOffset),
+                                 ((int) tileIndex/TilesPerRow)*(TileHeight + TileOffset), TileWidth, TileHeight);
         }
+
         #endregion
 
         #region Information about Map Cells
-        public static int GetCellByPixelX(int pixelX) 
+
+        public static int GetCellByPixelX(int pixelX)
         {
-            return pixelX / TileWidth;
+            return pixelX/TileWidth;
         }
 
-        public static int GetCellByPixelY(int pixelY) 
+        public static int GetCellByPixelY(int pixelY)
         {
-            return pixelY / TileHeight;
+            return pixelY/TileHeight;
         }
 
         public static Vector2 GetCellByPixel(Vector2 pixelLocation)
         {
-            return new Vector2(GetCellByPixelX((int)pixelLocation.X), GetCellByPixelY((int)pixelLocation.Y));
+            return new Vector2(GetCellByPixelX((int) pixelLocation.X), GetCellByPixelY((int) pixelLocation.Y));
         }
 
-        public static Vector2 GetCellCenter(int cellX, int cellY) 
+        public static Vector2 GetCellCenter(int cellX, int cellY)
         {
-            return new Vector2((cellX * TileWidth) + (TileWidth / 2), (cellY * TileHeight) + (TileHeight / 2));
+            return new Vector2((cellX*TileWidth) + (TileWidth/2), (cellY*TileHeight) + (TileHeight/2));
         }
 
-        public static Vector2 GetCellCenter(Vector2 cell) 
+        public static Vector2 GetCellCenter(Vector2 cell)
         {
-            return GetCellCenter((int)cell.X, (int)cell.Y);
+            return GetCellCenter((int) cell.X, (int) cell.Y);
         }
 
         public static Rectangle CellWorldRectangle(int cellX, int cellY)
         {
-            return new Rectangle(cellX * TileWidth, cellY * TileHeight, TileWidth, TileHeight);
+            return new Rectangle(cellX*TileWidth, cellY*TileHeight, TileWidth, TileHeight);
         }
 
         public static Rectangle CellWorldRectangle(Vector2 cell)
         {
-            return CellWorldRectangle((int)cell.X, (int)cell.Y);
+            return CellWorldRectangle((int) cell.X, (int) cell.Y);
         }
 
-        public static Rectangle CellScreenRectangle(int cellX, int cellY) 
+        public static Rectangle CellScreenRectangle(int cellX, int cellY)
         {
             return Camera.WorldToScreen(CellWorldRectangle(cellX, cellY));
         }
 
         public static Rectangle CellScreenRectangle(Vector2 cell)
         {
-            return CellScreenRectangle((int)cell.X, (int)cell.Y);
+            return CellScreenRectangle((int) cell.X, (int) cell.Y);
         }
 
         public static bool CellIsPassable(int cellX, int cellY)
@@ -101,7 +109,7 @@ namespace BlackDragonEngine.TileEngine
 
         public static bool CellIsPassable(Vector2 cell)
         {
-            return CellIsPassable((int)cell.X, (int)cell.Y);
+            return CellIsPassable((int) cell.X, (int) cell.Y);
         }
 
         public static bool CellIsPassable(Coords cell)
@@ -109,15 +117,15 @@ namespace BlackDragonEngine.TileEngine
             return CellIsPassable(cell.X, cell.Y);
         }
 
-        public static bool CellIsPassableByPixel(Vector2 pixelLocation) 
-        { 
-            return CellIsPassable(GetCellByPixelX((int)pixelLocation.X), GetCellByPixelY((int)pixelLocation.Y));
-        }        
+        public static bool CellIsPassableByPixel(Vector2 pixelLocation)
+        {
+            return CellIsPassable(GetCellByPixelX((int) pixelLocation.X), GetCellByPixelY((int) pixelLocation.Y));
+        }
 
         public static List<string> GetCellCodes(int cellX, int cellY)
         {
             var coords = new Coords(cellX, cellY);
-            if(!Map.Codes.ContainsKey(coords))
+            if (!Map.Codes.ContainsKey(coords))
                 return new List<string>();
             return Map.Codes[coords];
         }
@@ -138,7 +146,7 @@ namespace BlackDragonEngine.TileEngine
 
         public static List<string> GetCellCodes(Vector2 cell)
         {
-            return GetCellCodes((int)cell.X, (int)cell.Y);
+            return GetCellCodes((int) cell.X, (int) cell.Y);
         }
 
         public static void AddCodeToCell(int cellX, int cellY, string code)
@@ -164,18 +172,20 @@ namespace BlackDragonEngine.TileEngine
         {
             var coords = new Coords(cellX, cellY);
             if (Map.Codes.ContainsKey(coords))
-            {                
+            {
                 Map.Codes[coords].Remove(code);
                 if (Map.Codes[coords].Count == 0)
                     Map.Codes.Remove(coords);
-            }            
+            }
         }
+
         #endregion
 
         #region Information about MapSquare objects
+
         public static void RemoveMapSquareAtCell(int tileX, int tileY)
-        {            
-            RemoveMapSquareAtCell(new Coords(tileX, tileY));            
+        {
+            RemoveMapSquareAtCell(new Coords(tileX, tileY));
         }
 
         public static void RemoveMapSquareAtCell(Coords coords)
@@ -186,33 +196,33 @@ namespace BlackDragonEngine.TileEngine
 
         public static MapSquare GetMapSquareAtCell(int tileX, int tileY)
         {
-            if ((tileX >= 0) && (tileY >= 0)) 
+            if ((tileX >= 0) && (tileY >= 0))
             {
-                return Map[tileX, tileY];                
+                return Map[tileX, tileY];
             }
             return null;
         }
 
         public static void SetMapSquareAtCell(int tileX, int tileY, MapSquare tile)
-        {            
+        {
             if ((tileX >= 0) && (tileY >= 0))
             {
-                Map[tileX, tileY] = tile;               
+                Map[tileX, tileY] = tile;
             }
         }
 
         public static void SetTileAtCell(int tileX, int tileY, int layer, int? tileIndex)
         {
-            if ((tileX >= 0) && (tileY >= 0)) 
+            if ((tileX >= 0) && (tileY >= 0))
             {
-                var square = GetMapSquareAtCell(tileX, tileY);
+                MapSquare square = GetMapSquareAtCell(tileX, tileY);
                 if (square == null)
                 {
                     square = new MapSquare(layer, tileIndex);
                     Map[tileX, tileY] = square;
                     return;
                 }
-                Map[tileX, tileY].LayerTiles[layer] = tileIndex;                
+                Map[tileX, tileY].LayerTiles[layer] = tileIndex;
             }
         }
 
@@ -227,16 +237,24 @@ namespace BlackDragonEngine.TileEngine
             return GetMapSquareAtCell(GetCellByPixelX(pixelX), GetCellByPixelY(pixelY));
         }
 
-        public static MapSquare GetMapSquareAtPixel(Vector2 pixelLocation) 
+        public static MapSquare GetMapSquareAtPixel(Vector2 pixelLocation)
         {
-            return GetMapSquareAtPixel((int)pixelLocation.X, (int)pixelLocation.Y);
+            return GetMapSquareAtPixel((int) pixelLocation.X, (int) pixelLocation.Y);
         }
+
         #endregion
 
         #region Information about the Map
 
-        public static int MapWidth { get { return Map.MapWidth; } }
-        public static int MapHeight { get { return Map.MapHeight; } }   
+        public static int MapWidth
+        {
+            get { return Map.MapWidth; }
+        }
+
+        public static int MapHeight
+        {
+            get { return Map.MapHeight; }
+        }
 
         public static string GetMapProperty(string name)
         {
@@ -255,16 +273,18 @@ namespace BlackDragonEngine.TileEngine
         {
             Map.Properties.Remove(name);
         }
+
         #endregion
 
         #region Drawing
-        public static void Draw(SpriteBatch spriteBatch)
-        { 
-            int startX = GetCellByPixelX((int)Camera.Position.X);
-            int endX = GetCellByPixelX((int)Camera.Position.X + Camera.ViewPortWidth);
 
-            int startY = GetCellByPixelY((int)Camera.Position.Y);
-            int endY = GetCellByPixelY((int)Camera.Position.Y + Camera.ViewPortHeight);
+        public static void Draw(SpriteBatch spriteBatch)
+        {
+            int startX = GetCellByPixelX((int) Camera.Position.X);
+            int endX = GetCellByPixelX((int) Camera.Position.X + Camera.ViewPortWidth);
+
+            int startY = GetCellByPixelY((int) Camera.Position.Y);
+            int endY = GetCellByPixelY((int) Camera.Position.Y + Camera.ViewPortHeight);
 
             foreach (var item in Map.MapData)
             {
@@ -274,7 +294,9 @@ namespace BlackDragonEngine.TileEngine
                     {
                         if (TileSourceRectangle(Map[item.Key].LayerTiles[z]) != null)
                         {
-                            spriteBatch.Draw(tileSheet, CellScreenRectangle(item.Key.X, item.Key.Y), TileSourceRectangle(Map[item.Key].LayerTiles[z]), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 1f - ((float)z * 0.1f));
+                            spriteBatch.Draw(tileSheet, CellScreenRectangle(item.Key.X, item.Key.Y),
+                                             TileSourceRectangle(Map[item.Key].LayerTiles[z]), Color.White, 0.0f,
+                                             Vector2.Zero, SpriteEffects.None, 1f - (z*0.1f));
                         }
                     }
                     if (EditorMode)
@@ -282,52 +304,61 @@ namespace BlackDragonEngine.TileEngine
                         DrawEditModeItems(spriteBatch, item.Key.X, item.Key.Y);
                     }
                 }
-            } 
-            if(EditorMode)
+            }
+            if (EditorMode)
             {
-                foreach(var cell in Map.Codes)
+                foreach (var cell in Map.Codes)
                 {
-                    var coords = cell.Key;
-                    spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(coords.X, coords.Y), new Rectangle(0, 0, TileWidth, TileHeight), new Color(0, 0, 255, 80), 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
-                    spriteBatch.DrawString(spriteFont, Map.Codes[coords].Count.ToString(), Camera.WorldToScreen(new Vector2(coords.X * TileWidth, coords.Y * TileHeight)), Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);
+                    Coords coords = cell.Key;
+                    spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(coords.X, coords.Y),
+                                     new Rectangle(0, 0, TileWidth, TileHeight), new Color(0, 0, 255, 80), 0f,
+                                     Vector2.Zero, SpriteEffects.None, 0.1f);
+                    spriteBatch.DrawString(spriteFont, Map.Codes[coords].Count.ToString(),
+                                           Camera.WorldToScreen(new Vector2(coords.X*TileWidth, coords.Y*TileHeight)),
+                                           Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);
                 }
             }
         }
 
         public static void DrawEditModeItems(SpriteBatch spriteBatch, int x, int y)
         {
-            if (!CellIsPassable(x, y)) 
+            if (!CellIsPassable(x, y))
             {
-                spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(x, y), new Rectangle(0,0, TileWidth, TileHeight), new Color(255, 0, 0, 80), 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
+                spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(x, y),
+                                 new Rectangle(0, 0, TileWidth, TileHeight), new Color(255, 0, 0, 80), 0f, Vector2.Zero,
+                                 SpriteEffects.None, 0.2f);
             }
         }
 
-        
 
         public static void DrawRectangleIndicator(SpriteBatch spriteBatch, MouseState ms, Vector2 startCell)
         {
             if ((ms.X > 0) && (ms.Y > 0) && (ms.X < Camera.ViewPortWidth) && (ms.Y < Camera.ViewPortHeight))
             {
                 Vector2 mouseLoc = Camera.ScreenToWorld(new Vector2(ms.X, ms.Y));
-                int cellX = (int)MathHelper.Clamp(TileMap.GetCellByPixelX((int)mouseLoc.X), 0, TileMap.MapWidth - 1);
-                int cellY = (int)MathHelper.Clamp(TileMap.GetCellByPixelY((int)mouseLoc.Y), 0, TileMap.MapHeight - 1);
+                var cellX = (int) MathHelper.Clamp(GetCellByPixelX((int) mouseLoc.X), 0, MapWidth - 1);
+                var cellY = (int) MathHelper.Clamp(GetCellByPixelY((int) mouseLoc.Y), 0, MapHeight - 1);
 
-                for (int cellx = (int)startCell.X; cellx <= cellX; ++cellx)
+                for (var cellx = (int) startCell.X; cellx <= cellX; ++cellx)
                 {
-                    for (int celly = (int)startCell.Y; celly <= cellY; ++celly)
+                    for (var celly = (int) startCell.Y; celly <= cellY; ++celly)
                     {
-                        spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(cellx, celly), new Rectangle(0, 0, TileWidth, TileHeight), new Color(1, 1, 1, 80), 0f, Vector2.Zero, SpriteEffects.None, 0f);
+                        spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(cellx, celly),
+                                         new Rectangle(0, 0, TileWidth, TileHeight), new Color(1, 1, 1, 80), 0f,
+                                         Vector2.Zero, SpriteEffects.None, 0f);
                     }
                 }
             }
         }
+
         #endregion
 
         #region Loading and Saving
-        public static void SaveMap(FileStream fileStream) 
+
+        public static void SaveMap(FileStream fileStream)
         {
-            GZipStream gzs = new GZipStream(fileStream, CompressionMode.Compress);
-            XmlSerializer xmlSer = new XmlSerializer(Map.GetType());  
+            var gzs = new GZipStream(fileStream, CompressionMode.Compress);
+            var xmlSer = new XmlSerializer(Map.GetType());
             xmlSer.Serialize(gzs, Map);
             gzs.Close();
             fileStream.Close();
@@ -335,15 +366,15 @@ namespace BlackDragonEngine.TileEngine
 
         public static void LoadMap(FileStream fileStream)
         {
-            try 
-            {               
-                GZipStream gzs = new GZipStream(fileStream, CompressionMode.Decompress);
-                XmlSerializer xmlSer = new XmlSerializer(Map.GetType());                
-                Map = (Map)xmlSer.Deserialize(gzs);
+            try
+            {
+                var gzs = new GZipStream(fileStream, CompressionMode.Decompress);
+                var xmlSer = new XmlSerializer(Map.GetType());
+                Map = (Map) xmlSer.Deserialize(gzs);
                 gzs.Close();
-                fileStream.Close();                
-            } 
-            catch 
+                fileStream.Close();
+            }
+            catch
             {
                 ClearMap();
                 fileStream.Close();
@@ -354,6 +385,7 @@ namespace BlackDragonEngine.TileEngine
         {
             Map = new Map();
         }
+
         #endregion
     }
 }

@@ -1,16 +1,16 @@
 ﻿using BlackDragonEngine.Components;
+using BlackDragonEngine.Entities;
+using BlackDragonEngine.Providers;
+using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using BlackDragonEngine.Providers;
-using BlackDragonEngine.Entities;
-using DareToEscape.Providers;
 
 namespace DareToEscape.Components.Entities
 {
-    class BossKillerComponent : GraphicsComponent
+    internal class BossKillerComponent : GraphicsComponent
     {
-        public bool setRectangle = true;
         public bool enabled = true;
+        public bool setRectangle = true;
 
         public BossKillerComponent()
         {
@@ -30,14 +30,14 @@ namespace DareToEscape.Components.Entities
                 {
                     enabled = false;
                     foreach (GameObject boss in GameVariableProvider.Bosses)
-                        boss.Send<string>("INACTIVE", null);                    
+                        boss.Send<string>("INACTIVE", null);
                 }
             }
         }
 
         public override void Draw(GameObject obj, SpriteBatch spriteBatch)
         {
-            if(enabled)
+            if (enabled)
                 base.Draw(obj, spriteBatch);
         }
     }

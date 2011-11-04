@@ -1,7 +1,7 @@
-﻿
-namespace BlackDragonEngine.Helpers
+﻿namespace BlackDragonEngine.Helpers
 {
     public delegate void SaveEvents();
+
     public delegate void LoadEvents();
 
     public class EventHelper

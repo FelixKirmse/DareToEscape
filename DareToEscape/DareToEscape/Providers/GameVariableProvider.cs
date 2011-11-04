@@ -4,7 +4,7 @@ using DareToEscape.Managers;
 
 namespace DareToEscape.Providers
 {
-    static class GameVariableProvider
+    internal static class GameVariableProvider
     {
         public static List<GameObject> Bosses = new List<GameObject>();
         public static BulletManager BulletManager { get; set; }

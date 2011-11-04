@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace BlackDragonEngine.Helpers
@@ -10,15 +7,15 @@ namespace BlackDragonEngine.Helpers
     {
         public static float NextFloat(this Random rand)
         {
-            return (float)rand.NextDouble();
+            return (float) rand.NextDouble();
         }
 
         public static float NextFloat(this Random rand, float min, float max)
-        { 
-            if(max < min)
+        {
+            if (max < min)
                 throw new ArgumentOutOfRangeException("max cannot be less than min");
 
-            return (float)rand.NextDouble() * (max - min) + min;
+            return (float) rand.NextDouble()*(max - min) + min;
         }
 
         public static Vector2 ToVector2(this Point p)
@@ -28,7 +25,7 @@ namespace BlackDragonEngine.Helpers
 
         public static Point ToPoint(this Vector2 v)
         {
-            return new Point((int)v.X, (int)v.Y);
+            return new Point((int) v.X, (int) v.Y);
         }
     }
 }

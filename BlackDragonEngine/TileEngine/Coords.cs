@@ -1,11 +1,15 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace BlackDragonEngine.TileEngine
+﻿namespace BlackDragonEngine.TileEngine
 {
     public struct Coords
     {
         public int X;
         public int Y;
+
+        public Coords(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
 
         public static Coords Left
         {
@@ -25,19 +29,13 @@ namespace BlackDragonEngine.TileEngine
         public static Coords Down
         {
             get { return new Coords(0, 1); }
-        }        
-
-        public Coords(int x, int y)
-        {            
-            X = x;
-            Y = y;
         }
 
         public override bool Equals(object obj)
         {
             if (!(obj is Coords))
                 return false;
-            return (X == ((Coords)obj).X && Y == ((Coords)obj).Y);
+            return (X == ((Coords) obj).X && Y == ((Coords) obj).Y);
         }
 
         public override int GetHashCode()
@@ -57,7 +55,7 @@ namespace BlackDragonEngine.TileEngine
 
         public static Coords operator /(Coords coords, int divisor)
         {
-            return new Coords(coords.X / divisor, coords.Y / divisor);
+            return new Coords(coords.X/divisor, coords.Y/divisor);
         }
 
         public static Coords operator +(Coords leftCoords, Coords rightCoords)
@@ -67,7 +65,7 @@ namespace BlackDragonEngine.TileEngine
 
         public static Coords operator *(Coords coords, int multiplicator)
         {
-            return new Coords(coords.X * multiplicator, coords.Y * multiplicator);
+            return new Coords(coords.X*multiplicator, coords.Y*multiplicator);
         }
 
         public override string ToString()

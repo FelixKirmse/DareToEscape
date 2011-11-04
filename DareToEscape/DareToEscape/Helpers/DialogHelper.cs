@@ -1,14 +1,14 @@
-﻿using DareToEscape.Providers;
-using BlackDragonEngine.Managers;
+﻿using BlackDragonEngine.Managers;
+using DareToEscape.Providers;
 
 namespace DareToEscape.Helpers
 {
-    static class DialogHelper
+    internal static class DialogHelper
     {
         public static void PlayDialog(string dialogName)
         {
             switch (dialogName)
-            { 
+            {
                 case "Tutorial1":
                     DialogManager.PlayDialog(DialogDictionaryProvider.TutorialDialog1(), "Tutorial1");
                     break;

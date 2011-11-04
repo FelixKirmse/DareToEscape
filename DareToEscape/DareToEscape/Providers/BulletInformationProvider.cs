@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using BlackDragonEngine.Helpers;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Providers
 {
@@ -22,17 +21,17 @@ namespace DareToEscape.Providers
         }
 
         public static BCircle GetBCircle(int id)
-        {           
-            Rectangle rect =  bulletGraphicRectangles[id];
+        {
+            Rectangle rect = bulletGraphicRectangles[id];
             Vector2 center = rect.Center.ToVector2() - new Vector2(rect.X, rect.Y);
-            float radius = rect.Width < rect.Height ? rect.Width * .33f : rect.Height * .33f;
+            float radius = rect.Width < rect.Height ? rect.Width*.33f : rect.Height*.33f;
             return new BCircle(center, radius);
         }
 
         public static void LoadBulletData(ContentManager content)
         {
             BulletSheet = content.Load<Texture2D>(@"textures/entities/bullets");
-            using (StreamReader sr = new StreamReader(Application.StartupPath + @"/Content/data/shotdata.txt"))
+            using (var sr = new StreamReader(Application.StartupPath + @"/Content/data/shotdata.txt"))
             {
                 string currentLine;
                 int counter = 0;
@@ -42,12 +41,12 @@ namespace DareToEscape.Providers
                     int id;
                     int x, y, width, height;
 
-                    if (String.IsNullOrWhiteSpace(currentLine))                    
+                    if (String.IsNullOrWhiteSpace(currentLine))
                         continue;
                     if (currentLine[0] == '/')
                         continue;
                     string[] splitLine = currentLine.Split(';');
-                    
+
                     if (!Int32.TryParse(splitLine[0], out id))
                         continue;
 
@@ -62,7 +61,7 @@ namespace DareToEscape.Providers
                         continue;
                     if (!Int32.TryParse(splitLine[3], out height))
                         continue;
-                                        
+
                     bulletGraphicRectangles.Add(id, new Rectangle(x, y, width - x, height - y));
                 }
             }

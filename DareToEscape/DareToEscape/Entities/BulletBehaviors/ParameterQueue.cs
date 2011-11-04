@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DareToEscape.Entities.BulletBehaviors
-{   
-    class ParameterQueue : IBehavior
+{
+    internal class ParameterQueue : IBehavior
     {
         private readonly Queue<Parameters> paramQueue;
-        private int frameCounter;
         private IBehavior behavior;
+        private int frameCounter;
 
         public ParameterQueue()
         {
@@ -24,11 +22,7 @@ namespace DareToEscape.Entities.BulletBehaviors
             this.behavior = behavior;
         }
 
-        public void AddTask(int modOnFrame, float? newSpeed, float? newAngle, float newTurnSpeed, float newAcceleration, float newSpeedLimit)
-        {
-            var newParams = new Parameters(modOnFrame, newSpeed, newAngle, newTurnSpeed, newAcceleration, newSpeedLimit);
-            paramQueue.Enqueue(newParams);
-        }
+        #region IBehavior Members
 
         public void Update(Bullet bullet)
         {
@@ -45,19 +39,29 @@ namespace DareToEscape.Entities.BulletBehaviors
             }
             behavior.Update(bullet);
         }
+
+        #endregion
+
+        public void AddTask(int modOnFrame, float? newSpeed, float? newAngle, float newTurnSpeed, float newAcceleration,
+                            float newSpeedLimit)
+        {
+            var newParams = new Parameters(modOnFrame, newSpeed, newAngle, newTurnSpeed, newAcceleration, newSpeedLimit);
+            paramQueue.Enqueue(newParams);
+        }
     }
 
     public struct Parameters
     {
         public int ModOnFrame;
-        public float? NewSpeed;
-        public float? NewAngle;
-        public float NewTurnSpeed;
         public float NewAcceleration;
-        public float NewSpeedLimit;
+        public float? NewAngle;
         public IBehavior NewBehavior;
+        public float? NewSpeed;
+        public float NewSpeedLimit;
+        public float NewTurnSpeed;
 
-        public Parameters(int modOnFrame, float? newSpeed, float? newAngle, float newTurnSpeed, float newAcceleration, float newSpeedLimit)
+        public Parameters(int modOnFrame, float? newSpeed, float? newAngle, float newTurnSpeed, float newAcceleration,
+                          float newSpeedLimit)
         {
             ModOnFrame = modOnFrame;
             NewSpeed = newSpeed;
@@ -68,7 +72,8 @@ namespace DareToEscape.Entities.BulletBehaviors
             NewBehavior = ReusableBehaviors.StandardBehavior;
         }
 
-        public Parameters(int modOnFrame, float? newSpeed, float? newAngle, float newTurnSpeed, float newAcceleration, float newSpeedLimit, IBehavior newBehavior)
+        public Parameters(int modOnFrame, float? newSpeed, float? newAngle, float newTurnSpeed, float newAcceleration,
+                          float newSpeedLimit, IBehavior newBehavior)
             : this(modOnFrame, newSpeed, newAngle, newTurnSpeed, newAcceleration, newSpeedLimit)
         {
             NewBehavior = newBehavior;

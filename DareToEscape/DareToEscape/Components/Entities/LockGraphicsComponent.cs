@@ -1,20 +1,20 @@
 ﻿using BlackDragonEngine.Components;
-using BlackDragonEngine.Providers;
-using Microsoft.Xna.Framework.Graphics;
-using BlackDragonEngine.Managers;
 using BlackDragonEngine.Entities;
-using Microsoft.Xna.Framework;
-using DareToEscape.Helpers;
+using BlackDragonEngine.Managers;
+using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
+using DareToEscape.Helpers;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Components.Entities
 {
-    class LockGraphicsComponent : GraphicsComponent
+    internal class LockGraphicsComponent : GraphicsComponent
     {
-        private bool setRectangle = true;
+        private Color drawColor;
         private bool enabled = true;
         private string keystring;
-        private Color drawColor;
+        private bool setRectangle = true;
 
         public LockGraphicsComponent()
         {
@@ -39,7 +39,7 @@ namespace DareToEscape.Components.Entities
                         TileMap.GetMapSquareAtPixel(obj.Position).Passable = true;
                     }
                 }
-                else 
+                else
                 {
                     TileMap.GetMapSquareAtPixel(obj.Position).Passable = false;
                 }
@@ -51,15 +51,15 @@ namespace DareToEscape.Components.Entities
             if (enabled)
             {
                 spriteBatch.Draw(
-                texture,
-                obj.ScreenPosition,
-                null,
-                drawColor,
-                0f,
-                Vector2.Zero,
-                1f,
-                SpriteEffects.None,
-                drawDepth);
+                    texture,
+                    obj.ScreenPosition,
+                    null,
+                    drawColor,
+                    0f,
+                    Vector2.Zero,
+                    1f,
+                    SpriteEffects.None,
+                    drawDepth);
             }
         }
 
@@ -69,7 +69,7 @@ namespace DareToEscape.Components.Entities
             {
                 if (obj is string)
                 {
-                    keystring = (string)(object)obj;
+                    keystring = (string) (object) obj;
                     switch (keystring)
                     {
                         case "RED":

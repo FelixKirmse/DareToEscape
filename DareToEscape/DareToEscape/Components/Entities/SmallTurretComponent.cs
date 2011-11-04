@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
 using BlackDragonEngine.Providers;
 using DareToEscape.Entities;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Components.Entities
 {
-    class SmallTurretComponent : TurretComponent
+    internal class SmallTurretComponent : TurretComponent
     {
         public SmallTurretComponent()
         {
@@ -13,12 +13,12 @@ namespace DareToEscape.Components.Entities
         }
 
         protected override IEnumerator<int> ShootBehavior(params float[] parameters)
-        {            
+        {
             for (int i = 0; i < 5; ++i)
             {
-                Bullet newBullet = new Bullet(bulletOrigin,1);                
+                var newBullet = new Bullet(bulletOrigin, 1);
                 newBullet.Shoot(newBullet.DirectionAngleToPlayer, 2f);
-                yield return 10;               
+                yield return 10;
             }
             yield return 120;
         }

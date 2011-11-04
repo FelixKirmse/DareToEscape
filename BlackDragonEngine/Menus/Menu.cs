@@ -1,18 +1,33 @@
 ﻿using System.Collections.Generic;
+using BlackDragonEngine.Helpers;
+using BlackDragonEngine.Providers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using BlackDragonEngine.Providers;
-using BlackDragonEngine.Helpers;
 
 namespace BlackDragonEngine.Menus
 {
     public class Menu
     {
+        public bool EnableMouseSelection = true;
+        protected string fontName = "Mono21";
         protected Vector2 itemOffset = new Vector2(0, 32);
         protected List<MenuItem> menuItems = new List<MenuItem>();
         protected List<MenuLabel> menuLabels = new List<MenuLabel>();
-        protected string fontName = "Mono21";
-        public bool EnableMouseSelection = true;
+
+        protected string SelectedItem
+        {
+            get
+            {
+                foreach (MenuItem menuItem in menuItems)
+                {
+                    if (menuItem.IsSelected)
+                    {
+                        return menuItem.ItemName;
+                    }
+                }
+                return null;
+            }
+        }
 
         public virtual void Update()
         {
@@ -29,14 +44,15 @@ namespace BlackDragonEngine.Menus
             if (EnableMouseSelection)
                 ResolveMouseSelection();
 
-            if (InputMapper.StrictAction || (EnableMouseSelection || ShortcutProvider.LeftButtonClickedNowButNotLastFrame()))
+            if (InputMapper.StrictAction ||
+                (EnableMouseSelection || ShortcutProvider.LeftButtonClickedNowButNotLastFrame()))
             {
                 SelectMenuItem();
             }
             foreach (MenuItem menuItem in menuItems)
             {
                 menuItem.Update();
-            }            
+            }
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
@@ -44,7 +60,8 @@ namespace BlackDragonEngine.Menus
             spriteBatch.Draw(
                 VariableProvider.WhiteTexture,
                 Vector2.Zero,
-                new Rectangle(0,0,VariableProvider.Game.Window.ClientBounds.Width,VariableProvider.Game.Window.ClientBounds.Height) ,
+                new Rectangle(0, 0, VariableProvider.Game.Window.ClientBounds.Width,
+                              VariableProvider.Game.Window.ClientBounds.Height),
                 new Color(0, 0, 0, 200),
                 0,
                 Vector2.Zero,
@@ -64,11 +81,13 @@ namespace BlackDragonEngine.Menus
         }
 
         protected void SetPositions()
-        { 
+        {
             for (int i = 0; i < menuItems.Count; ++i)
-                {
-                    menuItems[i].ItemPosition = ShortcutProvider.ScreenCenter - ShortcutProvider.GetFontCenter(fontName, menuItems[i].ItemName) + (i-2) * itemOffset;
-                } 
+            {
+                menuItems[i].ItemPosition = ShortcutProvider.ScreenCenter -
+                                            ShortcutProvider.GetFontCenter(fontName, menuItems[i].ItemName) +
+                                            (i - 2)*itemOffset;
+            }
         }
 
         public virtual void NextMenuItem()
@@ -107,7 +126,10 @@ namespace BlackDragonEngine.Menus
         {
             foreach (MenuItem menuItem in menuItems)
             {
-                if (ShortcutProvider.MouseIntersectsRectangle(ShortcutProvider.GetFontRectangle(menuItem.ItemPosition, fontName, menuItem.ItemName)))
+                if (
+                    ShortcutProvider.MouseIntersectsRectangle(ShortcutProvider.GetFontRectangle(menuItem.ItemPosition,
+                                                                                                fontName,
+                                                                                                menuItem.ItemName)))
                 {
                     foreach (MenuItem item in menuItems)
                         item.IsSelected = false;
@@ -130,23 +152,8 @@ namespace BlackDragonEngine.Menus
             }
         }
 
-        protected string SelectedItem
-        {
-            get
-            {
-                foreach (MenuItem menuItem in menuItems)
-                {
-                    if (menuItem.IsSelected)
-                    {
-                        return menuItem.ItemName;
-                    }
-                }
-                return null;
-            }
-        }
-
         public virtual void SelectMenuItem()
-        { 
+        {
         }
     }
 }

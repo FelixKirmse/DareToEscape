@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace RotatedRectangleCollisions
 {
-    class RotatedRectangle
+    internal class RotatedRectangle
     {
         public Rectangle CollisionRectangle;
-        public float Rotation;
         public Vector2 Origin;
-        
+        public float Rotation;
+
         public RotatedRectangle(Rectangle theRectangle, float theInitialRotation)
         {
             CollisionRectangle = theRectangle;
             Rotation = theInitialRotation;
-        
+
             //Calculate the Rectangles origin. We assume the center of the Rectangle will
             //be the point that we will be rotating around and we use that for the origin
-            Origin = new Vector2((int)theRectangle.Width / 2, (int)theRectangle.Height / 2);
+            Origin = new Vector2(theRectangle.Width/2, theRectangle.Height/2);
         }
 
         /// <summary>
@@ -33,6 +32,31 @@ namespace RotatedRectangleCollisions
         public RotatedRectangle(int x, int y, int width, int height, float rotation)
             : this(new Rectangle(x, y, width, height), MathHelper.ToRadians(rotation))
         {
+        }
+
+        public int X
+        {
+            get { return CollisionRectangle.X; }
+        }
+
+        public int Y
+        {
+            get { return CollisionRectangle.Y; }
+        }
+
+        public int Width
+        {
+            get { return CollisionRectangle.Width; }
+        }
+
+        public int Height
+        {
+            get { return CollisionRectangle.Height; }
+        }
+
+        public Rectangle AdjustedPosition
+        {
+            get { return new Rectangle(X + (Width/2), Y + (Height/2), Width, Height); }
         }
 
         /// <summary>
@@ -67,7 +91,7 @@ namespace RotatedRectangleCollisions
             //Calculate the Axis we will use to determine if a collision has occurred
             //Since the objects are rectangles, we only have to generate 4 Axis (2 for
             //each rectangle) since we know the other 2 on a rectangle are parallel.
-            List<Vector2> aRectangleAxis = new List<Vector2>();
+            var aRectangleAxis = new List<Vector2>();
             aRectangleAxis.Add(UpperRightCorner() - UpperLeftCorner());
             aRectangleAxis.Add(UpperRightCorner() - LowerRightCorner());
             aRectangleAxis.Add(theRectangle.UpperLeftCorner() - theRectangle.LowerLeftCorner());
@@ -88,7 +112,7 @@ namespace RotatedRectangleCollisions
 
             return true;
         }
-        
+
         /// <summary>
         /// Determines if a collision has occurred on an Axis of one of the
         /// planes parallel to the Rectangle
@@ -100,7 +124,7 @@ namespace RotatedRectangleCollisions
         {
             //Project the corners of the Rectangle we are checking on to the Axis and
             //get a scalar value of that project we can then use for comparison
-            List<int> aRectangleAScalars = new List<int>();
+            var aRectangleAScalars = new List<int>();
             aRectangleAScalars.Add(GenerateScalar(theRectangle.UpperLeftCorner(), aAxis));
             aRectangleAScalars.Add(GenerateScalar(theRectangle.UpperRightCorner(), aAxis));
             aRectangleAScalars.Add(GenerateScalar(theRectangle.LowerLeftCorner(), aAxis));
@@ -108,7 +132,7 @@ namespace RotatedRectangleCollisions
 
             //Project the corners of the current Rectangle on to the Axis and
             //get a scalar value of that project we can then use for comparison
-            List<int> aRectangleBScalars = new List<int>();
+            var aRectangleBScalars = new List<int>();
             aRectangleBScalars.Add(GenerateScalar(UpperLeftCorner(), aAxis));
             aRectangleBScalars.Add(GenerateScalar(UpperRightCorner(), aAxis));
             aRectangleBScalars.Add(GenerateScalar(LowerLeftCorner(), aAxis));
@@ -145,15 +169,15 @@ namespace RotatedRectangleCollisions
         {
             //Using the formula for Vector projection. Take the corner being passed in
             //and project it onto the given Axis
-            float aNumerator = (theRectangleCorner.X * theAxis.X) + (theRectangleCorner.Y * theAxis.Y);
-            float aDenominator = (theAxis.X * theAxis.X) + (theAxis.Y * theAxis.Y);
-            float aDivisionResult = aNumerator / aDenominator;
-            Vector2 aCornerProjected = new Vector2(aDivisionResult * theAxis.X, aDivisionResult * theAxis.Y);
-            
+            float aNumerator = (theRectangleCorner.X*theAxis.X) + (theRectangleCorner.Y*theAxis.Y);
+            float aDenominator = (theAxis.X*theAxis.X) + (theAxis.Y*theAxis.Y);
+            float aDivisionResult = aNumerator/aDenominator;
+            var aCornerProjected = new Vector2(aDivisionResult*theAxis.X, aDivisionResult*theAxis.Y);
+
             //Now that we have our projected Vector, calculate a scalar of that projection
             //that can be used to more easily do comparisons
-            float aScalar = (theAxis.X * aCornerProjected.X) + (theAxis.Y * aCornerProjected.Y);
-            return (int)aScalar;
+            float aScalar = (theAxis.X*aCornerProjected.X) + (theAxis.Y*aCornerProjected.Y);
+            return (int) aScalar;
         }
 
         /// <summary>
@@ -166,68 +190,40 @@ namespace RotatedRectangleCollisions
         /// <returns></returns>
         private Vector2 RotatePoint(Vector2 thePoint, Vector2 theOrigin, float theRotation)
         {
-            Vector2 aTranslatedPoint = new Vector2();
-            aTranslatedPoint.X = (float)(theOrigin.X + (thePoint.X - theOrigin.X) * Math.Cos(theRotation)
-                - (thePoint.Y - theOrigin.Y) * Math.Sin(theRotation));
-            aTranslatedPoint.Y = (float)(theOrigin.Y + (thePoint.Y - theOrigin.Y) * Math.Cos(theRotation)
-                + (thePoint.X - theOrigin.X) * Math.Sin(theRotation));
+            var aTranslatedPoint = new Vector2();
+            aTranslatedPoint.X = (float) (theOrigin.X + (thePoint.X - theOrigin.X)*Math.Cos(theRotation)
+                                          - (thePoint.Y - theOrigin.Y)*Math.Sin(theRotation));
+            aTranslatedPoint.Y = (float) (theOrigin.Y + (thePoint.Y - theOrigin.Y)*Math.Cos(theRotation)
+                                          + (thePoint.X - theOrigin.X)*Math.Sin(theRotation));
             return aTranslatedPoint;
         }
-                
+
         public Vector2 UpperLeftCorner()
         {
-            Vector2 aUpperLeft = new Vector2(CollisionRectangle.Left, CollisionRectangle.Top);
+            var aUpperLeft = new Vector2(CollisionRectangle.Left, CollisionRectangle.Top);
             aUpperLeft = RotatePoint(aUpperLeft, aUpperLeft + Origin, Rotation);
             return aUpperLeft;
         }
 
         public Vector2 UpperRightCorner()
         {
-            Vector2 aUpperRight = new Vector2(CollisionRectangle.Right, CollisionRectangle.Top);
+            var aUpperRight = new Vector2(CollisionRectangle.Right, CollisionRectangle.Top);
             aUpperRight = RotatePoint(aUpperRight, aUpperRight + new Vector2(-Origin.X, Origin.Y), Rotation);
             return aUpperRight;
         }
 
         public Vector2 LowerLeftCorner()
         {
-            Vector2 aLowerLeft = new Vector2(CollisionRectangle.Left, CollisionRectangle.Bottom);
+            var aLowerLeft = new Vector2(CollisionRectangle.Left, CollisionRectangle.Bottom);
             aLowerLeft = RotatePoint(aLowerLeft, aLowerLeft + new Vector2(Origin.X, -Origin.Y), Rotation);
             return aLowerLeft;
         }
 
         public Vector2 LowerRightCorner()
         {
-            Vector2 aLowerRight = new Vector2(CollisionRectangle.Right, CollisionRectangle.Bottom);
+            var aLowerRight = new Vector2(CollisionRectangle.Right, CollisionRectangle.Bottom);
             aLowerRight = RotatePoint(aLowerRight, aLowerRight + new Vector2(-Origin.X, -Origin.Y), Rotation);
             return aLowerRight;
-        }
-
-        public int X
-        {
-            get { return CollisionRectangle.X; }
-        }
-
-        public int Y
-        {
-            get { return CollisionRectangle.Y; }
-        }
-
-        public int Width
-        {
-            get { return CollisionRectangle.Width; }
-        }
-
-        public int Height
-        {
-            get { return CollisionRectangle.Height; }
-        }
-
-        public Rectangle AdjustedPosition
-        {
-            get
-            {
-                return new Rectangle(X + (Width / 2), Y + (Height / 2), Width, Height);
-            }
         }
     }
 }

@@ -1,11 +1,14 @@
-﻿
-namespace DareToEscape.Entities.BulletBehaviors
+﻿namespace DareToEscape.Entities.BulletBehaviors
 {
-    class TracingBehavior : IBehavior
+    internal class TracingBehavior : IBehavior
     {
+        #region IBehavior Members
+
         public void Update(Bullet bullet)
-        {                        
-            bullet.Position += bullet.DirectionVectorToPlayer * bullet.BaseSpeed;
+        {
+            bullet.Position += bullet.DirectionVectorToPlayer*bullet.BaseSpeed;
         }
+
+        #endregion
     }
 }

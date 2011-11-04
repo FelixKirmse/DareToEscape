@@ -1,42 +1,43 @@
+using BlackDragonEngine.Helpers;
+using BlackDragonEngine.Managers;
+using BlackDragonEngine.Providers;
+using BlackDragonEngine.Scripting;
+using DareToEscape.Editor;
 using DareToEscape.Helpers;
+using DareToEscape.Managers;
+using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using BlackDragonEngine.Providers;
-using DareToEscape.Managers;
-using BlackDragonEngine.Managers;
-using DareToEscape.Providers;
-using BlackDragonEngine.Scripting;
-using BlackDragonEngine.Helpers;
 
 namespace DareToEscape
-{    
-    public class DareToEscape : Microsoft.Xna.Framework.Game
+{
+    public class DareToEscape : Game
     {
         public static GraphicsDeviceManager Graphics;
-        SpriteBatch spriteBatch;
+        private SpriteBatch spriteBatch;
 
         public DareToEscape()
         {
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
-            ScriptEngine engine = new ScriptEngine(this);
+            var engine = new ScriptEngine(this);
             Components.Add(engine);
             VariableProvider.ScriptEngine = engine;
-            BulletManager bulletManager = new BulletManager(this);
-            Components.Add(bulletManager);
-            GameVariableProvider.BulletManager = bulletManager;
+            
         }
-        
+
         protected override void Initialize()
         {
             VariableProvider.Game = this;
-            GameInitializer.Initialize();            
+            GameInitializer.Initialize();
+            var bulletManager = new BulletManager(this);
+            Components.Add(bulletManager);
+            GameVariableProvider.BulletManager = bulletManager;
 
             Graphics.PreferredBackBufferWidth = 1280;
             Graphics.PreferredBackBufferHeight = 720;
-            Graphics.ApplyChanges();            
-            
+            Graphics.ApplyChanges();
+
             base.Initialize();
         }
 
@@ -45,39 +46,38 @@ namespace DareToEscape
             spriteBatch = new SpriteBatch(GraphicsDevice);
             ContentLoader.LoadContent(Content);
             MenuManager.Initialize();
-            Editor.EditorManager.Initialize();
+            EditorManager.Initialize();
         }
-               
+
         protected override void UnloadContent()
         {
-           
         }
-        
+
         protected override void Update(GameTime gameTime)
         {
             if (IsActive)
-            {                
+            {
                 VariableProvider.GameTime = gameTime;
                 InputProvider.Update();
-                StateManager.Update();                             
+                StateManager.Update();
             }
             base.Update(gameTime);
         }
-        
+
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);            
+            GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             StateManager.Draw(spriteBatch);
             GameVariableProvider.BulletManager.Draw(spriteBatch);
             spriteBatch.End();
             DrawHelper.Draw(spriteBatch);
-            
+
             base.Draw(gameTime);
         }
 
         public void OnLevelLoad()
-        {       
+        {
             CodeManager.CheckCodes();
         }
 

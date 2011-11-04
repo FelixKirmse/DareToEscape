@@ -11,14 +11,17 @@ namespace BlackDragonEngine.Dialogue
         /// The Dialog's Text to output
         /// </summary>
         public string Text { get; protected set; }
+
         /// <summary>
         /// The Mugshot that should be displayed
         /// </summary>
         public Texture2D MugShot { get; protected set; }
+
         /// <summary>
         /// The dialog that plays after this one, use "STOPDIALOG" if there is none
         /// </summary>
         public string NextDialog { get; protected set; }
+
         /// <summary>
         /// Name of the object speaking
         /// </summary>

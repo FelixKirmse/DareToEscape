@@ -3,7 +3,7 @@ using DareToEscape.Providers;
 
 namespace DareToEscape.Components.Entities
 {
-    class ExitGraphicsComponent : AnimatedGraphicsComponent
+    internal class ExitGraphicsComponent : AnimatedGraphicsComponent
     {
         public ExitGraphicsComponent()
         {

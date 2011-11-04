@@ -1,20 +1,21 @@
-﻿using Microsoft.Xna.Framework;
-using BlackDragonEngine.Providers;
+﻿using BlackDragonEngine.Providers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace BlackDragonEngine.Menus
 {
     public class MenuLabel
     {
-        public string Text { get; set; }
-        public Vector2 Position { get; set; }
-        private SpriteFont font;
+        private readonly SpriteFont font;
 
         public MenuLabel(string text, string fontName)
         {
             Text = text;
             font = FontProvider.GetFont(fontName);
         }
+
+        public string Text { get; set; }
+        public Vector2 Position { get; set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -29,6 +30,5 @@ namespace BlackDragonEngine.Menus
                 SpriteEffects.None,
                 .2f);
         }
-        
     }
 }

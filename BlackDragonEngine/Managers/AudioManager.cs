@@ -5,8 +5,9 @@ using Microsoft.Xna.Framework.Audio;
 namespace BlackDragonEngine.Managers
 {
     public static class AudioManager
-    {    
+    {
         #region Declarations
+
         private static AudioEngine audioEngine;
         private static SoundBank soundBank;
 
@@ -21,15 +22,17 @@ namespace BlackDragonEngine.Managers
 
         public static Cue CurrentBgmCue;
         private static Cue currentSfxCue;
+
         #endregion
 
         #region Initialization
+
         public static void Initialize(Dictionary<string, string> parameters)
         {
             try
             {
                 audioEngine = new AudioEngine(parameters["settingsFile"]);
-                bgmBank = new WaveBank(audioEngine, parameters["bgmBank"]);                
+                bgmBank = new WaveBank(audioEngine, parameters["bgmBank"]);
                 sfxBank = new WaveBank(audioEngine, parameters["sfxBank"]);
                 soundBank = new SoundBank(audioEngine, parameters["soundBank"]);
             }
@@ -46,9 +49,11 @@ namespace BlackDragonEngine.Managers
             sfxCategory.SetVolume(sfxVolume);
             bgmCategory.SetVolume(bgmVolume);
         }
+
         #endregion
 
         #region Cue Methods
+
         public static Cue GetCue(string cueName)
         {
             if (soundBank == null)
@@ -87,12 +92,14 @@ namespace BlackDragonEngine.Managers
             if (CurrentBgmCue != null)
                 CurrentBgmCue.Play();
         }
+
         #endregion
 
         #region Update and Volume Control
+
         public static void Update()
         {
-            if(audioEngine != null)
+            if (audioEngine != null)
                 audioEngine.Update();
         }
 
@@ -105,6 +112,7 @@ namespace BlackDragonEngine.Managers
         {
             sfxVolume = MathHelper.Clamp(volume, .1f, 10f);
         }
+
         #endregion
     }
 }

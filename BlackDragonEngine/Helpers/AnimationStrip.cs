@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BlackDragonEngine.Providers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using BlackDragonEngine.Providers;
 
 namespace BlackDragonEngine.Helpers
 {
@@ -10,74 +10,77 @@ namespace BlackDragonEngine.Helpers
     public class AnimationStrip
     {
         #region Declarations
-        private Texture2D texture;
-        private int frameWidth;
-        private int frameHeight;
-
-        private float frameTimer = 0f;
-        private float frameDelay = 0.05f;
 
         private int currentFrame;
+        private bool finishedPlaying;
+        private float frameDelay = 0.05f;
+        private int frameHeight;
+
+        private float frameTimer;
+        private int frameWidth;
 
         private bool loopAnimation = true;
-        private bool finishedPlaying = false;
+        private Texture2D texture;
 
-        private string name;
-        private string nextAnimation;
         #endregion
 
         #region Properties
-        public int FrameWidth {
+
+        public int FrameWidth
+        {
             get { return frameWidth; }
             set { frameWidth = value; }
         }
 
-        public int FrameHeight {
+        public int FrameHeight
+        {
             get { return frameHeight; }
             set { frameHeight = value; }
         }
 
-        public Texture2D Texture {
+        public Texture2D Texture
+        {
             get { return texture; }
             set { texture = value; }
         }
 
-        public string Name {
-            get { return name; }
-            set { name = value; }
-        }
+        public string Name { get; set; }
 
-        public string NextAnimation {
-            get { return nextAnimation; }
-            set { nextAnimation = value; }
-        }
+        public string NextAnimation { get; set; }
 
-        public bool LoopAnimation {
+        public bool LoopAnimation
+        {
             get { return loopAnimation; }
             set { loopAnimation = value; }
         }
 
-        public bool FinishedPlaying {
+        public bool FinishedPlaying
+        {
             get { return finishedPlaying; }
         }
 
-        public int FrameCount {
-            get { return texture.Width / frameWidth; }
+        public int FrameCount
+        {
+            get { return texture.Width/frameWidth; }
         }
 
-        public float FrameLength {
+        public float FrameLength
+        {
             get { return frameDelay; }
             set { frameDelay = value; }
         }
 
-        public Rectangle FrameRectangle {
-            get { return new Rectangle(currentFrame * frameWidth, 0, frameWidth, frameHeight); }            
+        public Rectangle FrameRectangle
+        {
+            get { return new Rectangle(currentFrame*frameWidth, 0, frameWidth, frameHeight); }
         }
+
         #endregion
 
         #region Constructor
+
         public AnimationStrip(Texture2D texture, int frameWidth, string name, bool loop)
-            :this(texture, frameWidth, name)
+            : this(texture, frameWidth, name)
         {
             loopAnimation = loop;
         }
@@ -88,16 +91,20 @@ namespace BlackDragonEngine.Helpers
             this.frameDelay = frameDelay;
         }
 
-        public AnimationStrip(Texture2D texture, int frameWidth, string name) {
+        public AnimationStrip(Texture2D texture, int frameWidth, string name)
+        {
             this.texture = texture;
             this.frameWidth = frameWidth;
-            this.frameHeight = texture.Height;
-            this.name = name;
+            frameHeight = texture.Height;
+            this.Name = name;
         }
+
         #endregion
 
         #region Public Methods
-        public void Play() {
+
+        public void Play()
+        {
             currentFrame = 0;
             finishedPlaying = false;
         }
@@ -106,13 +113,17 @@ namespace BlackDragonEngine.Helpers
         {
             float elapsed = ShortcutProvider.ElapsedSeconds;
             frameTimer += elapsed;
-            if (frameTimer >= frameDelay) {
+            if (frameTimer >= frameDelay)
+            {
                 ++currentFrame;
-                if (currentFrame >= FrameCount) {
-                    if (loopAnimation) {
+                if (currentFrame >= FrameCount)
+                {
+                    if (loopAnimation)
+                    {
                         currentFrame = 0;
                     }
-                    else {
+                    else
+                    {
                         currentFrame = FrameCount - 1;
                         finishedPlaying = true;
                     }
@@ -120,6 +131,7 @@ namespace BlackDragonEngine.Helpers
                 frameTimer = 0f;
             }
         }
+
         #endregion
     }
 }

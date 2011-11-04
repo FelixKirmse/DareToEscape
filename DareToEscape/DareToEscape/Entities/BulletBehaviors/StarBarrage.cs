@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DareToEscape.Entities.BulletBehaviors
+﻿namespace DareToEscape.Entities.BulletBehaviors
 {
-    class StarBarrage : IBehavior
+    internal class StarBarrage : IBehavior
     {
+        private readonly int modifier;
         private int counter;
-        private int modifier;
 
         public StarBarrage(int modifier)
         {
             this.modifier = modifier;
             counter = 0;
         }
+
+        #region IBehavior Members
 
         public void Update(Bullet bullet)
         {
@@ -24,9 +21,11 @@ namespace DareToEscape.Entities.BulletBehaviors
                 bullet.SpeedLimit = 3f;
                 bullet.BaseSpeed = 1f;
                 bullet.LaunchSpeed = 1f;
-            }            
+            }
             ReusableBehaviors.StandardBehavior.Update(bullet);
             counter++;
         }
+
+        #endregion
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using BlackDragonEngine.Providers;
 using BlackDragonEngine.Dialogue;
 using BlackDragonEngine.Helpers;
+using BlackDragonEngine.Providers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,24 +10,27 @@ namespace BlackDragonEngine.Managers
     public static class DialogManager
     {
         #region Declarations
+
         private static Dictionary<string, DialogScript> dialog;
 
-        private static Vector2 textPosition = new Vector2(100, 500);
-        private static Vector2 mugShotPosition = new Vector2(600, 500);
+        private static readonly Vector2 textPosition = new Vector2(100, 500);
+        private static readonly Vector2 mugShotPosition = new Vector2(600, 500);
 
         private static string currentDialogue;
 
         private static string displayText = "";
-        private static int currentChar = 0;
+        private static int currentChar;
 
         private static DialogueStates dialogState;
 
         private static SpriteFont font;
 
         public static bool DrawMugshot = true;
+
         #endregion
 
         #region Properties
+
         private static int TextLength
         {
             get { return dialog[currentDialogue].Text.Length; }
@@ -47,6 +50,7 @@ namespace BlackDragonEngine.Managers
         {
             get { return dialog[currentDialogue].SpeakerName; }
         }
+
         #endregion
 
         public static void Initialize()
@@ -64,7 +68,7 @@ namespace BlackDragonEngine.Managers
         }
 
         public static void Update()
-        {            
+        {
             if (dialogState == DialogueStates.Talking)
             {
                 if (currentChar < TextLength)
@@ -72,7 +76,7 @@ namespace BlackDragonEngine.Managers
                     displayText += NextChar;
                 }
                 else
-                {                    
+                {
                     dialogState = DialogueStates.Pause;
                 }
             }
@@ -105,7 +109,7 @@ namespace BlackDragonEngine.Managers
                 SpriteEffects.None,
                 0.2f);
 
-            if(DrawMugshot)
+            if (DrawMugshot)
                 spriteBatch.Draw(
                     dialog[currentDialogue].MugShot,
                     ShortcutProvider.Vector2Point(mugShotPosition),
@@ -126,7 +130,7 @@ namespace BlackDragonEngine.Managers
                 Vector2.Zero,
                 1,
                 SpriteEffects.None,
-                .2f);            
+                .2f);
 
             spriteBatch.Draw(
                 VariableProvider.WhiteTexture,

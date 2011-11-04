@@ -3,15 +3,15 @@ using System;
 namespace DareToEscape
 {
 #if WINDOWS || XBOX
-    static class Program
+    internal static class Program
     {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            using (DareToEscape game = new DareToEscape())
+            using (var game = new DareToEscape())
             {
                 game.Run();
             }
@@ -19,4 +19,3 @@ namespace DareToEscape
     }
 #endif
 }
-

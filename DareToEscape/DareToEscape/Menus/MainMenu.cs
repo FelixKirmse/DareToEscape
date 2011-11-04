@@ -1,17 +1,17 @@
-﻿using BlackDragonEngine.Menus;
+﻿using System.IO;
 using BlackDragonEngine.Helpers;
-using BlackDragonEngine.Providers;
-using DareToEscape.Managers;
 using BlackDragonEngine.Managers;
-using Microsoft.Xna.Framework;
-using System.IO;
-using DareToEscape.Helpers;
+using BlackDragonEngine.Menus;
+using BlackDragonEngine.Providers;
 using DareToEscape.Editor;
+using DareToEscape.Helpers;
+using DareToEscape.Managers;
+using Microsoft.Xna.Framework;
 
 namespace DareToEscape.Menus
 {
-    class MainMenu : Menu
-    {        
+    internal class MainMenu : Menu
+    {
         private const string newGame = "New Game";
         private const string resume = "Resume";
         private const string tutorial = "Play tutorial";
@@ -21,23 +21,25 @@ namespace DareToEscape.Menus
 
         public MainMenu()
         {
-            menuItems.Add(new MenuItem(resume, fontName, File.Exists(SaveManager<SaveState>.CurrentSaveFile), new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(newGame, fontName, !File.Exists(SaveManager<SaveState>.CurrentSaveFile), new Color(255, 0, 0), new Color(0, 255, 0)));
+            menuItems.Add(new MenuItem(resume, fontName, File.Exists(SaveManager<SaveState>.CurrentSaveFile),
+                                       new Color(255, 0, 0), new Color(0, 255, 0)));
+            menuItems.Add(new MenuItem(newGame, fontName, !File.Exists(SaveManager<SaveState>.CurrentSaveFile),
+                                       new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(tutorial, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(editor, fontName, false, new Color(255,0,0), new Color(0,255,0)));
+            menuItems.Add(new MenuItem(editor, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(fullScreen, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(quit, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
 
             EnableMouseSelection = false;
 
             SetPositions();
-        }      
+        }
 
         public override void Update()
         {
             if (InputMapper.StrictCancel)
                 VariableProvider.Game.Exit();
-            base.Update();           
+            base.Update();
         }
 
         public override void SelectMenuItem()
@@ -51,25 +53,25 @@ namespace DareToEscape.Menus
                     StateManager.GameState = GameStates.Ingame;
                     IngameManager.Activate();
                     LevelManager.LoadLevel("Level1");
-                    SaveManager<SaveState>.Save();                    
+                    SaveManager<SaveState>.Save();
                     break;
                 case resume:
                     StateManager.GameState = GameStates.Ingame;
                     IngameManager.Activate();
-                    SaveManager<SaveState>.Load(VariableProvider.SaveSlot);                    
-                    break;  
+                    SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
+                    break;
 
                 case tutorial:
                     StateManager.GameState = GameStates.Tutorial;
                     IngameManager.Activate();
                     LevelManager.LoadLevel("Tutorial");
-                    SaveManager<SaveState>.Save();                    
+                    SaveManager<SaveState>.Save();
                     break;
 
                 case editor:
                     EditorManager.Activate();
                     break;
-              
+
                 case fullScreen:
                     DareToEscape.ToggleFullScreen();
                     break;

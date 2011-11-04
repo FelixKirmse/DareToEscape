@@ -1,44 +1,39 @@
-﻿using BlackDragonEngine.Entities;
-using BlackDragonEngine.Components;
+﻿using BlackDragonEngine.Components;
+using BlackDragonEngine.Entities;
 using DareToEscape.Providers;
-using Microsoft.Xna.Framework.Graphics;
-using BlackDragonEngine.Providers;
-using Microsoft.Xna.Framework;
-using DareToEscape.Entities;
-using BlackDragonEngine.Helpers;
 
 namespace DareToEscape.Components.PlayerComponents
 {
-    class PlayerGraphicsComponent : AnimatedGraphicsComponent
-    {        
+    internal class PlayerGraphicsComponent : AnimatedGraphicsComponent
+    {
+        private bool focused;
         private bool onGround;
-        private bool focused;        
 
         public PlayerGraphicsComponent()
         {
-            this.currentAnimation = "Idle";
-            this.animations = AnimationDictionaryProvider.GetPlayerAnimations();
-            this.drawDepth = .85f;
+            currentAnimation = "Idle";
+            animations = AnimationDictionaryProvider.GetPlayerAnimations();
+            drawDepth = .85f;
             focused = false;
         }
 
         public override void Update(GameObject obj)
-        {            
-            if(receivedAnimation == "")
+        {
+            if (receivedAnimation == "")
             {
                 if (onGround)
                     receivedAnimation = "Idle";
             }
-                
+
             if (receivedAnimation != currentAnimation && receivedAnimation != "")
             {
                 PlayAnimation(receivedAnimation);
             }
-                        
+
             receivedAnimation = "";
 
             base.Update(obj);
-        }  
+        }
 
         public override void Receive<T>(string message, T obj)
         {
@@ -47,22 +42,22 @@ namespace DareToEscape.Components.PlayerComponents
             if (messageParts[0] == "GRAPHICS")
             {
                 if (messageParts[1] == "SET")
-                {   
+                {
                     if (messageParts[2] == "ONGROUND")
                     {
                         if (obj is bool)
-                            onGround = (bool)(object)obj;
+                            onGround = (bool) (object) obj;
                     }
 
                     if (messageParts[2] == "FOCUSED")
                     {
                         if (obj is bool)
-                            focused = (bool)(object)obj;
-                    }                   
-                } 
+                            focused = (bool) (object) obj;
+                    }
+                }
             }
 
-            base.Receive<T>(message, obj);
+            base.Receive(message, obj);
         }
     }
 }

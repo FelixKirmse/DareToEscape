@@ -157,10 +157,10 @@ namespace DareToEscape.Editor
         {
             if (Form.ActiveForm == parentForm)
             {
-                var ms = InputProvider.MouseState;
+                MouseState ms = InputProvider.MouseState;
                 if (!PlayLevel)
                 {
-                    var mod = 1;
+                    int mod = 1;
                     if (ShortcutProvider.IsKeyDown(Keys.LeftShift))
                     {
                         mod = 2;
@@ -333,7 +333,10 @@ namespace DareToEscape.Editor
 
             if (CurrentItem.Unique)
             {
-                var codesToRemove = (from item in TileMap.Map.Codes where TileMap.GetCellCodes(item.Key.X, item.Key.Y).Contains(CurrentItem.Code) select item.Key).ToList();
+                List<Coords> codesToRemove = (from item in TileMap.Map.Codes
+                                              where
+                                                  TileMap.GetCellCodes(item.Key.X, item.Key.Y).Contains(CurrentItem.Code)
+                                              select item.Key).ToList();
                 codesToRemove.ForEach(coords => TileMap.RemoveCodeFromCell(coords.X, coords.Y, CurrentItem.Code));
             }
 

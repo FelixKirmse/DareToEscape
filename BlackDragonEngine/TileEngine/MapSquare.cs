@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace BlackDragonEngine.TileEngine
 {
@@ -7,13 +6,16 @@ namespace BlackDragonEngine.TileEngine
     public class MapSquare
     {
         #region Declarations
-        public int?[] LayerTiles = new int?[3];        
+
+        public int?[] LayerTiles = new int?[3];
         public bool Passable = true;
+
         #endregion
 
         #region Constructor
+
         private MapSquare()
-        { 
+        {
         }
 
         public MapSquare(int layer, int? tile)
@@ -26,15 +28,19 @@ namespace BlackDragonEngine.TileEngine
         {
             LayerTiles[0] = background;
             LayerTiles[1] = interactive;
-            LayerTiles[2] = foreground;            
+            LayerTiles[2] = foreground;
             Passable = passable;
         }
+
         #endregion
 
         #region Public Methods
-        public void TogglePassable() {
+
+        public void TogglePassable()
+        {
             Passable = !Passable;
         }
+
         #endregion
     }
 }

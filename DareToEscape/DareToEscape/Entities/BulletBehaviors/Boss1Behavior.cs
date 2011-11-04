@@ -2,9 +2,11 @@
 
 namespace DareToEscape.Entities.BulletBehaviors
 {
-    class Boss1Behavior : IBehavior
+    internal class Boss1Behavior : IBehavior
     {
         private float timer;
+
+        #region IBehavior Members
 
         public void Update(Bullet bullet)
         {
@@ -12,13 +14,13 @@ namespace DareToEscape.Entities.BulletBehaviors
 
             if (timer < 500f)
             {
-                bullet.Position += bullet.DirectionVector * bullet.BaseSpeed * 2;
-            }            
+                bullet.Position += bullet.DirectionVector*bullet.BaseSpeed*2;
+            }
             else if (timer < 1500f)
             {
                 if (bullet.ChangedPosition)
-                {                    
-                    bullet.Direction = bullet.DirectionAngleToPlayer;                    
+                {
+                    bullet.Direction = bullet.DirectionAngleToPlayer;
                 }
             }
             else
@@ -26,5 +28,7 @@ namespace DareToEscape.Entities.BulletBehaviors
                 ReusableBehaviors.StandardBehavior.Update(bullet);
             }
         }
+
+        #endregion
     }
 }

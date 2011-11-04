@@ -1,15 +1,16 @@
-﻿using BlackDragonEngine.Menus;
+﻿using BlackDragonEngine;
 using BlackDragonEngine.Helpers;
-using DareToEscape.Managers;
 using BlackDragonEngine.Managers;
-using DareToEscape.Helpers;
+using BlackDragonEngine.Menus;
 using BlackDragonEngine.Providers;
+using DareToEscape.Editor;
+using DareToEscape.Helpers;
+using DareToEscape.Managers;
 using Microsoft.Xna.Framework;
-using BlackDragonEngine;
 
 namespace DareToEscape.Menus
 {
-    class IngameMenu : Menu
+    internal class IngameMenu : Menu
     {
         private const string resume = "Resume";
         private const string restartCheck = "Restart from last checkpoint";
@@ -23,16 +24,16 @@ namespace DareToEscape.Menus
             menuItems.Add(new MenuItem(resume, fontName, true, new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(restartCheck, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(restartLevel, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(mapeditor, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0))); 
+            menuItems.Add(new MenuItem(mapeditor, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(toggleFullscreen, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(back, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
 
             EnableMouseSelection = false;
             SetPositions();
-        }        
+        }
 
         public override void Update()
-        {            
+        {
             base.Update();
             if (InputMapper.StrictCancel)
             {
@@ -42,9 +43,9 @@ namespace DareToEscape.Menus
         }
 
         public override void SelectMenuItem()
-        {     
+        {
             switch (SelectedItem)
-            { 
+            {
                 case resume:
                     EngineStates.GameStates = EEngineStates.Running;
                     StateManager.GameState = GameStates.Ingame;
@@ -54,11 +55,11 @@ namespace DareToEscape.Menus
                     EngineStates.GameStates = EEngineStates.Running;
                     SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
                     StateManager.GameState = GameStates.Ingame;
-                    break;                
+                    break;
 
                 case mapeditor:
                     EngineStates.GameStates = EEngineStates.Running;
-                    Editor.EditorManager.Activate(LevelManager.CurrentLevel);
+                    EditorManager.Activate(LevelManager.CurrentLevel);
                     break;
 
                 case toggleFullscreen:
@@ -67,7 +68,7 @@ namespace DareToEscape.Menus
 
                 case back:
                     EngineStates.GameStates = EEngineStates.Running;
-                    StateManager.MenuState = MenuStates.Main;                    
+                    StateManager.MenuState = MenuStates.Main;
                     break;
 
                 case restartLevel:
@@ -75,7 +76,7 @@ namespace DareToEscape.Menus
                     StateManager.GameState = GameStates.Ingame;
                     LevelManager.ReloadLevel();
                     SaveManager<SaveState>.Save();
-                    break;                
+                    break;
             }
         }
     }

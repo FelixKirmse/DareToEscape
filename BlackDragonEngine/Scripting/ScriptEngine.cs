@@ -1,25 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace BlackDragonEngine.Scripting
 {
-    public delegate IEnumerator<int> Script(params float[] parameters);     
+    public delegate IEnumerator<int> Script(params float[] parameters);
 
     public class ScriptEngine : GameComponent
     {
-        private static readonly List<ScriptState> scripts = new List<ScriptState>();        
+        private static readonly List<ScriptState> scripts = new List<ScriptState>();
 
         public ScriptEngine(Game game)
             : base(game)
-        {           
+        {
         }
 
         public void ExecuteScript(Script script)
         {
-            ScriptState scriptState = new ScriptState(script);
+            var scriptState = new ScriptState(script);
             ExecuteScript(scriptState);
         }
 
@@ -34,9 +31,9 @@ namespace BlackDragonEngine.Scripting
 
         public void ExecuteScript(Script script, params float[] parameters)
         {
-            ScriptState scriptState = new ScriptState(script, parameters);
+            var scriptState = new ScriptState(script, parameters);
             ExecuteScript(scriptState);
-        }        
+        }
 
         public bool IsScriptRunning(Script script)
         {
@@ -57,27 +54,20 @@ namespace BlackDragonEngine.Scripting
                     scripts[i].Execute();
                 }
                 scripts.RemoveAll(s => s.IsComplete);
-            }            
-        }        
+            }
+        }
+
+        #region Nested type: ScriptState
 
         private class ScriptState
         {
-            private int sleepLength;
-            public Script Script { get; private set; }            
+            private readonly float[] scriptParameter;
             private IEnumerator<int> scriptEnumerator;
-            private float[] scriptParameter;
-
-            public bool IsComplete
-            {
-                get
-                {
-                    return Script == null;
-                }
-            }
+            private int sleepLength;
 
             public ScriptState(Script script)
             {
-                this.Script = script;                
+                Script = script;
                 scriptParameter = null;
             }
 
@@ -85,6 +75,13 @@ namespace BlackDragonEngine.Scripting
                 : this(script)
             {
                 scriptParameter = parameters;
+            }
+
+            public Script Script { get; private set; }
+
+            public bool IsComplete
+            {
+                get { return Script == null; }
             }
 
             public void Execute()
@@ -116,5 +113,7 @@ namespace BlackDragonEngine.Scripting
                 }
             }
         }
+
+        #endregion
     }
 }

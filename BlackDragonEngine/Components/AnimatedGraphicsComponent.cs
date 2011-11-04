@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.Helpers;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace BlackDragonEngine.Components
 {
@@ -10,28 +10,32 @@ namespace BlackDragonEngine.Components
     /// Component used for handling animated sprites.
     /// </summary>
     public class AnimatedGraphicsComponent : GraphicsComponent
-    {        
+    {
         /// <summary>
         /// Dictionary containing all animations
         /// </summary>
         protected Dictionary<string, AnimationStrip> animations;
-        /// <summary>
-        /// Should the graphic be flipped?
-        /// </summary>
-        protected bool flipped;
+
         /// <summary>
         /// Represents the animation that is currently being played
         /// </summary>
         protected string currentAnimation;
+
+        /// <summary>
+        /// Drawdepth of the sprite
+        /// </summary>
+        protected new float drawDepth = .91f;
+
+        /// <summary>
+        /// Should the graphic be flipped?
+        /// </summary>
+        protected bool flipped;
+
         /// <summary>
         /// Represents the lates animation received by other components
         /// </summary>
         protected string receivedAnimation;
-        /// <summary>
-        /// Drawdepth of the sprite
-        /// </summary>
-        new protected float drawDepth = .91f;
-               
+
         /// <summary>
         /// Draws the entity
         /// </summary>
@@ -63,26 +67,26 @@ namespace BlackDragonEngine.Components
         {
             updateAnimation();
         }
-        
+
         public override void Receive<T>(string message, T obj)
-        {         
+        {
             string[] messageParts = message.Split('_');
 
             if (messageParts[0] == "GRAPHICS")
             {
                 if (messageParts[1] == "SET")
-                {      
+                {
                     if (messageParts[2] == "FLIPPED")
                     {
                         if (obj is bool)
-                            flipped = (bool)(object)obj;
-                    }                    
+                            flipped = (bool) (object) obj;
+                    }
                 }
 
                 if (messageParts[1] == "PLAYANIMATION")
                 {
                     if (obj is string)
-                        receivedAnimation = (string)(object)obj;                    
+                        receivedAnimation = (string) (object) obj;
                 }
 
                 if (messageParts[1] == "SEND")
@@ -90,10 +94,10 @@ namespace BlackDragonEngine.Components
                     if (messageParts[3] == "CURRENTANIMATION")
                     {
                         if (obj is GameObject)
-                            ((GameObject)(object)obj).Send(messageParts[2] + "_SET_CURRENTANIMATION", currentAnimation);
+                            ((GameObject) (object) obj).Send(messageParts[2] + "_SET_CURRENTANIMATION", currentAnimation);
                     }
                 }
-            }        
+            }
         }
 
         /// <summary>

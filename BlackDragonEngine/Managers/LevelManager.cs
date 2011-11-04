@@ -1,8 +1,8 @@
-﻿using BlackDragonEngine.TileEngine;
-using Microsoft.Xna.Framework.Graphics;
-using System.IO;
+﻿using System.IO;
 using System.Windows.Forms;
 using BlackDragonEngine.Helpers;
+using BlackDragonEngine.TileEngine;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace BlackDragonEngine.Managers
 {
@@ -10,14 +10,15 @@ namespace BlackDragonEngine.Managers
 
     public static class LevelManager
     {
-        public static string CurrentLevel;        
+        public static string CurrentLevel;
 
         public static event OnLevelLoadEventHandler OnLevelLoad;
 
         public static void LoadLevel(string levelName)
         {
             CurrentLevel = levelName;
-            TileMap.LoadMap(new FileStream(Application.StartupPath + @"\Content\maps\" + levelName + ".map", FileMode.Open));
+            TileMap.LoadMap(new FileStream(Application.StartupPath + @"\Content\maps\" + levelName + ".map",
+                                           FileMode.Open));
             Camera.UpdateWorldRectangle();
             if (OnLevelLoad != null)
                 OnLevelLoad();

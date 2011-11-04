@@ -1,10 +1,13 @@
-﻿
-namespace DareToEscape.Editor
+﻿namespace DareToEscape.Editor
 {
-    enum ItemType {Entity, Tile}
+    internal enum ItemType
+    {
+        Entity,
+        Tile
+    }
 
-    class EditorItem
-    {   
+    internal class EditorItem
+    {
         public ItemType Type { get; set; }
         public string Code { get; set; }
         public string CodeAbove { get; set; }

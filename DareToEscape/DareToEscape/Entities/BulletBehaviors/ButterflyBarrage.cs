@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DareToEscape.Entities.BulletBehaviors
+﻿namespace DareToEscape.Entities.BulletBehaviors
 {
-    class ButterflyBarrage : IBehavior
+    internal class ButterflyBarrage : IBehavior
     {
+        private readonly float iterator;
+        private readonly int modifier;
         private int frameCounter;
-        private int modifier;
-        private float iterator;
 
         public ButterflyBarrage(int modifier, float iterator)
         {
@@ -17,16 +12,18 @@ namespace DareToEscape.Entities.BulletBehaviors
             this.iterator = iterator;
         }
 
+        #region IBehavior Members
+
         public void Update(Bullet bullet)
         {
             switch (frameCounter++)
-            { 
+            {
                 case 60:
                     bullet.BaseSpeed = 2;
                     bullet.LaunchSpeed = 2;
-                    bullet.TurnSpeed = .5f * modifier;
+                    bullet.TurnSpeed = .5f*modifier;
                     bullet.Acceleration = .1f;
-                    bullet.SpeedLimit = 1 + iterator / 4;
+                    bullet.SpeedLimit = 1 + iterator/4;
                     break;
 
                 case 120:
@@ -37,5 +34,7 @@ namespace DareToEscape.Entities.BulletBehaviors
             }
             ReusableBehaviors.StandardBehavior.Update(bullet);
         }
+
+        #endregion
     }
 }
