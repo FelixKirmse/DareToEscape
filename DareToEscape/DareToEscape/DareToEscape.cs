@@ -73,7 +73,7 @@ namespace DareToEscape
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             StateManager.Draw(spriteBatch);
-            GameVariableProvider.BulletManager.Draw(spriteBatch);
+            GameVariableProvider.BulletManager.Draw();
             spriteBatch.End();
             DrawHelper.Draw(spriteBatch);
 

@@ -13,7 +13,7 @@ namespace DareToEscape.Entities
     public struct Bullet
     {
         #region Fields
-        private readonly IBehavior _behavior;
+        public IBehavior Behavior;
         private Vector2 _lastPosition;
         private float _lastDirection;
         public float TurnSpeed;
@@ -111,7 +111,7 @@ namespace DareToEscape.Entities
         {
             _collisionCircle = BulletInformationProvider.GetBCircle(id);
             _texture = BulletInformationProvider.BulletSheet;
-            _behavior = ReusableBehaviors.StandardBehavior;
+            Behavior = ReusableBehaviors.StandardBehavior;
             BaseSpeed = 1f;
             SpeedLimit = 1f;
             AutomaticCollision = false;
@@ -136,7 +136,7 @@ namespace DareToEscape.Entities
         public Bullet(IBehavior behavior, Vector2 position, int id)
             : this(position, id)
         {
-            _behavior = behavior;
+            Behavior = behavior;
         }
 
         public Bullet(IBehavior behavior, Vector2 position, int id, BlendState blendState)
@@ -152,6 +152,7 @@ namespace DareToEscape.Entities
             if (KillTime == 0)
             {
                 Active = false;
+                bulletsToDelete.Add(id);
                 return this;
             }
                 
@@ -161,7 +162,7 @@ namespace DareToEscape.Entities
             }
             if (!Active || SpawnDelay != 0) return this;
 
-            _behavior.Update(ref this);
+            Behavior.Update(ref this);
             
             if (AutomaticCollision)
             {

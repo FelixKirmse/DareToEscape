@@ -12,10 +12,9 @@ namespace DareToEscape.Managers
 {
     internal class BulletManager : GameComponent
     {
-        private readonly List<Bullet> _bullets = new List<Bullet>(100000);
+        private readonly List<Bullet> _bullets = new List<Bullet>(50000);
         private readonly int _processorCount;
         private readonly Task[] _tasks;
-        readonly StringBuilder _sb = new StringBuilder();
         private readonly List<int> _bulletsToDelete = new List<int>(1000);  
 
         public BulletManager(Game game)
@@ -80,12 +79,9 @@ namespace DareToEscape.Managers
             _bulletsToDelete.Clear();
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
             if (StateManager.GameState != GameStates.Ingame && StateManager.GameState != GameStates.Editor) return;
-            _sb.Clear();
-            spriteBatch.DrawString(FontProvider.GetFont("Mono14"), _sb.Append(_bullets.Count).ToString(), new Vector2(100, 20),
-                                   Color.White);
             
             for(var i =0; i < _bullets.Count;++i)
             {

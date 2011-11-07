@@ -144,6 +144,7 @@
     <Compile Include="Entities\BulletBehaviors\IBehavior.cs" />
     <Compile Include="Entities\BulletBehaviors\ButterflyMayhem.cs" />
     <Compile Include="Entities\BulletBehaviors\ParameterQueue.cs" />
+    <Compile Include="Entities\BulletBehaviors\ParameterQueueFactory.cs" />
     <Compile Include="Entities\BulletBehaviors\ReusableBehaviors.cs" />
     <Compile Include="Entities\BulletBehaviors\Boss1Behavior.cs" />
     <Compile Include="Entities\BulletBehaviors\StandardBehavior.cs" />

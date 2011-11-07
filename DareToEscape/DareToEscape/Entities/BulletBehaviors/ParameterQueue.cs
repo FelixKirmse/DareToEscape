@@ -5,39 +5,40 @@ namespace DareToEscape.Entities.BulletBehaviors
 {
     internal class ParameterQueue : IBehavior
     {
-        private readonly Queue<Parameters> paramQueue;
-        private IBehavior behavior;
-        private int frameCounter;
+        private readonly Queue<Parameters> _paramQueue;
+        private IBehavior _behavior;
+        private int _frameCounter;
+        public readonly int ID;
 
-        public ParameterQueue()
+        internal ParameterQueue(int id)
         {
-            paramQueue = new Queue<Parameters>();
-            frameCounter = 0;
-            behavior = ReusableBehaviors.StandardBehavior;
-        }
-
-        public ParameterQueue(IBehavior behavior)
-            : this()
-        {
-            this.behavior = behavior;
+            ID = id;
+            _paramQueue = new Queue<Parameters>();
+            _frameCounter = 0;
+            _behavior = ReusableBehaviors.StandardBehavior;
         }
 
         #region IBehavior Members
 
         public void Update(ref Bullet bullet)
         {
-            frameCounter++;
-            if (paramQueue.Count > 0)
+            _frameCounter++;
+            if (_paramQueue.Count > 0)
             {
-                if (frameCounter == paramQueue.First().ModOnFrame)
+                if (_frameCounter == _paramQueue.First().ModOnFrame)
                 {
-                    Parameters p = paramQueue.Dequeue();
+                    var p = _paramQueue.Dequeue();
                     bullet.SetParameters(p);
-                    frameCounter = 0;
-                    behavior = p.NewBehavior;
+                    _frameCounter = 0;
+                    _behavior = p.NewBehavior;
+                    if(_paramQueue.Count == 0)
+                    {
+                        bullet.Behavior = _behavior;
+                        ParameterQueueFactory.SetInactive(this);
+                    }
                 }
             }
-            behavior.Update(ref bullet);
+            _behavior.Update(ref bullet);
         }
 
         #endregion
@@ -46,7 +47,7 @@ namespace DareToEscape.Entities.BulletBehaviors
                             float newSpeedLimit)
         {
             var newParams = new Parameters(modOnFrame, newSpeed, newAngle, newTurnSpeed, newAcceleration, newSpeedLimit);
-            paramQueue.Enqueue(newParams);
+            _paramQueue.Enqueue(newParams);
         }
     }
 

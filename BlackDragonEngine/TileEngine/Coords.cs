@@ -1,9 +1,13 @@
 ﻿namespace BlackDragonEngine.TileEngine
 {
-    public struct Coords
+    public sealed class Coords
     {
         public int X;
         public int Y;
+
+        public Coords()
+        {
+        }
 
         public Coords(int x, int y)
         {
