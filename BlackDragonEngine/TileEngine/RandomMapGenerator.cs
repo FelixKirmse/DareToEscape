@@ -32,6 +32,7 @@ namespace BlackDragonEngine.TileEngine
                     var coords = new Coords(x, y);
                     var square = new MapSquare(0, null, null, false);
                     TileMap.Map.MapData.Add(coords, square);
+                    TileMap.Map.ValidCoords.Add(coords);
                 }
             }
 
@@ -74,20 +75,21 @@ namespace BlackDragonEngine.TileEngine
         {
             for (int x = 0; x < _width; ++x)
             {
-                TileMap.Map.MapData.Remove(new Coords(x, 0));
+                TileMap.RemoveMapSquareAtCell(new Coords(x, 0));
+                
             }
             for (int x = 0; x < _height; ++x)
             {
-                TileMap.Map.MapData.Remove(new Coords(0, x));
+                TileMap.RemoveMapSquareAtCell(new Coords(0, x));
             }
 
             for (int x = 0; x < _width; ++x)
             {
-                TileMap.Map.MapData.Remove(new Coords(x, _height - 1));
+                TileMap.RemoveMapSquareAtCell(new Coords(x, _height - 1));
             }
             for (int x = 0; x < _height; ++x)
             {
-                TileMap.Map.MapData.Remove(new Coords(_width - 1, x));
+                TileMap.RemoveMapSquareAtCell(new Coords(_width - 1, x));
             }
         }
 

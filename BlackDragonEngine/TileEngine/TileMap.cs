@@ -291,8 +291,8 @@ namespace BlackDragonEngine.TileEngine
                     if (TileSourceRectangle(Map[coords].LayerTiles[z]) != null)
                     {
                         spriteBatch.Draw(tileSheet, CellScreenRectangle(coords.X, coords.Y),
-                                         TileSourceRectangle(Map[coords].LayerTiles[z]), Color.White, 0.0f,
-                                         Vector2.Zero, SpriteEffects.None, 1f - (z * 0.1f));
+                                            TileSourceRectangle(Map[coords].LayerTiles[z]), Color.White, 0.0f,
+                                            Vector2.Zero, SpriteEffects.None, 1f - (z * 0.1f));
                     }
                 }
                 if (EditorMode)
@@ -301,16 +301,18 @@ namespace BlackDragonEngine.TileEngine
                 }
             }
             if (!EditorMode) return;
+            
             foreach (var cell in Map.Codes)
             {
                 var coords = cell.Key;
                 spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(coords.X, coords.Y),
-                                 new Rectangle(0, 0, TileWidth, TileHeight), new Color(0, 0, 255, 80), 0f,
-                                 Vector2.Zero, SpriteEffects.None, 0.1f);
+                                    new Rectangle(0, 0, TileWidth, TileHeight), new Color(0, 0, 255, 80), 0f,
+                                    Vector2.Zero, SpriteEffects.None, 0.1f);
                 spriteBatch.DrawString(spriteFont, Map.Codes[coords].Count.ToString(),
-                                       Camera.WorldToScreen(new Vector2(coords.X * TileWidth, coords.Y * TileHeight)),
-                                       Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);
+                                        Camera.WorldToScreen(new Vector2(coords.X * TileWidth, coords.Y * TileHeight)),
+                                        Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);
             }
+            
         }
 
         private static void DrawEditModeItems(SpriteBatch spriteBatch, int x, int y)
@@ -318,8 +320,8 @@ namespace BlackDragonEngine.TileEngine
             if (!CellIsPassable(x, y))
             {
                 spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(x, y),
-                                 new Rectangle(0, 0, TileWidth, TileHeight), new Color(255, 0, 0, 80), 0f, Vector2.Zero,
-                                 SpriteEffects.None, 0.2f);
+                                    new Rectangle(0, 0, TileWidth, TileHeight), new Color(255, 0, 0, 80), 0f, Vector2.Zero,
+                                    SpriteEffects.None, 0.2f);
             }
         }
 
@@ -329,7 +331,7 @@ namespace BlackDragonEngine.TileEngine
             if ((ms.X <= 0) || (ms.Y <= 0) || (ms.X >= Camera.ViewPortWidth) || (ms.Y >= Camera.ViewPortHeight)) return;
             var mouseLoc = Camera.ScreenToWorld(new Vector2(ms.X, ms.Y));
             var cellX = (int) MathHelper.Clamp(GetCellByPixelX((int) mouseLoc.X), 0, MapWidth - 1);
-            var cellY = (int) MathHelper.Clamp(GetCellByPixelY((int) mouseLoc.Y), 0, MapHeight - 1);
+            int cellY = (int) MathHelper.Clamp(GetCellByPixelY((int) mouseLoc.Y), 0, MapHeight - 1);
 
             for (var cellx = (int) startCell.X; cellx <= cellX; ++cellx)
             {

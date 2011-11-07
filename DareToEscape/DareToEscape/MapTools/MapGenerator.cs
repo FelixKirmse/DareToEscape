@@ -45,7 +45,6 @@ namespace DareToEscape.MapTools
 
                 case GenerationState.SingleRemoving:
                     drawString = "Removing single blocks... " + Math.Round(((float) _cellCounter/_mapSize)*100f) + "%";
-                    ;
                     break;
             }
             spriteBatch.DrawString(FontProvider.GetFont("Mono14"), drawString,

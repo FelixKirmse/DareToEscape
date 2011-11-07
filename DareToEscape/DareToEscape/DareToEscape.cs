@@ -15,14 +15,14 @@ namespace DareToEscape
     public class DareToEscape : Game
     {
         public static GraphicsDeviceManager Graphics;
-        private SpriteBatch spriteBatch;
+        private SpriteBatch _spriteBatch;
 
         public DareToEscape()
         {
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsFixedTimeStep = false;
-            Graphics.SynchronizeWithVerticalRetrace = false;
+            //IsFixedTimeStep = false;
+            //Graphics.SynchronizeWithVerticalRetrace = false;
             var engine = new ScriptEngine(this);
             Components.Add(engine);
             VariableProvider.ScriptEngine = engine;
@@ -47,7 +47,7 @@ namespace DareToEscape
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
             ContentLoader.LoadContent(Content);
             MenuManager.Initialize();
             EditorManager.Initialize();
@@ -71,11 +71,11 @@ namespace DareToEscape
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            StateManager.Draw(spriteBatch);
+            _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            StateManager.Draw(_spriteBatch);
             GameVariableProvider.BulletManager.Draw();
-            spriteBatch.End();
-            DrawHelper.Draw(spriteBatch);
+            _spriteBatch.End();
+            DrawHelper.Draw(_spriteBatch);
 
             base.Draw(gameTime);
         }
