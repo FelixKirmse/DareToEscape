@@ -2,6 +2,7 @@ using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.Scripting;
+using BlackDragonEngine.TileEngine;
 using DareToEscape.Editor;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
@@ -20,6 +21,8 @@ namespace DareToEscape
         {
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            IsFixedTimeStep = false;
+            Graphics.SynchronizeWithVerticalRetrace = false;
             var engine = new ScriptEngine(this);
             Components.Add(engine);
             VariableProvider.ScriptEngine = engine;
@@ -28,6 +31,7 @@ namespace DareToEscape
 
         protected override void Initialize()
         {
+            VariableProvider.CoordList = new CoordList();
             VariableProvider.Game = this;
             GameInitializer.Initialize();
             var bulletManager = new BulletManager(this);
@@ -79,6 +83,7 @@ namespace DareToEscape
         public void OnLevelLoad()
         {
             CodeManager.CheckCodes();
+            GameVariableProvider.BulletManager.ClearAllBullets();
         }
 
         public static void ToggleFullScreen()

@@ -32,9 +32,11 @@ namespace DareToEscape.Components.Entities
         public Boss1Component()
         {
             texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/boss1");
+            phase = 5;
+            PhaseTimer = 534545;
         }
 
-        private int phaseTimer
+        private int PhaseTimer
         {
             get { return (int) timeTracker; }
             set { timeTracker = value; }
@@ -85,7 +87,7 @@ namespace DareToEscape.Components.Entities
 
         public override void Draw(GameObject obj, SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(FontProvider.GetFont("Mono14"), phaseTimer.ToString(), new Vector2(1000, 100),
+            spriteBatch.DrawString(FontProvider.GetFont("Mono14"), PhaseTimer.ToString(), new Vector2(1000, 100),
                                    Color.White);
             if (active || !SaveManager<SaveState>.CurrentSaveState.BossDead)
                 base.Draw(obj, spriteBatch);
@@ -158,14 +160,14 @@ namespace DareToEscape.Components.Entities
                             var bullet = new Bullet(bulletOrigin, 51);
                             bullet.Shoot(angle2, 3);
                             angle2 += 360f/12;
-                            bullet = new Bullet(bulletOrigin, 172);
+                            bullet = new Bullet(bulletOrigin, 172, BlendState.Additive);
                             bullet.Shoot(angle, 1);
                             angle += 360f/6;
                             float radian = MathHelper.ToRadians(angle3);
                             bullet =
                                 new Bullet(
                                     new Vector2(bulletOrigin.X + 100f*(float) Math.Cos(radian),
-                                                bulletOrigin.Y + 100f*(float) Math.Sin(radian)), 172);
+                                                bulletOrigin.Y + 100f*(float) Math.Sin(radian)), 172, BlendState.Additive);
                             bullet.TurnSpeed = .57f;
                             bullet.KillTime = 120;
                             bullet.Shoot(angle3 + 90, 1);
@@ -178,7 +180,7 @@ namespace DareToEscape.Components.Entities
                     {
                         for (int i = 0; i < 15; ++i)
                         {
-                            var bullet = new Bullet(bulletOrigin, 243);
+                            var bullet = new Bullet(bulletOrigin, 243, BlendState.Additive);
                             bullet.Shoot(angle4, 2.5f);
                             angle4 += 24f; //360f / 15;
                         }
@@ -262,7 +264,7 @@ namespace DareToEscape.Components.Entities
                 {
                     var pq = new ParameterQueue();
                     var bullet = new Bullet(pq, bulletOrigin, 51);
-                    bullet.Shoot(angle2, 8);
+                    bullet.Shoot(angle2, 5);
                     bullet.AutomaticCollision = false;
                     bullet.SetParameters(null, null, 0, -.1f, 1);
                     pq.AddTask(60, 1, angle2, 0, -.2f, -1);
@@ -286,7 +288,7 @@ namespace DareToEscape.Components.Entities
                     var pq = new ParameterQueue();
                     var bullet = new Bullet(pq,
                                             new Vector2(bulletOrigin.X - 120f*(float) Math.Cos(radian),
-                                                        bulletOrigin.Y - 120f*(float) Math.Sin(radian)), 172);
+                                                        bulletOrigin.Y - 120f*(float) Math.Sin(radian)), 172, BlendState.Additive);
                     bullet.Shoot(angle, 5);
                     bullet.SetParameters(null, null, mod, -.1f, 1);
                     pq.AddTask(150, rand.NextFloat(1f, 1.5f), angle, rand.NextFloat(-.2f, .2f), 0, 0);
@@ -299,7 +301,7 @@ namespace DareToEscape.Components.Entities
                     var pq = new ParameterQueue();
                     var bullet = new Bullet(pq,
                                             new Vector2(bulletOrigin.X + 120f*(float) Math.Cos(radian),
-                                                        bulletOrigin.Y + 120f*(float) Math.Sin(radian)), 176);
+                                                        bulletOrigin.Y + 120f*(float) Math.Sin(radian)), 176, BlendState.Additive);
                     bullet.Shoot(angle3 + 90, -1*mod);
                     bullet.SetParameters(null, null, -1*mod, 0, 0);
                     pq.AddTask(120, mod, angle3 + 90, 0, 0, 0);
@@ -494,15 +496,15 @@ namespace DareToEscape.Components.Entities
             {
                 case 1:
                 case 3:
-                    phaseTimer = 20;
+                    PhaseTimer = 20;
                     break;
 
                 case 5:
                 case 7:
-                    phaseTimer = 15;
+                    PhaseTimer = 15;
                     break;
                 default:
-                    phaseTimer = 30;
+                    PhaseTimer = 30;
                     break;
             }
         }

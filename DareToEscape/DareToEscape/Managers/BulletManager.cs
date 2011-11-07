@@ -12,11 +12,11 @@ namespace DareToEscape.Managers
 {
     internal class BulletManager : GameComponent
     {
-        private readonly List<Bullet> _bullets = new List<Bullet>();
+        private readonly List<Bullet> _bullets = new List<Bullet>(100000);
         private readonly int _processorCount;
-        private int _counter;
         private readonly Task[] _tasks;
         readonly StringBuilder _sb = new StringBuilder();
+        private readonly List<int> _bulletsToDelete = new List<int>(1000);  
 
         public BulletManager(Game game)
             : base(game)
@@ -53,7 +53,7 @@ namespace DareToEscape.Managers
                                                for(var j = bulletsToProcess * x; j < bulletsToProcess * x + bulletsToProcess; ++j)
                                                {
                                                    if (_bullets[j].Active)
-                                                        _bullets[j] = _bullets[j].Update();
+                                                        _bullets[j] = _bullets[j].Update(j, _bulletsToDelete);
                                                }
                                            });
             }
@@ -61,15 +61,23 @@ namespace DareToEscape.Managers
             for (var i = bulletsToProcess * _processorCount; i < bulletCount; ++i)
             {
                 if (_bullets[i].Active)
-                    _bullets[i] = _bullets[i].Update();
+                    _bullets[i] = _bullets[i].Update(i, _bulletsToDelete);
             }
             
             Task.WaitAll(_tasks);
-            
-            ++_counter;
-            if (_counter != 300) return;
-            _counter = 0;
-            _bullets.RemoveAll(s => !s.Active);
+
+            _bulletsToDelete.Sort((x, y) =>
+                                      {
+                                          if (x < y) return 1;
+                                          if (x > y) return -1;
+                                          return 0;
+                                      });
+            foreach(var id in _bulletsToDelete)
+            {
+                _bullets[id] = _bullets[_bullets.Count - 1];
+                _bullets.RemoveAt(_bullets.Count - 1);
+            }
+            _bulletsToDelete.Clear();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -79,10 +87,10 @@ namespace DareToEscape.Managers
             spriteBatch.DrawString(FontProvider.GetFont("Mono14"), _sb.Append(_bullets.Count).ToString(), new Vector2(100, 20),
                                    Color.White);
             
-            foreach (var bullet in _bullets)
+            for(var i =0; i < _bullets.Count;++i)
             {
-                if (!bullet.Active || !Camera.ViewPort.Contains(bullet.CircleCollisionCenter.ToPoint())) continue;
-                bullet.Draw();
+                if (!Camera.ViewPort.Contains(_bullets[i].CircleCollisionCenter.ToPoint())) continue;
+                _bullets[i].Draw();
             }
         }
     }

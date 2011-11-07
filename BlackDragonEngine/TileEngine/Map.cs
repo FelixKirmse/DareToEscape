@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BlackDragonEngine.Helpers;
+using BlackDragonEngine.Providers;
 
 namespace BlackDragonEngine.TileEngine
 {
@@ -11,6 +12,7 @@ namespace BlackDragonEngine.TileEngine
         public SerializableDictionary<Coords, List<string>> Codes = new SerializableDictionary<Coords, List<string>>();
         public SerializableDictionary<Coords, MapSquare> MapData = new SerializableDictionary<Coords, MapSquare>();
         public SerializableDictionary<string, string> Properties = new SerializableDictionary<string, string>();
+        public List<Coords> ValidCoords = new List<Coords>(); 
 
         public int MapWidth
         {
@@ -24,9 +26,9 @@ namespace BlackDragonEngine.TileEngine
 
         public MapSquare this[int x, int y]
         {
-            get { return this[new Coords(x, y)]; }
+            get { return this[VariableProvider.CoordList[x, y]]; }
 
-            set { this[new Coords(x, y)] = value; }
+            set { this[VariableProvider.CoordList[x, y]] = value; }
         }
 
         public MapSquare this[Coords coords]
@@ -40,7 +42,10 @@ namespace BlackDragonEngine.TileEngine
                     MapData[coords] = value;
                 }
                 else
+                {
                     MapData.Add(coords, value);
+                    ValidCoords.Add(coords);
+                }
             }
         }
     }

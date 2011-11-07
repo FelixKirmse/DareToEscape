@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
@@ -110,16 +111,12 @@ namespace DareToEscape.Entities
         {
             _collisionCircle = BulletInformationProvider.GetBCircle(id);
             _texture = BulletInformationProvider.BulletSheet;
-            Active = false;
             _behavior = ReusableBehaviors.StandardBehavior;
-            TurnSpeed = 0f;
             BaseSpeed = 1f;
-            Acceleration = 0f;
             SpeedLimit = 1f;
-            AutomaticCollision = true;
+            AutomaticCollision = false;
             KillTime = -1;
             _sourceRect = BulletInformationProvider.GetSourceRectangle(id);
-            _directionVector = new Vector2();
             _blendState = BlendState.AlphaBlend;
         }
 
@@ -127,7 +124,13 @@ namespace DareToEscape.Entities
         public Bullet(Vector2 position, int id)
             : this(id)
         {
-            Position = position;
+            Position = position - _collisionCircle.Position;
+        }
+
+        public Bullet(Vector2 position, int id, BlendState blendState)
+            : this(position, id)
+        {
+            _blendState = blendState;
         }
 
         public Bullet(IBehavior behavior, Vector2 position, int id)
@@ -143,11 +146,15 @@ namespace DareToEscape.Entities
         }
         #endregion
 
-        public Bullet Update()
+        public Bullet Update(int id, List<int> bulletsToDelete)
         {
             --KillTime;
             if (KillTime == 0)
+            {
                 Active = false;
+                return this;
+            }
+                
             if (SpawnDelay > 0)
             {
                 --SpawnDelay;
@@ -162,18 +169,22 @@ namespace DareToEscape.Entities
                     !Camera.WorldRectangle.Contains((int) Position.X, (int) Position.Y))
                 {
                     Active = false;
+                    bulletsToDelete.Add(id);
+                    return this;
                 }
             }
 
             if (CollisionCircle.Intersects(((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircle))
             {
                 Active = false;
+                bulletsToDelete.Add(id);
+                return this;
                 //VariableProvider.CurrentPlayer.Send<string>("KILL", null);
             }
 
             _lastDirection = Direction;
             _lastPosition = Position;
-            _rotation = MathHelper.ToRadians(_directionInDegrees);
+            _rotation = MathHelper.ToRadians(_directionInDegrees + 90f);
             return this;
         }
 
@@ -184,7 +195,7 @@ namespace DareToEscape.Entities
                                  Camera.WorldToScreen(Position + BCircleLocalCenter),
                                  _sourceRect,
                                  Color.White,
-                                 BaseSpeed < 0 ? _rotation += MathHelper.PiOver2 : _rotation,
+                                 BaseSpeed < 0 ? _rotation += MathHelper.Pi : _rotation,
                                  new Vector2((float)_sourceRect.Width / 2, (float)_sourceRect.Height / 2),
                                  1f,
                                  SpriteEffects.None,

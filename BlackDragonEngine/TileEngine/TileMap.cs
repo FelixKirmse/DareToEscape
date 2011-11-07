@@ -124,15 +124,13 @@ namespace BlackDragonEngine.TileEngine
 
         public static List<string> GetCellCodes(int cellX, int cellY)
         {
-            var coords = new Coords(cellX, cellY);
-            if (!Map.Codes.ContainsKey(coords))
-                return new List<string>();
-            return Map.Codes[coords];
+            var coords = VariableProvider.CoordList[cellX, cellY];
+            return !Map.Codes.ContainsKey(coords) ? new List<string>() : Map.Codes[coords];
         }
 
         public static void SetCellCodes(int cellX, int cellY, List<string> codes)
         {
-            var coords = new Coords(cellX, cellY);
+            var coords = VariableProvider.CoordList[cellX, cellY];
             if (codes.Count == 0)
             {
                 Map.Codes.Remove(coords);
@@ -151,7 +149,7 @@ namespace BlackDragonEngine.TileEngine
 
         public static void AddCodeToCell(int cellX, int cellY, string code)
         {
-            AddCodeToCell(new Coords(cellX, cellY), code);
+            AddCodeToCell(VariableProvider.CoordList[cellX, cellY], code);
         }
 
         public static void AddCodeToCell(Coords cell, string code)
@@ -170,7 +168,7 @@ namespace BlackDragonEngine.TileEngine
 
         public static void RemoveCodeFromCell(int cellX, int cellY, string code)
         {
-            var coords = new Coords(cellX, cellY);
+            var coords = VariableProvider.CoordList[cellX, cellY];
             if (Map.Codes.ContainsKey(coords))
             {
                 Map.Codes[coords].Remove(code);
@@ -185,13 +183,14 @@ namespace BlackDragonEngine.TileEngine
 
         public static void RemoveMapSquareAtCell(int tileX, int tileY)
         {
-            RemoveMapSquareAtCell(new Coords(tileX, tileY));
+            RemoveMapSquareAtCell(VariableProvider.CoordList[tileX, tileY]);
         }
 
         public static void RemoveMapSquareAtCell(Coords coords)
         {
             Map.MapData.Remove(coords);
             Map.Codes.Remove(coords);
+            Map.ValidCoords.Remove(coords);
         }
 
         public static MapSquare GetMapSquareAtCell(int tileX, int tileY)
@@ -215,7 +214,7 @@ namespace BlackDragonEngine.TileEngine
         {
             if ((tileX >= 0) && (tileY >= 0))
             {
-                MapSquare square = GetMapSquareAtCell(tileX, tileY);
+                var square = GetMapSquareAtCell(tileX, tileY);
                 if (square == null)
                 {
                     square = new MapSquare(layer, tileIndex);
@@ -258,10 +257,7 @@ namespace BlackDragonEngine.TileEngine
 
         public static string GetMapProperty(string name)
         {
-            if (Map.Properties.ContainsKey(name))
-                return Map.Properties[name];
-            else
-                return null;
+            return Map.Properties.ContainsKey(name) ? Map.Properties[name] : null;
         }
 
         public static void AddMapProperty(string name, string value)
@@ -280,47 +276,44 @@ namespace BlackDragonEngine.TileEngine
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            int startX = GetCellByPixelX((int) Camera.Position.X);
-            int endX = GetCellByPixelX((int) Camera.Position.X + Camera.ViewPortWidth);
+            var startX = GetCellByPixelX((int) Camera.Position.X);
+            var endX = GetCellByPixelX((int) Camera.Position.X + Camera.ViewPortWidth);
 
-            int startY = GetCellByPixelY((int) Camera.Position.Y);
-            int endY = GetCellByPixelY((int) Camera.Position.Y + Camera.ViewPortHeight);
+            var startY = GetCellByPixelY((int) Camera.Position.Y);
+            var endY = GetCellByPixelY((int) Camera.Position.Y + Camera.ViewPortHeight);
 
-            foreach (var item in Map.MapData)
+            for (var i = 0; i < Map.ValidCoords.Count; ++i )
             {
-                if (item.Key.X >= startX && item.Key.X <= endX && item.Key.Y >= startY && item.Key.Y <= endY)
+                var coords = Map.ValidCoords[i];
+                if (coords.X < startX || coords.X > endX || coords.Y < startY || coords.Y > endY) continue;
+                for (var z = 0; z < MapLayers; ++z)
                 {
-                    for (int z = 0; z < MapLayers; ++z)
+                    if (TileSourceRectangle(Map[coords].LayerTiles[z]) != null)
                     {
-                        if (TileSourceRectangle(Map[item.Key].LayerTiles[z]) != null)
-                        {
-                            spriteBatch.Draw(tileSheet, CellScreenRectangle(item.Key.X, item.Key.Y),
-                                             TileSourceRectangle(Map[item.Key].LayerTiles[z]), Color.White, 0.0f,
-                                             Vector2.Zero, SpriteEffects.None, 1f - (z*0.1f));
-                        }
+                        spriteBatch.Draw(tileSheet, CellScreenRectangle(coords.X, coords.Y),
+                                         TileSourceRectangle(Map[coords].LayerTiles[z]), Color.White, 0.0f,
+                                         Vector2.Zero, SpriteEffects.None, 1f - (z * 0.1f));
                     }
-                    if (EditorMode)
-                    {
-                        DrawEditModeItems(spriteBatch, item.Key.X, item.Key.Y);
-                    }
+                }
+                if (EditorMode)
+                {
+                    DrawEditModeItems(spriteBatch, coords.X, coords.Y);
                 }
             }
-            if (EditorMode)
+            if (!EditorMode) return;
+            foreach (var cell in Map.Codes)
             {
-                foreach (var cell in Map.Codes)
-                {
-                    Coords coords = cell.Key;
-                    spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(coords.X, coords.Y),
-                                     new Rectangle(0, 0, TileWidth, TileHeight), new Color(0, 0, 255, 80), 0f,
-                                     Vector2.Zero, SpriteEffects.None, 0.1f);
-                    spriteBatch.DrawString(spriteFont, Map.Codes[coords].Count.ToString(),
-                                           Camera.WorldToScreen(new Vector2(coords.X*TileWidth, coords.Y*TileHeight)),
-                                           Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);
-                }
+                var coords = cell.Key;
+                spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(coords.X, coords.Y),
+                                 new Rectangle(0, 0, TileWidth, TileHeight), new Color(0, 0, 255, 80), 0f,
+                                 Vector2.Zero, SpriteEffects.None, 0.1f);
+                spriteBatch.DrawString(spriteFont, Map.Codes[coords].Count.ToString(),
+                                       Camera.WorldToScreen(new Vector2(coords.X * TileWidth, coords.Y * TileHeight)),
+                                       Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);
             }
         }
 
-        public static void DrawEditModeItems(SpriteBatch spriteBatch, int x, int y)
+        private static void DrawEditModeItems(SpriteBatch spriteBatch, int x, int y)
         {
             if (!CellIsPassable(x, y))
             {
@@ -333,20 +326,18 @@ namespace BlackDragonEngine.TileEngine
 
         public static void DrawRectangleIndicator(SpriteBatch spriteBatch, MouseState ms, Vector2 startCell)
         {
-            if ((ms.X > 0) && (ms.Y > 0) && (ms.X < Camera.ViewPortWidth) && (ms.Y < Camera.ViewPortHeight))
-            {
-                Vector2 mouseLoc = Camera.ScreenToWorld(new Vector2(ms.X, ms.Y));
-                var cellX = (int) MathHelper.Clamp(GetCellByPixelX((int) mouseLoc.X), 0, MapWidth - 1);
-                var cellY = (int) MathHelper.Clamp(GetCellByPixelY((int) mouseLoc.Y), 0, MapHeight - 1);
+            if ((ms.X <= 0) || (ms.Y <= 0) || (ms.X >= Camera.ViewPortWidth) || (ms.Y >= Camera.ViewPortHeight)) return;
+            var mouseLoc = Camera.ScreenToWorld(new Vector2(ms.X, ms.Y));
+            var cellX = (int) MathHelper.Clamp(GetCellByPixelX((int) mouseLoc.X), 0, MapWidth - 1);
+            var cellY = (int) MathHelper.Clamp(GetCellByPixelY((int) mouseLoc.Y), 0, MapHeight - 1);
 
-                for (var cellx = (int) startCell.X; cellx <= cellX; ++cellx)
+            for (var cellx = (int) startCell.X; cellx <= cellX; ++cellx)
+            {
+                for (var celly = (int) startCell.Y; celly <= cellY; ++celly)
                 {
-                    for (var celly = (int) startCell.Y; celly <= cellY; ++celly)
-                    {
-                        spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(cellx, celly),
-                                         new Rectangle(0, 0, TileWidth, TileHeight), new Color(1, 1, 1, 80), 0f,
-                                         Vector2.Zero, SpriteEffects.None, 0f);
-                    }
+                    spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(cellx, celly),
+                                     new Rectangle(0, 0, TileWidth, TileHeight), new Color(1, 1, 1, 80), 0f,
+                                     Vector2.Zero, SpriteEffects.None, 0f);
                 }
             }
         }

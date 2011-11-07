@@ -1,6 +1,7 @@
 ﻿using System;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.Scripting;
+using BlackDragonEngine.TileEngine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,6 +17,7 @@ namespace BlackDragonEngine.Providers
         public static string SaveSlot { get; set; }
         public static ScriptEngine ScriptEngine { get; set; }
         public static int ProcessorCount { get; set; }
+        public static CoordList CoordList { get; set; }
 
         public static void GenerateNewRandomSeed()
         {
