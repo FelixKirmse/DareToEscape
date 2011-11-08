@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
@@ -39,12 +41,12 @@ namespace DareToEscape.MapTools
                     drawString = "Making walls hollow... " + Math.Round(((float) _cellCounter/_mapSize)*100f) + "%";
                     break;
 
-                case GenerationState.WallRemoving:
-                    drawString = "Removing outer walls...";
-                    break;
-
                 case GenerationState.SingleRemoving:
                     drawString = "Removing single blocks... " + Math.Round(((float) _cellCounter/_mapSize)*100f) + "%";
+                    break;
+
+                case GenerationState.Inverting:
+                    drawString = "Inverting Map (2 Pass)... " + Math.Round(((float)_mapGen.ProgressCounter/_mapGen.ProgressMax) * 100f) + "%";
                     break;
             }
             spriteBatch.DrawString(FontProvider.GetFont("Mono14"), drawString,
@@ -58,47 +60,64 @@ namespace DareToEscape.MapTools
             _task = Task.Factory.StartNew(() =>
                                               {
                                                   _cellCounter = 0;
-                                                  GameStates previousState = StateManager.GameState;
+                                                  var previousState = StateManager.GameState;
                                                   StateManager.GameState = GameStates.GeneratingMap;
                                                   _task.Wait(32);
                                                   _state = GenerationState.Digging;
-                                                  _mapGen.GenerateNewMap(50, 50, 500, 500);
+                                                  _mapGen.GenerateNewMap(200);
+                                                  _state = GenerationState.Inverting;
+                                                  _mapGen.InvertMap();  
                                                   _state = GenerationState.PlacingPlatforms;
-                                                  _mapSize = TileMap.MapWidth*TileMap.MapHeight;
-                                                  _mapGen.ManipulateCellsByCondition(PlacePlatform,
-                                                                                     CellHasNeighborToLeftOrRight);
-                                                  _state = GenerationState.Hollowing;
-                                                  _cellCounter = 0;
-                                                  _mapSize = TileMap.MapWidth*TileMap.MapHeight;
-                                                  _mapGen.RemoveCellsByCondition(CellSurroundedByBlocks);
-                                                  _state = GenerationState.WallRemoving;
-                                                  _mapGen.RemoveOuterWall();
+                                                  _mapSize = TileMap.MapWidth * TileMap.MapHeight;
+                                                  PlacePlatforms();
+                                                  /*_mapGen.ManipulateCellsByCondition(PlacePlatform,
+                                                                                     CellHasNeighborToLeftOrRight);*/
                                                   _state = GenerationState.SingleRemoving;
                                                   _mapSize = TileMap.MapWidth*TileMap.MapHeight*2;
                                                   _cellCounter = 0;
-                                                  _mapGen.RemoveCellsByCondition(CellOnlyHasOneNeighbor);
                                                   _mapGen.RemoveCellsByCondition(CellSurroundedByAir);
+                                                  _mapGen.RemoveCellsByCondition(CellOnlyHasOneNeighbor);
+                                                  RemoveMapgenCodes();
                                                   OnGenerationFinished();
                                                   StateManager.GameState = previousState;
                                               });
         }
 
+        private static void RemoveMapgenCodes()
+        {
+            foreach(var cell in TileMap.Map.MapData.Keys)
+            {
+                while (TileMap.Map.Codes[cell].Remove("AddedByInvert")) continue;
+            }
+            foreach(var cell in TileMap.Map.MapData.Keys)
+            {
+                if (TileMap.Map.Codes[cell].Count == 0)
+                    TileMap.Map.Codes.Remove(cell);
+            }
+        }
+
+        private static void PlacePlatforms()
+        {
+            var cellsToChange = (from cell in TileMap.Map.Codes where cell.Value.Contains("AddedByInvert") && cell.Value.Count > 5 && cell.Value.Count < 8 && CellHasNeighborToLeftOrRight(cell.Key) select cell.Key).ToList();
+            cellsToChange.ForEach(PlacePlatform);
+        }
+
         private static void PlacePlatform(Coords cell)
         {
-            TileMap.RemoveMapSquareAtCell(cell);
             TileMap.AddCodeToCell(cell, "JUMPTHROUGH");
             TileMap.AddCodeToCell(new Coords(cell.X, cell.Y - 1), "JUMPTHROUGHTOP");
             TileMap.SetTileAtCell(cell.X, cell.Y, 0, 1);
+            TileMap.Map[cell].Passable = true;
         }
 
 
         private static bool CellHasNeighborToLeftOrRight(Coords cell)
         {
             ++_cellCounter;
-            int neighborCount = 0;
-            for (int x = -1; x <= 1; ++x)
+            var neighborCount = 0;
+            for (var x = -1; x <= 1; ++x)
             {
-                for (int y = -1; y <= 1; ++y)
+                for (var y = -1; y <= 1; ++y)
                 {
                     if (x == 0 && y == 0)
                         continue;
@@ -116,58 +135,21 @@ namespace DareToEscape.MapTools
             ++_cellCounter;
             if (TileMap.CellIsPassable(cell))
                 return false;
-            int neighborCount = 0;
-            for (int x = -1; x <= 1; ++x)
-            {
-                for (int y = -1; y <= 1; ++y)
-                {
-                    if (x == 0 && y == 0)
-                        continue;
-                    if (!TileMap.CellIsPassable(cell + new Coords(x, y)))
-                        ++neighborCount;
-                }
-            }
+            var neighborCount = 0;
+            neighborCount += !TileMap.CellIsPassable(cell.UpLeft) ? 1 : 0;
+            neighborCount += !TileMap.CellIsPassable(cell.UpRight) ? 1 : 0;
+            neighborCount += !TileMap.CellIsPassable(cell.DownLeft) ? 1 : 0;
+            neighborCount += !TileMap.CellIsPassable(cell.DownRight) ? 1 : 0;
+            neighborCount += !TileMap.CellIsPassable(cell.Up) ? -4 : 0;
+            neighborCount += !TileMap.CellIsPassable(cell.Down) ? -4 : 0;
+            neighborCount += !TileMap.CellIsPassable(cell.Left) ? -4 : 0;
+            neighborCount += !TileMap.CellIsPassable(cell.Right) ? -4 : 0;
             return neighborCount == 1;
-        }
-
-        private static bool CellSurroundedByBlocks(Coords cell)
-        {
-            ++_cellCounter;
-            if (TileMap.CellIsPassable(cell))
-                return false;
-            for (int i = -1; i <= 1; ++i)
-            {
-                for (int j = -1; j <= 1; ++j)
-                {
-                    if (TileMap.CellIsPassable(cell + new Coords(i, j)))
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
         }
 
         private static bool CellSurroundedByAir(Coords cell)
         {
-            ++_cellCounter;
-            if (TileMap.CellIsPassable(cell))
-                return false;
-            for (int i = -1; i <= 1; ++i)
-            {
-                for (int j = -1; j <= 1; ++j)
-                {
-                    if (j == 0 && i == 0)
-                        continue;
-                    if (Math.Abs(j) == 1 && Math.Abs(i) == 1)
-                        continue;
-                    if (!TileMap.CellIsPassable(cell + new Coords(i, j)))
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
+            return TileMap.Map.Codes[cell].Count == 8 && !TileMap.Map.Codes[cell].Contains("JUMPTHROUGH");
         }
 
         #region Nested type: GenerationState
@@ -176,9 +158,9 @@ namespace DareToEscape.MapTools
         {
             Digging,
             Hollowing,
-            WallRemoving,
             SingleRemoving,
-            PlacingPlatforms
+            PlacingPlatforms,
+            Inverting
         }
 
         #endregion

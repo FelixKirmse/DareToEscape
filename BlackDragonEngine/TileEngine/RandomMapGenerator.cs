@@ -11,30 +11,15 @@ namespace BlackDragonEngine.TileEngine
 
     public class RandomMapGenerator
     {
-        public const int MaxDiggers = 100;
+        public static int MaxDiggers;
         private readonly List<Digger> _diggers = new List<Digger>();
-        private readonly Random _rand = VariableProvider.RandomSeed;
         public int AddedDiggers { get; private set; }
-    
-        private int _height;
-        private int _width;
 
-
-        public void GenerateNewMap(int minWidth, int minHeight, int maxWidth, int maxHeight)
+        public void GenerateNewMap(int maxDiggers)
         {
+            MaxDiggers = maxDiggers;
             TileMap.Map = new Map();
-            _width = _rand.Next(minWidth, maxWidth + 1);
-            _height = _rand.Next(minHeight, maxHeight + 1);
-
-            for (var x = 0; x < _width; ++x)
-            {
-                for (var y = 0; y < _height; ++y)
-                {
-                    var coords = new Coords(x, y);
-                    var square = new MapSquare(0, null, null, false);
-                    TileMap.Map.MapData.Add(coords, square);
-                }
-            }
+            _diggers.Clear();
 
             AddDigger(new Coords(0, 0));
             TileMap.AddCodeToCell(0, 0, "START");
@@ -57,9 +42,51 @@ namespace BlackDragonEngine.TileEngine
             ++AddedDiggers;
         }
 
+
+        public int ProgressMax;
+        public int ProgressCounter;
+
+        public void InvertMap()
+        {
+            var map = TileMap.Map;
+            ProgressMax = TileMap.Map.Codes.Count;
+            var cells = TileMap.Map.Codes.Keys.ToList();
+            foreach(var cell in cells)
+            {
+                ++ProgressCounter;
+                TileMap.AddCodeToCell(cell.Up, "AddedByInvert");
+                TileMap.AddCodeToCell(cell.Down, "AddedByInvert");
+                TileMap.AddCodeToCell(cell.Left, "AddedByInvert");
+                TileMap.AddCodeToCell(cell.Right, "AddedByInvert");
+                map[cell.Up] = new MapSquare(0, null, null, false);
+                TileMap.AddCodeToCell(cell.UpLeft, "AddedByInvert");
+                TileMap.AddCodeToCell(cell.UpRight, "AddedByInvert");
+                map[cell.Down] = new MapSquare(0, null, null, false);
+                map[cell.Left] = new MapSquare(0, null, null, false);
+                map[cell.Right] = new MapSquare(0, null, null, false);
+                TileMap.AddCodeToCell(cell.DownLeft, "AddedByInvert");
+                TileMap.AddCodeToCell(cell.DownRight, "AddedByInvert");
+                map[cell.UpLeft] = new MapSquare(0, null, null, false);
+                map[cell.UpRight] = new MapSquare(0, null, null, false);
+                map[cell.DownLeft] = new MapSquare(0, null, null, false);
+                map[cell.DownRight] = new MapSquare(0, null, null, false);
+            }
+            ProgressMax = map.MapData.Count;
+            ProgressCounter = 0;
+            RemoveCellsByCondition(cell =>
+                                       {
+                                           ++ProgressCounter;
+                                           return TileMap.GetCellCodes(cell).Contains("OriginalPlaced");
+                                       });
+            var codesToDelete =
+                (from cell in TileMap.Map.Codes where TileMap.Map.Codes[cell.Key].Contains("OriginalPlaced") select cell.Key).
+                    ToList();
+            codesToDelete.ForEach(cell => map.Codes[cell].RemoveAll(s => s == "OriginalPlaced"));
+        }
+
         public void RemoveCellsByCondition(CellCondition condition)
         {
-            ManipulateCellsByCondition(TileMap.RemoveMapSquareAtCell, condition);
+            ManipulateCellsByCondition(TileMap.RemoveEverythingAtCell, condition);
         }
 
         public void ManipulateCellsByCondition(CustomAction action, CellCondition condition)
@@ -69,131 +96,104 @@ namespace BlackDragonEngine.TileEngine
             cellsToManipulate.ForEach(cell => action(cell));
         }
 
-        public void RemoveOuterWall()
-        {
-            for (var x = 0; x < _width; ++x)
-            {
-                TileMap.RemoveMapSquareAtCell(new Coords(x, 0));
-                
-            }
-            for (var x = 0; x < _height; ++x)
-            {
-                TileMap.RemoveMapSquareAtCell(new Coords(0, x));
-            }
-
-            for (var x = 0; x < _width; ++x)
-            {
-                TileMap.RemoveMapSquareAtCell(new Coords(x, _height - 1));
-            }
-            for (var x = 0; x < _height; ++x)
-            {
-                TileMap.RemoveMapSquareAtCell(new Coords(_width - 1, x));
-            }
-        }
-
         #region Nested type: Digger
 
         private class Digger
         {
-            private readonly RandomMapGenerator mapGen;
-            private readonly Coords[] positions = new Coords[4];
+            private readonly RandomMapGenerator _mapGen;
+            private readonly Coords[] _positions = new Coords[4];
 
-            private readonly Random rand;
+            private readonly Random _rand;
 
             public Digger(Coords position, RandomMapGenerator mapGen)
             {
-                this.mapGen = mapGen;
+                _mapGen = mapGen;
                 Position = position;
-                rand = VariableProvider.RandomSeed;
-                foreach (Coords cell in positions)
+                _rand = VariableProvider.RandomSeed;
+                foreach (var cell in _positions)
                 {
-                    TileMap.RemoveMapSquareAtCell(cell);
+                    TileMap.SetSolidTileAtCell(cell);
+                    TileMap.AddUniqueCodeToCell(cell, "OriginalPlaced");
                 }
             }
 
-            public Digger(RandomMapGenerator mapGen)
-                : this(new Coords(TileMap.MapWidth/2, TileMap.MapHeight/2), mapGen)
+            private Coords Position
             {
-            }
-
-            public Coords Position
-            {
-                get { return positions[0]; }
+                get { return _positions[0]; }
                 set
                 {
-                    positions[0] = value;
-                    positions[1] = new Coords(value.X + 1, value.Y);
-                    positions[2] = new Coords(value.X, value.Y + 1);
-                    positions[3] = new Coords(value.X + 1, value.Y + 1);
+                    _positions[0] = value;
+                    _positions[1] = new Coords(value.X + 1, value.Y);
+                    _positions[2] = new Coords(value.X, value.Y + 1);
+                    _positions[3] = new Coords(value.X + 1, value.Y + 1);
                 }
             }
 
-            public bool LastManStanding { get; set; }
+            public bool LastManStanding { private get; set; }
 
             public bool Dig()
             {
-                List<Coords> diggableBlocks = getBlocksToDig();
+                var diggableBlocks = GetBlocksToDig();
 
                 if (diggableBlocks.Count > 0)
                 {
-                    Position = diggableBlocks[rand.Next(0, diggableBlocks.Count)];
-                    foreach (Coords cell in positions)
+                    Position = diggableBlocks[_rand.Next(0, diggableBlocks.Count)];
+                    foreach (var cell in _positions)
                     {
-                        TileMap.RemoveMapSquareAtCell(cell);
+                        TileMap.SetSolidTileAtCell(cell);
+                        TileMap.AddUniqueCodeToCell(cell, "OriginalPlaced");
                     }
-                    if (rand.Next(1, 101) < 4)
+                    if (_rand.Next(1, 101) < 4)
                     {
                         LastManStanding = false;
-                        mapGen.AddDigger(Position);
+                        _mapGen.AddDigger(Position);
                     }
                     return true;
                 }
                 return false;
             }
 
-            private List<Coords> getBlocksToDig()
+            private List<Coords> GetBlocksToDig()
             {
                 var possibleBlocks = new List<Coords>();
-                if (blockIsMineAble(positions[0] + Coords.Up))
+                if (BlockIsMineAble(_positions[0].Up))
                 {
-                    possibleBlocks.Add(positions[0] + Coords.Up);
+                    possibleBlocks.Add(_positions[0].Up);
                 }
-                if (blockIsMineAble(positions[1] + Coords.Up))
+                if (BlockIsMineAble(_positions[1].Up))
                 {
-                    possibleBlocks.Add(positions[0] + Coords.Up);
+                    possibleBlocks.Add(_positions[0].Up);
                 }
-                if (blockIsMineAble(positions[2] + Coords.Down))
+                if (BlockIsMineAble(_positions[2].Down))
                 {
-                    possibleBlocks.Add(positions[0] + Coords.Down);
+                    possibleBlocks.Add(_positions[0].Down);
                 }
-                if (blockIsMineAble(positions[3] + Coords.Down))
+                if (BlockIsMineAble(_positions[3].Down))
                 {
-                    possibleBlocks.Add(positions[0] + Coords.Down);
+                    possibleBlocks.Add(_positions[0].Down);
                 }
-                if (blockIsMineAble(positions[0] + Coords.Left))
+                if (BlockIsMineAble(_positions[0].Left))
                 {
-                    possibleBlocks.Add(positions[0] + Coords.Left);
+                    possibleBlocks.Add(_positions[0].Left);
                 }
-                if (blockIsMineAble(positions[2] + Coords.Left))
+                if (BlockIsMineAble(_positions[2].Left))
                 {
-                    possibleBlocks.Add(positions[0] + Coords.Left);
+                    possibleBlocks.Add(_positions[0].Left);
                 }
-                if (blockIsMineAble(positions[1] + Coords.Right))
+                if (BlockIsMineAble(_positions[1].Right))
                 {
-                    possibleBlocks.Add(positions[0] + Coords.Right);
+                    possibleBlocks.Add(_positions[0].Right);
                 }
-                if (blockIsMineAble(positions[3] + Coords.Right))
+                if (BlockIsMineAble(_positions[3].Right))
                 {
-                    possibleBlocks.Add(positions[0] + Coords.Right);
+                    possibleBlocks.Add(_positions[0].Right);
                 }
                 return possibleBlocks;
             }
 
-            private bool blockIsMineAble(Coords coords)
+            private bool BlockIsMineAble(Coords coords)
             {
-                if (LastManStanding)
-                    return true;
-                return !TileMap.CellIsPassable(coords);
+                return LastManStanding || TileMap.CellIsPassable(coords);
             }
         }
 

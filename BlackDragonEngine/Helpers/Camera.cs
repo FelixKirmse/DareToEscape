@@ -93,7 +93,7 @@ namespace BlackDragonEngine.Helpers
 
         public static void UpdateWorldRectangle()
         {
-            WorldRectangle = new Rectangle(TileMap.Map.LowestX, TileMap.Map.LowestY, TileMap.TileWidth*(TileMap.MapWidth + 1),
+            WorldRectangle = new Rectangle(TileMap.Map.LowestX * TileMap.TileWidth, TileMap.Map.LowestY * TileMap.TileHeight, TileMap.TileWidth*(TileMap.MapWidth + 1),
                                            TileMap.MapHeight*(TileMap.TileHeight + 1));
         }
 

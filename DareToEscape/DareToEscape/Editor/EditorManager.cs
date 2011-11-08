@@ -199,7 +199,7 @@ namespace DareToEscape.Editor
 
                                 if (RemoveTile)
                                 {
-                                    TileMap.RemoveMapSquareAtCell(cellX, cellY);
+                                    TileMap.RemoveEverythingAtCell(cellX, cellY);
                                 }
                             }
                             if (ShortcutProvider.RightButtonClicked())
@@ -250,7 +250,7 @@ namespace DareToEscape.Editor
 
                                             if (RemoveTile)
                                             {
-                                                TileMap.RemoveMapSquareAtCell(cellx, celly);
+                                                TileMap.RemoveEverythingAtCell(cellx, celly);
                                             }
                                         }
                                     }

@@ -151,17 +151,35 @@ namespace BlackDragonEngine.TileEngine
             return GetCellCodes((int) cell.X, (int) cell.Y);
         }
 
+        public static List<string> GetCellCodes(Coords cell)
+        {
+            return GetCellCodes(cell.X, cell.Y);
+        }
+
         public static void AddCodeToCell(int cellX, int cellY, string code)
         {
             AddCodeToCell(VariableProvider.CoordList[cellX, cellY], code);
+        }
+
+        public static void AddUniqueCodeToCell(Coords cell, string code)
+        {
+            if (!Map.Codes.ContainsKey(cell))
+            {
+                var codeList = new List<string> { code };
+                Map.Codes.Add(cell, codeList);
+            }
+            else
+            {
+                if(!Map.Codes[cell].Contains(code))
+                    Map.Codes[cell].Add(code);
+            }
         }
 
         public static void AddCodeToCell(Coords cell, string code)
         {
             if (!Map.Codes.ContainsKey(cell))
             {
-                var codeList = new List<string>();
-                codeList.Add(code);
+                var codeList = new List<string> {code};
                 Map.Codes.Add(cell, codeList);
             }
             else
@@ -183,15 +201,25 @@ namespace BlackDragonEngine.TileEngine
 
         #region Information about MapSquare objects
 
-        public static void RemoveMapSquareAtCell(int tileX, int tileY)
+        public static void RemoveEverythingAtCell(int tileX, int tileY)
         {
-            RemoveMapSquareAtCell(VariableProvider.CoordList[tileX, tileY]);
+            RemoveEverythingAtCell(VariableProvider.CoordList[tileX, tileY]);
+        }
+
+        public static void RemoveEverythingAtCell(Coords coords)
+        {
+            Map.MapData.Remove(coords);
+            Map.Codes.Remove(coords);
         }
 
         public static void RemoveMapSquareAtCell(Coords coords)
         {
             Map.MapData.Remove(coords);
-            Map.Codes.Remove(coords);
+        }
+
+        public static void SetSolidTileAtCell(Coords coords)
+        {
+            Map[coords] = new MapSquare(0, null, null, false);
         }
 
         public static MapSquare GetMapSquareAtCell(int cellX, int cellY)

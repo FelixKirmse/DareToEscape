@@ -14,24 +14,44 @@ namespace BlackDragonEngine.TileEngine
             Y = y;
         }
 
-        public static Coords Left
+        public Coords Left
         {
-            get { return new Coords(-1, 0); }
+            get { return new Coords(X - 1, Y); }
         }
 
-        public static Coords Right
+        public Coords Right
         {
-            get { return new Coords(1, 0); }
+            get { return new Coords(X + 1, Y); }
         }
 
-        public static Coords Up
+        public Coords Up
         {
-            get { return new Coords(0, -1); }
+            get { return new Coords(X, Y - 1); }
         }
 
-        public static Coords Down
+        public Coords Down
         {
-            get { return new Coords(0, 1); }
+            get { return new Coords(X, Y + 1); }
+        }
+
+        public Coords UpLeft
+        {
+            get { return new Coords(X - 1, Y - 1); }
+        }
+
+        public Coords UpRight
+        {
+            get { return new Coords(X + 1, Y - 1); }
+        }
+
+        public Coords DownLeft
+        {
+            get { return new Coords(X - 1, Y + 1); }
+        }
+
+        public Coords DownRight
+        {
+            get { return new Coords(X + 1, Y + 1); }
         }
 
         public override bool Equals(object obj)

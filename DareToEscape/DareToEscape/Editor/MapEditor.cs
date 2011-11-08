@@ -17,12 +17,12 @@ namespace DareToEscape.Editor
 {
     public partial class MapEditor : Form
     {
-        private readonly string cwd = Application.StartupPath + "/Content/maps";
+        private readonly string _cwd = Application.StartupPath + "/Content/maps";
 
-        private readonly string loadLevel;
+        private readonly string _loadLevel;
         public DareToEscape Game;
         private bool _updateMapSize = true;
-        private string currentMapName;
+        private string _currentMapName;
 
         public MapEditor()
         {
@@ -33,7 +33,7 @@ namespace DareToEscape.Editor
         public MapEditor(string levelName)
         {
             InitializeComponent();
-            loadLevel = levelName;
+            _loadLevel = levelName;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -191,7 +191,7 @@ namespace DareToEscape.Editor
             openFileDialog.ShowDialog();
             try
             {
-                TileMap.LoadMap(new FileStream(cwd + @"/" + currentMapName, FileMode.Open));
+                TileMap.LoadMap(new FileStream(_cwd + @"/" + _currentMapName, FileMode.Open));
             }
             catch
             {
@@ -240,19 +240,19 @@ namespace DareToEscape.Editor
         private void MapEditor_Shown(object sender, EventArgs e)
         {
             timerGameUpdate.Start();
-            openFileDialog.InitialDirectory = cwd;
-            saveFileDialog.InitialDirectory = cwd;
+            openFileDialog.InitialDirectory = _cwd;
+            saveFileDialog.InitialDirectory = _cwd;
 
-            if (loadLevel != null)
+            if (_loadLevel != null)
             {
-                TileMap.LoadMap(new FileStream(cwd + @"/" + loadLevel + ".map", FileMode.Open));
-                currentMapName = loadLevel + ".map";
+                TileMap.LoadMap(new FileStream(_cwd + @"/" + _loadLevel + ".map", FileMode.Open));
+                _currentMapName = _loadLevel + ".map";
             }
         }
 
         private void startGameButton_Click(object sender, EventArgs e)
         {
-            EditorManager.JumpToLevel(currentMapName.Replace(".map", ""));
+            EditorManager.JumpToLevel(_currentMapName.Replace(".map", ""));
         }
 
         private void backgroundRadioButton_CheckedChanged(object sender, EventArgs e)
@@ -388,32 +388,32 @@ namespace DareToEscape.Editor
 
         private void openFileDialog_FileOk(object sender, CancelEventArgs e)
         {
-            currentMapName = openFileDialog.SafeFileName;
+            _currentMapName = openFileDialog.SafeFileName;
         }
 
         private void saveFileDialog_FileOk(object sender, CancelEventArgs e)
         {
             string[] filePathArray = saveFileDialog.FileName.Split('\\');
-            currentMapName = filePathArray[filePathArray.Length - 1];
+            _currentMapName = filePathArray[filePathArray.Length - 1];
         }
 
         private void saveMapToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(currentMapName))
+            if (string.IsNullOrEmpty(_currentMapName))
                 saveFileDialog.ShowDialog();
-            if (!string.IsNullOrEmpty(currentMapName))
+            if (!string.IsNullOrEmpty(_currentMapName))
                 SaveMap();
         }
 
         private void SaveMap()
         {
-            TileMap.SaveMap(new FileStream(cwd + @"/" + currentMapName, FileMode.Create));
+            TileMap.SaveMap(new FileStream(_cwd + @"/" + _currentMapName, FileMode.Create));
         }
 
         private void newMapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TileMap.ClearMap();
-            currentMapName = "";
+            _currentMapName = "";
         }
 
         private void deleteCheckbox_CheckedChanged(object sender, EventArgs e)
