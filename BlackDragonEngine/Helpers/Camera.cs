@@ -7,9 +7,9 @@ namespace BlackDragonEngine.Helpers
     {
         #region Declarations
 
-        private static Vector2 position = Vector2.Zero;
-        private static Vector2 viewPortSize = Vector2.Zero;
-        private static Rectangle worldRectangle = new Rectangle(0, 0, 0, 0);
+        private static Vector2 _position;
+        private static Vector2 _viewPortSize;
+        private static Rectangle _worldRectangle;
 
         #endregion
 
@@ -17,37 +17,37 @@ namespace BlackDragonEngine.Helpers
 
         public static Vector2 ForcePosition
         {
-            get { return position; }
-            set { position = value; }
+            get { return _position; }
+            set { _position = value; }
         }
 
         public static Vector2 Position
         {
-            get { return position; }
+            get { return _position; }
             set
             {
-                position = new Vector2(
-                    MathHelper.Clamp(value.X, worldRectangle.X, worldRectangle.Width - ViewPortWidth),
-                    MathHelper.Clamp(value.Y, worldRectangle.Y, worldRectangle.Height - ViewPortHeight));
+                _position = new Vector2(
+                    MathHelper.Clamp(value.X, _worldRectangle.X, _worldRectangle.Width - ViewPortWidth),
+                    MathHelper.Clamp(value.Y, _worldRectangle.Y, _worldRectangle.Height - ViewPortHeight));
             }
         }
 
         public static Rectangle WorldRectangle
         {
-            get { return worldRectangle; }
-            set { worldRectangle = value; }
+            get { return _worldRectangle; }
+            set { _worldRectangle = value; }
         }
 
         public static int ViewPortWidth
         {
-            get { return (int) viewPortSize.X; }
-            set { viewPortSize.X = value; }
+            get { return (int) _viewPortSize.X; }
+            set { _viewPortSize.X = value; }
         }
 
         public static int ViewPortHeight
         {
-            get { return (int) viewPortSize.Y; }
-            set { viewPortSize.Y = value; }
+            get { return (int) _viewPortSize.Y; }
+            set { _viewPortSize.Y = value; }
         }
 
         public static Rectangle ViewPort
@@ -71,30 +71,30 @@ namespace BlackDragonEngine.Helpers
 
         public static Vector2 WorldToScreen(Vector2 worldLocation)
         {
-            return worldLocation - position;
+            return worldLocation - _position;
         }
 
         public static Rectangle WorldToScreen(Rectangle worldRectangle)
         {
-            return new Rectangle(worldRectangle.Left - (int) position.X, worldRectangle.Top - (int) position.Y,
+            return new Rectangle(worldRectangle.Left - (int) _position.X, worldRectangle.Top - (int) _position.Y,
                                  worldRectangle.Width, worldRectangle.Height);
         }
 
         public static Vector2 ScreenToWorld(Vector2 screenLocation)
         {
-            return screenLocation + position;
+            return screenLocation + _position;
         }
 
         public static Rectangle ScreenToWorld(Rectangle screenRectangle)
         {
-            return new Rectangle(screenRectangle.Left + (int) position.X, screenRectangle.Top + (int) position.Y,
+            return new Rectangle(screenRectangle.Left + (int) _position.X, screenRectangle.Top + (int) _position.Y,
                                  screenRectangle.Width, screenRectangle.Height);
         }
 
         public static void UpdateWorldRectangle()
         {
-            WorldRectangle = new Rectangle(0, 0, TileMap.TileWidth*TileMap.MapWidth,
-                                           TileMap.MapHeight*TileMap.TileHeight);
+            WorldRectangle = new Rectangle(TileMap.Map.LowestX, TileMap.Map.LowestY, TileMap.TileWidth*(TileMap.MapWidth + 1),
+                                           TileMap.MapHeight*(TileMap.TileHeight + 1));
         }
 
         #endregion

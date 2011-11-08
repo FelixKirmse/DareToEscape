@@ -52,19 +52,15 @@ namespace BlackDragonEngine.Managers
             SaveHelper.LoadHelp();
         }
 
-        public static string GetMD5Hash(string TextToHash)
+        private static string GetMD5Hash(string TextToHash)
         {
-            //Prüfen ob Daten übergeben wurden.
-            if ((TextToHash == null) || (TextToHash.Length == 0))
+            if (string.IsNullOrEmpty(TextToHash))
             {
                 return string.Empty;
             }
-
-            //MD5 Hash aus dem String berechnen. Dazu muss der string in ein Byte[]
-            //zerlegt werden. Danach muss das Resultat wieder zurück in ein string.
-            MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] textToHash = Encoding.Default.GetBytes(TextToHash);
-            byte[] result = md5.ComputeHash(textToHash);
+            var md5 = new MD5CryptoServiceProvider();
+            var textToHash = Encoding.Default.GetBytes(TextToHash);
+            var result = md5.ComputeHash(textToHash);
 
             return BitConverter.ToString(result);
         }

@@ -4,24 +4,22 @@ namespace BlackDragonEngine.TileEngine
 {
     public class CoordList
     {
-        private const int ComputeSize = 500;
-        private readonly List<List<Coords>> _coordsList = new List<List<Coords>>(ComputeSize);
 
-        public CoordList()
-        {
-            for (var x = 0; x <= ComputeSize; ++x)
-            {
-                _coordsList.Add(new List<Coords>(ComputeSize));
-                for (var y = 0; y <= ComputeSize; ++y)
-                {
-                    _coordsList[x].Add(new Coords(x,y));
-                }
-            }
-        }
+        private readonly List<Coords> _coords = new List<Coords>();
 
         public Coords this[int x, int y]
         {
-            get { return _coordsList[x][y]; }
+            get
+            {
+                for(var i = 0; i < _coords.Count; ++i)
+                {
+                    if (_coords[i].X == x && _coords[i].Y == y)
+                        return _coords[i];
+                }
+                var newCoords = new Coords(x, y);
+                _coords.Add(newCoords);
+                return newCoords;
+            }
         }
     }
 }

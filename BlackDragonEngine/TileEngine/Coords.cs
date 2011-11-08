@@ -1,13 +1,12 @@
-﻿namespace BlackDragonEngine.TileEngine
+﻿using System;
+
+namespace BlackDragonEngine.TileEngine
 {
+    [Serializable]
     public sealed class Coords
     {
-        public int X;
-        public int Y;
-
-        public Coords()
-        {
-        }
+        public readonly int X;
+        public readonly int Y;
 
         public Coords(int x, int y)
         {

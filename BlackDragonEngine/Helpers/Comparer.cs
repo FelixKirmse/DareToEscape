@@ -4,6 +4,7 @@ using BlackDragonEngine.TileEngine;
 
 namespace BlackDragonEngine.Helpers
 {
+    [Serializable]
     public class CoordComparer : IEqualityComparer<Coords>
     {
         public bool Equals(Coords c1, Coords c2)

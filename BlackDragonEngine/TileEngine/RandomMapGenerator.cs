@@ -14,7 +14,8 @@ namespace BlackDragonEngine.TileEngine
         public const int MaxDiggers = 100;
         private readonly List<Digger> _diggers = new List<Digger>();
         private readonly Random _rand = VariableProvider.RandomSeed;
-        public int AddedDiggers;
+        public int AddedDiggers { get; private set; }
+    
         private int _height;
         private int _width;
 
@@ -25,30 +26,27 @@ namespace BlackDragonEngine.TileEngine
             _width = _rand.Next(minWidth, maxWidth + 1);
             _height = _rand.Next(minHeight, maxHeight + 1);
 
-            for (int x = 0; x < _width; ++x)
+            for (var x = 0; x < _width; ++x)
             {
-                for (int y = 0; y < _height; ++y)
+                for (var y = 0; y < _height; ++y)
                 {
                     var coords = new Coords(x, y);
                     var square = new MapSquare(0, null, null, false);
                     TileMap.Map.MapData.Add(coords, square);
-                    TileMap.Map.ValidCoords.Add(coords);
                 }
             }
 
-            AddDigger(new Coords(2, 2));
-            TileMap.AddCodeToCell(2, 2, "START");
+            AddDigger(new Coords(0, 0));
+            TileMap.AddCodeToCell(0, 0, "START");
             do
             {
-                for (int i = 0; i < _diggers.Count; ++i)
+                for (var i = 0; i < _diggers.Count; ++i)
                 {
-                    if (!_diggers[i].Dig())
-                    {
-                        if (_diggers.Count > 1)
-                            _diggers.Remove(_diggers[i]);
-                        else
-                            _diggers[i].LastManStanding = true;
-                    }
+                    if (_diggers[i].Dig()) continue;
+                    if (_diggers.Count > 1)
+                        _diggers.Remove(_diggers[i]);
+                    else
+                        _diggers[i].LastManStanding = true;
                 }
             } while (AddedDiggers < MaxDiggers);
         }
@@ -66,28 +64,28 @@ namespace BlackDragonEngine.TileEngine
 
         public void ManipulateCellsByCondition(CustomAction action, CellCondition condition)
         {
-            List<Coords> cellsToManipulate =
+            var cellsToManipulate =
                 (from cell in TileMap.Map.MapData where condition(cell.Key) select cell.Key).ToList();
             cellsToManipulate.ForEach(cell => action(cell));
         }
 
         public void RemoveOuterWall()
         {
-            for (int x = 0; x < _width; ++x)
+            for (var x = 0; x < _width; ++x)
             {
                 TileMap.RemoveMapSquareAtCell(new Coords(x, 0));
                 
             }
-            for (int x = 0; x < _height; ++x)
+            for (var x = 0; x < _height; ++x)
             {
                 TileMap.RemoveMapSquareAtCell(new Coords(0, x));
             }
 
-            for (int x = 0; x < _width; ++x)
+            for (var x = 0; x < _width; ++x)
             {
                 TileMap.RemoveMapSquareAtCell(new Coords(x, _height - 1));
             }
-            for (int x = 0; x < _height; ++x)
+            for (var x = 0; x < _height; ++x)
             {
                 TileMap.RemoveMapSquareAtCell(new Coords(_width - 1, x));
             }
@@ -193,8 +191,6 @@ namespace BlackDragonEngine.TileEngine
 
             private bool blockIsMineAble(Coords coords)
             {
-                if (coords.X == 1 || coords.Y == 1 || coords.X == mapGen._width - 2 || coords.Y == mapGen._height - 2)
-                    return false;
                 if (LastManStanding)
                     return true;
                 return !TileMap.CellIsPassable(coords);

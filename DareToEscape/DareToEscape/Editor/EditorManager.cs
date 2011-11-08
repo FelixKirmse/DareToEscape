@@ -90,7 +90,7 @@ namespace DareToEscape.Editor
             Camera.ViewPortWidth = pictureBox.Width;
             Camera.ViewPortHeight = pictureBox.Height;
             Camera.UpdateWorldRectangle();
-            TileMap.spriteFont = FontProvider.GetFont("Mono8");
+            TileMap.SpriteFont = FontProvider.GetFont("Mono8");
             pictureBox_SizeChanged(null, null);
         }
 
@@ -155,41 +155,41 @@ namespace DareToEscape.Editor
 
         public static void Update()
         {
-            if (Form.ActiveForm == parentForm)
+            if (Form.ActiveForm != parentForm) return;
+            var ms = InputProvider.MouseState;
+            if (!PlayLevel)
             {
-                MouseState ms = InputProvider.MouseState;
-                if (!PlayLevel)
+                var mod = 1;
+                if (ShortcutProvider.IsKeyDown(Keys.LeftShift))
                 {
-                    int mod = 1;
-                    if (ShortcutProvider.IsKeyDown(Keys.LeftShift))
-                    {
-                        mod = 2;
-                    }
-                    if (InputMapper.Up)
-                    {
-                        Camera.ForcePosition -= new Vector2(0, 5)*mod;
-                    }
-                    if (InputMapper.Down)
-                    {
-                        Camera.ForcePosition += new Vector2(0, 5)*mod;
-                    }
-                    if (InputMapper.Left)
-                    {
-                        Camera.ForcePosition -= new Vector2(5, 0)*mod;
-                    }
-                    if (InputMapper.Right)
-                    {
-                        Camera.ForcePosition += new Vector2(5, 0)*mod;
-                    }
+                    mod = 2;
+                }
+                if (InputMapper.Up)
+                {
+                    Camera.ForcePosition -= new Vector2(0, 5)*mod;
+                }
+                if (InputMapper.Down)
+                {
+                    Camera.ForcePosition += new Vector2(0, 5)*mod;
+                }
+                if (InputMapper.Left)
+                {
+                    Camera.ForcePosition -= new Vector2(5, 0)*mod;
+                }
+                if (InputMapper.Right)
+                {
+                    Camera.ForcePosition += new Vector2(5, 0)*mod;
+                }
 
-                    if ((ms.X > 0) && (ms.Y > 0) && (ms.X < Camera.ViewPortWidth) && (ms.Y < Camera.ViewPortHeight))
-                    {
-                        Vector2 mouseLoc = Camera.ScreenToWorld(new Vector2(ms.X, ms.Y));
-                        var cellX = (int) MathHelper.Max(TileMap.GetCellByPixelX((int) mouseLoc.X), 0);
-                        var cellY = (int) MathHelper.Max(TileMap.GetCellByPixelY((int) mouseLoc.Y), 0);
+                if ((ms.X > 0) && (ms.Y > 0) && (ms.X < Camera.ViewPortWidth) && (ms.Y < Camera.ViewPortHeight))
+                {
+                    var mouseLoc = Camera.ScreenToWorld(new Vector2(ms.X, ms.Y));
+                    var cellX = TileMap.GetCellByPixelX((int) mouseLoc.X);
+                    var cellY = TileMap.GetCellByPixelY((int) mouseLoc.Y);
 
-                        if (FillMode == "TILEFILL")
-                        {
+                    switch (FillMode)
+                    {
+                        case "TILEFILL":
                             if (ShortcutProvider.LeftButtonClicked())
                             {
                                 if (SmartInsert)
@@ -202,7 +202,6 @@ namespace DareToEscape.Editor
                                     TileMap.RemoveMapSquareAtCell(cellX, cellY);
                                 }
                             }
-
                             if (ShortcutProvider.RightButtonClicked())
                             {
                                 if (SettingCode)
@@ -226,9 +225,8 @@ namespace DareToEscape.Editor
                                     TileMap.SetTileAtCell(cellX, cellY, DrawLayer, DrawTile);
                                 }
                             }
-                        }
-                        else if (FillMode == "RECTANGLEFILL")
-                        {
+                            break;
+                        case "RECTANGLEFILL":
                             if (ShortcutProvider.LeftButtonClickedNowButNotLastFrame())
                             {
                                 if (!WaitingForSecondClick)
@@ -295,15 +293,15 @@ namespace DareToEscape.Editor
                                 }
                             }
                             CellCoords = new Vector2(cellX, cellY);
-                        }
+                            break;
                     }
-                    CodeManager.CheckCodes();
                 }
-                else
-                {
-                    EntityManager.Update();
-                    CodeManager.CheckPlayerCodes();
-                }
+                CodeManager.CheckCodes();
+            }
+            else
+            {
+                EntityManager.Update();
+                CodeManager.CheckPlayerCodes();
             }
         }
 
@@ -318,7 +316,7 @@ namespace DareToEscape.Editor
 
         #endregion
 
-        public static void InsertEditorItem(int cellX, int cellY)
+        private static void InsertEditorItem(int cellX, int cellY)
         {
             if (CurrentItem == null)
                 return;

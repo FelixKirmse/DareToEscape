@@ -9,28 +9,52 @@ namespace BlackDragonEngine.TileEngine
     [Serializable]
     public class Map
     {
-        public SerializableDictionary<Coords, List<string>> Codes;
-        public SerializableDictionary<Coords, MapSquare> MapData;
-        public SerializableDictionary<string, string> Properties;
-        public List<Coords> ValidCoords; 
+        public Dictionary<Coords, List<string>> Codes;
+        public Dictionary<Coords, MapSquare> MapData;
+        public Dictionary<string, string> Properties;
 
         public Map()
         {
             var comparer = new CoordComparer();
-            Codes = new SerializableDictionary<Coords, List<string>>(comparer);
-            MapData = new SerializableDictionary<Coords, MapSquare>(comparer);
-            Properties = new SerializableDictionary<string, string>();
-            ValidCoords = new List<Coords>();
+            Codes = new Dictionary<Coords, List<string>>(comparer);
+            MapData = new Dictionary<Coords, MapSquare>(comparer);
+            Properties = new Dictionary<string, string>();
         }
 
         public int MapWidth
         {
-            get {return MapData.Select(item => item.Key.X).Concat(new[] {0}).Max() + 1; }
+            get { return HighestX - LowestX; }
         }
 
         public int MapHeight
         {
-            get { return MapData.Select(item => item.Key.Y).Concat(new[] {0}).Max() + 1; }
+            get { return HighestY - LowestY; }
+        }
+
+        public int LowestX
+        {
+            get
+            {
+                return MapData.Keys.Select(coords => coords.X).Concat(new[] {0}).Min();
+            }
+        }
+
+        public int HighestX
+        {
+            get { return MapData.Keys.Select(coords => coords.X).Concat(new[] { 0 }).Max(); }
+        }
+
+        public int LowestY
+        {
+            get
+            {
+                return MapData.Keys.Select(coords => coords.Y).Concat(new[] { 0 }).Min();
+            }
+        }
+
+        public int HighestY
+        {
+            get { return MapData.Keys.Select(coords => coords.Y).Concat(new[] { 0 }).Max(); }
         }
 
         public MapSquare this[int x, int y]
@@ -53,7 +77,6 @@ namespace BlackDragonEngine.TileEngine
                 else
                 {
                     MapData.Add(coords, value);
-                    ValidCoords.Add(coords);
                 }
             }
         }
