@@ -105,6 +105,7 @@
     <Compile Include="Entities\GameObject.cs" />
     <Compile Include="Entities\IGameObject.cs" />
     <Compile Include="Helpers\BCircle.cs" />
+    <Compile Include="Helpers\Comparer.cs" />
     <Compile Include="Helpers\DrawHelper.cs" />
     <Compile Include="Helpers\EventInput.cs" />
     <Compile Include="Helpers\AnimationStrip.cs" />

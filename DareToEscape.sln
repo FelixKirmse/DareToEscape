@@ -7,20 +7,50 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DareToEscapeContent", "Dare
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackDragonEngine", "BlackDragonEngine\BlackDragonEngine.csproj", "{5540C64E-2DAA-4B51-A628-0328C36A8B21}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{62BA4C3D-A05E-4C35-869E-7B72EBC09281}"
+	ProjectSection(SolutionItems) = preProject
+		DareToEscape.vsmdi = DareToEscape.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = DareToEscape.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7735B67A-3554-482E-BDB1-2A446B35C2AB}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{7735B67A-3554-482E-BDB1-2A446B35C2AB}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{7735B67A-3554-482E-BDB1-2A446B35C2AB}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{7735B67A-3554-482E-BDB1-2A446B35C2AB}.Debug|x86.ActiveCfg = Debug|x86
 		{7735B67A-3554-482E-BDB1-2A446B35C2AB}.Debug|x86.Build.0 = Debug|x86
+		{7735B67A-3554-482E-BDB1-2A446B35C2AB}.Release|Any CPU.ActiveCfg = Release|x86
+		{7735B67A-3554-482E-BDB1-2A446B35C2AB}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{7735B67A-3554-482E-BDB1-2A446B35C2AB}.Release|Mixed Platforms.Build.0 = Release|x86
 		{7735B67A-3554-482E-BDB1-2A446B35C2AB}.Release|x86.ActiveCfg = Release|x86
 		{7735B67A-3554-482E-BDB1-2A446B35C2AB}.Release|x86.Build.0 = Release|x86
+		{966EEE07-C1AD-4486-A73C-5CF3570C31D6}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{966EEE07-C1AD-4486-A73C-5CF3570C31D6}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{966EEE07-C1AD-4486-A73C-5CF3570C31D6}.Debug|x86.ActiveCfg = Debug|x86
+		{966EEE07-C1AD-4486-A73C-5CF3570C31D6}.Release|Any CPU.ActiveCfg = Release|x86
+		{966EEE07-C1AD-4486-A73C-5CF3570C31D6}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{966EEE07-C1AD-4486-A73C-5CF3570C31D6}.Release|x86.ActiveCfg = Release|x86
+		{5540C64E-2DAA-4B51-A628-0328C36A8B21}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{5540C64E-2DAA-4B51-A628-0328C36A8B21}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{5540C64E-2DAA-4B51-A628-0328C36A8B21}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{5540C64E-2DAA-4B51-A628-0328C36A8B21}.Debug|x86.ActiveCfg = Debug|x86
 		{5540C64E-2DAA-4B51-A628-0328C36A8B21}.Debug|x86.Build.0 = Debug|x86
+		{5540C64E-2DAA-4B51-A628-0328C36A8B21}.Release|Any CPU.ActiveCfg = Release|x86
+		{5540C64E-2DAA-4B51-A628-0328C36A8B21}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{5540C64E-2DAA-4B51-A628-0328C36A8B21}.Release|Mixed Platforms.Build.0 = Release|x86
 		{5540C64E-2DAA-4B51-A628-0328C36A8B21}.Release|x86.ActiveCfg = Release|x86
 		{5540C64E-2DAA-4B51-A628-0328C36A8B21}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
