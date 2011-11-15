@@ -3,44 +3,36 @@
 namespace BlackDragonEngine.TileEngine
 {
     [Serializable]
-    public class MapSquare
+    public struct MapSquare
     {
         #region Declarations
 
-        public int?[] LayerTiles = new int?[3];
-        public bool Passable = true;
+        public int[] LayerTiles;
+        public bool Passable;
+        public bool InValidSquare;
 
         #endregion
 
         #region Constructor
-
-        private MapSquare()
+        public MapSquare(int layer, int tile)
         {
-        }
-
-        public MapSquare(int layer, int? tile)
-        {
+            LayerTiles = new int[TileMap.MapLayers];
             LayerTiles[layer] = tile;
             Passable = true;
+            InValidSquare = false;
         }
 
-        public MapSquare(int? background, int? interactive, int? foreground, bool passable)
+        public MapSquare(int tile, bool passable)
+            : this(0,tile)
         {
-            LayerTiles[0] = background;
-            LayerTiles[1] = interactive;
-            LayerTiles[2] = foreground;
             Passable = passable;
         }
 
-        #endregion
-
-        #region Public Methods
-
-        public void TogglePassable()
+        public MapSquare(bool invalid)
+            :this()
         {
-            Passable = !Passable;
+            InValidSquare = invalid;
         }
-
         #endregion
     }
 }

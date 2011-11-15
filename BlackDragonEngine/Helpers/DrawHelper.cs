@@ -6,16 +6,16 @@ namespace BlackDragonEngine.Helpers
 {
     public static class DrawHelper
     {
-        private static readonly Queue<DrawOptions> alphaBlendStateBatch = new Queue<DrawOptions>();
-        private static readonly Queue<DrawOptions> addBlendStateBatch = new Queue<DrawOptions>();
+        private static readonly Queue<DrawOptions> AlphaBlendStateBatch = new Queue<DrawOptions>(10000);
+        private static readonly Queue<DrawOptions> AddBlendStateBatch = new Queue<DrawOptions>(10000);
 
         public static void AddNewJob(DrawOptions o)
         {
             if (o.BlendState == BlendState.AlphaBlend)
-                alphaBlendStateBatch.Enqueue(o);
+                AlphaBlendStateBatch.Enqueue(o);
 
             if (o.BlendState == BlendState.Additive)
-                addBlendStateBatch.Enqueue(o);
+                AddBlendStateBatch.Enqueue(o);
         }
 
         public static void AddNewJob(BlendState blendState, Texture2D texture, Vector2 position,
@@ -33,15 +33,15 @@ namespace BlackDragonEngine.Helpers
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            int alphaJobCount = alphaBlendStateBatch.Count;
-            int addJobCount = addBlendStateBatch.Count;
+            int alphaJobCount = AlphaBlendStateBatch.Count;
+            int addJobCount = AddBlendStateBatch.Count;
 
             if (alphaJobCount > 0)
             {
-                spriteBatch.Begin();
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
                 for (int i = 0; i < alphaJobCount; ++i)
                 {
-                    DrawOptions o = alphaBlendStateBatch.Dequeue();
+                    var o = AlphaBlendStateBatch.Dequeue();
                     spriteBatch.Draw(o.Texture, o.Position, o.SourceRectangle, o.Color, o.Rotation, o.Origin, o.Scale,
                                      o.Effects, o.DrawDepth);
                 }
@@ -53,7 +53,7 @@ namespace BlackDragonEngine.Helpers
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
                 for (int i = 0; i < addJobCount; ++i)
                 {
-                    DrawOptions o = addBlendStateBatch.Dequeue();
+                    var o = AddBlendStateBatch.Dequeue();
                     spriteBatch.Draw(o.Texture, o.Position, o.SourceRectangle, o.Color, o.Rotation, o.Origin, o.Scale,
                                      o.Effects, o.DrawDepth);
                 }

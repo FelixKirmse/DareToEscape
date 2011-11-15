@@ -17,14 +17,14 @@
             switch (frameCounter++)
             {
                 case 110:
-                    bullet.BaseSpeed = 0;
+                    bullet.Velocity = 0;
                     bullet.TurnSpeed = 0;
                     bullet.Direction = angle;
                     bullet.Acceleration = 0;
                     break;
 
                 case 380:
-                    bullet.BaseSpeed = -1;
+                    bullet.Velocity = -1;
                     bullet.TurnSpeed = .2f;
                     bullet.Direction = angle;
                     break;
@@ -37,6 +37,10 @@
                     break;
             }
             ReusableBehaviors.StandardBehavior.Update(ref bullet);
+        }
+
+        public void FreeRessources()
+        {
         }
 
         #endregion
@@ -52,6 +56,10 @@
             this.angle = angle;
         }
 
+        public void FreeRessources()
+        {
+        }
+
         #region IBehavior Members
 
         public void Update(ref Bullet bullet)
@@ -59,14 +67,14 @@
             switch (frameCounter++)
             {
                 case 110:
-                    bullet.BaseSpeed = 0;
+                    bullet.Velocity = 0;
                     bullet.TurnSpeed = 0;
                     bullet.Direction = angle;
                     bullet.Acceleration = 0;
                     break;
 
                 case 380:
-                    bullet.BaseSpeed = 1;
+                    bullet.Velocity = 1;
                     bullet.LaunchSpeed = 1;
                     bullet.TurnSpeed = .05f;
                     bullet.Direction = angle;

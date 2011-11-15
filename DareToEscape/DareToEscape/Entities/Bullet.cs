@@ -25,7 +25,7 @@ namespace DareToEscape.Entities
         public int KillTime;
         private float _directionInDegrees;
         private Vector2 _directionVector;
-        public float BaseSpeed;
+        public float Velocity;
         public bool Active;
         public Vector2 Position;
         private BCircle _collisionCircle;
@@ -112,9 +112,9 @@ namespace DareToEscape.Entities
             _collisionCircle = BulletInformationProvider.GetBCircle(id);
             _texture = BulletInformationProvider.BulletSheet;
             Behavior = ReusableBehaviors.StandardBehavior;
-            BaseSpeed = 1f;
+            Velocity = 1f;
             SpeedLimit = 1f;
-            AutomaticCollision = false;
+            AutomaticCollision = true;
             KillTime = -1;
             _sourceRect = BulletInformationProvider.GetSourceRectangle(id);
             _blendState = BlendState.AlphaBlend;
@@ -153,6 +153,7 @@ namespace DareToEscape.Entities
             {
                 Active = false;
                 bulletsToDelete.Add(id);
+                Clear();
                 return this;
             }
                 
@@ -171,6 +172,7 @@ namespace DareToEscape.Entities
                 {
                     Active = false;
                     bulletsToDelete.Add(id);
+                    Clear();
                     return this;
                 }
             }
@@ -179,6 +181,7 @@ namespace DareToEscape.Entities
             {
                 Active = false;
                 bulletsToDelete.Add(id);
+                Clear();
                 return this;
                 //VariableProvider.CurrentPlayer.Send<string>("KILL", null);
             }
@@ -196,7 +199,7 @@ namespace DareToEscape.Entities
                                  Camera.WorldToScreen(Position + BCircleLocalCenter),
                                  _sourceRect,
                                  Color.White,
-                                 BaseSpeed < 0 ? _rotation += MathHelper.Pi : _rotation,
+                                 Velocity < 0 ? _rotation += MathHelper.Pi : _rotation,
                                  new Vector2((float)_sourceRect.Width / 2, (float)_sourceRect.Height / 2),
                                  1f,
                                  SpriteEffects.None,
@@ -205,9 +208,14 @@ namespace DareToEscape.Entities
 
         public void SetNewSpeedRules(float newSpeed, float speedLimit)
         {
-            BaseSpeed = newSpeed;
+            Velocity = newSpeed;
             LaunchSpeed = newSpeed;
             SpeedLimit = speedLimit;
+        }
+
+        public void Clear()
+        {
+            Behavior.FreeRessources();
         }
 
         public void SetParameters(Parameters p)
@@ -219,7 +227,7 @@ namespace DareToEscape.Entities
         {
             if (newSpeed != null)
             {
-                BaseSpeed = (float) newSpeed;
+                Velocity = (float) newSpeed;
                 LaunchSpeed = (float) newSpeed;
             }
             if (angle != null)
@@ -235,7 +243,7 @@ namespace DareToEscape.Entities
         public void Shoot(float direction, float startingSpeed)
         {
             LaunchSpeed = startingSpeed;
-            BaseSpeed = startingSpeed;
+            Velocity = startingSpeed;
             Active = true;
             Direction = direction;
             GameVariableProvider.BulletManager.AddBullet(this);
@@ -243,8 +251,9 @@ namespace DareToEscape.Entities
 
         public override string ToString()
         {
-            return "Position: " + Position +" BaseSpeed: " + BaseSpeed + " LaunchSpeed: " + LaunchSpeed + " Acceleration: " + Acceleration +
-                   " SpeedLimit: " + SpeedLimit + " TurnSpeed: " + TurnSpeed;
+            //return "Position: " + Position +" BaseSpeed: " + BaseSpeed + " LaunchSpeed: " + LaunchSpeed + " Acceleration: " + Acceleration +
+              //     " SpeedLimit: " + SpeedLimit + " TurnSpeed: " + TurnSpeed;
+            return ((ParameterQueue) Behavior).ID.ToString();
         }
     }
 }

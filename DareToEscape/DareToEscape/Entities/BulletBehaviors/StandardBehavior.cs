@@ -10,17 +10,21 @@ namespace DareToEscape.Entities.BulletBehaviors
         {
             if (bullet.LaunchSpeed > bullet.SpeedLimit)
             {
-                bullet.BaseSpeed = MathHelper.Max(bullet.SpeedLimit, bullet.BaseSpeed + bullet.Acceleration);
+                bullet.Velocity = MathHelper.Max(bullet.SpeedLimit, bullet.Velocity + bullet.Acceleration);
             }
             else if (bullet.LaunchSpeed < bullet.SpeedLimit)
             {
-                bullet.BaseSpeed = MathHelper.Min(bullet.SpeedLimit, bullet.BaseSpeed + bullet.Acceleration);
+                bullet.Velocity = MathHelper.Min(bullet.SpeedLimit, bullet.Velocity + bullet.Acceleration);
             }
             if(bullet.TurnSpeed != 0f)
                 bullet.Direction += bullet.TurnSpeed;
-            bullet.Position += bullet.DirectionVector*bullet.BaseSpeed;
+            bullet.Position += bullet.DirectionVector*bullet.Velocity;
         }
 
         #endregion
+
+        public void FreeRessources()
+        {
+        }
     }
 }

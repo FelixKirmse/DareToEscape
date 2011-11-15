@@ -210,11 +210,11 @@ namespace DareToEscape.Editor
                                 }
                                 else if (MakePassable)
                                 {
-                                    TileMap.GetMapSquareAtCell(cellX, cellY).Passable = true;
+                                    TileMap.SetPassabilityAtCell(cellX,cellY, true);
                                 }
                                 else if (MakeUnpassable)
                                 {
-                                    TileMap.GetMapSquareAtCell(cellX, cellY).Passable = false;
+                                    TileMap.SetPassabilityAtCell(cellX, cellY, false);
                                 }
                                 else if (GettingCode)
                                 {
@@ -278,11 +278,11 @@ namespace DareToEscape.Editor
                                             }
                                             else if (MakePassable)
                                             {
-                                                TileMap.GetMapSquareAtCell(cellx, celly).Passable = true;
+                                                TileMap.SetPassabilityAtCell(cellx, celly, true);
                                             }
                                             else if (MakeUnpassable)
                                             {
-                                                TileMap.GetMapSquareAtCell(cellx, celly).Passable = false;
+                                                TileMap.SetPassabilityAtCell(cellx, celly, false);
                                             }
                                             if (InsertTile)
                                             {
@@ -321,17 +321,16 @@ namespace DareToEscape.Editor
             if (CurrentItem == null)
                 return;
 
-            MapSquare mapSquare = TileMap.GetMapSquareAtCell(cellX, cellY);
-            List<string> codes = TileMap.GetCellCodes(cellX, cellY);
-            if (mapSquare == null)
+            var mapSquare = TileMap.GetMapSquareAtCell(cellX, cellY);
+            var codes = TileMap.GetCellCodes(cellX, cellY);
+            if (mapSquare.InValidSquare)
             {
-                mapSquare = new MapSquare(null, null, null,
-                                          CurrentItem.Passable == null || (bool) CurrentItem.Passable);
+                mapSquare = new MapSquare(0, CurrentItem.Passable == null || (bool) CurrentItem.Passable);
             }
 
             if (CurrentItem.Unique)
             {
-                List<Coords> codesToRemove = (from item in TileMap.Map.Codes
+                var codesToRemove = (from item in TileMap.Map.Codes
                                               where
                                                   TileMap.GetCellCodes(item.Key.X, item.Key.Y).Contains(CurrentItem.Code)
                                               select item.Key).ToList();
@@ -375,7 +374,7 @@ namespace DareToEscape.Editor
                     TileMap.RemoveCodeFromCell(cellX - 1, cellY, CurrentItem.CodeLeft);
                 else
                 {
-                    List<string> otherCodes = TileMap.GetCellCodes(cellX - 1, cellY);
+                    var otherCodes = TileMap.GetCellCodes(cellX - 1, cellY);
                     if (!otherCodes.Contains(CurrentItem.CodeLeft))
                     {
                         TileMap.AddCodeToCell(cellX - 1, cellY, CurrentItem.CodeLeft);
@@ -397,9 +396,10 @@ namespace DareToEscape.Editor
             }
             if (CurrentItem.TileID != null)
             {
-                mapSquare.LayerTiles[DrawLayer] = CurrentItem.TileID;
+                mapSquare.LayerTiles[DrawLayer] = (int)CurrentItem.TileID;
             }
-            TileMap.SetMapSquareAtCell(cellX, cellY, mapSquare);
+            if(CurrentItem.Type == ItemType.Tile)
+                TileMap.SetMapSquareAtCell(cellX, cellY, mapSquare);
             TileMap.SetCellCodes(cellX, cellY, codes);
         }
 

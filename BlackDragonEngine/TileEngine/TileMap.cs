@@ -17,7 +17,7 @@ namespace BlackDragonEngine.TileEngine
 
         public const int TileWidth = 16;
         public const int TileHeight = 16;
-        private const int MapLayers = 1;
+        public const int MapLayers = 1;
         public const int TileOffset = 0;
         public static bool EditorMode;
         public static SpriteFont SpriteFont;
@@ -62,12 +62,14 @@ namespace BlackDragonEngine.TileEngine
 
         public static int GetCellByPixelX(int pixelX)
         {
-            return pixelX/TileWidth;
+            var cell = pixelX/TileWidth;
+            return pixelX < 0 ? cell - 1 : cell;
         }
 
         public static int GetCellByPixelY(int pixelY)
         {
-            return pixelY/TileHeight;
+            var cell = pixelY / TileWidth;
+            return pixelY < 0 ? cell - 1 : cell;
         }
 
         public static Vector2 GetCellByPixel(Vector2 pixelLocation)
@@ -108,7 +110,7 @@ namespace BlackDragonEngine.TileEngine
         public static bool CellIsPassable(int cellX, int cellY)
         {
             var square = GetMapSquareAtCell(cellX, cellY);
-            return square == null || square.Passable;
+            return square.InValidSquare || square.Passable;
         }
 
         public static bool CellIsPassable(Vector2 cell)
@@ -135,7 +137,7 @@ namespace BlackDragonEngine.TileEngine
         public static void SetCellCodes(int cellX, int cellY, List<string> codes)
         {
             var coords = VariableProvider.CoordList[cellX, cellY];
-            if (codes.Count == 0)
+            if (codes == null || codes.Count == 0)
             {
                 Map.Codes.Remove(coords);
                 return;
@@ -219,7 +221,7 @@ namespace BlackDragonEngine.TileEngine
 
         public static void SetSolidTileAtCell(Coords coords)
         {
-            Map[coords] = new MapSquare(0, null, null, false);
+            Map[coords] = new MapSquare(0, false);
         }
 
         public static MapSquare GetMapSquareAtCell(int cellX, int cellY)
@@ -227,27 +229,56 @@ namespace BlackDragonEngine.TileEngine
             return Map[cellX, cellY];
         }
 
+        public static MapSquare GetMapSquareAtCell(Vector2 cell)
+        {
+            return Map[(int)cell.X, (int)cell.Y];
+        }
+
+        public static void SetMapSquareAtCell(Vector2 cell, MapSquare tile)
+        {
+            SetMapSquareAtCell((int)cell.X, (int) cell.Y, tile);
+        }
+
         public static void SetMapSquareAtCell(int tileX, int tileY, MapSquare tile)
         {
             Map[tileX, tileY] = tile;
         }
 
-        public static void SetTileAtCell(int tileX, int tileY, int layer, int? tileIndex)
+        public static void SetPassabilityAtCell(Vector2 cell, bool passable)
+        {
+            var square = GetMapSquareAtCell(cell);
+            square.Passable = passable;
+            SetMapSquareAtCell(cell, square);
+        }
+
+        public static void SetPassabilityAtCell(int x, int y, bool passable)
+        {
+            SetPassabilityAtCell(new Vector2(x,y), passable);
+        }
+
+        public static void SetPassabilityAtCell(Coords coords, bool passable)
+        {
+            SetPassabilityAtCell(new Vector2(coords.X, coords.Y), passable);
+        }
+
+        public static void SetTileAtCell(int tileX, int tileY, int layer, int tileIndex)
         {
             var square = GetMapSquareAtCell(tileX, tileY);
-            if (square == null)
+            if (square.InValidSquare)
             {
-                square = new MapSquare(layer, tileIndex);
-                Map[tileX, tileY] = square;
+                var newSquare = new MapSquare(layer, tileIndex);
+                Map[tileX, tileY] = newSquare;
                 return;
             }
             Map[tileX, tileY].LayerTiles[layer] = tileIndex;
         }
 
-        public static void SetSolidTileAtCoords(Coords coords, int? tileIndex)
+        public static void SetSolidTileAtCoords(Coords coords, int tileIndex)
         {
             SetTileAtCell(coords.X, coords.Y, 0, tileIndex);
-            Map[coords].Passable = false;
+            var square = Map[coords];
+            square.Passable = false;
+            Map[coords] = square;
         }
 
         private static MapSquare GetMapSquareAtPixel(int pixelX, int pixelY)

@@ -1,4 +1,5 @@
 ﻿using System;
+using BlackDragonEngine.Providers;
 
 namespace BlackDragonEngine.TileEngine
 {
@@ -16,42 +17,42 @@ namespace BlackDragonEngine.TileEngine
 
         public Coords Left
         {
-            get { return new Coords(X - 1, Y); }
+            get { return VariableProvider.CoordList[X - 1, Y]; }
         }
 
         public Coords Right
         {
-            get { return new Coords(X + 1, Y); }
+            get { return VariableProvider.CoordList[X + 1, Y ]; }
         }
 
         public Coords Up
         {
-            get { return new Coords(X, Y - 1); }
+            get { return VariableProvider.CoordList[X, Y - 1]; }
         }
 
         public Coords Down
         {
-            get { return new Coords(X, Y + 1); }
+            get { return VariableProvider.CoordList[X, Y + 1]; }
         }
 
         public Coords UpLeft
         {
-            get { return new Coords(X - 1, Y - 1); }
+            get { return VariableProvider.CoordList[X - 1, Y - 1]; }
         }
 
         public Coords UpRight
         {
-            get { return new Coords(X + 1, Y - 1); }
+            get { return VariableProvider.CoordList[X + 1, Y - 1]; }
         }
 
         public Coords DownLeft
         {
-            get { return new Coords(X - 1, Y + 1); }
+            get { return VariableProvider.CoordList[X - 1, Y + 1]; }
         }
 
         public Coords DownRight
         {
-            get { return new Coords(X + 1, Y + 1); }
+            get { return VariableProvider.CoordList[X + 1, Y + 1]; }
         }
 
         public override bool Equals(object obj)
@@ -76,17 +77,17 @@ namespace BlackDragonEngine.TileEngine
 
         public static Coords operator /(Coords coords, int divisor)
         {
-            return new Coords(coords.X/divisor, coords.Y/divisor);
+            return VariableProvider.CoordList[coords.X / divisor, coords.Y / divisor];
         }
 
         public static Coords operator +(Coords leftCoords, Coords rightCoords)
         {
-            return new Coords(leftCoords.X + rightCoords.X, leftCoords.Y + rightCoords.Y);
+            return VariableProvider.CoordList[leftCoords.X + rightCoords.X, leftCoords.Y + rightCoords.Y];
         }
 
         public static Coords operator *(Coords coords, int multiplicator)
         {
-            return new Coords(coords.X*multiplicator, coords.Y*multiplicator);
+            return VariableProvider.CoordList[coords.X*multiplicator, coords.Y*multiplicator];
         }
 
         public override string ToString()

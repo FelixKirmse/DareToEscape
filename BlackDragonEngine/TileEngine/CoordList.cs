@@ -4,21 +4,24 @@ namespace BlackDragonEngine.TileEngine
 {
     public class CoordList
     {
-
-        private readonly List<Coords> _coords = new List<Coords>();
+        private readonly Dictionary<int, Dictionary<int, Coords>> _coords = new Dictionary<int, Dictionary<int, Coords>>();  
 
         public Coords this[int x, int y]
         {
             get
             {
-                for(var i = 0; i < _coords.Count; ++i)
+                lock (_coords)
                 {
-                    if (_coords[i].X == x && _coords[i].Y == y)
-                        return _coords[i];
+                    if (!_coords.ContainsKey(x))
+                    {
+                        _coords.Add(x, new Dictionary<int, Coords>());
+                    }
+                    if (!_coords[x].ContainsKey(y))
+                    {
+                        _coords[x].Add(y, new Coords(x, y));
+                    }
+                    return _coords[x][y];
                 }
-                var newCoords = new Coords(x, y);
-                _coords.Add(newCoords);
-                return newCoords;
             }
         }
     }

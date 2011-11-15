@@ -14,7 +14,7 @@ namespace DareToEscape.Entities.BulletBehaviors
 
             if (timer < 500f)
             {
-                bullet.Position += bullet.DirectionVector*bullet.BaseSpeed*2;
+                bullet.Position += bullet.DirectionVector*bullet.Velocity*2;
             }
             else if (timer < 1500f)
             {
@@ -30,5 +30,9 @@ namespace DareToEscape.Entities.BulletBehaviors
         }
 
         #endregion
+
+        public void FreeRessources()
+        {
+        }
     }
 }

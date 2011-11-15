@@ -34,8 +34,7 @@ namespace DareToEscape
             VariableProvider.CoordList = new CoordList();
             VariableProvider.Game = this;
             GameInitializer.Initialize();
-            var bulletManager = new BulletManager(this);
-            Components.Add(bulletManager);
+            var bulletManager = new BulletManager();
             GameVariableProvider.BulletManager = bulletManager;
 
             Graphics.PreferredBackBufferWidth = 1280;
@@ -61,6 +60,7 @@ namespace DareToEscape
         {
             if (IsActive)
             {
+                GameVariableProvider.BulletManager.Update(gameTime);
                 VariableProvider.GameTime = gameTime;
                 InputProvider.Update();
                 StateManager.Update();

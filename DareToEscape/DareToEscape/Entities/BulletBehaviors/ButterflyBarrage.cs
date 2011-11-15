@@ -11,6 +11,9 @@
             this.modifier = modifier;
             this.iterator = iterator;
         }
+        public void FreeRessources()
+        {
+        }
 
         #region IBehavior Members
 
@@ -19,7 +22,7 @@
             switch (frameCounter++)
             {
                 case 60:
-                    bullet.BaseSpeed = 2;
+                    bullet.Velocity = 2;
                     bullet.LaunchSpeed = 2;
                     bullet.TurnSpeed = .5f*modifier;
                     bullet.Acceleration = .1f;

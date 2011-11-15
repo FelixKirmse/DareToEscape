@@ -12,6 +12,9 @@
             this.speedMod = speedMod;
             frameCounter = 0;
         }
+        public void FreeRessources()
+        {
+        }
 
         #region IBehavior Members
 
@@ -21,7 +24,7 @@
             {
                 case 60:
                     bullet.LaunchSpeed = 2f;
-                    bullet.BaseSpeed = 2f;
+                    bullet.Velocity = 2f;
                     bullet.TurnSpeed = 1*modifier;
                     bullet.Acceleration = .2f;
                     bullet.SpeedLimit = 2 + (speedMod/3);

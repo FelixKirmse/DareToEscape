@@ -19,7 +19,7 @@
             {
                 bullet.Acceleration = .1f;
                 bullet.SpeedLimit = 3f;
-                bullet.BaseSpeed = 1f;
+                bullet.Velocity = 1f;
                 bullet.LaunchSpeed = 1f;
             }
             ReusableBehaviors.StandardBehavior.Update(ref bullet);
@@ -27,5 +27,9 @@
         }
 
         #endregion
+
+        public void FreeRessources()
+        {
+        }
     }
 }

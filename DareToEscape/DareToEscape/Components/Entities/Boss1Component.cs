@@ -128,20 +128,22 @@ namespace DareToEscape.Components.Entities
                     break;
 
                 case 3:
-                    for (int i = 0; i < 10; ++i)
+                    for (var i = 0; i < 10; ++i)
                     {
-                        for (int j = 0; j < 5; ++j)
+                        for (var j = 0; j < 5; ++j)
                         {
-                            var bullet = new Bullet(new StarBarrage(j*4), bulletOrigin, 51);
-                            bullet.SpawnDelay = 5 + j;
+                            var pq = ParameterQueueFactory.CreateNew();
+                            var bullet = new Bullet(pq, bulletOrigin, 51) {SpawnDelay = 5 + j};
                             bullet.Shoot(angle2 + j*4, 0);
+                            pq.AddTask(j*4, 1f, null, 0f, .1f, 3f);
                         }
 
-                        for (int j = 0; j < 5; ++j)
+                        for (var j = 0; j < 5; ++j)
                         {
-                            var bullet = new Bullet(new StarBarrage(j*4), bulletOrigin, 51);
-                            bullet.SpawnDelay = 5 + j;
+                            var pq = ParameterQueueFactory.CreateNew();
+                            var bullet = new Bullet(pq, bulletOrigin, 51) {SpawnDelay = 5 + j};
                             bullet.Shoot(angle2 - j*4, 0);
+                            pq.AddTask(j * 4, 1f, null, 0f, .1f, 3f);
                         }
                         angle2 += 36f; //360f / 10f;
                     }
@@ -227,8 +229,8 @@ namespace DareToEscape.Components.Entities
                 for (int i = 0; i < 50; ++i)
                 {
                     var bullet = new Bullet(GetVectorAroundPoint(bulletOrigin, 20, angle), 83);
-                    bullet.Shoot(angle, 3);
                     bullet.SetParameters(null, null, .05f*mod, 0, 0);
+                    bullet.Shoot(angle, 3);
                     angle += 7.2f; //360f / 50;
                 }
                 angle += 4f;
@@ -260,9 +262,9 @@ namespace DareToEscape.Components.Entities
                 {
                     var pq = ParameterQueueFactory.CreateNew();
                     var bullet = new Bullet(pq, bulletOrigin, 51);
-                    bullet.Shoot(angle2, 5);
-                    bullet.AutomaticCollision = false;
                     bullet.SetParameters(null, null, 0, -.1f, 1);
+                    bullet.AutomaticCollision = false;
+                    bullet.Shoot(angle2, 5);
                     pq.AddTask(60, 1, angle2, 0, -.2f, -1);
                     pq.AddTask(120, -1, angle2, -2*mod, .2f, 2);
                     pq.AddTask(180, -1, angle2, rand.NextFloat(-.1f, .1f), -.1f, rand.NextFloat(-3, -1));
@@ -285,8 +287,8 @@ namespace DareToEscape.Components.Entities
                     var bullet = new Bullet(pq,
                                             new Vector2(bulletOrigin.X - 120f*(float) Math.Cos(radian),
                                                         bulletOrigin.Y - 120f*(float) Math.Sin(radian)), 172, BlendState.Additive);
-                    bullet.Shoot(angle, 5);
                     bullet.SetParameters(null, null, mod, -.1f, 1);
+                    bullet.Shoot(angle, 5);
                     pq.AddTask(150, rand.NextFloat(1f, 1.5f), angle, rand.NextFloat(-.2f, .2f), 0, 0);
                     angle += 72f; //360f / 5;
                 }
@@ -298,8 +300,8 @@ namespace DareToEscape.Components.Entities
                     var bullet = new Bullet(pq,
                                             new Vector2(bulletOrigin.X + 120f*(float) Math.Cos(radian),
                                                         bulletOrigin.Y + 120f*(float) Math.Sin(radian)), 176, BlendState.Additive);
+                    bullet.SetParameters(null, null, -1 * mod, 0, 0);
                     bullet.Shoot(angle3 + 90, -1*mod);
-                    bullet.SetParameters(null, null, -1*mod, 0, 0);
                     pq.AddTask(120, mod, angle3 + 90, 0, 0, 0);
                     angle3 += 20f; //360 / 18;
                 }
@@ -324,15 +326,16 @@ namespace DareToEscape.Components.Entities
 
         private void ButterflyBarrage2(int modifier)
         {
-            for (int i = 0; i < 20; ++i)
+            for (float i = 0; i < 20; ++i)
             {
-                for (int j = 0; j < 30; ++j)
+                for (var j = 0; j < 30; ++j)
                 {
-                    var bullet = new Bullet(new ButterflyBarrage(modifier, i), bulletOrigin, 228);
-                    bullet.TurnSpeed = -3*modifier;
-                    bullet.Acceleration = -.2f;
-                    bullet.SpeedLimit = 1;
+                    var pq = ParameterQueueFactory.CreateNew();
+                    var bullet = new Bullet(pq, bulletOrigin, 228)
+                                     {TurnSpeed = -3*modifier, Acceleration = -.2f, SpeedLimit = 1};
                     bullet.Shoot(angle*modifier, 5);
+                    pq.AddTask(60, 2, null, .5f*modifier, .1f, 1 + (i/4f));
+                    pq.AddTask(120, null, null, 0f, 0f, 0f);
                     angle += 12f; //360f / 30;
                 }
             }
@@ -394,9 +397,7 @@ namespace DareToEscape.Components.Entities
             float modifier = parameters[0];
             for (int i = 0; i < 10; ++i)
             {
-                var bullet = new Bullet(bulletOrigin, 69);
-                bullet.Acceleration = -.1f;
-                bullet.SpeedLimit = 3f;
+                var bullet = new Bullet(bulletOrigin, 69) {Acceleration = -.1f, SpeedLimit = 3f};
                 bullet.Shoot(bullet.DirectionAngleToPlayer + modifier, 6f);
                 yield return 10;
             }
@@ -407,21 +408,28 @@ namespace DareToEscape.Components.Entities
             float angle = 0;
             for (int i = 0; i < 120; ++i)
             {
-                float radian = MathHelper.ToRadians(angle);
-                var bullet = new Bullet(new PlayerTrap1(angle),
+                var radian = MathHelper.ToRadians(angle);
+                var pq = ParameterQueueFactory.CreateNew();
+                var bullet = new Bullet(pq,
                                         new Vector2(Player.PlayerPosX + 150f*(float) Math.Cos(radian),
-                                                    Player.PlayerPosY + 150f*(float) Math.Sin(radian)), 50);
-                bullet.Acceleration = .1f;
-                bullet.SpeedLimit = 0;
+                                                    Player.PlayerPosY + 150f*(float) Math.Sin(radian)), 50,
+                                        BlendState.Additive)
+                                 {Acceleration = .1f, SpeedLimit = 0, AutomaticCollision = false};
                 bullet.Shoot(angle, -3);
-                bullet.AutomaticCollision = false;
-                var bullet2 = new Bullet(new PlayerTrap2(angle),
+                pq.AddTask(110, 0f, angle, 0f, 0f, 0f);
+                pq.AddTask(380, -1f, angle, .2f, 0f, 0f);
+                pq.AddTask(700, null, null, 0f, -.5f, -3);
+                pq = ParameterQueueFactory.CreateNew();
+                var bullet2 = new Bullet(pq,
                                          new Vector2(Player.PlayerPosX + 90f*(float) Math.Cos(radian),
-                                                     Player.PlayerPosY + 90f*(float) Math.Sin(radian)), 50);
-                bullet2.Acceleration = .05f;
-                bullet2.SpeedLimit = 0;
+                                                     Player.PlayerPosY + 90f*(float) Math.Sin(radian)), 50,
+                                         BlendState.Additive)
+                                  {Acceleration = .05f, SpeedLimit = 0, AutomaticCollision = false};
                 bullet2.Shoot(angle, -2);
-                bullet2.AutomaticCollision = false;
+                pq.AddTask(110, 0f, angle, 0f, 0f, 0f);
+                pq.AddTask(380, 1, angle, .05f, 0f, 0f);
+                pq.AddTask(700, null, null, 0f, .5f, 3f);
+
                 angle += 3f; //360 / 120;
             }
         }
@@ -433,11 +441,12 @@ namespace DareToEscape.Components.Entities
             {
                 for (int j = 0; j < 60; ++j)
                 {
-                    var bullet = new Bullet(new ButterflyMayhem(modifier, i), bulletOrigin, 228);
-                    bullet.TurnSpeed = -3f*modifier;
-                    bullet.Acceleration = -.5f;
-                    bullet.SpeedLimit = 2f;
+                    var pq = ParameterQueueFactory.CreateNew();
+                    var bullet = new Bullet(pq, bulletOrigin, 228);
+                    bullet.SetParameters(null, null, -3f * modifier, -.5f, 2f);
                     bullet.Shoot(angle*modifier, 5f);
+                    pq.AddTask(60, 2f, null, 1f*modifier, .2f, 2f + (i/3f));
+                    pq.AddTask(120, null, null, 0f, 0f, 0f);
                     angle += 6f; //360 / 60;
                 }
             }

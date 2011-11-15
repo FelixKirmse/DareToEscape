@@ -40,6 +40,7 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generateRandomMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.layerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.interactiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,7 +90,6 @@
             this.propertyListBox = new System.Windows.Forms.ListBox();
             this.mapSizeLabel = new System.Windows.Forms.Label();
             this.focusButton = new System.Windows.Forms.CheckBox();
-            this.generateRandomMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pctSurface)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBoxRightClick.SuspendLayout();
@@ -137,14 +137,14 @@
             // 
             this.newMapToolStripMenuItem.Name = "newMapToolStripMenuItem";
             this.newMapToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newMapToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.newMapToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.newMapToolStripMenuItem.Text = "New Map";
             this.newMapToolStripMenuItem.Click += new System.EventHandler(this.newMapToolStripMenuItem_Click);
             // 
             // loadMapToolStripMenuItem
             // 
             this.loadMapToolStripMenuItem.Name = "loadMapToolStripMenuItem";
-            this.loadMapToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.loadMapToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.loadMapToolStripMenuItem.Text = "&Load Map";
             this.loadMapToolStripMenuItem.Click += new System.EventHandler(this.loadMapToolStripMenuItem_Click);
             // 
@@ -152,26 +152,26 @@
             // 
             this.saveMapToolStripMenuItem1.Name = "saveMapToolStripMenuItem1";
             this.saveMapToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveMapToolStripMenuItem1.Size = new System.Drawing.Size(170, 22);
+            this.saveMapToolStripMenuItem1.Size = new System.Drawing.Size(168, 22);
             this.saveMapToolStripMenuItem1.Text = "&Save Map";
             this.saveMapToolStripMenuItem1.Click += new System.EventHandler(this.saveMapToolStripMenuItem1_Click);
             // 
             // saveMapToolStripMenuItem
             // 
             this.saveMapToolStripMenuItem.Name = "saveMapToolStripMenuItem";
-            this.saveMapToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.saveMapToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.saveMapToolStripMenuItem.Text = "&Save Map as...";
             this.saveMapToolStripMenuItem.Click += new System.EventHandler(this.saveMapToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(167, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(165, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -190,6 +190,13 @@
             this.clearMapToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.clearMapToolStripMenuItem.Text = "&Clear Map";
             this.clearMapToolStripMenuItem.Click += new System.EventHandler(this.clearMapToolStripMenuItem_Click);
+            // 
+            // generateRandomMapToolStripMenuItem
+            // 
+            this.generateRandomMapToolStripMenuItem.Name = "generateRandomMapToolStripMenuItem";
+            this.generateRandomMapToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.generateRandomMapToolStripMenuItem.Text = "&Generate Random Map";
+            this.generateRandomMapToolStripMenuItem.Click += new System.EventHandler(this.generateRandomMapToolStripMenuItem_Click);
             // 
             // layerToolStripMenuItem
             // 
@@ -683,13 +690,6 @@
             this.focusButton.Size = new System.Drawing.Size(15, 14);
             this.focusButton.TabIndex = 30;
             this.focusButton.UseVisualStyleBackColor = true;
-            // 
-            // generateRandomMapToolStripMenuItem
-            // 
-            this.generateRandomMapToolStripMenuItem.Name = "generateRandomMapToolStripMenuItem";
-            this.generateRandomMapToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.generateRandomMapToolStripMenuItem.Text = "Generate Random Map";
-            this.generateRandomMapToolStripMenuItem.Click += new System.EventHandler(this.generateRandomMapToolStripMenuItem_Click);
             // 
             // MapEditor
             // 

@@ -66,7 +66,7 @@ namespace BlackDragonEngine.TileEngine
 
         public MapSquare this[Coords coords]
         {
-            get { return MapData.ContainsKey(coords) ? MapData[coords] : null; }
+            get { return MapData.ContainsKey(coords) ? MapData[coords] : new MapSquare(true); }
 
             set
             {

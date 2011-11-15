@@ -27,5 +27,10 @@ namespace BlackDragonEngine.Helpers
         {
             return new Point((int) v.X, (int) v.Y);
         }
+
+        public static Vector2 RoundValues(this Vector2 v)
+        {
+            return new Vector2((int)v.X, (int)v.Y);
+        }
     }
 }

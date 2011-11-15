@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BlackDragonEngine.Helpers;
 using System.Linq;
 using System.Threading.Tasks;
 using BlackDragonEngine.Providers;
@@ -15,8 +16,6 @@ namespace DareToEscape.MapTools
     public static class MapGenerator
     {
         private static RandomMapGenerator _mapGen;
-        private static int _mapSize;
-        private static int _cellCounter;
         private static Task _task;
 
         private static GenerationState _state;
@@ -34,15 +33,15 @@ namespace DareToEscape.MapTools
                     break;
 
                 case GenerationState.PlacingPlatforms:
-                    drawString = "Placing platforms... " + Math.Round(((float) _cellCounter/_mapSize)*100f) + "%";
+                    drawString = "Placing platforms... " + Math.Round(((float)_mapGen.ProgressCounter / _mapGen.ProgressMax) * 100f) + "%";
                     break;
 
                 case GenerationState.Hollowing:
-                    drawString = "Making walls hollow... " + Math.Round(((float) _cellCounter/_mapSize)*100f) + "%";
+                    drawString = "Making walls hollow... " + Math.Round(((float)_mapGen.ProgressCounter / _mapGen.ProgressMax) * 100f) + "%";
                     break;
 
                 case GenerationState.SingleRemoving:
-                    drawString = "Removing single blocks... " + Math.Round(((float) _cellCounter/_mapSize)*100f) + "%";
+                    drawString = "Removing single blocks... " + Math.Round(((float)_mapGen.ProgressCounter / _mapGen.ProgressMax) * 100f) + "%";
                     break;
 
                 case GenerationState.Inverting:
@@ -50,7 +49,7 @@ namespace DareToEscape.MapTools
                     break;
             }
             spriteBatch.DrawString(FontProvider.GetFont("Mono14"), drawString,
-                                   ShortcutProvider.ScreenCenter - ShortcutProvider.GetFontCenter("Mono14", drawString),
+                                   ShortcutProvider.ScreenCenter.RoundValues() - ShortcutProvider.GetFontCenter("Mono14", drawString).RoundValues(),
                                    new Color(0, 255, 0));
         }
 
@@ -59,22 +58,16 @@ namespace DareToEscape.MapTools
             _mapGen = new RandomMapGenerator();
             _task = Task.Factory.StartNew(() =>
                                               {
-                                                  _cellCounter = 0;
                                                   var previousState = StateManager.GameState;
                                                   StateManager.GameState = GameStates.GeneratingMap;
                                                   _task.Wait(32);
                                                   _state = GenerationState.Digging;
-                                                  _mapGen.GenerateNewMap(200);
+                                                  _mapGen.GenerateNewMap(500);
                                                   _state = GenerationState.Inverting;
                                                   _mapGen.InvertMap();  
                                                   _state = GenerationState.PlacingPlatforms;
-                                                  _mapSize = TileMap.MapWidth * TileMap.MapHeight;
                                                   PlacePlatforms();
-                                                  /*_mapGen.ManipulateCellsByCondition(PlacePlatform,
-                                                                                     CellHasNeighborToLeftOrRight);*/
                                                   _state = GenerationState.SingleRemoving;
-                                                  _mapSize = TileMap.MapWidth*TileMap.MapHeight*2;
-                                                  _cellCounter = 0;
                                                   _mapGen.RemoveCellsByCondition(CellSurroundedByAir);
                                                   _mapGen.RemoveCellsByCondition(CellOnlyHasOneNeighbor);
                                                   RemoveMapgenCodes();
@@ -105,15 +98,14 @@ namespace DareToEscape.MapTools
         private static void PlacePlatform(Coords cell)
         {
             TileMap.AddCodeToCell(cell, "JUMPTHROUGH");
-            TileMap.AddCodeToCell(new Coords(cell.X, cell.Y - 1), "JUMPTHROUGHTOP");
+            TileMap.AddCodeToCell(VariableProvider.CoordList[cell.X, cell.Y - 1], "JUMPTHROUGHTOP");
             TileMap.SetTileAtCell(cell.X, cell.Y, 0, 1);
-            TileMap.Map[cell].Passable = true;
+            TileMap.SetPassabilityAtCell(cell, true);
         }
 
 
         private static bool CellHasNeighborToLeftOrRight(Coords cell)
         {
-            ++_cellCounter;
             var neighborCount = 0;
             for (var x = -1; x <= 1; ++x)
             {
@@ -121,9 +113,9 @@ namespace DareToEscape.MapTools
                 {
                     if (x == 0 && y == 0)
                         continue;
-                    if (y == 0 && !TileMap.CellIsPassable(cell + new Coords(x, y)))
+                    if (y == 0 && !TileMap.CellIsPassable(cell + VariableProvider.CoordList[x, y]))
                         ++neighborCount;
-                    if (y != 0 && x == 0 && !TileMap.CellIsPassable(cell + new Coords(x, y)))
+                    if (y != 0 && x == 0 && !TileMap.CellIsPassable(cell + VariableProvider.CoordList[x, y]))
                         return false;
                 }
             }
@@ -132,7 +124,7 @@ namespace DareToEscape.MapTools
 
         private static bool CellOnlyHasOneNeighbor(Coords cell)
         {
-            ++_cellCounter;
+            ++_mapGen.ProgressCounter;
             if (TileMap.CellIsPassable(cell))
                 return false;
             var neighborCount = 0;
@@ -149,6 +141,7 @@ namespace DareToEscape.MapTools
 
         private static bool CellSurroundedByAir(Coords cell)
         {
+            ++_mapGen.ProgressCounter;
             return TileMap.Map.Codes[cell].Count == 8 && !TileMap.Map.Codes[cell].Contains("JUMPTHROUGH");
         }
 

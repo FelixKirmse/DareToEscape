@@ -20,8 +20,7 @@ namespace BlackDragonEngine.TileEngine
             MaxDiggers = maxDiggers;
             TileMap.Map = new Map();
             _diggers.Clear();
-
-            AddDigger(new Coords(0, 0));
+            AddDigger(VariableProvider.CoordList[0,0]);
             TileMap.AddCodeToCell(0, 0, "START");
             do
             {
@@ -31,7 +30,12 @@ namespace BlackDragonEngine.TileEngine
                     if (_diggers.Count > 1)
                         _diggers.Remove(_diggers[i]);
                     else
-                        _diggers[i].LastManStanding = true;
+                    {
+                        var digger = _diggers[i];
+                        digger.LastManStanding = true;
+                        _diggers[i] = digger;
+                    }
+                        
                 }
             } while (AddedDiggers < MaxDiggers);
         }
@@ -54,22 +58,22 @@ namespace BlackDragonEngine.TileEngine
             foreach(var cell in cells)
             {
                 ++ProgressCounter;
+                map[cell.Up] = new MapSquare(0, false);
+                map[cell.Down] = new MapSquare(0, false);
+                map[cell.Left] = new MapSquare(0, false);
+                map[cell.Right] = new MapSquare(0, false);
+                map[cell.UpLeft] = new MapSquare(0, false);
+                map[cell.UpRight] = new MapSquare(0, false);
+                map[cell.DownLeft] = new MapSquare(0, false);
+                map[cell.DownRight] = new MapSquare(0, false);
                 TileMap.AddCodeToCell(cell.Up, "AddedByInvert");
                 TileMap.AddCodeToCell(cell.Down, "AddedByInvert");
                 TileMap.AddCodeToCell(cell.Left, "AddedByInvert");
                 TileMap.AddCodeToCell(cell.Right, "AddedByInvert");
-                map[cell.Up] = new MapSquare(0, null, null, false);
                 TileMap.AddCodeToCell(cell.UpLeft, "AddedByInvert");
                 TileMap.AddCodeToCell(cell.UpRight, "AddedByInvert");
-                map[cell.Down] = new MapSquare(0, null, null, false);
-                map[cell.Left] = new MapSquare(0, null, null, false);
-                map[cell.Right] = new MapSquare(0, null, null, false);
                 TileMap.AddCodeToCell(cell.DownLeft, "AddedByInvert");
                 TileMap.AddCodeToCell(cell.DownRight, "AddedByInvert");
-                map[cell.UpLeft] = new MapSquare(0, null, null, false);
-                map[cell.UpRight] = new MapSquare(0, null, null, false);
-                map[cell.DownLeft] = new MapSquare(0, null, null, false);
-                map[cell.DownRight] = new MapSquare(0, null, null, false);
             }
             ProgressMax = map.MapData.Count;
             ProgressCounter = 0;
@@ -91,6 +95,8 @@ namespace BlackDragonEngine.TileEngine
 
         public void ManipulateCellsByCondition(CustomAction action, CellCondition condition)
         {
+            ProgressMax = TileMap.Map.MapData.Count;
+            ProgressCounter = 0;
             var cellsToManipulate =
                 (from cell in TileMap.Map.MapData where condition(cell.Key) select cell.Key).ToList();
             cellsToManipulate.ForEach(cell => action(cell));
@@ -98,18 +104,20 @@ namespace BlackDragonEngine.TileEngine
 
         #region Nested type: Digger
 
-        private class Digger
+        private struct Digger
         {
             private readonly RandomMapGenerator _mapGen;
-            private readonly Coords[] _positions = new Coords[4];
+            private readonly Coords[] _positions;
 
             private readonly Random _rand;
 
             public Digger(Coords position, RandomMapGenerator mapGen)
+                :this()
             {
                 _mapGen = mapGen;
-                Position = position;
+                _positions = new Coords[4];
                 _rand = VariableProvider.RandomSeed;
+                Position = position;
                 foreach (var cell in _positions)
                 {
                     TileMap.SetSolidTileAtCell(cell);
@@ -123,13 +131,13 @@ namespace BlackDragonEngine.TileEngine
                 set
                 {
                     _positions[0] = value;
-                    _positions[1] = new Coords(value.X + 1, value.Y);
-                    _positions[2] = new Coords(value.X, value.Y + 1);
-                    _positions[3] = new Coords(value.X + 1, value.Y + 1);
+                    _positions[1] = VariableProvider.CoordList[value.X + 1, value.Y];
+                    _positions[2] = VariableProvider.CoordList[value.X, value.Y + 1];
+                    _positions[3] = VariableProvider.CoordList[value.X + 1, value.Y + 1];
                 }
             }
 
-            public bool LastManStanding { private get; set; }
+            public bool LastManStanding;
 
             public bool Dig()
             {

@@ -10,15 +10,14 @@ using System.Threading.Tasks;
 
 namespace DareToEscape.Managers
 {
-    internal class BulletManager : GameComponent
+    internal class BulletManager
     {
         private readonly List<Bullet> _bullets = new List<Bullet>(50000);
         private readonly int _processorCount;
         private readonly Task[] _tasks;
         private readonly List<int> _bulletsToDelete = new List<int>(1000);  
 
-        public BulletManager(Game game)
-            : base(game)
+        public BulletManager()
         {
             _processorCount = VariableProvider.ProcessorCount;
             _tasks = new Task[_processorCount];
@@ -34,7 +33,7 @@ namespace DareToEscape.Managers
             _bullets.Add(bullet);
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             if (StateManager.GameState != GameStates.Ingame &&
                 (StateManager.GameState != GameStates.Editor || EngineStates.GameStates != EEngineStates.Running))
@@ -51,16 +50,14 @@ namespace DareToEscape.Managers
                                            {
                                                for(var j = bulletsToProcess * x; j < bulletsToProcess * x + bulletsToProcess; ++j)
                                                {
-                                                   if (_bullets[j].Active)
-                                                        _bullets[j] = _bullets[j].Update(j, _bulletsToDelete);
+                                                    _bullets[j] = _bullets[j].Update(j, _bulletsToDelete);
                                                }
                                            });
             }
             
             for (var i = bulletsToProcess * _processorCount; i < bulletCount; ++i)
             {
-                if (_bullets[i].Active)
-                    _bullets[i] = _bullets[i].Update(i, _bulletsToDelete);
+                _bullets[i] = _bullets[i].Update(i, _bulletsToDelete);
             }
             
             Task.WaitAll(_tasks);

@@ -6,9 +6,13 @@
 
         public void Update(ref Bullet bullet)
         {
-            bullet.Position += bullet.DirectionVectorToPlayer*bullet.BaseSpeed;
+            bullet.Position += bullet.DirectionVectorToPlayer*bullet.Velocity;
         }
 
         #endregion
+
+        public void FreeRessources()
+        {
+        }
     }
 }
