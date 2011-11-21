@@ -2,14 +2,18 @@
 
 namespace BlackDragonEngine.Components
 {
-    public abstract class SoundComponent : Component
+    public abstract class SoundComponent : IComponent
     {
-        public override void Update(GameObject obj)
+        #region IComponent Members
+
+        public virtual void Update(GameObject obj)
         {
         }
 
-        public override void Receive<T>(string message, T obj)
+        public virtual void Receive<T>(string message, T obj)
         {
         }
+
+        #endregion
     }
 }

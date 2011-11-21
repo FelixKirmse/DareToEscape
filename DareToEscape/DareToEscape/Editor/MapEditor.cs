@@ -21,8 +21,8 @@ namespace DareToEscape.Editor
 
         private readonly string _loadLevel;
         public DareToEscape Game;
-        private bool _updateMapSize = true;
         private string _currentMapName;
+        private bool _updateMapSize = true;
 
         public MapEditor()
         {

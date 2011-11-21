@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
 
-namespace DareToEscape.Entities.BulletBehaviors
+namespace DareToEscape.Bullets.BulletBehaviors
 {
     internal class ParameterQueue : IBehavior
     {
+        private static readonly Dictionary<int, ParameterQueue> ActivePqs = new Dictionary<int, ParameterQueue>(50000);
+        private static readonly Stack<ParameterQueue> InActivePqs = new Stack<ParameterQueue>(10000);
+        private static int _idCounter;
         public readonly int ID;
         private readonly Queue<Parameters> _paramQueue;
         private IBehavior _behavior;
         private int _frameCounter;
 
-        internal ParameterQueue(int id)
+        private ParameterQueue(int id)
         {
             ID = id;
             _paramQueue = new Queue<Parameters>();
@@ -21,7 +24,6 @@ namespace DareToEscape.Entities.BulletBehaviors
 
         public void Update(ref Bullet bullet)
         {
-           
             if (_paramQueue.Count > 0)
             {
                 if (_frameCounter == _paramQueue.Peek().ModOnFrame)
@@ -33,7 +35,7 @@ namespace DareToEscape.Entities.BulletBehaviors
                     if (_paramQueue.Count == 0)
                     {
                         bullet.Behavior = _behavior;
-                        ParameterQueueFactory.SetInactive(this);
+                        SetInactive(this);
                         _behavior.Update(ref bullet);
                         return;
                     }
@@ -48,7 +50,7 @@ namespace DareToEscape.Entities.BulletBehaviors
             _paramQueue.Clear();
             _frameCounter = 0;
             _behavior = ReusableBehaviors.StandardBehavior;
-            ParameterQueueFactory.SetInactive(this);
+            SetInactive(this);
         }
 
         #endregion
@@ -63,6 +65,31 @@ namespace DareToEscape.Entities.BulletBehaviors
         public override string ToString()
         {
             return ID.ToString();
+        }
+
+        public static ParameterQueue GetInstance()
+        {
+            lock (ActivePqs)
+            {
+                lock (InActivePqs)
+                {
+                    ParameterQueue pq = InActivePqs.Count > 0 ? InActivePqs.Pop() : new ParameterQueue(_idCounter++);
+                    ActivePqs.Add(pq.ID, pq);
+                    return pq;
+                }
+            }
+        }
+
+        private static void SetInactive(ParameterQueue pq)
+        {
+            lock (ActivePqs)
+            {
+                lock (InActivePqs)
+                {
+                    ActivePqs.Remove(pq.ID);
+                    InActivePqs.Push(pq);
+                }
+            }
         }
     }
 

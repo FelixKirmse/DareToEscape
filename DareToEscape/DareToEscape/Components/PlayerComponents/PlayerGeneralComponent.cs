@@ -6,29 +6,33 @@ using Microsoft.Xna.Framework;
 
 namespace DareToEscape.Components.PlayerComponents
 {
-    internal class PlayerGeneralComponent : Component
+    internal class PlayerGeneralComponent : IComponent
     {
-        public override void Update(GameObject obj)
+        #region IComponent Members
+
+        public void Update(GameObject obj)
         {
             if (obj.ScreenPosition.X > 1000)
-                Camera.ForcePosition += (new Vector2((int) obj.ScreenPosition.X, 0) - new Vector2(1000, 0));
+                Camera.Position += (new Vector2((int) obj.ScreenPosition.X, 0) - new Vector2(1000, 0));
 
             if (obj.ScreenPosition.Y > 350)
-                Camera.ForcePosition += (new Vector2(0, (int)obj.ScreenPosition.Y) - new Vector2(0, 350));
+                Camera.Position += (new Vector2(0, (int) obj.ScreenPosition.Y) - new Vector2(0, 350));
 
             if (obj.ScreenPosition.X < 300)
-                Camera.ForcePosition += (-(new Vector2(300, 0) - new Vector2((int)obj.ScreenPosition.X, 0)));
+                Camera.Position += (-(new Vector2(300, 0) - new Vector2((int) obj.ScreenPosition.X, 0)));
 
             if (obj.ScreenPosition.Y < 350)
-                Camera.ForcePosition += (-(new Vector2(0, 350) - new Vector2(0, (int)obj.ScreenPosition.Y)));
+                Camera.Position += (-(new Vector2(0, 350) - new Vector2(0, (int) obj.ScreenPosition.Y)));
         }
 
-        public override void Receive<T>(string message, T obj)
+        public void Receive<T>(string message, T obj)
         {
             if (message == "KILL")
             {
                 StateManager.PlayerDead = true;
             }
         }
+
+        #endregion
     }
 }

@@ -2,7 +2,7 @@
 
 namespace BlackDragonEngine.Components
 {
-    public abstract class Component
+    public interface IComponent
     {
         /// <summary>
         /// Handles messages from other components
@@ -10,8 +10,8 @@ namespace BlackDragonEngine.Components
         /// <typeparam name="T">Type of the object thats being sent</typeparam>
         /// <param name="message">The message that was received</param>
         /// <param name="obj">The attachment to the message</param>
-        public abstract void Receive<T>(string message, T obj);
+        void Receive<T>(string message, T obj);
 
-        public abstract void Update(GameObject obj);
+        void Update(GameObject obj);
     }
 }

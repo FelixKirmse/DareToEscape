@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using BlackDragonEngine.Providers;
-using DareToEscape.Entities;
-using DareToEscape.Entities.BulletBehaviors;
+using DareToEscape.Bullets;
+using DareToEscape.Bullets.BulletBehaviors;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Components.Entities
@@ -22,7 +22,7 @@ namespace DareToEscape.Components.Entities
                 var red = (int) (Math.Sin(frequency*i + 0)*127 + 128);
                 var green = (int) (Math.Sin(frequency*i + (2*Math.PI/3))*127 + 128);
                 var blue = (int) (Math.Sin(frequency*i + (4*Math.PI/3))*127 + 128);
-                var bullet = new Bullet(ReusableBehaviors.StandardBehavior, bulletOrigin, 1);
+                var bullet = new Bullet(ReusableBehaviors.StandardBehavior, BulletOrigin, 1);
                 bullet.Shoot(VariableProvider.RandomSeed.Next(-1, 361), 4);
             }
             yield return 1;

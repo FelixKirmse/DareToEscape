@@ -41,7 +41,7 @@ namespace BlackDragonEngine.Helpers
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
                 for (int i = 0; i < alphaJobCount; ++i)
                 {
-                    var o = AlphaBlendStateBatch.Dequeue();
+                    DrawOptions o = AlphaBlendStateBatch.Dequeue();
                     spriteBatch.Draw(o.Texture, o.Position, o.SourceRectangle, o.Color, o.Rotation, o.Origin, o.Scale,
                                      o.Effects, o.DrawDepth);
                 }
@@ -53,7 +53,7 @@ namespace BlackDragonEngine.Helpers
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
                 for (int i = 0; i < addJobCount; ++i)
                 {
-                    var o = AddBlendStateBatch.Dequeue();
+                    DrawOptions o = AddBlendStateBatch.Dequeue();
                     spriteBatch.Draw(o.Texture, o.Position, o.SourceRectangle, o.Color, o.Rotation, o.Origin, o.Scale,
                                      o.Effects, o.DrawDepth);
                 }

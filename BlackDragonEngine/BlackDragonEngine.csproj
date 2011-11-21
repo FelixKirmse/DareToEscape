@@ -95,7 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\AnimatedGraphicsComponent.cs" />
-    <Compile Include="Components\Component.cs" />
+    <Compile Include="Components\IComponent.cs" />
     <Compile Include="Components\GraphicsComponent.cs" />
     <Compile Include="Components\InputComponent.cs" />
     <Compile Include="Components\PhysicsComponent.cs" />

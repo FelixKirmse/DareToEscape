@@ -12,10 +12,10 @@ namespace DareToEscape.Components.Entities
 {
     internal class TurretComponent : GraphicsComponent
     {
-        protected Vector2 bulletOrigin;
-        protected float rotation;
+        public Vector2 BulletOrigin;
+        private float _rotation;
 
-        protected Vector2 RotationOrigin
+        private Vector2 RotationOrigin
         {
             get { return new Vector2(texture.Width/2, texture.Height/2); }
         }
@@ -38,7 +38,7 @@ namespace DareToEscape.Components.Entities
                 Camera.WorldToScreen(obj.Position + RotationOrigin),
                 null,
                 Color.White,
-                rotation,
+                _rotation,
                 RotationOrigin,
                 1f,
                 SpriteEffects.None,
@@ -56,9 +56,9 @@ namespace DareToEscape.Components.Entities
 
             if (pos.X >= startX && pos.X <= endX && pos.Y >= startY && pos.Y <= endY)
             {
-                Vector2 direction = playerPosition - bulletOrigin;
+                Vector2 direction = playerPosition - BulletOrigin;
                 direction /= (TileMap.TileWidth*32);
-                Vector2 particlePosition = bulletOrigin;
+                Vector2 particlePosition = BulletOrigin;
 
                 while (particlePosition != playerPosition)
                 {
@@ -82,14 +82,14 @@ namespace DareToEscape.Components.Entities
                 obj.Position += new Vector2(0, -texture.Height/2);
             if (texture.Height == 64)
                 obj.Position += new Vector2(0, -texture.Height/4);
-            bulletOrigin = obj.Position + RotationOrigin + new Vector2(0, -texture.Height/2);
-            rotation = MathHelper.ToRadians(180);
+            BulletOrigin = obj.Position + RotationOrigin + new Vector2(0, -texture.Height/2);
+            _rotation = MathHelper.ToRadians(180);
         }
 
         protected void SetLeft(GameObject obj)
         {
-            bulletOrigin = obj.Position + RotationOrigin + new Vector2(texture.Width/2, 0);
-            rotation = MathHelper.ToRadians(270);
+            BulletOrigin = obj.Position + RotationOrigin + new Vector2(texture.Width/2, 0);
+            _rotation = MathHelper.ToRadians(270);
         }
 
         protected void SetRight(GameObject obj)
@@ -98,14 +98,14 @@ namespace DareToEscape.Components.Entities
                 obj.Position += new Vector2(-texture.Width/2, 0);
             if (texture.Height == 64)
                 obj.Position += new Vector2(-texture.Width/4, 0);
-            bulletOrigin = obj.Position + RotationOrigin + new Vector2(-texture.Width/2, 0);
-            rotation = MathHelper.ToRadians(90);
+            BulletOrigin = obj.Position + RotationOrigin + new Vector2(-texture.Width/2, 0);
+            _rotation = MathHelper.ToRadians(90);
         }
 
         protected void SetUp(GameObject obj)
         {
-            bulletOrigin = obj.Position + RotationOrigin + new Vector2(0, texture.Height/2);
-            rotation = MathHelper.ToRadians(0);
+            BulletOrigin = obj.Position + RotationOrigin + new Vector2(0, texture.Height/2);
+            _rotation = MathHelper.ToRadians(0);
         }
 
         public override void Receive<T>(string message, T obj)

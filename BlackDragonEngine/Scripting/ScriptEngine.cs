@@ -7,7 +7,7 @@ namespace BlackDragonEngine.Scripting
 
     public class ScriptEngine : GameComponent
     {
-        private static readonly List<ScriptState> scripts = new List<ScriptState>();
+        private readonly List<ScriptState> _scripts = new List<ScriptState>();
 
         public ScriptEngine(Game game)
             : base(game)
@@ -25,7 +25,7 @@ namespace BlackDragonEngine.Scripting
             scriptState.Execute();
             if (!scriptState.IsComplete)
             {
-                scripts.Add(scriptState);
+                _scripts.Add(scriptState);
             }
         }
 
@@ -37,23 +37,23 @@ namespace BlackDragonEngine.Scripting
 
         public bool IsScriptRunning(Script script)
         {
-            return scripts.Exists(s => s.Script == script);
+            return _scripts.Exists(s => s.Script == script);
         }
 
         public void StopAllScripts()
         {
-            scripts.Clear();
+            _scripts.Clear();
         }
 
         public override void Update(GameTime gameTime)
         {
             if (EngineStates.GameStates == EEngineStates.Running)
             {
-                for (int i = 0; i < scripts.Count; ++i)
+                for (int i = 0; i < _scripts.Count; ++i)
                 {
-                    scripts[i].Execute();
+                    _scripts[i].Execute();
                 }
-                scripts.RemoveAll(s => s.IsComplete);
+                _scripts.RemoveAll(s => s.IsComplete);
             }
         }
 

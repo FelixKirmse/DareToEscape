@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using BlackDragonEngine.Helpers;
 using System.Linq;
 using System.Threading.Tasks;
+using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
 using DareToEscape.Managers;
@@ -33,23 +33,28 @@ namespace DareToEscape.MapTools
                     break;
 
                 case GenerationState.PlacingPlatforms:
-                    drawString = "Placing platforms... " + Math.Round(((float)_mapGen.ProgressCounter / _mapGen.ProgressMax) * 100f) + "%";
+                    drawString = "Placing platforms... " +
+                                 Math.Round(((float) _mapGen.ProgressCounter/_mapGen.ProgressMax)*100f) + "%";
                     break;
 
                 case GenerationState.Hollowing:
-                    drawString = "Making walls hollow... " + Math.Round(((float)_mapGen.ProgressCounter / _mapGen.ProgressMax) * 100f) + "%";
+                    drawString = "Making walls hollow... " +
+                                 Math.Round(((float) _mapGen.ProgressCounter/_mapGen.ProgressMax)*100f) + "%";
                     break;
 
                 case GenerationState.SingleRemoving:
-                    drawString = "Removing single blocks... " + Math.Round(((float)_mapGen.ProgressCounter / _mapGen.ProgressMax) * 100f) + "%";
+                    drawString = "Removing single blocks... " +
+                                 Math.Round(((float) _mapGen.ProgressCounter/_mapGen.ProgressMax)*100f) + "%";
                     break;
 
                 case GenerationState.Inverting:
-                    drawString = "Inverting Map (2 Pass)... " + Math.Round(((float)_mapGen.ProgressCounter/_mapGen.ProgressMax) * 100f) + "%";
+                    drawString = "Inverting Map (2 Pass)... " +
+                                 Math.Round(((float) _mapGen.ProgressCounter/_mapGen.ProgressMax)*100f) + "%";
                     break;
             }
             spriteBatch.DrawString(FontProvider.GetFont("Mono14"), drawString,
-                                   ShortcutProvider.ScreenCenter.RoundValues() - ShortcutProvider.GetFontCenter("Mono14", drawString).RoundValues(),
+                                   ShortcutProvider.ScreenCenter.RoundValues() -
+                                   ShortcutProvider.GetFontCenter("Mono14", drawString).RoundValues(),
                                    new Color(0, 255, 0));
         }
 
@@ -58,13 +63,13 @@ namespace DareToEscape.MapTools
             _mapGen = new RandomMapGenerator();
             _task = Task.Factory.StartNew(() =>
                                               {
-                                                  var previousState = StateManager.GameState;
+                                                  GameStates previousState = StateManager.GameState;
                                                   StateManager.GameState = GameStates.GeneratingMap;
                                                   _task.Wait(32);
                                                   _state = GenerationState.Digging;
                                                   _mapGen.GenerateNewMap(500);
                                                   _state = GenerationState.Inverting;
-                                                  _mapGen.InvertMap();  
+                                                  _mapGen.InvertMap();
                                                   _state = GenerationState.PlacingPlatforms;
                                                   PlacePlatforms();
                                                   _state = GenerationState.SingleRemoving;
@@ -78,11 +83,11 @@ namespace DareToEscape.MapTools
 
         private static void RemoveMapgenCodes()
         {
-            foreach(var cell in TileMap.Map.MapData.Keys)
+            foreach (Coords cell in TileMap.Map.MapData.Keys)
             {
                 while (TileMap.Map.Codes[cell].Remove("AddedByInvert")) continue;
             }
-            foreach(var cell in TileMap.Map.MapData.Keys)
+            foreach (Coords cell in TileMap.Map.MapData.Keys)
             {
                 if (TileMap.Map.Codes[cell].Count == 0)
                     TileMap.Map.Codes.Remove(cell);
@@ -91,7 +96,11 @@ namespace DareToEscape.MapTools
 
         private static void PlacePlatforms()
         {
-            var cellsToChange = (from cell in TileMap.Map.Codes where cell.Value.Contains("AddedByInvert") && cell.Value.Count > 5 && cell.Value.Count < 8 && CellHasNeighborToLeftOrRight(cell.Key) select cell.Key).ToList();
+            List<Coords> cellsToChange = (from cell in TileMap.Map.Codes
+                                          where
+                                              cell.Value.Contains("AddedByInvert") && cell.Value.Count > 5 &&
+                                              cell.Value.Count < 8 && CellHasNeighborToLeftOrRight(cell.Key)
+                                          select cell.Key).ToList();
             cellsToChange.ForEach(PlacePlatform);
         }
 
@@ -106,10 +115,10 @@ namespace DareToEscape.MapTools
 
         private static bool CellHasNeighborToLeftOrRight(Coords cell)
         {
-            var neighborCount = 0;
-            for (var x = -1; x <= 1; ++x)
+            int neighborCount = 0;
+            for (int x = -1; x <= 1; ++x)
             {
-                for (var y = -1; y <= 1; ++y)
+                for (int y = -1; y <= 1; ++y)
                 {
                     if (x == 0 && y == 0)
                         continue;
@@ -127,7 +136,7 @@ namespace DareToEscape.MapTools
             ++_mapGen.ProgressCounter;
             if (TileMap.CellIsPassable(cell))
                 return false;
-            var neighborCount = 0;
+            int neighborCount = 0;
             neighborCount += !TileMap.CellIsPassable(cell.UpLeft) ? 1 : 0;
             neighborCount += !TileMap.CellIsPassable(cell.UpRight) ? 1 : 0;
             neighborCount += !TileMap.CellIsPassable(cell.DownLeft) ? 1 : 0;

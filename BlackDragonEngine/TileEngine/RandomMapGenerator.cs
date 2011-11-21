@@ -13,6 +13,8 @@ namespace BlackDragonEngine.TileEngine
     {
         public static int MaxDiggers;
         private readonly List<Digger> _diggers = new List<Digger>();
+        public int ProgressCounter;
+        public int ProgressMax;
         public int AddedDiggers { get; private set; }
 
         public void GenerateNewMap(int maxDiggers)
@@ -20,22 +22,21 @@ namespace BlackDragonEngine.TileEngine
             MaxDiggers = maxDiggers;
             TileMap.Map = new Map();
             _diggers.Clear();
-            AddDigger(VariableProvider.CoordList[0,0]);
+            AddDigger(VariableProvider.CoordList[0, 0]);
             TileMap.AddCodeToCell(0, 0, "START");
             do
             {
-                for (var i = 0; i < _diggers.Count; ++i)
+                for (int i = 0; i < _diggers.Count; ++i)
                 {
                     if (_diggers[i].Dig()) continue;
                     if (_diggers.Count > 1)
                         _diggers.Remove(_diggers[i]);
                     else
                     {
-                        var digger = _diggers[i];
+                        Digger digger = _diggers[i];
                         digger.LastManStanding = true;
                         _diggers[i] = digger;
                     }
-                        
                 }
             } while (AddedDiggers < MaxDiggers);
         }
@@ -47,15 +48,12 @@ namespace BlackDragonEngine.TileEngine
         }
 
 
-        public int ProgressMax;
-        public int ProgressCounter;
-
         public void InvertMap()
         {
-            var map = TileMap.Map;
+            Map map = TileMap.Map;
             ProgressMax = TileMap.Map.Codes.Count;
-            var cells = TileMap.Map.Codes.Keys.ToList();
-            foreach(var cell in cells)
+            List<Coords> cells = TileMap.Map.Codes.Keys.ToList();
+            foreach (Coords cell in cells)
             {
                 ++ProgressCounter;
                 map[cell.Up] = new MapSquare(0, false);
@@ -82,8 +80,10 @@ namespace BlackDragonEngine.TileEngine
                                            ++ProgressCounter;
                                            return TileMap.GetCellCodes(cell).Contains("OriginalPlaced");
                                        });
-            var codesToDelete =
-                (from cell in TileMap.Map.Codes where TileMap.Map.Codes[cell.Key].Contains("OriginalPlaced") select cell.Key).
+            List<Coords> codesToDelete =
+                (from cell in TileMap.Map.Codes
+                 where TileMap.Map.Codes[cell.Key].Contains("OriginalPlaced")
+                 select cell.Key).
                     ToList();
             codesToDelete.ForEach(cell => map.Codes[cell].RemoveAll(s => s == "OriginalPlaced"));
         }
@@ -97,7 +97,7 @@ namespace BlackDragonEngine.TileEngine
         {
             ProgressMax = TileMap.Map.MapData.Count;
             ProgressCounter = 0;
-            var cellsToManipulate =
+            List<Coords> cellsToManipulate =
                 (from cell in TileMap.Map.MapData where condition(cell.Key) select cell.Key).ToList();
             cellsToManipulate.ForEach(cell => action(cell));
         }
@@ -110,15 +110,16 @@ namespace BlackDragonEngine.TileEngine
             private readonly Coords[] _positions;
 
             private readonly Random _rand;
+            public bool LastManStanding;
 
             public Digger(Coords position, RandomMapGenerator mapGen)
-                :this()
+                : this()
             {
                 _mapGen = mapGen;
                 _positions = new Coords[4];
                 _rand = VariableProvider.RandomSeed;
                 Position = position;
-                foreach (var cell in _positions)
+                foreach (Coords cell in _positions)
                 {
                     TileMap.SetSolidTileAtCell(cell);
                     TileMap.AddUniqueCodeToCell(cell, "OriginalPlaced");
@@ -137,16 +138,14 @@ namespace BlackDragonEngine.TileEngine
                 }
             }
 
-            public bool LastManStanding;
-
             public bool Dig()
             {
-                var diggableBlocks = GetBlocksToDig();
+                List<Coords> diggableBlocks = GetBlocksToDig();
 
                 if (diggableBlocks.Count > 0)
                 {
                     Position = diggableBlocks[_rand.Next(0, diggableBlocks.Count)];
-                    foreach (var cell in _positions)
+                    foreach (Coords cell in _positions)
                     {
                         TileMap.SetSolidTileAtCell(cell);
                         TileMap.AddUniqueCodeToCell(cell, "OriginalPlaced");

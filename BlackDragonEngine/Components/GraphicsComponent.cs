@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BlackDragonEngine.Components
 {
-    public class GraphicsComponent : Component
+    public class GraphicsComponent : IComponent
     {
         protected float drawDepth = .82f;
         protected Texture2D texture;
@@ -22,6 +22,18 @@ namespace BlackDragonEngine.Components
             this.texture = texture;
         }
 
+        #region IComponent Members
+
+        public virtual void Update(GameObject obj)
+        {
+        }
+
+        public virtual void Receive<T>(string message, T obj)
+        {
+        }
+
+        #endregion
+
         public virtual void Draw(GameObject obj, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(
@@ -34,14 +46,6 @@ namespace BlackDragonEngine.Components
                 1f,
                 SpriteEffects.None,
                 drawDepth);
-        }
-
-        public override void Update(GameObject obj)
-        {
-        }
-
-        public override void Receive<T>(string message, T obj)
-        {
         }
     }
 }

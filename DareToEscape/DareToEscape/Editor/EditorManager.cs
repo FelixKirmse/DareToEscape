@@ -156,10 +156,10 @@ namespace DareToEscape.Editor
         public static void Update()
         {
             if (Form.ActiveForm != parentForm) return;
-            var ms = InputProvider.MouseState;
+            MouseState ms = InputProvider.MouseState;
             if (!PlayLevel)
             {
-                var mod = 1;
+                int mod = 1;
                 if (ShortcutProvider.IsKeyDown(Keys.LeftShift))
                 {
                     mod = 2;
@@ -183,9 +183,9 @@ namespace DareToEscape.Editor
 
                 if ((ms.X > 0) && (ms.Y > 0) && (ms.X < Camera.ViewPortWidth) && (ms.Y < Camera.ViewPortHeight))
                 {
-                    var mouseLoc = Camera.ScreenToWorld(new Vector2(ms.X, ms.Y));
-                    var cellX = TileMap.GetCellByPixelX((int) mouseLoc.X);
-                    var cellY = TileMap.GetCellByPixelY((int) mouseLoc.Y);
+                    Vector2 mouseLoc = Camera.ScreenToWorld(new Vector2(ms.X, ms.Y));
+                    int cellX = TileMap.GetCellByPixelX((int) mouseLoc.X);
+                    int cellY = TileMap.GetCellByPixelY((int) mouseLoc.Y);
 
                     switch (FillMode)
                     {
@@ -210,7 +210,7 @@ namespace DareToEscape.Editor
                                 }
                                 else if (MakePassable)
                                 {
-                                    TileMap.SetPassabilityAtCell(cellX,cellY, true);
+                                    TileMap.SetPassabilityAtCell(cellX, cellY, true);
                                 }
                                 else if (MakeUnpassable)
                                 {
@@ -321,8 +321,8 @@ namespace DareToEscape.Editor
             if (CurrentItem == null)
                 return;
 
-            var mapSquare = TileMap.GetMapSquareAtCell(cellX, cellY);
-            var codes = TileMap.GetCellCodes(cellX, cellY);
+            MapSquare mapSquare = TileMap.GetMapSquareAtCell(cellX, cellY);
+            List<string> codes = TileMap.GetCellCodes(cellX, cellY);
             if (mapSquare.InValidSquare)
             {
                 mapSquare = new MapSquare(0, CurrentItem.Passable == null || (bool) CurrentItem.Passable);
@@ -330,7 +330,7 @@ namespace DareToEscape.Editor
 
             if (CurrentItem.Unique)
             {
-                var codesToRemove = (from item in TileMap.Map.Codes
+                List<Coords> codesToRemove = (from item in TileMap.Map.Codes
                                               where
                                                   TileMap.GetCellCodes(item.Key.X, item.Key.Y).Contains(CurrentItem.Code)
                                               select item.Key).ToList();
@@ -374,7 +374,7 @@ namespace DareToEscape.Editor
                     TileMap.RemoveCodeFromCell(cellX - 1, cellY, CurrentItem.CodeLeft);
                 else
                 {
-                    var otherCodes = TileMap.GetCellCodes(cellX - 1, cellY);
+                    List<string> otherCodes = TileMap.GetCellCodes(cellX - 1, cellY);
                     if (!otherCodes.Contains(CurrentItem.CodeLeft))
                     {
                         TileMap.AddCodeToCell(cellX - 1, cellY, CurrentItem.CodeLeft);
@@ -396,9 +396,9 @@ namespace DareToEscape.Editor
             }
             if (CurrentItem.TileID != null)
             {
-                mapSquare.LayerTiles[DrawLayer] = (int)CurrentItem.TileID;
+                mapSquare.LayerTiles[DrawLayer] = (int) CurrentItem.TileID;
             }
-            if(CurrentItem.Type == ItemType.Tile)
+            if (CurrentItem.Type == ItemType.Tile)
                 TileMap.SetMapSquareAtCell(cellX, cellY, mapSquare);
             TileMap.SetCellCodes(cellX, cellY, codes);
         }

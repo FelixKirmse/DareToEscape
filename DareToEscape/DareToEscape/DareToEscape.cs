@@ -26,7 +26,6 @@ namespace DareToEscape
             var engine = new ScriptEngine(this);
             Components.Add(engine);
             VariableProvider.ScriptEngine = engine;
-            
         }
 
         protected override void Initialize()

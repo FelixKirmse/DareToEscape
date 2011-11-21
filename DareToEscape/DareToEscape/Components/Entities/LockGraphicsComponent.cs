@@ -36,14 +36,13 @@ namespace DareToEscape.Components.Entities
                     if (obj.CollisionRectangle.Intersects(VariableProvider.CurrentPlayer.CollisionRectangle))
                     {
                         enabled = false;
-                        var cell = TileMap.GetCellByPixel(obj.Position);
+                        Vector2 cell = TileMap.GetCellByPixel(obj.Position);
                         TileMap.SetPassabilityAtCell(cell, true);
-
                     }
                 }
                 else
                 {
-                    var cell = TileMap.GetCellByPixel(obj.Position);
+                    Vector2 cell = TileMap.GetCellByPixel(obj.Position);
                     TileMap.SetPassabilityAtCell(cell, false);
                 }
             }

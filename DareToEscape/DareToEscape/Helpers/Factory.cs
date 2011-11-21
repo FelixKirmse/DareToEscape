@@ -13,83 +13,72 @@ namespace DareToEscape.Helpers
     {
         public static GameObject CreatePlayer()
         {
-            var components = new List<Component>();
-            components.Add(new PlayerGraphicsComponent());
-            components.Add(new PlayerInputComponent());
-            components.Add(new PlayerPhysicsComponent());
-            components.Add(new PlayerSoundComponent());
-            components.Add(new PlayerGeneralComponent());
+            var components = new List<IComponent>
+                                 {
+                                     new PlayerGraphicsComponent(),
+                                     new PlayerInputComponent(),
+                                     new PlayerPhysicsComponent(),
+                                     new PlayerSoundComponent(),
+                                     new PlayerGeneralComponent()
+                                 };
             return new Player(components);
         }
 
         public static GameObject CreateCheckPoint()
         {
-            var components = new List<Component>();
-            components.Add(new CheckPointGraphicsComponent());
+            var components = new List<IComponent> {new CheckPointGraphicsComponent()};
             return new GameObject(components);
         }
 
         public static GameObject CreateExit()
         {
-            var components = new List<Component>();
-            components.Add(new ExitGraphicsComponent());
+            var components = new List<IComponent> {new ExitGraphicsComponent()};
             return new GameObject(components);
         }
 
         public static GameObject CreateKey()
         {
-            var components = new List<Component>();
-            components.Add(new KeyGraphicsComponent());
+            var components = new List<IComponent> {new KeyGraphicsComponent()};
             return new GameObject(components);
         }
 
         public static GameObject CreateLock()
         {
-            var components = new List<Component>();
-            components.Add(new LockGraphicsComponent());
+            var components = new List<IComponent> {new LockGraphicsComponent()};
             return new GameObject(components);
         }
 
         public static GameObject CreateSmallTurret()
         {
-            var components = new List<Component>();
-            components.Add(new SmallTurretComponent());
+            var components = new List<IComponent> {new SmallTurretComponent()};
             return new GameObject(components);
         }
 
         public static GameObject CreateMediumTurret()
         {
-            var components = new List<Component>();
-            components.Add(new MediumTurretComponent());
+            var components = new List<IComponent> {new MediumTurretComponent()};
             return new GameObject(components);
         }
 
         public static GameObject CreateBoss1()
         {
-            var components = new List<Component>();
-            components.Add(new Boss1Component());
+            var components = new List<IComponent> {new Boss1Component()};
             return new GameObject(components);
         }
 
         public static GameObject CreateBossKiller()
         {
-            var components = new List<Component>();
-            components.Add(new BossKillerComponent());
+            var components = new List<IComponent> {new BossKillerComponent()};
             return new GameObject(components);
         }
 
         public static GameObject CreateSign()
         {
-            var components = new List<Component>();
-            components.Add(
-                new GraphicsComponent(VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/sign")));
-            return new GameObject(components);
-        }
-
-        public static GameObject CreateTutorialBoss()
-        {
-            var components = new List<Component>();
-            components.Add(new TutorialBossComponent());
+            var components = new List<IComponent>
+                                 {
+                                     new GraphicsComponent(
+                                         VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/sign"))
+                                 };
             return new GameObject(components);
         }
     }

@@ -96,7 +96,7 @@ namespace BlackDragonEngine.Helpers
             this.texture = texture;
             this.frameWidth = frameWidth;
             frameHeight = texture.Height;
-            this.Name = name;
+            Name = name;
         }
 
         #endregion

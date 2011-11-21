@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using BlackDragonEngine.Providers;
-using DareToEscape.Entities;
+using DareToEscape.Bullets;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Components.Entities
@@ -16,7 +16,7 @@ namespace DareToEscape.Components.Entities
         {
             for (int i = 0; i < 5; ++i)
             {
-                var newBullet = new Bullet(bulletOrigin, 1);
+                var newBullet = new Bullet(BulletOrigin, 1);
                 newBullet.Shoot(newBullet.DirectionAngleToPlayer, 2f);
                 yield return 10;
             }

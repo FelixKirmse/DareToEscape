@@ -7,6 +7,8 @@ namespace BlackDragonEngine.Helpers
     [Serializable]
     public class CoordComparer : IEqualityComparer<Coords>
     {
+        #region IEqualityComparer<Coords> Members
+
         public bool Equals(Coords c1, Coords c2)
         {
             return c1 == c2;
@@ -16,5 +18,7 @@ namespace BlackDragonEngine.Helpers
         {
             return c.GetHashCode();
         }
+
+        #endregion
     }
 }

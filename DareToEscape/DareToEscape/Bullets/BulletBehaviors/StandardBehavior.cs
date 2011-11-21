@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace DareToEscape.Entities.BulletBehaviors
+namespace DareToEscape.Bullets.BulletBehaviors
 {
     internal class StandardBehavior : IBehavior
     {
@@ -16,15 +16,15 @@ namespace DareToEscape.Entities.BulletBehaviors
             {
                 bullet.Velocity = MathHelper.Min(bullet.SpeedLimit, bullet.Velocity + bullet.Acceleration);
             }
-            if(bullet.TurnSpeed != 0f)
+            if (bullet.TurnSpeed != 0f)
                 bullet.Direction += bullet.TurnSpeed;
             bullet.Position += bullet.DirectionVector*bullet.Velocity;
         }
 
-        #endregion
-
         public void FreeRessources()
         {
         }
+
+        #endregion
     }
 }

@@ -30,7 +30,7 @@ namespace BlackDragonEngine.Helpers
 
         public static Vector2 RoundValues(this Vector2 v)
         {
-            return new Vector2((int)v.X, (int)v.Y);
+            return new Vector2((int) v.X, (int) v.Y);
         }
     }
 }

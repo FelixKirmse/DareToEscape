@@ -1,4 +1,4 @@
-﻿namespace DareToEscape.Entities.BulletBehaviors
+﻿namespace DareToEscape.Bullets.BulletBehaviors
 {
     public interface IBehavior
     {

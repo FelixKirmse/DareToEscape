@@ -9,7 +9,7 @@ namespace DareToEscape.Entities
 {
     internal class Player : GameObject
     {
-        public Player(List<Component> components)
+        public Player(List<IComponent> components)
             : base(components)
         {
             collisionCircle = new BCircle(6, 9, 4);

@@ -4,7 +4,8 @@ namespace BlackDragonEngine.TileEngine
 {
     public class CoordList
     {
-        private readonly Dictionary<int, Dictionary<int, Coords>> _coords = new Dictionary<int, Dictionary<int, Coords>>();  
+        private readonly Dictionary<int, Dictionary<int, Coords>> _coords =
+            new Dictionary<int, Dictionary<int, Coords>>();
 
         public Coords this[int x, int y]
         {

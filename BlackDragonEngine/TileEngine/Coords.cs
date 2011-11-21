@@ -22,7 +22,7 @@ namespace BlackDragonEngine.TileEngine
 
         public Coords Right
         {
-            get { return VariableProvider.CoordList[X + 1, Y ]; }
+            get { return VariableProvider.CoordList[X + 1, Y]; }
         }
 
         public Coords Up
@@ -77,7 +77,7 @@ namespace BlackDragonEngine.TileEngine
 
         public static Coords operator /(Coords coords, int divisor)
         {
-            return VariableProvider.CoordList[coords.X / divisor, coords.Y / divisor];
+            return VariableProvider.CoordList[coords.X/divisor, coords.Y/divisor];
         }
 
         public static Coords operator +(Coords leftCoords, Coords rightCoords)

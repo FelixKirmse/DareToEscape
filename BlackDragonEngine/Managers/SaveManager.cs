@@ -59,8 +59,8 @@ namespace BlackDragonEngine.Managers
                 return string.Empty;
             }
             var md5 = new MD5CryptoServiceProvider();
-            var textToHash = Encoding.Default.GetBytes(TextToHash);
-            var result = md5.ComputeHash(textToHash);
+            byte[] textToHash = Encoding.Default.GetBytes(TextToHash);
+            byte[] result = md5.ComputeHash(textToHash);
 
             return BitConverter.ToString(result);
         }

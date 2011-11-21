@@ -30,7 +30,7 @@ namespace BlackDragonEngine.Entities
         /// <summary>
         /// The list of components this object uses
         /// </summary>
-        protected List<Component> components = new List<Component>();
+        protected List<IComponent> components = new List<IComponent>();
 
         /// <summary>
         /// The current position of the Object
@@ -45,7 +45,7 @@ namespace BlackDragonEngine.Entities
         /// Returns an Instance of a GameObject with the components specified in the parameter
         /// </summary>
         /// <param name="components">The components the object should use</param>
-        public GameObject(List<Component> components)
+        public GameObject(List<IComponent> components)
         {
             this.components = components;
         }
@@ -54,9 +54,9 @@ namespace BlackDragonEngine.Entities
         /// Returns an Instance of a GameObject with the component specified
         /// </summary>
         /// <param name="component"></param>
-        public GameObject(Component component)
+        public GameObject(IComponent component)
         {
-            components = new List<Component>();
+            components = new List<IComponent>();
             components.Add(component);
         }
 
@@ -124,6 +124,36 @@ namespace BlackDragonEngine.Entities
             get { return ShortcutProvider.Vector2Point(Camera.WorldToScreen(Position)); }
         }
 
+        #region IGameObject Members
+
+        /// <summary>
+        /// Updates all the components
+        /// </summary>
+        public virtual void Update()
+        {
+            foreach (IComponent component in components)
+            {
+                component.Update(this);
+            }
+        }
+
+        /// <summary>
+        /// Draws all drawable components
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        public virtual void Draw(SpriteBatch spriteBatch)
+        {
+            foreach (IComponent component in components)
+            {
+                if (component is GraphicsComponent)
+                {
+                    ((GraphicsComponent) component).Draw(this, spriteBatch);
+                }
+            }
+        }
+
+        #endregion
+
         /// <summary>
         /// [DEPRECATED] Returns a custom collision rectangle based on a position 
         /// </summary>
@@ -137,32 +167,6 @@ namespace BlackDragonEngine.Entities
         }
 
         /// <summary>
-        /// Updates all the components
-        /// </summary>
-        public virtual void Update()
-        {
-            foreach (Component component in components)
-            {
-                component.Update(this);
-            }
-        }
-
-        /// <summary>
-        /// Draws all drawable components
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        public virtual void Draw(SpriteBatch spriteBatch)
-        {
-            foreach (Component component in components)
-            {
-                if (component is GraphicsComponent)
-                {
-                    ((GraphicsComponent) component).Draw(this, spriteBatch);
-                }
-            }
-        }
-
-        /// <summary>
         /// Used to send messages to all components
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -170,7 +174,7 @@ namespace BlackDragonEngine.Entities
         /// <param name="obj">An attachment</param>
         public void Send<T>(string Message, T obj)
         {
-            foreach (Component component in components)
+            foreach (IComponent component in components)
             {
                 component.Receive(Message, obj);
             }
