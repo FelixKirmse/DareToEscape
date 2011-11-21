@@ -28,7 +28,7 @@ namespace DareToEscape.Bullets.BulletBehaviors
             {
                 if (_frameCounter == _paramQueue.Peek().ModOnFrame)
                 {
-                    var p = _paramQueue.Dequeue();
+                    Parameters p = _paramQueue.Dequeue();
                     bullet.SetParameters(p);
                     _frameCounter = 0;
                     _behavior = p.NewBehavior;

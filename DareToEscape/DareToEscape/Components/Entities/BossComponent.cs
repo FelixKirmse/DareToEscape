@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BlackDragonEngine.Entities;
-using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.Scripting;
 using DareToEscape.Bullets;
-using DareToEscape.Bullets.BulletBehaviors;
-using DareToEscape.Entities;
 using DareToEscape.Helpers;
 using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
@@ -17,12 +13,11 @@ namespace DareToEscape.Components.Entities
 {
     internal abstract class BossComponent : TurretComponent
     {
-        private bool _active = true;
+        protected readonly BulletPatterns Patterns;
         protected int Phase;
         protected bool Shoot;
+        private bool _active = true;
         private double _timeTracker;
-
-        protected readonly BulletPatterns Patterns;
 
         protected BossComponent()
         {
@@ -67,7 +62,7 @@ namespace DareToEscape.Components.Entities
         }
 
         protected abstract override IEnumerator<int> ShootBehavior(params float[] parameters);
-        
+
 
         protected override bool ShootCondition(Vector2 playerPosition, GameObject turret)
         {
@@ -88,6 +83,5 @@ namespace DareToEscape.Components.Entities
         }
 
         protected abstract void SwitchPhase();
-
     }
 }

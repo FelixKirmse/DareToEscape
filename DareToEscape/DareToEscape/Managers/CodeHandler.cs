@@ -32,39 +32,39 @@ namespace DareToEscape.Managers
                     break;
 
                 case "CHECKPOINT":
-                    var checkPoint = Factory.CreateCheckPoint();
+                    GameObject checkPoint = Factory.CreateCheckPoint();
                     checkPoint.Position = location;
                     EntityManager.AddEntity(checkPoint);
                     break;
 
                 case "EXIT":
-                    var exit = Factory.CreateExit();
+                    GameObject exit = Factory.CreateExit();
                     exit.Position = location;
                     EntityManager.AddEntity(exit);
                     break;
 
                 case "KEY":
-                    var key = Factory.CreateKey();
+                    GameObject key = Factory.CreateKey();
                     key.Position = location;
                     EntityManager.AddEntity(key);
                     key.Send("KEYSTRING", code[1]);
                     break;
 
                 case "LOCK":
-                    var Lock = Factory.CreateLock();
+                    GameObject Lock = Factory.CreateLock();
                     Lock.Position = location;
                     EntityManager.AddEntity(Lock);
                     Lock.Send("KEYSTRING", code[1]);
                     break;
 
                 case "BOSSKILLER":
-                    var bossKiller = Factory.CreateBossKiller();
+                    GameObject bossKiller = Factory.CreateBossKiller();
                     bossKiller.Position = location;
                     EntityManager.AddEntity(bossKiller);
                     break;
 
                 case "DIALOG":
-                    var sign = Factory.CreateSign();
+                    GameObject sign = Factory.CreateSign();
                     sign.Position = location;
                     EntityManager.AddEntity(sign);
                     break;
@@ -85,8 +85,9 @@ namespace DareToEscape.Managers
             }
         }
 
-        private static int OnCodeInPlayerCenterCheck(IList<string> codeArray, List<string> codes, Vector2 collisionCenter,
-                                                    int i, GameObject player)
+        private static int OnCodeInPlayerCenterCheck(IList<string> codeArray, List<string> codes,
+                                                     Vector2 collisionCenter,
+                                                     int i, GameObject player)
         {
             switch (codeArray[0])
             {
@@ -148,7 +149,7 @@ namespace DareToEscape.Managers
 
                 case "TRIGGER":
                     if (codeArray[1] == "BOSS")
-                        foreach (var boss in GameVariableProvider.Bosses)
+                        foreach (GameObject boss in GameVariableProvider.Bosses)
                             boss.Send<string>("SHOOT", null);
                     break;
             }
@@ -159,13 +160,14 @@ namespace DareToEscape.Managers
         private static void Spawn(IList<string> codearray, Vector2 position)
         {
             var components = new List<IComponent>
-                                    {
-                                        (IComponent)
-                                        Activator.CreateInstance(Type.GetType("DareToEscape.Components.Entities." + codearray[1] + "Component"))
-                                    };
+                                 {
+                                     (IComponent)
+                                     Activator.CreateInstance(
+                                         Type.GetType("DareToEscape.Components.Entities." + codearray[1] + "Component"))
+                                 };
             var turret = new GameObject(components) {Position = position};
             turret.Send("SET_" + codearray[2], turret);
-            if(codearray[1].Contains("Boss"))
+            if (codearray[1].Contains("Boss"))
             {
                 GameVariableProvider.Bosses.Add(turret);
             }

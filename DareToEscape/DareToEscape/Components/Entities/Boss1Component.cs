@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using BlackDragonEngine.Entities;
 using BlackDragonEngine.Providers;
 
 namespace DareToEscape.Components.Entities
 {
-    class Boss1Component : BossComponent
+    internal class Boss1Component : BossComponent
     {
+        private float _angle;
         private int _frame;
         private int _frame2;
         private int _frame3;
-        private float _angle;
 
-        public override void Update(BlackDragonEngine.Entities.GameObject obj)
+        public override void Update(GameObject obj)
         {
-            if(Shoot)
+            if (Shoot)
             {
                 switch (Phase)
                 {
@@ -137,15 +135,15 @@ namespace DareToEscape.Components.Entities
             {
                 case 1:
                 case 3:
-                    PhaseTimer = 20 * 60;
+                    PhaseTimer = 20*60;
                     break;
 
                 case 5:
                 case 7:
-                    PhaseTimer = 15 * 60;
+                    PhaseTimer = 15*60;
                     break;
                 default:
-                    PhaseTimer = 30 * 60;
+                    PhaseTimer = 30*60;
                     break;
             }
         }

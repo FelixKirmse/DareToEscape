@@ -95,7 +95,7 @@ namespace BlackDragonEngine.Helpers
         {
             WorldRectangle = new Rectangle(TileMap.Map.LowestX*TileMap.TileWidth, TileMap.Map.LowestY*TileMap.TileHeight,
                                            TileMap.TileWidth*(TileMap.MapWidth + 1),
-                                           TileMap.MapHeight*(TileMap.TileHeight + 1));
+                                           TileMap.TileHeight*(TileMap.MapHeight + 1));
         }
 
         #endregion
