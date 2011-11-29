@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
-using DareToEscape.Bullets.BulletBehaviors;
+using DareToEscape.Bullets.Behaviors;
 using DareToEscape.Managers;
 using Microsoft.Xna.Framework.Input;
 

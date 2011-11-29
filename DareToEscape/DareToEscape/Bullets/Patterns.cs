@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
-using DareToEscape.Bullets.BulletBehaviors;
+using DareToEscape.Bullets.Behaviors;
 using DareToEscape.Components.Entities;
 using DareToEscape.Entities;
 using Microsoft.Xna.Framework;
@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Bullets
 {
-    internal class BulletPatterns
+    internal class Patterns
     {
         private readonly BossComponent _turret;
         private float _angle;
@@ -18,7 +18,7 @@ namespace DareToEscape.Bullets
         private float _angle3;
         private float _angle4 = 90;
 
-        public BulletPatterns(BossComponent turret)
+        public Patterns(BossComponent turret)
         {
             _turret = turret;
         }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using BlackDragonEngine.Providers;
 using DareToEscape.Bullets;
-using DareToEscape.Bullets.BulletBehaviors;
+using DareToEscape.Bullets.Behaviors;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Components.Entities

@@ -13,7 +13,7 @@ namespace DareToEscape.Components.Entities
 {
     internal abstract class BossComponent : TurretComponent
     {
-        protected readonly BulletPatterns Patterns;
+        protected readonly Patterns Patterns;
         protected int Phase;
         protected bool Shoot;
         private bool _active = true;
@@ -22,7 +22,7 @@ namespace DareToEscape.Components.Entities
         protected BossComponent()
         {
             texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/boss1");
-            Patterns = new BulletPatterns(this);
+            Patterns = new Patterns(this);
         }
 
         protected int PhaseTimer

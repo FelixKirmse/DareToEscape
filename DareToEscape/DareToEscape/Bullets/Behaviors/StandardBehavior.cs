@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace DareToEscape.Bullets.BulletBehaviors
+namespace DareToEscape.Bullets.Behaviors
 {
     internal class StandardBehavior : IBehavior
     {

@@ -1,4 +1,4 @@
-﻿namespace DareToEscape.Bullets.BulletBehaviors
+﻿namespace DareToEscape.Bullets.Behaviors
 {
     public static class ReusableBehaviors
     {

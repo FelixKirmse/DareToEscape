@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DareToEscape.Bullets.BulletBehaviors
+namespace DareToEscape.Bullets.Behaviors
 {
     internal class ParameterQueue : IBehavior
     {
