@@ -104,6 +104,8 @@
     <Compile Include="Dialogue\DialogScript.cs" />
     <Compile Include="Entities\GameObject.cs" />
     <Compile Include="Entities\IGameObject.cs" />
+    <Compile Include="GameStates\IDrawableGameState.cs" />
+    <Compile Include="GameStates\IUpdateableGameState.cs" />
     <Compile Include="Helpers\BCircle.cs" />
     <Compile Include="Helpers\Comparer.cs" />
     <Compile Include="Helpers\DrawHelper.cs" />
@@ -118,10 +120,11 @@
     <Compile Include="Helpers\SerializableDictionary.cs" />
     <Compile Include="Managers\AudioManager.cs" />
     <Compile Include="Managers\CodeManager.cs" />
-    <Compile Include="Managers\DialogManager.cs" />
+    <Compile Include="GameStates\DialogManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Managers\LevelManager.cs" />
     <Compile Include="Managers\SaveManager.cs" />
+    <Compile Include="Managers\StateManager.cs" />
     <Compile Include="Menus\Menu.cs" />
     <Compile Include="Menus\MenuItem.cs" />
     <Compile Include="Menus\MenuLabel.cs" />

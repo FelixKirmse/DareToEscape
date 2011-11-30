@@ -1,6 +1,6 @@
 ﻿namespace DareToEscape
 {
-    public enum GameStates
+    public enum States
     {
         Titlescreen,
         Menu,

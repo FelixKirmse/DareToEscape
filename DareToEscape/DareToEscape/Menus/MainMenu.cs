@@ -6,6 +6,7 @@ using BlackDragonEngine.Providers;
 using DareToEscape.Editor;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
+using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 
 namespace DareToEscape.Menus
@@ -50,26 +51,26 @@ namespace DareToEscape.Menus
             switch (selectedItem)
             {
                 case newGame:
-                    StateManager.GameState = GameStates.Ingame;
-                    IngameManager.Activate();
+                    GameStateManager.State = States.Ingame;
+                    GameVariableProvider.IngameManager.Activate();
                     LevelManager.LoadLevel("Level1");
                     SaveManager<SaveState>.Save();
                     break;
                 case resume:
-                    StateManager.GameState = GameStates.Ingame;
-                    IngameManager.Activate();
+                    GameStateManager.State = States.Ingame;
+                    GameVariableProvider.IngameManager.Activate();
                     SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
                     break;
 
                 case tutorial:
-                    StateManager.GameState = GameStates.Tutorial;
-                    IngameManager.Activate();
+                    GameStateManager.State = States.Tutorial;
+                    GameVariableProvider.IngameManager.Activate();
                     LevelManager.LoadLevel("Tutorial");
                     SaveManager<SaveState>.Save();
                     break;
 
                 case editor:
-                    EditorManager.Activate();
+                    GameVariableProvider.EditorManager.Activate();
                     break;
 
                 case fullScreen:

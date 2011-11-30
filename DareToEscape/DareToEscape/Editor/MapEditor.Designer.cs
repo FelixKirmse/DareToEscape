@@ -173,7 +173,7 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItemClick);
             // 
             // toolsToolStripMenuItem
             // 
@@ -196,7 +196,7 @@
             this.generateRandomMapToolStripMenuItem.Name = "generateRandomMapToolStripMenuItem";
             this.generateRandomMapToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.generateRandomMapToolStripMenuItem.Text = "&Generate Random Map";
-            this.generateRandomMapToolStripMenuItem.Click += new System.EventHandler(this.generateRandomMapToolStripMenuItem_Click);
+            this.generateRandomMapToolStripMenuItem.Click += new System.EventHandler(this.GenerateRandomMapToolStripMenuItemClick);
             // 
             // layerToolStripMenuItem
             // 

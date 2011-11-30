@@ -2,149 +2,170 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using BlackDragonEngine.GameStates;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
+using DareToEscape.Editor;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
+using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
-namespace DareToEscape.Editor
+namespace DareToEscape.GameStates
 {
-    internal static class EditorManager
+    internal class EditorManager : IUpdateableGameState, IDrawableGameState
     {
-        public static int DrawLayer;
-        public static int DrawTile;
-        public static bool SettingCode;
-        public static bool MakeUnpassable;
-        public static bool MakePassable = true;
-        public static bool GettingCode;
-        public static bool InsertTile;
-        public static Vector2 CellCoords = Vector2.Zero;
-        public static string FillMode = "TILEFILL";
-        public static bool WaitingForSecondClick;
-        private static Vector2 startCell;
-        public static bool RemoveTile;
-        public static EditorItem CurrentItem;
-        public static bool SmartInsert = true;
-        public static bool PlayLevel;
+        public Vector2 CellCoords = Vector2.Zero;
+        public EditorItem CurrentItem;
+        public int DrawLayer;
+        public int DrawTile;
+        public string FillMode = "TILEFILL";
+        public bool GettingCode;
+        public bool InsertTile;
+        public bool MakePassable = true;
+        public bool MakeUnpassable;
+        public bool PlayLevel;
+        public bool RemoveTile;
+        public bool SettingCode;
+        public bool SmartInsert = true;
+        private bool _waitingForSecondClick;
+        private Vector2 _startCell;
 
         #region Doing The Impossible
 
-        private static IntPtr drawSurface;
-        private static Form parentForm;
-        private static PictureBox pictureBox;
-        private static Control gameForm;
-        private static MapEditor editorForm;
-        private static PresentationParameters orgPParams;
-        private static DareToEscape game;
-        private static EventHandler gameFormVisibleChanged;
-        private static EventHandler pictureBoxSizeChanged;
-        private static EventHandler<PreparingDeviceSettingsEventArgs> preparingDeviceSettingsHandler;
-        private static EventHandler<PreparingDeviceSettingsEventArgs> resetDeviceSettingsHandler;
+        private IntPtr _drawSurface;
+        private MapEditor _editorForm;
+        private DareToEscape _game;
+        private Control _gameForm;
+        private EventHandler _gameFormVisibleChanged;
+        private PresentationParameters _orgPParams;
+        private Form _parentForm;
+        private PictureBox _pictureBox;
+        private EventHandler _pictureBoxSizeChanged;
+        private EventHandler<PreparingDeviceSettingsEventArgs> _preparingDeviceSettingsHandler;
+        private EventHandler<PreparingDeviceSettingsEventArgs> _resetDeviceSettingsHandler;
 
-        public static void Initialize()
+        #region IDrawableGameState Members
+
+        public bool DrawCondition
         {
-            gameFormVisibleChanged = gameForm_VisibleChanged;
-            pictureBoxSizeChanged = pictureBox_SizeChanged;
-            preparingDeviceSettingsHandler = graphics_PreparingDeviceSettings;
-            resetDeviceSettingsHandler = graphics_resetDeviceSettings;
-            orgPParams = DareToEscape.Graphics.GraphicsDevice.PresentationParameters.Clone();
-            DareToEscape.Graphics.PreparingDeviceSettings += resetDeviceSettingsHandler;
+            get { return UpdateCondition; }
         }
 
-        public static void Activate(string levelname)
+        #endregion
+
+        #region IUpdateableGameState Members
+
+        public bool UpdateCondition
         {
-            editorForm = new MapEditor(levelname);
+            get { return GameStateManager.State == States.Editor; }
+        }
+
+        #endregion
+
+        public EditorManager()
+        {
+            _gameFormVisibleChanged = GameFormVisibleChanged;
+            _pictureBoxSizeChanged = PictureBoxSizeChanged;
+            _preparingDeviceSettingsHandler = GraphicsPreparingDeviceSettings;
+            _resetDeviceSettingsHandler = GraphicsResetDeviceSettings;
+            _orgPParams = DareToEscape.Graphics.GraphicsDevice.PresentationParameters.Clone();
+            DareToEscape.Graphics.PreparingDeviceSettings += _resetDeviceSettingsHandler;
+        }
+
+        public void Activate(string levelname)
+        {
+            _editorForm = new MapEditor(levelname);
             Activate();
         }
 
-        public static void Activate()
+        public void Activate()
         {
-            StateManager.GameState = GameStates.Editor;
+            GameStateManager.State = States.Editor;
             VariableProvider.CurrentPlayer = Factory.CreatePlayer();
             EntityManager.SetPlayer();
-            if (editorForm == null)
-                editorForm = new MapEditor();
-            editorForm.Show();
-            drawSurface = editorForm.pctSurface.Handle;
-            parentForm = editorForm;
-            pictureBox = editorForm.pctSurface;
-            game = (DareToEscape) VariableProvider.Game;
-            editorForm.Game = game;
+            if (_editorForm == null)
+                _editorForm = new MapEditor();
+            _editorForm.Show();
+            _drawSurface = _editorForm.pctSurface.Handle;
+            _parentForm = _editorForm;
+            _pictureBox = _editorForm.pctSurface;
+            _game = (DareToEscape) VariableProvider.Game;
+            _editorForm.Game = _game;
 
-            DareToEscape.Graphics.PreparingDeviceSettings -= resetDeviceSettingsHandler;
-            DareToEscape.Graphics.PreparingDeviceSettings += preparingDeviceSettingsHandler;
+            DareToEscape.Graphics.PreparingDeviceSettings -= _resetDeviceSettingsHandler;
+            DareToEscape.Graphics.PreparingDeviceSettings += _preparingDeviceSettingsHandler;
             DareToEscape.Graphics.GraphicsDevice.Reset();
             DareToEscape.Graphics.ApplyChanges();
 
-            gameForm = Control.FromHandle(game.Window.Handle);
-            gameForm.VisibleChanged += gameFormVisibleChanged;
-            pictureBox.SizeChanged += pictureBoxSizeChanged;
-            gameForm.Visible = false;
+            _gameForm = Control.FromHandle(_game.Window.Handle);
+            _gameForm.VisibleChanged += _gameFormVisibleChanged;
+            _pictureBox.SizeChanged += _pictureBoxSizeChanged;
+            _gameForm.Visible = false;
 
-            Camera.ViewPortWidth = pictureBox.Width;
-            Camera.ViewPortHeight = pictureBox.Height;
+            Camera.ViewPortWidth = _pictureBox.Width;
+            Camera.ViewPortHeight = _pictureBox.Height;
             Camera.UpdateWorldRectangle();
             TileMap.SpriteFont = FontProvider.GetFont("Mono8");
-            pictureBox_SizeChanged(null, null);
+            PictureBoxSizeChanged(null, null);
         }
 
-        private static void graphics_PreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        private void GraphicsPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
         {
-            e.GraphicsDeviceInformation.PresentationParameters.DeviceWindowHandle = drawSurface;
-            Mouse.WindowHandle = drawSurface;
+            e.GraphicsDeviceInformation.PresentationParameters.DeviceWindowHandle = _drawSurface;
+            Mouse.WindowHandle = _drawSurface;
         }
 
-        private static void graphics_resetDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        private void GraphicsResetDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
         {
-            e.GraphicsDeviceInformation.PresentationParameters = orgPParams.Clone();
-            Mouse.WindowHandle = orgPParams.Clone().DeviceWindowHandle;
+            e.GraphicsDeviceInformation.PresentationParameters = _orgPParams.Clone();
+            Mouse.WindowHandle = _orgPParams.Clone().DeviceWindowHandle;
         }
 
-        public static void Deactivate()
+        public void Deactivate()
         {
-            gameForm.VisibleChanged -= gameFormVisibleChanged;
-            pictureBox.SizeChanged -= pictureBoxSizeChanged;
-            DareToEscape.Graphics.PreparingDeviceSettings -= preparingDeviceSettingsHandler;
-            DareToEscape.Graphics.PreparingDeviceSettings += resetDeviceSettingsHandler;
+            _gameForm.VisibleChanged -= _gameFormVisibleChanged;
+            _pictureBox.SizeChanged -= _pictureBoxSizeChanged;
+            DareToEscape.Graphics.PreparingDeviceSettings -= _preparingDeviceSettingsHandler;
+            DareToEscape.Graphics.PreparingDeviceSettings += _resetDeviceSettingsHandler;
             DareToEscape.Graphics.GraphicsDevice.Reset();
             DareToEscape.Graphics.PreferredBackBufferWidth = 800;
             DareToEscape.Graphics.PreferredBackBufferHeight = 600;
             Camera.ViewPortWidth = 800;
             Camera.ViewPortHeight = 600;
             DareToEscape.Graphics.ApplyChanges();
-            StateManager.GameState = GameStates.Menu;
-            editorForm.Hide();
-            gameForm.Visible = true;
+            GameStateManager.State = States.Menu;
+            _editorForm.Hide();
+            _gameForm.Visible = true;
             TileMap.EditorMode = false;
         }
 
-        public static void JumpToLevel(string levelName)
+        public void JumpToLevel(string levelName)
         {
             Deactivate();
-            StateManager.GameState = GameStates.Ingame;
-            IngameManager.Activate();
+            GameStateManager.State = States.Ingame;
+            GameVariableProvider.IngameManager.Activate();
             LevelManager.LoadLevel(levelName);
         }
 
-        private static void gameForm_VisibleChanged(object sender, EventArgs e)
+        private void GameFormVisibleChanged(object sender, EventArgs e)
         {
-            if (gameForm.Visible) gameForm.Visible = false;
+            if (_gameForm.Visible) _gameForm.Visible = false;
         }
 
-        private static void pictureBox_SizeChanged(object sender, EventArgs e)
+        private void PictureBoxSizeChanged(object sender, EventArgs e)
         {
-            if (parentForm.WindowState != FormWindowState.Minimized)
+            if (_parentForm.WindowState != FormWindowState.Minimized)
             {
-                DareToEscape.Graphics.PreferredBackBufferWidth = pictureBox.Width;
-                DareToEscape.Graphics.PreferredBackBufferHeight = pictureBox.Height;
-                Camera.ViewPortWidth = pictureBox.Width;
-                Camera.ViewPortHeight = pictureBox.Height;
+                DareToEscape.Graphics.PreferredBackBufferWidth = _pictureBox.Width;
+                DareToEscape.Graphics.PreferredBackBufferHeight = _pictureBox.Height;
+                Camera.ViewPortWidth = _pictureBox.Width;
+                Camera.ViewPortHeight = _pictureBox.Height;
                 DareToEscape.Graphics.ApplyChanges();
             }
         }
@@ -153,9 +174,25 @@ namespace DareToEscape.Editor
 
         #region Updating and Drawing
 
-        public static void Update()
+        #region IDrawableGameState Members
+
+        public void Draw(SpriteBatch spriteBatch)
         {
-            if (Form.ActiveForm != parentForm) return;
+            if (_waitingForSecondClick)
+            {
+                TileMap.DrawRectangleIndicator(spriteBatch, InputProvider.MouseState, _startCell);
+            }
+            EntityManager.Draw(spriteBatch);
+            LevelManager.Draw(spriteBatch);
+        }
+
+        #endregion
+
+        #region IUpdateableGameState Members
+
+        public void Update()
+        {
+            if (Form.ActiveForm != _parentForm) return;
             MouseState ms = InputProvider.MouseState;
             if (!PlayLevel)
             {
@@ -206,7 +243,7 @@ namespace DareToEscape.Editor
                             {
                                 if (SettingCode)
                                 {
-                                    ((MapEditor) parentForm).SetCodeList(cellX, cellY);
+                                    ((MapEditor) _parentForm).SetCodeList(cellX, cellY);
                                 }
                                 else if (MakePassable)
                                 {
@@ -218,7 +255,7 @@ namespace DareToEscape.Editor
                                 }
                                 else if (GettingCode)
                                 {
-                                    ((MapEditor) parentForm).GetCodeList(TileMap.GetCellCodes(cellX, cellY));
+                                    ((MapEditor) _parentForm).GetCodeList(TileMap.GetCellCodes(cellX, cellY));
                                 }
                                 if (InsertTile)
                                 {
@@ -229,19 +266,19 @@ namespace DareToEscape.Editor
                         case "RECTANGLEFILL":
                             if (ShortcutProvider.LeftButtonClickedNowButNotLastFrame())
                             {
-                                if (!WaitingForSecondClick)
+                                if (!_waitingForSecondClick)
                                 {
-                                    startCell = new Vector2(cellX, cellY);
-                                    WaitingForSecondClick = true;
+                                    _startCell = new Vector2(cellX, cellY);
+                                    _waitingForSecondClick = true;
                                 }
                                 else
                                 {
                                     var endCell = new Vector2(cellX, cellY);
-                                    WaitingForSecondClick = false;
+                                    _waitingForSecondClick = false;
 
-                                    for (var cellx = (int) startCell.X; cellx <= endCell.X; ++cellx)
+                                    for (var cellx = (int) _startCell.X; cellx <= endCell.X; ++cellx)
                                     {
-                                        for (var celly = (int) startCell.Y; celly <= endCell.Y; ++celly)
+                                        for (var celly = (int) _startCell.Y; celly <= endCell.Y; ++celly)
                                         {
                                             if (SmartInsert)
                                                 InsertEditorItem(cellx, celly);
@@ -258,23 +295,23 @@ namespace DareToEscape.Editor
                             }
                             if (ShortcutProvider.RightButtonClickedButNotLastFrame())
                             {
-                                if (!WaitingForSecondClick)
+                                if (!_waitingForSecondClick)
                                 {
-                                    startCell = new Vector2(cellX, cellY);
-                                    WaitingForSecondClick = true;
+                                    _startCell = new Vector2(cellX, cellY);
+                                    _waitingForSecondClick = true;
                                 }
                                 else
                                 {
                                     var endCell = new Vector2(cellX, cellY);
-                                    WaitingForSecondClick = false;
+                                    _waitingForSecondClick = false;
 
-                                    for (var cellx = (int) startCell.X; cellx <= endCell.X; ++cellx)
+                                    for (var cellx = (int) _startCell.X; cellx <= endCell.X; ++cellx)
                                     {
-                                        for (var celly = (int) startCell.Y; celly <= endCell.Y; ++celly)
+                                        for (var celly = (int) _startCell.Y; celly <= endCell.Y; ++celly)
                                         {
                                             if (SettingCode)
                                             {
-                                                ((MapEditor) parentForm).SetCodeList(cellx, celly);
+                                                ((MapEditor) _parentForm).SetCodeList(cellx, celly);
                                             }
                                             else if (MakePassable)
                                             {
@@ -305,18 +342,11 @@ namespace DareToEscape.Editor
             }
         }
 
-        public static void Draw(SpriteBatch spriteBatch)
-        {
-            if (WaitingForSecondClick)
-            {
-                TileMap.DrawRectangleIndicator(spriteBatch, InputProvider.MouseState, startCell);
-            }
-            EntityManager.Draw(spriteBatch);
-        }
+        #endregion
 
         #endregion
 
-        private static void InsertEditorItem(int cellX, int cellY)
+        private void InsertEditorItem(int cellX, int cellY)
         {
             if (CurrentItem == null)
                 return;
@@ -403,7 +433,7 @@ namespace DareToEscape.Editor
             TileMap.SetCellCodes(cellX, cellY, codes);
         }
 
-        public static EditorItem GetEditorItemByName(string name)
+        public EditorItem GetEditorItemByName(string name)
         {
             var item = new EditorItem();
             switch (name)

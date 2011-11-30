@@ -29,7 +29,7 @@ namespace DareToEscape.Components.PlayerComponents
         {
             if (message == "KILL")
             {
-                StateManager.PlayerDead = true;
+                GameStateManager.PlayerDead = true;
             }
         }
 

@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace EventInput
+namespace BlackDragonEngine.Helpers
 {
     /// <summary>
     ///  CREDITS INFINIMINER

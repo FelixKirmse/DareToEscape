@@ -33,8 +33,8 @@ namespace DareToEscape.Managers
 
         public void Update(GameTime gameTime)
         {
-            if (StateManager.GameState != GameStates.Ingame &&
-                (StateManager.GameState != GameStates.Editor || EngineStates.GameStates != EEngineStates.Running))
+            if (GameStateManager.State != States.Ingame &&
+                (GameStateManager.State != States.Editor || EngineStates.GameStates != EEngineStates.Running))
                 return;
 
             int bulletCount = _bullets.Count;
@@ -79,7 +79,7 @@ namespace DareToEscape.Managers
 
         public void Draw()
         {
-            if (StateManager.GameState != GameStates.Ingame && StateManager.GameState != GameStates.Editor) return;
+            if (GameStateManager.State != States.Ingame && GameStateManager.State != States.Editor) return;
 
             for (int i = 0; i < _bullets.Count; ++i)
             {

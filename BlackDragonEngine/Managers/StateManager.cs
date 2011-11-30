@@ -7,26 +7,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BlackDragonEngine.Managers
 {
-    public sealed class StateManager
+    public abstract class StateManager
     {
         private readonly List<IDrawableGameState> _drawableStates;
         private readonly List<IUpdateableGameState> _updateableStates;
 
-        #region Static fields and methods
-        private static readonly Dictionary<string, bool> Conditionals = new Dictionary<string, bool>();
-
-        public static void AddConditional(string name, bool initialValue)
-        {
-            Conditionals.Add(name, initialValue);
-        }
-
-        public static bool GetConditional(string name)
-        {
-            return Conditionals[name];
-        }
-        #endregion
-
-        public StateManager()
+        protected StateManager()
         {
             _drawableStates = new List<IDrawableGameState>();
             _updateableStates = new List<IUpdateableGameState>();
@@ -34,19 +20,21 @@ namespace BlackDragonEngine.Managers
 
         public void AddGameState(object state)
         {
+            var implementedInterface = false;
             var drawableState = state as IDrawableGameState;
             if(drawableState != null)
             {
                 _drawableStates.Add(drawableState);
-                return;
+                implementedInterface = true;
             }
             var updateableState = state as IUpdateableGameState;
             if(updateableState != null)
             {
                 _updateableStates.Add(updateableState);
-                return;
+                implementedInterface = true;
             }
-            throw new Exception("Passed object didn't implement any GameState-Interfaces");
+            if(!implementedInterface)
+                throw new Exception("Object " + state + " didn't implement any of the required interfaces");
         }
 
         public void Update()
@@ -54,7 +42,11 @@ namespace BlackDragonEngine.Managers
             foreach(var state in _updateableStates)
             {
                 if(state.UpdateCondition)
+                {
                     state.Update();
+                    return;
+                }
+                    
             }
         }
 

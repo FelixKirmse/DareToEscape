@@ -1,6 +1,6 @@
 ﻿namespace BlackDragonEngine.GameStates
 {
-    internal interface IUpdateableGameState
+    public interface IUpdateableGameState
     {
         bool UpdateCondition { get; }
         void Update();

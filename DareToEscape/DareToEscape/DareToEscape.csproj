@@ -115,7 +115,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bullets\BulletPatterns.cs" />
+    <Compile Include="Bullets\Patterns.cs" />
     <Compile Include="Components\Entities\Boss1Component.cs" />
     <Compile Include="Components\Entities\BossComponent.cs" />
     <Compile Include="Components\Entities\BossKillerComponent.cs" />
@@ -133,7 +133,7 @@
     <Compile Include="Components\PlayerComponents\PlayerGeneralComponent.cs" />
     <Compile Include="Dialog\Tutorial\TutorialDialog.cs" />
     <Compile Include="Editor\EditorItem.cs" />
-    <Compile Include="Editor\EditorManager.cs" />
+    <Compile Include="GameStates\EditorManager.cs" />
     <Compile Include="Editor\MapEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -141,31 +141,31 @@
       <DependentUpon>MapEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Bullets\Bullet.cs" />
-    <Compile Include="Bullets\BulletBehaviors\IBehavior.cs" />
-    <Compile Include="Bullets\BulletBehaviors\ParameterQueue.cs" />
-    <Compile Include="Bullets\BulletBehaviors\ReusableBehaviors.cs" />
-    <Compile Include="Bullets\BulletBehaviors\StandardBehavior.cs" />
+    <Compile Include="Bullets\Behaviors\IBehavior.cs" />
+    <Compile Include="Bullets\Behaviors\ParameterQueue.cs" />
+    <Compile Include="Bullets\Behaviors\ReusableBehaviors.cs" />
+    <Compile Include="Bullets\Behaviors\StandardBehavior.cs" />
     <Compile Include="Entities\Player.cs" />
-    <Compile Include="GameStates.cs" />
+    <Compile Include="States.cs" />
     <Compile Include="Helpers\ContentLoader.cs" />
     <Compile Include="Helpers\DialogHelper.cs" />
     <Compile Include="Helpers\Factory.cs" />
     <Compile Include="Helpers\GameInitializer.cs" />
-    <Compile Include="Helpers\GeneralHelper.cs" />
+    <Compile Include="GameStates\GeneralHelper.cs" />
     <Compile Include="Helpers\SaveHelper.cs" />
     <Compile Include="Helpers\SaveState.cs" />
     <Compile Include="Managers\BulletManager.cs" />
-    <Compile Include="Managers\IngameManager.cs" />
-    <Compile Include="Managers\MenuManager.cs" />
+    <Compile Include="Managers\GameStateManager.cs" />
+    <Compile Include="GameStates\IngameManager.cs" />
+    <Compile Include="GameStates\MenuManager.cs" />
     <Compile Include="Managers\CodeHandler.cs" />
-    <Compile Include="Managers\StateManager.cs" />
-    <Compile Include="MapTools\MapGenerator.cs" />
+    <Compile Include="GameStates\MapGenerator.cs" />
     <Compile Include="Menus\IngameMenu.cs" />
     <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="DareToEscape.cs" />
-    <Compile Include="Menus\Titlescreen.cs" />
+    <Compile Include="GameStates\Titlescreen.cs" />
     <Compile Include="Providers\AnimationDictionaryProvider.cs" />
     <Compile Include="Providers\BulletInformationProvider.cs" />
     <Compile Include="Providers\DialogDictionaryProvider.cs" />

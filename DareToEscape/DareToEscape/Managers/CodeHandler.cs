@@ -4,6 +4,8 @@ using BlackDragonEngine.Components;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Managers;
+using BlackDragonEngine.Providers;
+using DareToEscape.GameStates;
 using DareToEscape.Helpers;
 using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
@@ -92,15 +94,15 @@ namespace DareToEscape.Managers
             switch (codeArray[0])
             {
                 case "TRANSITION":
-                    IngameManager.Activate();
+                    GameVariableProvider.IngameManager.Activate();
                     LevelManager.LoadLevel(codeArray[1]);
                     SaveManager<SaveState>.CurrentSaveState.Keys.Clear();
                     SaveManager<SaveState>.CurrentSaveState.BossDead = false;
                     break;
 
                 case "MAINMENU":
-                    StateManager.GameState = GameStates.Menu;
-                    StateManager.MenuState = MenuStates.Main;
+                    GameStateManager.State = States.Menu;
+                    MenuManager.MenuState = MenuStates.Main;
                     SaveManager<SaveState>.CurrentSaveState.Keys.Clear();
                     SaveManager<SaveState>.CurrentSaveState.BossDead = false;
                     break;
@@ -113,18 +115,18 @@ namespace DareToEscape.Managers
                     break;
 
                 case "TUTORIALDIALOG":
-                    DialogManager.PlayDialog(DialogDictionaryProvider.TutorialDialog(), "Tutorial");
+                    VariableProvider.DialogManager.PlayDialog(DialogDictionaryProvider.TutorialDialog(), "Tutorial");
                     codes.Remove("TUTORIALDIALOG");
                     break;
 
                 case "TUTORIALFINISH":
-                    DialogManager.PlayDialog(DialogDictionaryProvider.TutorialDialogFinish(), "TutorialFinish");
+                    VariableProvider.DialogManager.PlayDialog(DialogDictionaryProvider.TutorialDialogFinish(), "TutorialFinish");
                     codes.Remove("TUTORIALFINISH");
                     codes.Add("MAINMENU");
                     break;
 
                 case "GRATZ":
-                    DialogManager.PlayDialog(DialogDictionaryProvider.Gratz(), "Gratz");
+                    VariableProvider.DialogManager.PlayDialog(DialogDictionaryProvider.Gratz(), "Gratz");
                     codes.Remove("GRATZ");
                     codes.Add("MAINMENU");
                     break;

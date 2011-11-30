@@ -8,7 +8,8 @@ using System.IO;
 using System.Windows.Forms;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.TileEngine;
-using DareToEscape.MapTools;
+using DareToEscape.GameStates;
+using DareToEscape.Providers;
 using Microsoft.Xna.Framework.Input;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using XNARectangle = Microsoft.Xna.Framework.Rectangle;
@@ -23,30 +24,28 @@ namespace DareToEscape.Editor
         public DareToEscape Game;
         private string _currentMapName;
         private bool _updateMapSize = true;
+        private readonly EditorManager _editorManager;
 
         public MapEditor()
         {
+            _editorManager = GameVariableProvider.EditorManager;
             InitializeComponent();
-            MapGenerator.OnGenerationFinished += () => _updateMapSize = true;
+            GameVariableProvider.MapGenerator.OnGenerationFinished += () => _updateMapSize = true;
         }
 
         public MapEditor(string levelName)
         {
+            _editorManager = GameVariableProvider.EditorManager;
             InitializeComponent();
             _loadLevel = levelName;
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExitToolStripMenuItemClick(object sender, EventArgs e)
         {
-            EditorManager.Deactivate();
+            _editorManager.Deactivate();
         }
 
-        private void LoadImageLists()
-        {
-            LoadImageLists(false);
-        }
-
-        private void LoadImageLists(bool createImages)
+        private void LoadImageLists(bool createImages = false)
         {
             string filepath;
 
@@ -133,8 +132,8 @@ namespace DareToEscape.Editor
         {
             if (listTiles.SelectedIndices.Count > 0)
             {
-                EditorManager.DrawTile = listTiles.SelectedIndices[0];
-                EditorManager.CurrentItem = EditorManager.GetEditorItemByName(listTiles.SelectedIndices[0].ToString());
+                _editorManager.DrawTile = listTiles.SelectedIndices[0];
+                _editorManager.CurrentItem = GameVariableProvider.EditorManager.GetEditorItemByName(listTiles.SelectedIndices[0].ToString());
             }
         }
 
@@ -143,16 +142,16 @@ namespace DareToEscape.Editor
         {
             if (radioPassable.Checked)
             {
-                EditorManager.SettingCode = false;
-                EditorManager.MakePassable = true;
-                EditorManager.MakeUnpassable = false;
-                EditorManager.GettingCode = false;
+                _editorManager.SettingCode = false;
+                _editorManager.MakePassable = true;
+                _editorManager.MakeUnpassable = false;
+                _editorManager.GettingCode = false;
             }
         }
 
         private void backgroundToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EditorManager.DrawLayer = 0;
+            _editorManager.DrawLayer = 0;
             backgroundToolStripMenuItem.Checked = true;
             interactiveToolStripMenuItem.Checked = false;
             foregroundToolStripMenuItem.Checked = false;
@@ -160,7 +159,7 @@ namespace DareToEscape.Editor
 
         private void interactiveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EditorManager.DrawLayer = 1;
+            _editorManager.DrawLayer = 1;
             backgroundToolStripMenuItem.Checked = false;
             interactiveToolStripMenuItem.Checked = true;
             foregroundToolStripMenuItem.Checked = false;
@@ -168,7 +167,7 @@ namespace DareToEscape.Editor
 
         private void foregroundToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EditorManager.DrawLayer = 2;
+            _editorManager.DrawLayer = 2;
             backgroundToolStripMenuItem.Checked = false;
             interactiveToolStripMenuItem.Checked = false;
             foregroundToolStripMenuItem.Checked = true;
@@ -183,7 +182,7 @@ namespace DareToEscape.Editor
 
             if (_updateMapSize)
                 mapSizeLabel.Text = "Map size: " + TileMap.MapWidth + " x " + TileMap.MapHeight;
-            coordLbl.Text = "MapCell: (" + EditorManager.CellCoords.X + @"|" + EditorManager.CellCoords.Y + ")";
+            coordLbl.Text = "MapCell: (" + _editorManager.CellCoords.X + @"|" + _editorManager.CellCoords.Y + ")";
         }
 
         private void loadMapToolStripMenuItem_Click(object sender, EventArgs e)
@@ -212,17 +211,17 @@ namespace DareToEscape.Editor
 
         private void MapEditor_FormClosed(object sender, FormClosedEventArgs e)
         {
-            EditorManager.Deactivate();
+            _editorManager.Deactivate();
         }
 
         private void radioUnpassable_CheckedChanged(object sender, EventArgs e)
         {
             if (radioUnpassable.Checked)
             {
-                EditorManager.SettingCode = false;
-                EditorManager.MakePassable = false;
-                EditorManager.MakeUnpassable = true;
-                EditorManager.GettingCode = false;
+                _editorManager.SettingCode = false;
+                _editorManager.MakePassable = false;
+                _editorManager.MakeUnpassable = true;
+                _editorManager.GettingCode = false;
             }
         }
 
@@ -230,10 +229,10 @@ namespace DareToEscape.Editor
         {
             if (radioCode.Checked)
             {
-                EditorManager.SettingCode = true;
-                EditorManager.MakePassable = false;
-                EditorManager.MakeUnpassable = false;
-                EditorManager.GettingCode = false;
+                _editorManager.SettingCode = true;
+                _editorManager.MakePassable = false;
+                _editorManager.MakeUnpassable = false;
+                _editorManager.GettingCode = false;
             }
         }
 
@@ -252,14 +251,14 @@ namespace DareToEscape.Editor
 
         private void startGameButton_Click(object sender, EventArgs e)
         {
-            EditorManager.JumpToLevel(_currentMapName.Replace(".map", ""));
+            _editorManager.JumpToLevel(_currentMapName.Replace(".map", ""));
         }
 
         private void backgroundRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (backgroundRadioButton.Checked)
             {
-                EditorManager.DrawLayer = 0;
+                _editorManager.DrawLayer = 0;
                 backgroundToolStripMenuItem.Checked = true;
                 interactiveToolStripMenuItem.Checked = false;
                 foregroundToolStripMenuItem.Checked = false;
@@ -270,7 +269,7 @@ namespace DareToEscape.Editor
         {
             if (interactiveRadioButton.Checked)
             {
-                EditorManager.DrawLayer = 1;
+                _editorManager.DrawLayer = 1;
                 backgroundToolStripMenuItem.Checked = false;
                 interactiveToolStripMenuItem.Checked = true;
                 foregroundToolStripMenuItem.Checked = false;
@@ -281,7 +280,7 @@ namespace DareToEscape.Editor
         {
             if (foregroundRadioButton.Checked)
             {
-                EditorManager.DrawLayer = 2;
+                _editorManager.DrawLayer = 2;
                 backgroundToolStripMenuItem.Checked = false;
                 interactiveToolStripMenuItem.Checked = false;
                 foregroundToolStripMenuItem.Checked = true;
@@ -300,12 +299,12 @@ namespace DareToEscape.Editor
         {
             if (rectangleSelectionCheckBox.Checked)
             {
-                EditorManager.FillMode = "RECTANGLEFILL";
+                _editorManager.FillMode = "RECTANGLEFILL";
                 getCodeRadio.Enabled = false;
             }
             else
             {
-                EditorManager.FillMode = "TILEFILL";
+                _editorManager.FillMode = "TILEFILL";
                 getCodeRadio.Enabled = true;
             }
         }
@@ -314,10 +313,10 @@ namespace DareToEscape.Editor
         {
             if (getCodeRadio.Checked)
             {
-                EditorManager.SettingCode = false;
-                EditorManager.MakePassable = false;
-                EditorManager.MakeUnpassable = false;
-                EditorManager.GettingCode = true;
+                _editorManager.SettingCode = false;
+                _editorManager.MakePassable = false;
+                _editorManager.MakeUnpassable = false;
+                _editorManager.GettingCode = true;
             }
         }
 
@@ -383,7 +382,7 @@ namespace DareToEscape.Editor
 
         private void insertTileCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            EditorManager.InsertTile = insertTileCheckBox.Checked;
+            _editorManager.InsertTile = insertTileCheckBox.Checked;
         }
 
         private void openFileDialog_FileOk(object sender, CancelEventArgs e)
@@ -418,24 +417,24 @@ namespace DareToEscape.Editor
 
         private void deleteCheckbox_CheckedChanged(object sender, EventArgs e)
         {
-            EditorManager.RemoveTile = deleteCheckbox.Checked;
+            _editorManager.RemoveTile = deleteCheckbox.Checked;
         }
 
         private void smartLeftClick_CheckedChanged(object sender, EventArgs e)
         {
-            EditorManager.SmartInsert = smartLeftClick.Checked;
+            _editorManager.SmartInsert = smartLeftClick.Checked;
         }
 
         private void listEntities_SelectedIndexChanged(object sender, EventArgs e)
         {
-            EditorManager.CurrentItem = EditorManager.GetEditorItemByName(listEntities.SelectedItems[0].Text);
+            _editorManager.CurrentItem = _editorManager.GetEditorItemByName(listEntities.SelectedItems[0].Text);
         }
 
         private void playInEditorButton_Click(object sender, EventArgs e)
         {
-            EditorManager.PlayLevel = !EditorManager.PlayLevel;
-            TileMap.EditorMode = !EditorManager.PlayLevel;
-            playInEditorButton.Text = EditorManager.PlayLevel ? "Return To Edit-Mode" : "Play Map in Editor";
+            _editorManager.PlayLevel = !_editorManager.PlayLevel;
+            TileMap.EditorMode = !_editorManager.PlayLevel;
+            playInEditorButton.Text = _editorManager.PlayLevel ? "Return To Edit-Mode" : "Play Map in Editor";
             bool state = TileMap.EditorMode;
             listTiles.Enabled = state;
             listEntities.Enabled = state;
@@ -449,10 +448,10 @@ namespace DareToEscape.Editor
             focusButton.Focus();
         }
 
-        private void generateRandomMapToolStripMenuItem_Click(object sender, EventArgs e)
+        private void GenerateRandomMapToolStripMenuItemClick(object sender, EventArgs e)
         {
             _updateMapSize = false;
-            MapGenerator.GenerateNewMap();
+            GameVariableProvider.MapGenerator.GenerateNewMap();
         }
     }
 }

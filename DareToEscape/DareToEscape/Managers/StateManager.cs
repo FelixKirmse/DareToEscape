@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Managers
 {
-    internal static class StateManager
+    internal static class ObsoleteStateManager
     {
         public static GameStates GameState { get; set; }
         public static MenuStates MenuState { get; set; }

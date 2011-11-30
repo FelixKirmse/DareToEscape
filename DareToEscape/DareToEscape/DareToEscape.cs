@@ -16,6 +16,7 @@ namespace DareToEscape
     {
         public static GraphicsDeviceManager Graphics;
         private SpriteBatch _spriteBatch;
+        private GameStateManager _stateManager;
 
         public DareToEscape()
         {
@@ -47,8 +48,7 @@ namespace DareToEscape
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             ContentLoader.LoadContent(Content);
-            MenuManager.Initialize();
-            EditorManager.Initialize();
+            _stateManager = new GameStateManager();
         }
 
         protected override void UnloadContent()
@@ -62,7 +62,7 @@ namespace DareToEscape
                 GameVariableProvider.BulletManager.Update(gameTime);
                 VariableProvider.GameTime = gameTime;
                 InputProvider.Update();
-                StateManager.Update();
+                _stateManager.Update();
             }
             base.Update(gameTime);
         }
@@ -71,7 +71,7 @@ namespace DareToEscape
         {
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            StateManager.Draw(_spriteBatch);
+            _stateManager.Draw(_spriteBatch);
             GameVariableProvider.BulletManager.Draw();
             _spriteBatch.End();
             DrawHelper.Draw(_spriteBatch);

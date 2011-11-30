@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlackDragonEngine.GameStates;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
@@ -9,20 +10,24 @@ using DareToEscape.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace DareToEscape.MapTools
+namespace DareToEscape.GameStates
 {
     public delegate void MapGenerated();
 
-    public static class MapGenerator
+    public  class MapGenerator : IDrawableGameState
     {
-        private static RandomMapGenerator _mapGen;
-        private static Task _task;
+        private  RandomMapGenerator _mapGen;
+        private  Task _task;
 
-        private static GenerationState _state;
-        public static event MapGenerated OnGenerationFinished;
+        private  GenerationState _state;
+        public  event MapGenerated OnGenerationFinished;
 
+        public bool DrawCondition
+        {
+            get { return GameStateManager.State == States.GeneratingMap; }
+        }
 
-        public static void Draw(SpriteBatch spriteBatch)
+        public  void Draw(SpriteBatch spriteBatch)
         {
             string drawString = null;
             switch (_state)
@@ -58,13 +63,13 @@ namespace DareToEscape.MapTools
                                    new Color(0, 255, 0));
         }
 
-        public static void GenerateNewMap()
+        public  void GenerateNewMap()
         {
             _mapGen = new RandomMapGenerator();
             _task = Task.Factory.StartNew(() =>
                                               {
-                                                  GameStates previousState = StateManager.GameState;
-                                                  StateManager.GameState = GameStates.GeneratingMap;
+                                                  States previousState = GameStateManager.State;
+                                                  GameStateManager.State = States.GeneratingMap;
                                                   _task.Wait(32);
                                                   _state = GenerationState.Digging;
                                                   _mapGen.GenerateNewMap(500);
@@ -77,11 +82,11 @@ namespace DareToEscape.MapTools
                                                   _mapGen.RemoveCellsByCondition(CellOnlyHasOneNeighbor);
                                                   RemoveMapgenCodes();
                                                   OnGenerationFinished();
-                                                  StateManager.GameState = previousState;
+                                                  GameStateManager.State = previousState;
                                               });
         }
 
-        private static void RemoveMapgenCodes()
+        private  void RemoveMapgenCodes()
         {
             foreach (Coords cell in TileMap.Map.MapData.Keys)
             {
@@ -94,7 +99,7 @@ namespace DareToEscape.MapTools
             }
         }
 
-        private static void PlacePlatforms()
+        private  void PlacePlatforms()
         {
             List<Coords> cellsToChange = (from cell in TileMap.Map.Codes
                                           where
@@ -104,7 +109,7 @@ namespace DareToEscape.MapTools
             cellsToChange.ForEach(PlacePlatform);
         }
 
-        private static void PlacePlatform(Coords cell)
+        private  void PlacePlatform(Coords cell)
         {
             TileMap.AddCodeToCell(cell, "JUMPTHROUGH");
             TileMap.AddCodeToCell(VariableProvider.CoordList[cell.X, cell.Y - 1], "JUMPTHROUGHTOP");
@@ -113,7 +118,7 @@ namespace DareToEscape.MapTools
         }
 
 
-        private static bool CellHasNeighborToLeftOrRight(Coords cell)
+        private  bool CellHasNeighborToLeftOrRight(Coords cell)
         {
             int neighborCount = 0;
             for (int x = -1; x <= 1; ++x)
@@ -131,7 +136,7 @@ namespace DareToEscape.MapTools
             return neighborCount > 0;
         }
 
-        private static bool CellOnlyHasOneNeighbor(Coords cell)
+        private  bool CellOnlyHasOneNeighbor(Coords cell)
         {
             ++_mapGen.ProgressCounter;
             if (TileMap.CellIsPassable(cell))
@@ -148,7 +153,7 @@ namespace DareToEscape.MapTools
             return neighborCount == 1;
         }
 
-        private static bool CellSurroundedByAir(Coords cell)
+        private  bool CellSurroundedByAir(Coords cell)
         {
             ++_mapGen.ProgressCounter;
             return TileMap.Map.Codes[cell].Count == 8 && !TileMap.Map.Codes[cell].Contains("JUMPTHROUGH");
