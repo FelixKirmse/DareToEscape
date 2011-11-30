@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using BlackDragonEngine.Entities;
-using DareToEscape.Editor;
 using DareToEscape.GameStates;
 using DareToEscape.Managers;
 

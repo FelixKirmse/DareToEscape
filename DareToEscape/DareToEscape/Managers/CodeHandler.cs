@@ -120,7 +120,8 @@ namespace DareToEscape.Managers
                     break;
 
                 case "TUTORIALFINISH":
-                    VariableProvider.DialogManager.PlayDialog(DialogDictionaryProvider.TutorialDialogFinish(), "TutorialFinish");
+                    VariableProvider.DialogManager.PlayDialog(DialogDictionaryProvider.TutorialDialogFinish(),
+                                                              "TutorialFinish");
                     codes.Remove("TUTORIALFINISH");
                     codes.Add("MAINMENU");
                     break;
@@ -151,7 +152,7 @@ namespace DareToEscape.Managers
 
                 case "TRIGGER":
                     if (codeArray[1] == "BOSS")
-                        foreach (GameObject boss in GameVariableProvider.Bosses)
+                        foreach (var boss in GameVariableProvider.Bosses)
                             boss.Send<string>("SHOOT", null);
                     break;
             }

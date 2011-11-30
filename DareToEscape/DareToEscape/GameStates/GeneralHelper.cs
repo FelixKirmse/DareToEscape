@@ -9,17 +9,23 @@ using DareToEscape.Providers;
 
 namespace DareToEscape.GameStates
 {
-    internal class GeneralHelper : IUpdateableGameState 
+    internal class GeneralHelper : IUpdateableGameState
     {
         private const float TimeToAutoResume = 3f;
-        private  float _elapsedSeconds;
+        private float _elapsedSeconds;
+
+        #region IUpdateableGameState Members
 
         public bool UpdateCondition
         {
-            get { return GameStateManager.PlayerDead && EngineStates.DialogState == DialogueStates.Inactive && GameStateManager.State != States.Editor; }
+            get
+            {
+                return GameStateManager.PlayerDead && EngineStates.DialogState == DialogueStates.Inactive &&
+                       GameStateManager.State != States.Editor;
+            }
         }
 
-        public  void Update()
+        public bool Update()
         {
             GameVariableProvider.BulletManager.ClearAllBullets();
             VariableProvider.ScriptEngine.StopAllScripts();
@@ -33,6 +39,9 @@ namespace DareToEscape.GameStates
                 GameStateManager.PlayerDead = false;
                 _elapsedSeconds = 0f;
             }
+            return true;
         }
+
+        #endregion
     }
 }

@@ -3,6 +3,6 @@
     public interface IUpdateableGameState
     {
         bool UpdateCondition { get; }
-        void Update();
+        bool Update();
     }
 }

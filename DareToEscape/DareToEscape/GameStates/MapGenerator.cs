@@ -14,20 +14,21 @@ namespace DareToEscape.GameStates
 {
     public delegate void MapGenerated();
 
-    public  class MapGenerator : IDrawableGameState
+    public class MapGenerator : IDrawableGameState
     {
-        private  RandomMapGenerator _mapGen;
-        private  Task _task;
+        private RandomMapGenerator _mapGen;
 
-        private  GenerationState _state;
-        public  event MapGenerated OnGenerationFinished;
+        private GenerationState _state;
+        private Task _task;
+
+        #region IDrawableGameState Members
 
         public bool DrawCondition
         {
             get { return GameStateManager.State == States.GeneratingMap; }
         }
 
-        public  void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             string drawString = null;
             switch (_state)
@@ -63,7 +64,11 @@ namespace DareToEscape.GameStates
                                    new Color(0, 255, 0));
         }
 
-        public  void GenerateNewMap()
+        #endregion
+
+        public event MapGenerated OnGenerationFinished;
+
+        public void GenerateNewMap()
         {
             _mapGen = new RandomMapGenerator();
             _task = Task.Factory.StartNew(() =>
@@ -86,20 +91,20 @@ namespace DareToEscape.GameStates
                                               });
         }
 
-        private  void RemoveMapgenCodes()
+        private void RemoveMapgenCodes()
         {
-            foreach (Coords cell in TileMap.Map.MapData.Keys)
+            foreach (var cell in TileMap.Map.MapData.Keys)
             {
                 while (TileMap.Map.Codes[cell].Remove("AddedByInvert")) continue;
             }
-            foreach (Coords cell in TileMap.Map.MapData.Keys)
+            foreach (var cell in TileMap.Map.MapData.Keys)
             {
                 if (TileMap.Map.Codes[cell].Count == 0)
                     TileMap.Map.Codes.Remove(cell);
             }
         }
 
-        private  void PlacePlatforms()
+        private void PlacePlatforms()
         {
             List<Coords> cellsToChange = (from cell in TileMap.Map.Codes
                                           where
@@ -109,7 +114,7 @@ namespace DareToEscape.GameStates
             cellsToChange.ForEach(PlacePlatform);
         }
 
-        private  void PlacePlatform(Coords cell)
+        private void PlacePlatform(Coords cell)
         {
             TileMap.AddCodeToCell(cell, "JUMPTHROUGH");
             TileMap.AddCodeToCell(VariableProvider.CoordList[cell.X, cell.Y - 1], "JUMPTHROUGHTOP");
@@ -118,7 +123,7 @@ namespace DareToEscape.GameStates
         }
 
 
-        private  bool CellHasNeighborToLeftOrRight(Coords cell)
+        private bool CellHasNeighborToLeftOrRight(Coords cell)
         {
             int neighborCount = 0;
             for (int x = -1; x <= 1; ++x)
@@ -136,7 +141,7 @@ namespace DareToEscape.GameStates
             return neighborCount > 0;
         }
 
-        private  bool CellOnlyHasOneNeighbor(Coords cell)
+        private bool CellOnlyHasOneNeighbor(Coords cell)
         {
             ++_mapGen.ProgressCounter;
             if (TileMap.CellIsPassable(cell))
@@ -153,7 +158,7 @@ namespace DareToEscape.GameStates
             return neighborCount == 1;
         }
 
-        private  bool CellSurroundedByAir(Coords cell)
+        private bool CellSurroundedByAir(Coords cell)
         {
             ++_mapGen.ProgressCounter;
             return TileMap.Map.Codes[cell].Count == 8 && !TileMap.Map.Codes[cell].Contains("JUMPTHROUGH");

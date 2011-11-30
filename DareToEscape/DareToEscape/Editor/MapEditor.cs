@@ -19,12 +19,12 @@ namespace DareToEscape.Editor
     public partial class MapEditor : Form
     {
         private readonly string _cwd = Application.StartupPath + "/Content/maps";
+        private readonly EditorManager _editorManager;
 
         private readonly string _loadLevel;
         public DareToEscape Game;
         private string _currentMapName;
         private bool _updateMapSize = true;
-        private readonly EditorManager _editorManager;
 
         public MapEditor()
         {
@@ -98,7 +98,7 @@ namespace DareToEscape.Editor
             var dirInfo = new DirectoryInfo(Application.StartupPath + @"\Content\textures\editor\entities");
             FileInfo[] files = dirInfo.GetFiles();
             tilecount = 0;
-            foreach (FileInfo file in files)
+            foreach (var file in files)
             {
                 entityList.Images.Add(new Bitmap(file.FullName));
                 listEntities.Items.Add(new ListViewItem(file.Name.Replace(".bmp", ""), tilecount++));
@@ -133,7 +133,8 @@ namespace DareToEscape.Editor
             if (listTiles.SelectedIndices.Count > 0)
             {
                 _editorManager.DrawTile = listTiles.SelectedIndices[0];
-                _editorManager.CurrentItem = GameVariableProvider.EditorManager.GetEditorItemByName(listTiles.SelectedIndices[0].ToString());
+                _editorManager.CurrentItem =
+                    GameVariableProvider.EditorManager.GetEditorItemByName(listTiles.SelectedIndices[0].ToString());
             }
         }
 
@@ -323,7 +324,7 @@ namespace DareToEscape.Editor
         public void GetCodeList(List<string> codeList)
         {
             codeListBox.Items.Clear();
-            foreach (string code in codeList)
+            foreach (var code in codeList)
             {
                 codeListBox.Items.Add(code);
             }
@@ -356,7 +357,7 @@ namespace DareToEscape.Editor
             {
                 items[i] = (string) codeListBox.SelectedItems[i];
             }
-            foreach (string item in items)
+            foreach (var item in items)
             {
                 codeListBox.Items.Remove(item);
             }

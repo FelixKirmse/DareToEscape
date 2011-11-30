@@ -29,7 +29,7 @@ namespace DareToEscape.Components.Entities
                 if (VariableProvider.CurrentPlayer.CollisionRectangle.Intersects(obj.CollisionRectangle))
                 {
                     enabled = false;
-                    foreach (GameObject boss in GameVariableProvider.Bosses)
+                    foreach (var boss in GameVariableProvider.Bosses)
                         boss.Send<string>("INACTIVE", null);
                 }
             }

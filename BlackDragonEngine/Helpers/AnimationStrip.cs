@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace BlackDragonEngine.Helpers
 {
     /// <summary>
-    /// Class that helps handling Animations
+    ///   Class that helps handling Animations
     /// </summary>
     public class AnimationStrip
     {

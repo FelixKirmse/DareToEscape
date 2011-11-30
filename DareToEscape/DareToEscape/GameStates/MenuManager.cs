@@ -8,9 +8,8 @@ namespace DareToEscape.GameStates
 {
     internal class MenuManager : IDrawableGameState, IUpdateableGameState
     {
-        private readonly MainMenu _mainMenu;
         private readonly IngameMenu _ingameMenu;
-        public static MenuStates MenuState { private get; set; }
+        private readonly MainMenu _mainMenu;
 
         public MenuManager()
         {
@@ -18,35 +17,16 @@ namespace DareToEscape.GameStates
             _ingameMenu = new IngameMenu();
         }
 
-        public bool UpdateCondition
-        {
-            get
-            {
-                return GameStateManager.State == States.Menu &&
-                       EngineStates.DialogState == DialogueStates.Inactive && !GameStateManager.PlayerDead;
-            }
-        }
+        public static MenuStates MenuState { private get; set; }
+
+        #region IDrawableGameState Members
 
         public bool DrawCondition
         {
             get { return GameStateManager.State == States.Menu; }
         }
 
-        public void Update()
-        {
-            switch (MenuState)
-            {
-                case MenuStates.Main:
-                    _mainMenu.Update();
-                    break;
-
-                case MenuStates.Ingame:
-                    _ingameMenu.Update();
-                    break;
-            }
-        }
-
-        public  void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             switch (MenuState)
             {
@@ -59,5 +39,35 @@ namespace DareToEscape.GameStates
                     break;
             }
         }
+
+        #endregion
+
+        #region IUpdateableGameState Members
+
+        public bool UpdateCondition
+        {
+            get
+            {
+                return GameStateManager.State == States.Menu &&
+                       EngineStates.DialogState == DialogueStates.Inactive && !GameStateManager.PlayerDead;
+            }
+        }
+
+        public bool Update()
+        {
+            switch (MenuState)
+            {
+                case MenuStates.Main:
+                    _mainMenu.Update();
+                    break;
+
+                case MenuStates.Ingame:
+                    _ingameMenu.Update();
+                    break;
+            }
+            return true;
+        }
+
+        #endregion
     }
 }

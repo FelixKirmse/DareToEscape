@@ -8,32 +8,32 @@ using Microsoft.Xna.Framework.Graphics;
 namespace BlackDragonEngine.Entities
 {
     /// <summary>
-    /// Barebone GameObject class
+    ///   Barebone GameObject class
     /// </summary>
     public class GameObject : IGameObject
     {
         /// <summary>
-        /// Velocity of the Object [DEPRECATED]
+        ///   Velocity of the Object [DEPRECATED]
         /// </summary>
         public Vector2 Velocity;
 
         /// <summary>
-        /// The bounding circle of the object with local position
+        ///   The bounding circle of the object with local position
         /// </summary>
         protected BCircle collisionCircle;
 
         /// <summary>
-        /// The collision rectangle of the object in local coordinates
+        ///   The collision rectangle of the object in local coordinates
         /// </summary>
         protected Rectangle collisionRectangle;
 
         /// <summary>
-        /// The list of components this object uses
+        ///   The list of components this object uses
         /// </summary>
         protected List<IComponent> components = new List<IComponent>();
 
         /// <summary>
-        /// The current position of the Object
+        ///   The current position of the Object
         /// </summary>
         protected Vector2 position;
 
@@ -42,18 +42,18 @@ namespace BlackDragonEngine.Entities
         }
 
         /// <summary>
-        /// Returns an Instance of a GameObject with the components specified in the parameter
+        ///   Returns an Instance of a GameObject with the components specified in the parameter
         /// </summary>
-        /// <param name="components">The components the object should use</param>
+        /// <param name = "components">The components the object should use</param>
         public GameObject(List<IComponent> components)
         {
             this.components = components;
         }
 
         /// <summary>
-        /// Returns an Instance of a GameObject with the component specified
+        ///   Returns an Instance of a GameObject with the component specified
         /// </summary>
-        /// <param name="component"></param>
+        /// <param name = "component"></param>
         public GameObject(IComponent component)
         {
             components = new List<IComponent>();
@@ -61,7 +61,7 @@ namespace BlackDragonEngine.Entities
         }
 
         /// <summary>
-        /// Gets or sets the position of the object
+        ///   Gets or sets the position of the object
         /// </summary>
         public Vector2 Position
         {
@@ -70,7 +70,7 @@ namespace BlackDragonEngine.Entities
         }
 
         /// <summary>
-        /// Gets the collision rectangle of the object in world coordinates or sets the rectangle in local coordinates
+        ///   Gets the collision rectangle of the object in world coordinates or sets the rectangle in local coordinates
         /// </summary>
         public Rectangle CollisionRectangle
         {
@@ -83,7 +83,7 @@ namespace BlackDragonEngine.Entities
         }
 
         /// <summary>
-        /// Gets the bounding circle of the object in world coordinates or sets the circle in local coordinates
+        ///   Gets the bounding circle of the object in world coordinates or sets the circle in local coordinates
         /// </summary>
         public BCircle CollisionCircle
         {
@@ -97,7 +97,7 @@ namespace BlackDragonEngine.Entities
         }
 
         /// <summary>
-        /// Gets the collision center of the object in world coordinates
+        ///   Gets the collision center of the object in world coordinates
         /// </summary>
         public Vector2 RectCollisionCenter
         {
@@ -109,7 +109,7 @@ namespace BlackDragonEngine.Entities
         }
 
         /// <summary>
-        /// Gets the collision center of the object in world coordinates
+        ///   Gets the collision center of the object in world coordinates
         /// </summary>
         public Vector2 CircleCollisionCenter
         {
@@ -117,7 +117,7 @@ namespace BlackDragonEngine.Entities
         }
 
         /// <summary>
-        /// Position of the object in screencoordinates (used when drawing)
+        ///   Position of the object in screencoordinates (used when drawing)
         /// </summary>
         public Vector2 ScreenPosition
         {
@@ -127,23 +127,23 @@ namespace BlackDragonEngine.Entities
         #region IGameObject Members
 
         /// <summary>
-        /// Updates all the components
+        ///   Updates all the components
         /// </summary>
         public virtual void Update()
         {
-            foreach (IComponent component in components)
+            foreach (var component in components)
             {
                 component.Update(this);
             }
         }
 
         /// <summary>
-        /// Draws all drawable components
+        ///   Draws all drawable components
         /// </summary>
-        /// <param name="spriteBatch"></param>
+        /// <param name = "spriteBatch"></param>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            foreach (IComponent component in components)
+            foreach (var component in components)
             {
                 if (component is GraphicsComponent)
                 {
@@ -155,9 +155,9 @@ namespace BlackDragonEngine.Entities
         #endregion
 
         /// <summary>
-        /// [DEPRECATED] Returns a custom collision rectangle based on a position 
+        ///   [DEPRECATED] Returns a custom collision rectangle based on a position
         /// </summary>
-        /// <param name="customPosition"></param>
+        /// <param name = "customPosition"></param>
         /// <returns></returns>
         public Rectangle GetCustomCollisionRectangle(Vector2 customPosition)
         {
@@ -167,14 +167,14 @@ namespace BlackDragonEngine.Entities
         }
 
         /// <summary>
-        /// Used to send messages to all components
+        ///   Used to send messages to all components
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="Message">The message</param>
-        /// <param name="obj">An attachment</param>
+        /// <typeparam name = "T"></typeparam>
+        /// <param name = "Message">The message</param>
+        /// <param name = "obj">An attachment</param>
         public void Send<T>(string Message, T obj)
         {
-            foreach (IComponent component in components)
+            foreach (var component in components)
             {
                 component.Receive(Message, obj);
             }

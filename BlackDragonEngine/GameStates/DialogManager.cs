@@ -7,54 +7,48 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BlackDragonEngine.GameStates
 {
-    public  class DialogManager : IUpdateableGameState, IDrawableGameState 
+    public class DialogManager : IUpdateableGameState, IDrawableGameState
     {
         #region Declarations
 
         private static Dictionary<string, DialogScript> _dialog;
-
-        private  readonly Vector2 _textPosition = new Vector2(100, 500);
-        private  readonly Vector2 _mugShotPosition = new Vector2(600, 500);
-
-        private  string _currentDialogue;
-
-        private  string _displayText = "";
-        private  int _currentChar;
-
-        private  DialogueStates _dialogState;
-
-        private  SpriteFont _font;
-
         public static bool DrawMugshot = true;
+        private readonly SpriteFont _font;
+
+        private readonly Vector2 _mugShotPosition = new Vector2(600, 500);
+        private readonly Vector2 _textPosition = new Vector2(100, 500);
+
+        private int _currentChar;
+        private string _currentDialogue;
+
+        private DialogueStates _dialogState;
+        private string _displayText = "";
 
         #endregion
 
         #region Properties
 
-        private  int TextLength
+        private int TextLength
         {
             get { return _dialog[_currentDialogue].Text.Length; }
         }
 
-        private  char NextChar
+        private char NextChar
         {
             get { return _dialog[_currentDialogue].Text[_currentChar++]; }
         }
 
-        private  Texture2D CurrentMugShot
+        private Texture2D CurrentMugShot
         {
             get { return _dialog[_currentDialogue].MugShot; }
         }
 
-        private  string CurrentName
+        private string CurrentName
         {
             get { return _dialog[_currentDialogue].SpeakerName; }
         }
 
-        public bool UpdateCondition
-        {
-            get { return EngineStates.DialogState != DialogueStates.Inactive; }
-        }
+        #region IDrawableGameState Members
 
         public bool DrawCondition
         {
@@ -63,50 +57,25 @@ namespace BlackDragonEngine.GameStates
 
         #endregion
 
-        public  DialogManager()
+        #region IUpdateableGameState Members
+
+        public bool UpdateCondition
+        {
+            get { return EngineStates.DialogState != DialogueStates.Inactive; }
+        }
+
+        #endregion
+
+        #endregion
+
+        public DialogManager()
         {
             _font = FontProvider.GetFont("Mono14");
         }
 
-        public  void PlayDialog(Dictionary<string, DialogScript> dialogue, string startDialog)
-        {
-            _currentChar = 0;
-            _dialog = dialogue;
-            _currentDialogue = startDialog;
-            EngineStates.DialogState = DialogueStates.Active;
-            _dialogState = DialogueStates.Talking;
-        }
+        #region IDrawableGameState Members
 
-        public  void Update()
-        {
-            if (_dialogState == DialogueStates.Talking)
-            {
-                if (_currentChar < TextLength)
-                {
-                    _displayText += NextChar;
-                }
-                else
-                {
-                    _dialogState = DialogueStates.Pause;
-                }
-            }
-            else if (InputMapper.StrictAction)
-            {
-                _displayText = "";
-                _currentChar = 0;
-                _currentDialogue = _dialog[_currentDialogue].NextDialog;
-                if (_currentDialogue == "STOPDIALOG")
-                {
-                    EngineStates.DialogState = DialogueStates.Inactive;
-                }
-                else
-                {
-                    _dialogState = DialogueStates.Talking;
-                }
-            }
-        }
-
-        public  void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(
                 _font,
@@ -152,6 +121,51 @@ namespace BlackDragonEngine.GameStates
                 1f,
                 SpriteEffects.None,
                 0.3f);
+        }
+
+        #endregion
+
+        #region IUpdateableGameState Members
+
+        public bool Update()
+        {
+            if (_dialogState == DialogueStates.Talking)
+            {
+                if (_currentChar < TextLength)
+                {
+                    _displayText += NextChar;
+                }
+                else
+                {
+                    _dialogState = DialogueStates.Pause;
+                }
+            }
+            else if (InputMapper.StrictAction)
+            {
+                _displayText = "";
+                _currentChar = 0;
+                _currentDialogue = _dialog[_currentDialogue].NextDialog;
+                if (_currentDialogue == "STOPDIALOG")
+                {
+                    EngineStates.DialogState = DialogueStates.Inactive;
+                }
+                else
+                {
+                    _dialogState = DialogueStates.Talking;
+                }
+            }
+            return true;
+        }
+
+        #endregion
+
+        public void PlayDialog(Dictionary<string, DialogScript> dialogue, string startDialog)
+        {
+            _currentChar = 0;
+            _dialog = dialogue;
+            _currentDialogue = startDialog;
+            EngineStates.DialogState = DialogueStates.Active;
+            _dialogState = DialogueStates.Talking;
         }
     }
 }

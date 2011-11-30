@@ -7,40 +7,40 @@ using Microsoft.Xna.Framework.Graphics;
 namespace BlackDragonEngine.Components
 {
     /// <summary>
-    /// Component used for handling animated sprites.
+    ///   Component used for handling animated sprites.
     /// </summary>
     public class AnimatedGraphicsComponent : GraphicsComponent
     {
         /// <summary>
-        /// Dictionary containing all animations
+        ///   Dictionary containing all animations
         /// </summary>
         protected Dictionary<string, AnimationStrip> animations;
 
         /// <summary>
-        /// Represents the animation that is currently being played
+        ///   Represents the animation that is currently being played
         /// </summary>
         protected string currentAnimation;
 
         /// <summary>
-        /// Drawdepth of the sprite
+        ///   Drawdepth of the sprite
         /// </summary>
         protected new float drawDepth = .91f;
 
         /// <summary>
-        /// Should the graphic be flipped?
+        ///   Should the graphic be flipped?
         /// </summary>
         protected bool flipped;
 
         /// <summary>
-        /// Represents the lates animation received by other components
+        ///   Represents the lates animation received by other components
         /// </summary>
         protected string receivedAnimation;
 
         /// <summary>
-        /// Draws the entity
+        ///   Draws the entity
         /// </summary>
-        /// <param name="obj">The entity to draw</param>
-        /// <param name="spriteBatch">The spritebatch to use</param>
+        /// <param name = "obj">The entity to draw</param>
+        /// <param name = "spriteBatch">The spritebatch to use</param>
         public override void Draw(GameObject obj, SpriteBatch spriteBatch)
         {
             SpriteEffects effects = SpriteEffects.None;
@@ -60,9 +60,9 @@ namespace BlackDragonEngine.Components
         }
 
         /// <summary>
-        /// Updates the animation
+        ///   Updates the animation
         /// </summary>
-        /// <param name="obj">The entity to update (not being used)</param>
+        /// <param name = "obj">The entity to update (not being used)</param>
         public override void Update(GameObject obj)
         {
             updateAnimation();
@@ -101,7 +101,7 @@ namespace BlackDragonEngine.Components
         }
 
         /// <summary>
-        /// Updates the current Animation
+        ///   Updates the current Animation
         /// </summary>
         protected void updateAnimation()
         {
@@ -119,9 +119,9 @@ namespace BlackDragonEngine.Components
         }
 
         /// <summary>
-        /// Plays a new animation
+        ///   Plays a new animation
         /// </summary>
-        /// <param name="name">The name of the new animation</param>
+        /// <param name = "name">The name of the new animation</param>
         protected void PlayAnimation(string name)
         {
             if (name != null && animations.ContainsKey(name))

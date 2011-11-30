@@ -6,8 +6,8 @@ using Microsoft.Xna.Framework.Input;
 namespace BlackDragonEngine.Helpers
 {
     /// <summary>
-    ///  CREDITS INFINIMINER
-    ///  http://code.google.com/p/infiniminer/
+    ///   CREDITS INFINIMINER
+    ///   http://code.google.com/p/infiniminer/
     /// </summary>
     public class CharacterEventArgs : EventArgs
     {
@@ -93,17 +93,17 @@ namespace BlackDragonEngine.Helpers
         private static IntPtr hIMC;
 
         /// <summary>
-        /// Event raised when a character has been entered.
+        ///   Event raised when a character has been entered.
         /// </summary>
         public static event CharEnteredHandler CharEntered;
 
         /// <summary>
-        /// Event raised when a key has been pressed down. May fire multiple times due to keyboard repeat.
+        ///   Event raised when a key has been pressed down. May fire multiple times due to keyboard repeat.
         /// </summary>
         public static event KeyEventHandler KeyDown;
 
         /// <summary>
-        /// Event raised when a key has been released.
+        ///   Event raised when a key has been released.
         /// </summary>
         public static event KeyEventHandler KeyUp;
 
@@ -122,9 +122,9 @@ namespace BlackDragonEngine.Helpers
         private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
         /// <summary>
-        /// Initialize the TextInput with the given GameWindow.
+        ///   Initialize the TextInput with the given GameWindow.
         /// </summary>
-        /// <param name="window">The XNA window to which text input should be linked.</param>
+        /// <param name = "window">The XNA window to which text input should be linked.</param>
         public static void Initialize(GameWindow window)
         {
             if (initialized)

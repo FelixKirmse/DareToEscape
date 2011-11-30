@@ -30,7 +30,7 @@ namespace BlackDragonEngine.Managers
                 foreach (var item in TileMap.Map.Codes)
                 {
                     var location = new Vector2(item.Key.X*TileMap.TileWidth, item.Key.Y*TileMap.TileHeight);
-                    foreach (string codePart in item.Value)
+                    foreach (var codePart in item.Value)
                     {
                         string[] code = codePart.Split('_');
                         OnMapCodeCheck(code, location, player);
@@ -85,7 +85,7 @@ namespace BlackDragonEngine.Managers
         {
             if (codes == null)
                 return;
-            foreach (string code in codes)
+            foreach (var code in codes)
             {
                 string[] codeArray = code.Split('_');
                 OnCodeUnderPlayerCheck(codeArray, player);

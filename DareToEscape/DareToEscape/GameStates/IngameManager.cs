@@ -11,16 +11,7 @@ namespace DareToEscape.GameStates
 {
     internal class IngameManager : IUpdateableGameState, IDrawableGameState
     {
-        public bool UpdateCondition
-        {
-            get
-            {
-                return (GameStateManager.State == States.Ingame ||
-                        GameStateManager.State == States.Tutorial) &&
-                       EngineStates.GameStates == EEngineStates.Running && !GameStateManager.PlayerDead &&
-                       EngineStates.DialogState == DialogueStates.Inactive;
-            }
-        }
+        #region IDrawableGameState Members
 
         public bool DrawCondition
         {
@@ -32,29 +23,47 @@ namespace DareToEscape.GameStates
             }
         }
 
-        public void Activate()
+        public void Draw(SpriteBatch spriteBatch)
         {
-            VariableProvider.CurrentPlayer = Factory.CreatePlayer();
-            EntityManager.SetPlayer();
+            EntityManager.Draw(spriteBatch);
+            LevelManager.Draw(spriteBatch);
         }
 
-        public  void Update()
+        #endregion
+
+        #region IUpdateableGameState Members
+
+        public bool UpdateCondition
+        {
+            get
+            {
+                return (GameStateManager.State == States.Ingame ||
+                        GameStateManager.State == States.Tutorial) &&
+                       EngineStates.GameStates == EEngineStates.Running && !GameStateManager.PlayerDead &&
+                       EngineStates.DialogState == DialogueStates.Inactive;
+            }
+        }
+
+        public bool Update()
         {
             if (InputMapper.StrictCancel)
             {
                 EngineStates.GameStates = EEngineStates.Paused;
                 MenuManager.MenuState = MenuStates.Ingame;
                 GameStateManager.State = States.Menu;
-                return;
+                return false;
             }
             CodeManager.CheckPlayerCodes();
             EntityManager.Update();
+            return true;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        #endregion
+
+        public void Activate()
         {
-            EntityManager.Draw(spriteBatch);
-            LevelManager.Draw(spriteBatch);
+            VariableProvider.CurrentPlayer = Factory.CreatePlayer();
+            EntityManager.SetPlayer();
         }
     }
 }

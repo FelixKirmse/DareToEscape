@@ -53,7 +53,7 @@ namespace BlackDragonEngine.TileEngine
             Map map = TileMap.Map;
             ProgressMax = TileMap.Map.Codes.Count;
             List<Coords> cells = TileMap.Map.Codes.Keys.ToList();
-            foreach (Coords cell in cells)
+            foreach (var cell in cells)
             {
                 ++ProgressCounter;
                 map[cell.Up] = new MapSquare(0, false);
@@ -119,7 +119,7 @@ namespace BlackDragonEngine.TileEngine
                 _positions = new Coords[4];
                 _rand = VariableProvider.RandomSeed;
                 Position = position;
-                foreach (Coords cell in _positions)
+                foreach (var cell in _positions)
                 {
                     TileMap.SetSolidTileAtCell(cell);
                     TileMap.AddUniqueCodeToCell(cell, "OriginalPlaced");
@@ -145,7 +145,7 @@ namespace BlackDragonEngine.TileEngine
                 if (diggableBlocks.Count > 0)
                 {
                     Position = diggableBlocks[_rand.Next(0, diggableBlocks.Count)];
-                    foreach (Coords cell in _positions)
+                    foreach (var cell in _positions)
                     {
                         TileMap.SetSolidTileAtCell(cell);
                         TileMap.AddUniqueCodeToCell(cell, "OriginalPlaced");

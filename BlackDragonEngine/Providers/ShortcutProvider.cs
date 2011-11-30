@@ -89,7 +89,7 @@ namespace BlackDragonEngine.Providers
 
         public static bool AreAnyKeysDown(Keys[] keys)
         {
-            foreach (Keys key in keys)
+            foreach (var key in keys)
             {
                 if (IsKeyDown(key))
                     return true;
@@ -102,7 +102,7 @@ namespace BlackDragonEngine.Providers
             if (!strict)
                 return AreAnyKeysDown(keys);
 
-            foreach (Keys key in keys)
+            foreach (var key in keys)
             {
                 if (KeyPressedNowButNotLastFrame(key))
                     return true;
@@ -146,7 +146,7 @@ namespace BlackDragonEngine.Providers
             UInt32 maxHResolution = 0;
             UInt32 maxVResolution = 0;
 
-            foreach (ManagementBaseObject item in results)
+            foreach (var item in results)
             {
                 if ((UInt32) item["HorizontalResolution"] > maxHResolution)
                     maxHResolution = (UInt32) item["HorizontalResolution"];

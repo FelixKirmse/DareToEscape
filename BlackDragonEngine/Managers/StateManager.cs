@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using BlackDragonEngine.GameStates;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -20,41 +18,37 @@ namespace BlackDragonEngine.Managers
 
         public void AddGameState(object state)
         {
-            var implementedInterface = false;
+            bool implementedInterface = false;
             var drawableState = state as IDrawableGameState;
-            if(drawableState != null)
+            if (drawableState != null)
             {
                 _drawableStates.Add(drawableState);
                 implementedInterface = true;
             }
             var updateableState = state as IUpdateableGameState;
-            if(updateableState != null)
+            if (updateableState != null)
             {
                 _updateableStates.Add(updateableState);
                 implementedInterface = true;
             }
-            if(!implementedInterface)
+            if (!implementedInterface)
                 throw new Exception("Object " + state + " didn't implement any of the required interfaces");
         }
 
         public void Update()
         {
-            foreach(var state in _updateableStates)
+            foreach (var state in _updateableStates)
             {
-                if(state.UpdateCondition)
-                {
-                    state.Update();
-                    return;
-                }
-                    
+                if (state.UpdateCondition)
+                    if (!state.Update()) return;
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach(var state in _drawableStates)
+            foreach (var state in _drawableStates)
             {
-                if(state.DrawCondition)
+                if (state.DrawCondition)
                     state.Draw(spriteBatch);
             }
         }

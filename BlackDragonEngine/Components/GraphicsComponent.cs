@@ -14,9 +14,9 @@ namespace BlackDragonEngine.Components
         }
 
         /// <summary>
-        /// Directly sets the texture, useful for Entity that only have a GraphicsComponent
+        ///   Directly sets the texture, useful for Entity that only have a GraphicsComponent
         /// </summary>
-        /// <param name="texture"></param>
+        /// <param name = "texture"></param>
         public GraphicsComponent(Texture2D texture)
         {
             this.texture = texture;

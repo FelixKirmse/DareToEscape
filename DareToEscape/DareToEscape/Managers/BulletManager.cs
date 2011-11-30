@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlackDragonEngine;
+using BlackDragonEngine.GameStates;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
 using DareToEscape.Bullets;
-using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Managers
 {
-    internal class BulletManager
+    internal class BulletManager : IUpdateableGameState, IDrawableGameState
     {
         private readonly List<Bullet> _bullets = new List<Bullet>(50000);
         private readonly List<int> _bulletsToDelete = new List<int>(1000);
@@ -21,24 +22,39 @@ namespace DareToEscape.Managers
             _tasks = new Task[_processorCount];
         }
 
-        public void ClearAllBullets()
+        #region IDrawableGameState Members
+
+        public bool DrawCondition
         {
-            _bullets.Clear();
+            get { return GameStateManager.State == States.Ingame || GameStateManager.State == States.Editor; }
         }
 
-        public void AddBullet(Bullet bullet)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            _bullets.Add(bullet);
+            for (int i = 0; i < _bullets.Count; ++i)
+            {
+                if (!Camera.ViewPort.Contains(_bullets[i].CircleCollisionCenter.ToPoint())) continue;
+                _bullets[i].Draw();
+            }
         }
 
-        public void Update(GameTime gameTime)
-        {
-            if (GameStateManager.State != States.Ingame &&
-                (GameStateManager.State != States.Editor || EngineStates.GameStates != EEngineStates.Running))
-                return;
+        #endregion
 
+        #region IUpdateableGameState Members
+
+        public bool UpdateCondition
+        {
+            get
+            {
+                return GameStateManager.State == States.Ingame ||
+                       (GameStateManager.State == States.Editor && EngineStates.GameStates == EEngineStates.Running);
+            }
+        }
+
+        public bool Update()
+        {
             int bulletCount = _bullets.Count;
-            if (bulletCount == 0) return;
+            if (bulletCount == 0) return true;
             int bulletsToProcess = bulletCount/_processorCount;
 
             for (int i = 0; i < _processorCount; ++i)
@@ -69,23 +85,25 @@ namespace DareToEscape.Managers
                                           if (x > y) return -1;
                                           return 0;
                                       });
-            foreach (int id in _bulletsToDelete)
+            foreach (var id in _bulletsToDelete)
             {
                 _bullets[id] = _bullets[_bullets.Count - 1];
                 _bullets.RemoveAt(_bullets.Count - 1);
             }
             _bulletsToDelete.Clear();
+            return true;
         }
 
-        public void Draw()
-        {
-            if (GameStateManager.State != States.Ingame && GameStateManager.State != States.Editor) return;
+        #endregion
 
-            for (int i = 0; i < _bullets.Count; ++i)
-            {
-                if (!Camera.ViewPort.Contains(_bullets[i].CircleCollisionCenter.ToPoint())) continue;
-                _bullets[i].Draw();
-            }
+        public void ClearAllBullets()
+        {
+            _bullets.Clear();
+        }
+
+        public void AddBullet(Bullet bullet)
+        {
+            _bullets.Add(bullet);
         }
     }
 }

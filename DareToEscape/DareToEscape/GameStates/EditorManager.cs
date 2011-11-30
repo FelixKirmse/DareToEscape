@@ -33,22 +33,32 @@ namespace DareToEscape.GameStates
         public bool RemoveTile;
         public bool SettingCode;
         public bool SmartInsert = true;
-        private bool _waitingForSecondClick;
         private Vector2 _startCell;
+        private bool _waitingForSecondClick;
 
         #region Doing The Impossible
 
+        private readonly EventHandler _gameFormVisibleChanged;
+        private readonly PresentationParameters _orgPParams;
+        private readonly EventHandler _pictureBoxSizeChanged;
+        private readonly EventHandler<PreparingDeviceSettingsEventArgs> _preparingDeviceSettingsHandler;
+        private readonly EventHandler<PreparingDeviceSettingsEventArgs> _resetDeviceSettingsHandler;
         private IntPtr _drawSurface;
         private MapEditor _editorForm;
         private DareToEscape _game;
         private Control _gameForm;
-        private EventHandler _gameFormVisibleChanged;
-        private PresentationParameters _orgPParams;
         private Form _parentForm;
         private PictureBox _pictureBox;
-        private EventHandler _pictureBoxSizeChanged;
-        private EventHandler<PreparingDeviceSettingsEventArgs> _preparingDeviceSettingsHandler;
-        private EventHandler<PreparingDeviceSettingsEventArgs> _resetDeviceSettingsHandler;
+
+        public EditorManager()
+        {
+            _gameFormVisibleChanged = GameFormVisibleChanged;
+            _pictureBoxSizeChanged = PictureBoxSizeChanged;
+            _preparingDeviceSettingsHandler = GraphicsPreparingDeviceSettings;
+            _resetDeviceSettingsHandler = GraphicsResetDeviceSettings;
+            _orgPParams = DareToEscape.Graphics.GraphicsDevice.PresentationParameters.Clone();
+            DareToEscape.Graphics.PreparingDeviceSettings += _resetDeviceSettingsHandler;
+        }
 
         #region IDrawableGameState Members
 
@@ -67,16 +77,6 @@ namespace DareToEscape.GameStates
         }
 
         #endregion
-
-        public EditorManager()
-        {
-            _gameFormVisibleChanged = GameFormVisibleChanged;
-            _pictureBoxSizeChanged = PictureBoxSizeChanged;
-            _preparingDeviceSettingsHandler = GraphicsPreparingDeviceSettings;
-            _resetDeviceSettingsHandler = GraphicsResetDeviceSettings;
-            _orgPParams = DareToEscape.Graphics.GraphicsDevice.PresentationParameters.Clone();
-            DareToEscape.Graphics.PreparingDeviceSettings += _resetDeviceSettingsHandler;
-        }
 
         public void Activate(string levelname)
         {
@@ -190,9 +190,9 @@ namespace DareToEscape.GameStates
 
         #region IUpdateableGameState Members
 
-        public void Update()
+        public bool Update()
         {
-            if (Form.ActiveForm != _parentForm) return;
+            if (Form.ActiveForm != _parentForm) return true;
             MouseState ms = InputProvider.MouseState;
             if (!PlayLevel)
             {
@@ -340,6 +340,7 @@ namespace DareToEscape.GameStates
                 EntityManager.Update();
                 CodeManager.CheckPlayerCodes();
             }
+            return true;
         }
 
         #endregion

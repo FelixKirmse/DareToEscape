@@ -5,9 +5,7 @@ using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
 using DareToEscape.Bullets.Behaviors;
-using DareToEscape.Editor;
 using DareToEscape.Managers;
-using DareToEscape.Menus;
 using Microsoft.Xna.Framework.Input;
 
 namespace DareToEscape.Helpers
@@ -38,7 +36,7 @@ namespace DareToEscape.Helpers
             Camera.ViewPortWidth = 1280;
 
             DialogManager.DrawMugshot = false;
-            
+
             CodeHandler.BindEvents();
             ReusableBehaviors.Initialize();
 

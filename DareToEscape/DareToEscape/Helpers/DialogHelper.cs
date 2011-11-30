@@ -1,5 +1,4 @@
 ﻿using BlackDragonEngine.GameStates;
-using BlackDragonEngine.Managers;
 using DareToEscape.Providers;
 
 namespace DareToEscape.Helpers

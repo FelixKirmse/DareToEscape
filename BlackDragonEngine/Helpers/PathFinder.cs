@@ -200,7 +200,7 @@ namespace BlackDragonEngine.Helpers
                 openList.Remove(currentNode);
                 nodeCosts.Remove(currentNode.GridLocation);
 
-                foreach (PathNode possibleNode in findAdjacentNodes(currentNode, endNode))
+                foreach (var possibleNode in findAdjacentNodes(currentNode, endNode))
                 {
                     if (nodeStatus.ContainsKey(possibleNode.GridLocation))
                     {

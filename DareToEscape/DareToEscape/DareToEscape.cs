@@ -3,7 +3,6 @@ using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.Scripting;
 using BlackDragonEngine.TileEngine;
-using DareToEscape.Editor;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
 using DareToEscape.Providers;
@@ -34,8 +33,6 @@ namespace DareToEscape
             VariableProvider.CoordList = new CoordList();
             VariableProvider.Game = this;
             GameInitializer.Initialize();
-            var bulletManager = new BulletManager();
-            GameVariableProvider.BulletManager = bulletManager;
 
             Graphics.PreferredBackBufferWidth = 1280;
             Graphics.PreferredBackBufferHeight = 720;
@@ -59,7 +56,6 @@ namespace DareToEscape
         {
             if (IsActive)
             {
-                GameVariableProvider.BulletManager.Update(gameTime);
                 VariableProvider.GameTime = gameTime;
                 InputProvider.Update();
                 _stateManager.Update();
@@ -70,9 +66,9 @@ namespace DareToEscape
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
+
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             _stateManager.Draw(_spriteBatch);
-            GameVariableProvider.BulletManager.Draw();
             _spriteBatch.End();
             DrawHelper.Draw(_spriteBatch);
 

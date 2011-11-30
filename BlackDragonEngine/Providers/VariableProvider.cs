@@ -1,7 +1,6 @@
 ﻿using System;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.GameStates;
-using BlackDragonEngine.Managers;
 using BlackDragonEngine.Scripting;
 using BlackDragonEngine.TileEngine;
 using Microsoft.Xna.Framework;
