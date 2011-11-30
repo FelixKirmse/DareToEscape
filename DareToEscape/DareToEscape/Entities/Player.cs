@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace DareToEscape.Entities
 {
-    internal class Player : GameObject
+    internal sealed class Player : GameObject
     {
         public Player(List<IComponent> components)
             : base(components)

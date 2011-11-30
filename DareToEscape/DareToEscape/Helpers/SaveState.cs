@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 namespace DareToEscape.Helpers
 {
     [Serializable]
-    public class SaveState
+    public sealed class SaveState
     {
         public List<string> Keys = new List<string>();
         public string CurrentLevel { get; set; }

@@ -7,7 +7,7 @@ using BlackDragonEngine.Providers;
 namespace BlackDragonEngine.TileEngine
 {
     [Serializable]
-    public class Map
+    public sealed class Map
     {
         public Dictionary<Coords, List<string>> Codes;
         public Dictionary<Coords, MapSquare> MapData;

@@ -9,7 +9,7 @@ namespace BlackDragonEngine.TileEngine
 
     public delegate void CustomAction(Coords cell);
 
-    public class RandomMapGenerator
+    public sealed class RandomMapGenerator
     {
         public static int MaxDiggers;
         private readonly List<Digger> _diggers = new List<Digger>();

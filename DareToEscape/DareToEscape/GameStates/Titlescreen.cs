@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.GameStates
 {
-    internal class Titlescreen : IDrawableGameState, IUpdateableGameState
+    internal sealed class Titlescreen : IDrawableGameState, IUpdateableGameState
     {
         public static Texture2D TitleTexture { private get; set; }
 

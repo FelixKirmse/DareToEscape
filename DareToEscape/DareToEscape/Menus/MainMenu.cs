@@ -3,32 +3,32 @@ using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.Menus;
 using BlackDragonEngine.Providers;
+using DareToEscape.GameStates;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
-using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 
 namespace DareToEscape.Menus
 {
-    internal class MainMenu : Menu
+    internal sealed class MainMenu : Menu
     {
-        private const string newGame = "New Game";
-        private const string resume = "Resume";
-        private const string tutorial = "Play tutorial";
-        private const string editor = "Map Editor";
-        private const string fullScreen = "Toggle Fullscreen";
-        private const string quit = "Quit";
+        private const string NewGame = "New Game";
+        private const string Resume = "Resume";
+        private const string Tutorial = "Play tutorial";
+        private const string Editor = "Map Editor";
+        private const string FullScreen = "Toggle Fullscreen";
+        private const string Quit = "Quit";
 
         public MainMenu()
         {
-            menuItems.Add(new MenuItem(resume, fontName, File.Exists(SaveManager<SaveState>.CurrentSaveFile),
+            menuItems.Add(new MenuItem(Resume, fontName, File.Exists(SaveManager<SaveState>.CurrentSaveFile),
                                        new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(newGame, fontName, !File.Exists(SaveManager<SaveState>.CurrentSaveFile),
+            menuItems.Add(new MenuItem(NewGame, fontName, !File.Exists(SaveManager<SaveState>.CurrentSaveFile),
                                        new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(tutorial, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(editor, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(fullScreen, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(quit, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
+            menuItems.Add(new MenuItem(Tutorial, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
+            menuItems.Add(new MenuItem(Editor, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
+            menuItems.Add(new MenuItem(FullScreen, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
+            menuItems.Add(new MenuItem(Quit, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
 
             EnableMouseSelection = false;
 
@@ -47,36 +47,38 @@ namespace DareToEscape.Menus
             string selectedItem;
             GetSelectedItem(out selectedItem);
 
+            IngameManager ingameManager = IngameManager.GetInstance();
+
             switch (selectedItem)
             {
-                case newGame:
+                case NewGame:
                     GameStateManager.State = States.Ingame;
-                    GameVariableProvider.IngameManager.Activate();
+                    ingameManager.Activate();
                     LevelManager.LoadLevel("Level1");
                     SaveManager<SaveState>.Save();
                     break;
-                case resume:
+                case Resume:
                     GameStateManager.State = States.Ingame;
-                    GameVariableProvider.IngameManager.Activate();
+                    ingameManager.Activate();
                     SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
                     break;
 
-                case tutorial:
+                case Tutorial:
                     GameStateManager.State = States.Tutorial;
-                    GameVariableProvider.IngameManager.Activate();
+                    ingameManager.Activate();
                     LevelManager.LoadLevel("Tutorial");
                     SaveManager<SaveState>.Save();
                     break;
 
-                case editor:
-                    GameVariableProvider.EditorManager.Activate();
+                case Editor:
+                    EditorManager.GetInstance().Activate();
                     break;
 
-                case fullScreen:
+                case FullScreen:
                     DareToEscape.ToggleFullScreen();
                     break;
 
-                case quit:
+                case Quit:
                     VariableProvider.Game.Exit();
                     break;
             }

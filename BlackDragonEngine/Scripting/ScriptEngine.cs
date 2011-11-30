@@ -5,7 +5,7 @@ namespace BlackDragonEngine.Scripting
 {
     public delegate IEnumerator<int> Script(params float[] parameters);
 
-    public class ScriptEngine : GameComponent
+    public sealed class ScriptEngine : GameComponent
     {
         private readonly List<ScriptState> _scripts = new List<ScriptState>();
 

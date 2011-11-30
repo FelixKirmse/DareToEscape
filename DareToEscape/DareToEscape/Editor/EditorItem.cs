@@ -6,7 +6,7 @@
         Tile
     }
 
-    internal class EditorItem
+    internal sealed class EditorItem
     {
         public ItemType Type { get; set; }
         public string Code { get; set; }

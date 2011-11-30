@@ -7,7 +7,7 @@ namespace BlackDragonEngine.Helpers
     /// <summary>
     ///   Class that helps handling Animations
     /// </summary>
-    public class AnimationStrip
+    public sealed class AnimationStrip
     {
         #region Declarations
 

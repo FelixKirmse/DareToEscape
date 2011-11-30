@@ -5,7 +5,7 @@ using BlackDragonEngine.TileEngine;
 namespace BlackDragonEngine.Helpers
 {
     [Serializable]
-    public class CoordComparer : IEqualityComparer<Coords>
+    public sealed class CoordComparer : IEqualityComparer<Coords>
     {
         #region IEqualityComparer<Coords> Members
 

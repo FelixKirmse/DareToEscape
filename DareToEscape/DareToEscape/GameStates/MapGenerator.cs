@@ -14,12 +14,17 @@ namespace DareToEscape.GameStates
 {
     public delegate void MapGenerated();
 
-    public class MapGenerator : IDrawableGameState
+    public sealed class MapGenerator : IDrawableGameState
     {
+        private static MapGenerator _instance;
         private RandomMapGenerator _mapGen;
 
         private GenerationState _state;
         private Task _task;
+
+        private MapGenerator()
+        {
+        }
 
         #region IDrawableGameState Members
 
@@ -65,6 +70,11 @@ namespace DareToEscape.GameStates
         }
 
         #endregion
+
+        public static MapGenerator GetInstance()
+        {
+            return _instance ?? (_instance = new MapGenerator());
+        }
 
         public event MapGenerated OnGenerationFinished;
 

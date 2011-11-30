@@ -2,7 +2,7 @@
 
 namespace DareToEscape.Dialog.Tutorial
 {
-    internal class TutorialDialog : DialogScript
+    internal sealed class TutorialDialog : DialogScript
     {
         public TutorialDialog()
         {
@@ -15,7 +15,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialoga : DialogScript
+    internal sealed class TutorialDialoga : DialogScript
     {
         public TutorialDialoga()
         {
@@ -28,7 +28,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialog1 : DialogScript
+    internal sealed class TutorialDialog1 : DialogScript
     {
         public TutorialDialog1()
         {
@@ -39,7 +39,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialog2 : DialogScript
+    internal sealed class TutorialDialog2 : DialogScript
     {
         public TutorialDialog2()
         {
@@ -51,7 +51,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialog3 : DialogScript
+    internal sealed class TutorialDialog3 : DialogScript
     {
         public TutorialDialog3()
         {
@@ -62,7 +62,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialog4 : DialogScript
+    internal sealed class TutorialDialog4 : DialogScript
     {
         public TutorialDialog4()
         {
@@ -74,7 +74,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialog5 : DialogScript
+    internal sealed class TutorialDialog5 : DialogScript
     {
         public TutorialDialog5()
         {
@@ -86,7 +86,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialog6 : DialogScript
+    internal sealed class TutorialDialog6 : DialogScript
     {
         public TutorialDialog6()
         {
@@ -97,7 +97,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialog6a : DialogScript
+    internal sealed class TutorialDialog6a : DialogScript
     {
         public TutorialDialog6a()
         {
@@ -109,7 +109,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialog7 : DialogScript
+    internal sealed class TutorialDialog7 : DialogScript
     {
         public TutorialDialog7()
         {
@@ -122,7 +122,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialog8 : DialogScript
+    internal sealed class TutorialDialog8 : DialogScript
     {
         public TutorialDialog8()
         {
@@ -135,7 +135,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialog9 : DialogScript
+    internal sealed class TutorialDialog9 : DialogScript
     {
         public TutorialDialog9()
         {
@@ -148,7 +148,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialog9a : DialogScript
+    internal sealed class TutorialDialog9a : DialogScript
     {
         public TutorialDialog9a()
         {
@@ -161,7 +161,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialog9b : DialogScript
+    internal sealed class TutorialDialog9b : DialogScript
     {
         public TutorialDialog9b()
         {
@@ -173,7 +173,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialogFinish : DialogScript
+    internal sealed class TutorialDialogFinish : DialogScript
     {
         public TutorialDialogFinish()
         {
@@ -186,7 +186,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class TutorialDialogFinisha : DialogScript
+    internal sealed class TutorialDialogFinisha : DialogScript
     {
         public TutorialDialogFinisha()
         {
@@ -197,7 +197,7 @@ namespace DareToEscape.Dialog.Tutorial
         }
     }
 
-    internal class Gratz : DialogScript
+    internal sealed class Gratz : DialogScript
     {
         public Gratz()
         {

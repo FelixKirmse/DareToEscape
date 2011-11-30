@@ -9,8 +9,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.GameStates
 {
-    internal class IngameManager : IUpdateableGameState, IDrawableGameState
+    internal sealed class IngameManager : IUpdateableGameState, IDrawableGameState
     {
+        private static IngameManager _instance;
+
+        private IngameManager()
+        {
+        }
+
         #region IDrawableGameState Members
 
         public bool DrawCondition
@@ -59,6 +65,11 @@ namespace DareToEscape.GameStates
         }
 
         #endregion
+
+        public static IngameManager GetInstance()
+        {
+            return _instance ?? (_instance = new IngameManager());
+        }
 
         public void Activate()
         {

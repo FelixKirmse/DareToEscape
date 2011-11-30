@@ -10,7 +10,6 @@ using BlackDragonEngine.TileEngine;
 using DareToEscape.Editor;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
-using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -18,7 +17,7 @@ using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace DareToEscape.GameStates
 {
-    internal class EditorManager : IUpdateableGameState, IDrawableGameState
+    internal sealed class EditorManager : IUpdateableGameState, IDrawableGameState
     {
         public Vector2 CellCoords = Vector2.Zero;
         public EditorItem CurrentItem;
@@ -38,6 +37,7 @@ namespace DareToEscape.GameStates
 
         #region Doing The Impossible
 
+        private static EditorManager _instance;
         private readonly EventHandler _gameFormVisibleChanged;
         private readonly PresentationParameters _orgPParams;
         private readonly EventHandler _pictureBoxSizeChanged;
@@ -50,7 +50,7 @@ namespace DareToEscape.GameStates
         private Form _parentForm;
         private PictureBox _pictureBox;
 
-        public EditorManager()
+        private EditorManager()
         {
             _gameFormVisibleChanged = GameFormVisibleChanged;
             _pictureBoxSizeChanged = PictureBoxSizeChanged;
@@ -77,6 +77,11 @@ namespace DareToEscape.GameStates
         }
 
         #endregion
+
+        public static EditorManager GetInstance()
+        {
+            return _instance ?? (_instance = new EditorManager());
+        }
 
         public void Activate(string levelname)
         {
@@ -149,7 +154,7 @@ namespace DareToEscape.GameStates
         {
             Deactivate();
             GameStateManager.State = States.Ingame;
-            GameVariableProvider.IngameManager.Activate();
+            IngameManager.GetInstance().Activate();
             LevelManager.LoadLevel(levelName);
         }
 

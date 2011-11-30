@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace BlackDragonEngine.Helpers
 {
-    internal class RotatedRectangle
+    internal sealed class RotatedRectangle
     {
         public Rectangle CollisionRectangle;
         public Vector2 Origin;

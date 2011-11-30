@@ -5,13 +5,12 @@ using BlackDragonEngine.Scripting;
 using BlackDragonEngine.TileEngine;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
-using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape
 {
-    public class DareToEscape : Game
+    public sealed class DareToEscape : Game
     {
         public static GraphicsDeviceManager Graphics;
         private SpriteBatch _spriteBatch;
@@ -78,7 +77,7 @@ namespace DareToEscape
         public void OnLevelLoad()
         {
             CodeManager.CheckCodes();
-            GameVariableProvider.BulletManager.ClearAllBullets();
+            BulletManager.GetInstance().ClearAllBullets();
         }
 
         public static void ToggleFullScreen()

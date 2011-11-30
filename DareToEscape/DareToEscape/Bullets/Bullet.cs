@@ -5,6 +5,7 @@ using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
 using DareToEscape.Bullets.Behaviors;
 using DareToEscape.Entities;
+using DareToEscape.Managers;
 using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -251,7 +252,7 @@ namespace DareToEscape.Bullets
             Velocity = startingSpeed;
             Active = true;
             Direction = direction;
-            GameVariableProvider.BulletManager.AddBullet(this);
+            BulletManager.GetInstance().AddBullet(this);
         }
 
         public override string ToString()

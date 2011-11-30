@@ -2,7 +2,7 @@
 
 namespace DareToEscape.Bullets.Behaviors
 {
-    internal class StandardBehavior : IBehavior
+    internal sealed class StandardBehavior : IBehavior
     {
         #region IBehavior Members
 

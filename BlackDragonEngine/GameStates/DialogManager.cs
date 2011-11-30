@@ -7,12 +7,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BlackDragonEngine.GameStates
 {
-    public class DialogManager : IUpdateableGameState, IDrawableGameState
+    public sealed class DialogManager : IUpdateableGameState, IDrawableGameState
     {
         #region Declarations
 
         private static Dictionary<string, DialogScript> _dialog;
         public static bool DrawMugshot = true;
+        private static DialogManager _instance;
         private readonly SpriteFont _font;
 
         private readonly Vector2 _mugShotPosition = new Vector2(600, 500);
@@ -68,7 +69,7 @@ namespace BlackDragonEngine.GameStates
 
         #endregion
 
-        public DialogManager()
+        private DialogManager()
         {
             _font = FontProvider.GetFont("Mono14");
         }
@@ -158,6 +159,11 @@ namespace BlackDragonEngine.GameStates
         }
 
         #endregion
+
+        public static DialogManager GetInstance()
+        {
+            return _instance ?? (_instance = new DialogManager());
+        }
 
         public void PlayDialog(Dictionary<string, DialogScript> dialogue, string startDialog)
         {

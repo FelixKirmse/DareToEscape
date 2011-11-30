@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace BlackDragonEngine.Helpers
 {
-    public class PathNode
+    public sealed class PathNode
     {
         #region Declarations
 

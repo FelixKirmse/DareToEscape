@@ -5,7 +5,7 @@ using BlackDragonEngine.Providers;
 using BlackDragonEngine.Scripting;
 using DareToEscape.Bullets;
 using DareToEscape.Helpers;
-using DareToEscape.Providers;
+using DareToEscape.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -39,7 +39,7 @@ namespace DareToEscape.Components.Entities
                 if (_timeTracker <= 0)
                 {
                     ++Phase;
-                    GameVariableProvider.BulletManager.ClearAllBullets();
+                    BulletManager.GetInstance().ClearAllBullets();
                     VariableProvider.ScriptEngine.StopAllScripts();
                     SwitchPhase();
                 }

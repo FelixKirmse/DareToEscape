@@ -1,10 +1,8 @@
 ﻿using BlackDragonEngine;
 using BlackDragonEngine.GameStates;
 using BlackDragonEngine.Managers;
-using BlackDragonEngine.Providers;
 using DareToEscape.GameStates;
 using DareToEscape.Helpers;
-using DareToEscape.Providers;
 
 namespace DareToEscape.Managers
 {
@@ -12,19 +10,13 @@ namespace DareToEscape.Managers
     {
         public GameStateManager()
         {
-            var editorManager = new EditorManager();
-            var ingameManager = new IngameManager();
-            var dialogManager = new DialogManager();
-            var mapGenerator = new MapGenerator();
-            var bulletManager = new BulletManager();
+            var editorManager = EditorManager.GetInstance();
+            var ingameManager = IngameManager.GetInstance();
+            var dialogManager = DialogManager.GetInstance();
+            var mapGenerator = MapGenerator.GetInstance();
+            var bulletManager = BulletManager.GetInstance();
 
             DialogHelper.Initialize(dialogManager);
-
-            VariableProvider.DialogManager = dialogManager;
-            GameVariableProvider.BulletManager = bulletManager;
-            GameVariableProvider.EditorManager = editorManager;
-            GameVariableProvider.IngameManager = ingameManager;
-            GameVariableProvider.MapGenerator = mapGenerator;
 
             AddGameState(bulletManager);
             AddGameState(editorManager);

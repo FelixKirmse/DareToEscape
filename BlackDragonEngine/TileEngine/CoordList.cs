@@ -2,7 +2,7 @@
 
 namespace BlackDragonEngine.TileEngine
 {
-    public class CoordList
+    public sealed class CoordList
     {
         private readonly Dictionary<int, Dictionary<int, Coords>> _coords =
             new Dictionary<int, Dictionary<int, Coords>>();

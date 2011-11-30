@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.GameStates
 {
-    internal class MenuManager : IDrawableGameState, IUpdateableGameState
+    internal sealed class MenuManager : IDrawableGameState, IUpdateableGameState
     {
         private readonly IngameMenu _ingameMenu;
         private readonly MainMenu _mainMenu;

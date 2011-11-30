@@ -2,7 +2,7 @@
 
 namespace DareToEscape.Bullets.Behaviors
 {
-    internal class ParameterQueue : IBehavior
+    internal sealed class ParameterQueue : IBehavior
     {
         private static readonly Dictionary<int, ParameterQueue> ActivePqs = new Dictionary<int, ParameterQueue>(50000);
         private static readonly Stack<ParameterQueue> InActivePqs = new Stack<ParameterQueue>(10000);

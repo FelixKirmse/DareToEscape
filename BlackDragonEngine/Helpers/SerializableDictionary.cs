@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 namespace BlackDragonEngine.Helpers
 {
     [XmlRoot("dictionary")]
-    public class SerializableDictionary<TKey, TValue>
+    public sealed class SerializableDictionary<TKey, TValue>
         : Dictionary<TKey, TValue>, IXmlSerializable
     {
         public SerializableDictionary()

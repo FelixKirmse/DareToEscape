@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.TileEngine;
 using DareToEscape.GameStates;
-using DareToEscape.Providers;
 using Microsoft.Xna.Framework.Input;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using XNARectangle = Microsoft.Xna.Framework.Rectangle;
@@ -28,16 +27,17 @@ namespace DareToEscape.Editor
 
         public MapEditor()
         {
-            _editorManager = GameVariableProvider.EditorManager;
+            _editorManager = EditorManager.GetInstance();
             InitializeComponent();
-            GameVariableProvider.MapGenerator.OnGenerationFinished += () => _updateMapSize = true;
+            MapGenerator.GetInstance().OnGenerationFinished += () => _updateMapSize = true;
         }
 
         public MapEditor(string levelName)
         {
-            _editorManager = GameVariableProvider.EditorManager;
+            _editorManager = EditorManager.GetInstance();
             InitializeComponent();
             _loadLevel = levelName;
+            MapGenerator.GetInstance().OnGenerationFinished += () => _updateMapSize = true;
         }
 
         private void ExitToolStripMenuItemClick(object sender, EventArgs e)
@@ -134,7 +134,7 @@ namespace DareToEscape.Editor
             {
                 _editorManager.DrawTile = listTiles.SelectedIndices[0];
                 _editorManager.CurrentItem =
-                    GameVariableProvider.EditorManager.GetEditorItemByName(listTiles.SelectedIndices[0].ToString());
+                    _editorManager.GetEditorItemByName(listTiles.SelectedIndices[0].ToString());
             }
         }
 
@@ -452,7 +452,7 @@ namespace DareToEscape.Editor
         private void GenerateRandomMapToolStripMenuItemClick(object sender, EventArgs e)
         {
             _updateMapSize = false;
-            GameVariableProvider.MapGenerator.GenerateNewMap();
+            MapGenerator.GetInstance().GenerateNewMap();
         }
     }
 }

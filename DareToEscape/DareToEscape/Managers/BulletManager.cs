@@ -9,14 +9,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Managers
 {
-    internal class BulletManager : IUpdateableGameState, IDrawableGameState
+    internal sealed class BulletManager : IUpdateableGameState, IDrawableGameState
     {
+        private static BulletManager _instance;
         private readonly List<Bullet> _bullets = new List<Bullet>(50000);
         private readonly List<int> _bulletsToDelete = new List<int>(1000);
         private readonly int _processorCount;
         private readonly Task[] _tasks;
 
-        public BulletManager()
+        private BulletManager()
         {
             _processorCount = VariableProvider.ProcessorCount;
             _tasks = new Task[_processorCount];
@@ -95,6 +96,11 @@ namespace DareToEscape.Managers
         }
 
         #endregion
+
+        public static BulletManager GetInstance()
+        {
+            return _instance ?? (_instance = new BulletManager());
+        }
 
         public void ClearAllBullets()
         {

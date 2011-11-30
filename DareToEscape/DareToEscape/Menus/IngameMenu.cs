@@ -6,28 +6,27 @@ using BlackDragonEngine.Providers;
 using DareToEscape.GameStates;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
-using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 
 namespace DareToEscape.Menus
 {
-    internal class IngameMenu : Menu
+    internal sealed class IngameMenu : Menu
     {
-        private const string resume = "Resume";
-        private const string restartCheck = "Restart from last checkpoint";
-        private const string restartLevel = "Restart level";
-        private const string mapeditor = "Edit this level";
-        private const string toggleFullscreen = "Toggle fullscreen";
-        private const string back = "Back to main menu";
+        private const string Resume = "Resume";
+        private const string RestartCheck = "Restart from last checkpoint";
+        private const string RestartLevel = "Restart level";
+        private const string Mapeditor = "Edit this level";
+        private const string ToggleFullscreen = "Toggle fullscreen";
+        private const string Back = "Back to main menu";
 
         public IngameMenu()
         {
-            menuItems.Add(new MenuItem(resume, fontName, true, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(restartCheck, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(restartLevel, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(mapeditor, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(toggleFullscreen, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(back, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
+            menuItems.Add(new MenuItem(Resume, fontName, true, new Color(255, 0, 0), new Color(0, 255, 0)));
+            menuItems.Add(new MenuItem(RestartCheck, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
+            menuItems.Add(new MenuItem(RestartLevel, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
+            menuItems.Add(new MenuItem(Mapeditor, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
+            menuItems.Add(new MenuItem(ToggleFullscreen, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
+            menuItems.Add(new MenuItem(Back, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
 
             EnableMouseSelection = false;
             SetPositions();
@@ -47,32 +46,32 @@ namespace DareToEscape.Menus
         {
             switch (SelectedItem)
             {
-                case resume:
+                case Resume:
                     EngineStates.GameStates = EEngineStates.Running;
                     GameStateManager.State = States.Ingame;
                     break;
 
-                case restartCheck:
+                case RestartCheck:
                     EngineStates.GameStates = EEngineStates.Running;
                     SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
                     GameStateManager.State = States.Ingame;
                     break;
 
-                case mapeditor:
+                case Mapeditor:
                     EngineStates.GameStates = EEngineStates.Running;
-                    GameVariableProvider.EditorManager.Activate(LevelManager.CurrentLevel);
+                    EditorManager.GetInstance().Activate(LevelManager.CurrentLevel);
                     break;
 
-                case toggleFullscreen:
+                case ToggleFullscreen:
                     DareToEscape.ToggleFullScreen();
                     break;
 
-                case back:
+                case Back:
                     EngineStates.GameStates = EEngineStates.Running;
                     MenuManager.MenuState = MenuStates.Main;
                     break;
 
-                case restartLevel:
+                case RestartLevel:
                     EngineStates.GameStates = EEngineStates.Running;
                     GameStateManager.State = States.Ingame;
                     LevelManager.ReloadLevel();

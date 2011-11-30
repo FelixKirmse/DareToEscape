@@ -9,7 +9,7 @@ namespace BlackDragonEngine.Helpers
     ///   CREDITS INFINIMINER
     ///   http://code.google.com/p/infiniminer/
     /// </summary>
-    public class CharacterEventArgs : EventArgs
+    public sealed class CharacterEventArgs : EventArgs
     {
         private readonly char character;
         private readonly int lParam;

@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Bullets
 {
-    internal class Patterns
+    internal sealed class Patterns
     {
         private readonly BossComponent _turret;
         private float _angle;
