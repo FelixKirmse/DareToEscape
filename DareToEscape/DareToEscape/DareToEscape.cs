@@ -35,6 +35,7 @@ namespace DareToEscape
 
             Graphics.PreferredBackBufferWidth = 1280;
             Graphics.PreferredBackBufferHeight = 720;
+            Graphics.IsFullScreen = false;
             Graphics.ApplyChanges();
 
             base.Initialize();

@@ -59,6 +59,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
     <XnaCompressContent>true</XnaCompressContent>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -115,6 +116,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bullets\Behaviors\IBehavior.cs" />
+    <Compile Include="Bullets\Behaviors\ParameterQueue.cs" />
+    <Compile Include="Bullets\Behaviors\ReusableBehaviors.cs" />
+    <Compile Include="Bullets\Behaviors\StandardBehavior.cs" />
+    <Compile Include="Bullets\Bullet.cs" />
     <Compile Include="Bullets\Patterns.cs" />
     <Compile Include="Components\Entities\Boss1Component.cs" />
     <Compile Include="Components\Entities\BossComponent.cs" />
@@ -140,12 +146,8 @@
     <Compile Include="Editor\MapEditor.Designer.cs">
       <DependentUpon>MapEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Bullets\Bullet.cs" />
-    <Compile Include="Bullets\Behaviors\IBehavior.cs" />
-    <Compile Include="Bullets\Behaviors\ParameterQueue.cs" />
-    <Compile Include="Bullets\Behaviors\ReusableBehaviors.cs" />
-    <Compile Include="Bullets\Behaviors\StandardBehavior.cs" />
     <Compile Include="Entities\Player.cs" />
+    <Compile Include="Managers\BulletManager.cs" />
     <Compile Include="States.cs" />
     <Compile Include="Helpers\ContentLoader.cs" />
     <Compile Include="Helpers\DialogHelper.cs" />
@@ -154,7 +156,6 @@
     <Compile Include="GameStates\GeneralHelper.cs" />
     <Compile Include="Helpers\SaveHelper.cs" />
     <Compile Include="Helpers\SaveState.cs" />
-    <Compile Include="Managers\BulletManager.cs" />
     <Compile Include="Managers\GameStateManager.cs" />
     <Compile Include="GameStates\IngameManager.cs" />
     <Compile Include="GameStates\MenuManager.cs" />
@@ -189,7 +190,7 @@
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 und x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
