@@ -88,8 +88,8 @@
             this.addPropertyButton = new System.Windows.Forms.Button();
             this.propertyNameInput = new System.Windows.Forms.TextBox();
             this.propertyListBox = new System.Windows.Forms.ListBox();
-            this.mapSizeLabel = new System.Windows.Forms.Label();
             this.focusButton = new System.Windows.Forms.CheckBox();
+            this.mapSizeLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pctSurface)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBoxRightClick.SuspendLayout();
@@ -104,7 +104,7 @@
             // 
             this.pctSurface.Location = new System.Drawing.Point(549, 27);
             this.pctSurface.Name = "pctSurface";
-            this.pctSurface.Size = new System.Drawing.Size(1280, 720);
+            this.pctSurface.Size = new System.Drawing.Size(320, 240);
             this.pctSurface.TabIndex = 0;
             this.pctSurface.TabStop = false;
             // 
@@ -116,7 +116,7 @@
             this.layerToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1840, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(890, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -333,7 +333,7 @@
             // 
             this.cwdLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cwdLabel.AutoSize = true;
-            this.cwdLabel.Location = new System.Drawing.Point(13, 736);
+            this.cwdLabel.Location = new System.Drawing.Point(13, 646);
             this.cwdLabel.Name = "cwdLabel";
             this.cwdLabel.Size = new System.Drawing.Size(0, 13);
             this.cwdLabel.TabIndex = 9;
@@ -405,7 +405,7 @@
             // 
             this.coordLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.coordLbl.AutoSize = true;
-            this.coordLbl.Location = new System.Drawing.Point(271, 592);
+            this.coordLbl.Location = new System.Drawing.Point(-679, 592);
             this.coordLbl.Name = "coordLbl";
             this.coordLbl.Size = new System.Drawing.Size(16, 13);
             this.coordLbl.TabIndex = 20;
@@ -414,7 +414,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.rectangleSelectionCheckBox);
-            this.groupBox2.Location = new System.Drawing.Point(370, 429);
+            this.groupBox2.Location = new System.Drawing.Point(552, 277);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(173, 103);
             this.groupBox2.TabIndex = 21;
@@ -673,15 +673,6 @@
             this.propertyListBox.Size = new System.Drawing.Size(336, 134);
             this.propertyListBox.TabIndex = 0;
             // 
-            // mapSizeLabel
-            // 
-            this.mapSizeLabel.AutoSize = true;
-            this.mapSizeLabel.Location = new System.Drawing.Point(371, 535);
-            this.mapSizeLabel.Name = "mapSizeLabel";
-            this.mapSizeLabel.Size = new System.Drawing.Size(35, 13);
-            this.mapSizeLabel.TabIndex = 29;
-            this.mapSizeLabel.Text = "label5";
-            // 
             // focusButton
             // 
             this.focusButton.AutoSize = true;
@@ -691,11 +682,20 @@
             this.focusButton.TabIndex = 30;
             this.focusButton.UseVisualStyleBackColor = true;
             // 
+            // mapSizeLabel
+            // 
+            this.mapSizeLabel.AutoSize = true;
+            this.mapSizeLabel.Location = new System.Drawing.Point(744, 283);
+            this.mapSizeLabel.Name = "mapSizeLabel";
+            this.mapSizeLabel.Size = new System.Drawing.Size(35, 13);
+            this.mapSizeLabel.TabIndex = 29;
+            this.mapSizeLabel.Text = "label5";
+            // 
             // MapEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1840, 758);
+            this.ClientSize = new System.Drawing.Size(890, 668);
             this.Controls.Add(this.focusButton);
             this.Controls.Add(this.mapSizeLabel);
             this.Controls.Add(this.mapPropertiesGroupBox);
@@ -804,8 +804,8 @@
         private System.Windows.Forms.Button addPropertyButton;
         private System.Windows.Forms.TextBox propertyNameInput;
         private System.Windows.Forms.ListBox propertyListBox;
-        private System.Windows.Forms.Label mapSizeLabel;
         private System.Windows.Forms.CheckBox focusButton;
         private System.Windows.Forms.ToolStripMenuItem generateRandomMapToolStripMenuItem;
+        private System.Windows.Forms.Label mapSizeLabel;
     }
 }

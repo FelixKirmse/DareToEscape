@@ -15,8 +15,8 @@ namespace BlackDragonEngine.TileEngine
     {
         #region Declarations
 
-        public const int TileWidth = 16;
-        public const int TileHeight = 16;
+        public const int TileWidth = 8;
+        public const int TileHeight = 8;
         public const int MapLayers = 1;
         public const int TileOffset = 0;
         public static bool EditorMode;

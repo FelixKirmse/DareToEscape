@@ -12,7 +12,7 @@ namespace DareToEscape
 {
     public sealed class DareToEscape : Game
     {
-        public static GraphicsDeviceManager Graphics;
+        public static GraphicsDeviceManager Graphics { get; private set; }
         private SpriteBatch _spriteBatch;
         private GameStateManager _stateManager;
 
@@ -31,12 +31,13 @@ namespace DareToEscape
         {
             VariableProvider.CoordList = new CoordList();
             VariableProvider.Game = this;
-            GameInitializer.Initialize();
 
-            Graphics.PreferredBackBufferWidth = 1280;
-            Graphics.PreferredBackBufferHeight = 720;
+            Graphics.PreferredBackBufferWidth = 320;
+            Graphics.PreferredBackBufferHeight = 240;
             Graphics.IsFullScreen = false;
             Graphics.ApplyChanges();
+
+            GameInitializer.Initialize();
 
             base.Initialize();
         }
