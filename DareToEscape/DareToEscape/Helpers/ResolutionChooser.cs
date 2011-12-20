@@ -98,9 +98,9 @@ namespace DareToEscape.Helpers
 
         private void StartGameBtnClick(object sender, EventArgs e)
         {
+            _resInfo = new ResolutionInformation(_viewport, _fullScreen, _resolution, _matrix);
             if(_remember)
             {
-                _resInfo = new ResolutionInformation(_viewport, _fullScreen, _resolution, _matrix);
                 var fs = new FileStream(Settings, FileMode.Create);
                 var xmls = new XmlSerializer(_resInfo.GetType());
                 xmls.Serialize(fs, _resInfo);

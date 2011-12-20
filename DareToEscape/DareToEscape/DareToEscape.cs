@@ -40,6 +40,10 @@ namespace DareToEscape
                                                               return;
                                                           }
                                                       }
+                                                      else
+                                                      {
+                                                          File.Delete(ResolutionChooser.Settings);
+                                                      }
                                                       Application.Run(new ResolutionChooser(this));
                                                   });
             Task.WaitAll(task);
@@ -94,12 +98,12 @@ namespace DareToEscape
             _stateManager = new GameStateManager();
             _renderTarget = new RenderTarget2D(GraphicsDevice, ResolutionWidth, ResolutionHeight, true,
                                                GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
-            var myForm = (Form) Control.FromHandle(Window.Handle);
-            myForm.Activate();
         }
 
         protected override void Update(GameTime gameTime)
         {
+            var myForm = (Form)Control.FromHandle(Window.Handle);
+            myForm.Activate();
             if (IsActive)
             {
                 VariableProvider.GameTime = gameTime;
