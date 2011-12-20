@@ -52,7 +52,8 @@ namespace DareToEscape
                                PreferredBackBufferWidth =
                                    ResInfo.FullScreen ? ResolutionWidth : ResInfo.Resolution.Width,
                                PreferredBackBufferHeight =
-                                   ResInfo.FullScreen ? ResolutionHeight : ResInfo.Resolution.Height
+                                   ResInfo.FullScreen ? ResolutionHeight : ResInfo.Resolution.Height,
+                                   PreferMultiSampling = false
                            };
             _scaleMatrix = ResInfo.Matrix;
             Content.RootDirectory = "Content";
@@ -96,14 +97,18 @@ namespace DareToEscape
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             ContentLoader.LoadContent(Content);
             _stateManager = new GameStateManager();
-            _renderTarget = new RenderTarget2D(GraphicsDevice, ResolutionWidth, ResolutionHeight, true,
+            _renderTarget = new RenderTarget2D(GraphicsDevice, ResolutionWidth, ResolutionHeight, false,
                                                GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+        }
+
+        protected override void OnDeactivated(object sender, System.EventArgs args)
+        {
+            var myForm = (Form)Control.FromHandle(Window.Handle);
+            myForm.Activate();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            var myForm = (Form)Control.FromHandle(Window.Handle);
-            myForm.Activate();
             if (IsActive)
             {
                 VariableProvider.GameTime = gameTime;
@@ -138,7 +143,7 @@ namespace DareToEscape
             _spriteBatch.DrawString(
                 FontProvider.GetFont("Mono8"),
                 string.Format(
-                    "Your viewport is {0}x{1} \nstarting at ({2}|{3})\nwith Scale {4}",
+                    "Your viewport is {0}x{1} \nstarting at ({2}|{3}) \nwith Scale {4}",
                     GraphicsDevice.Viewport.Width,
                     GraphicsDevice.Viewport.Height,
                     GraphicsDevice.Viewport.X,
@@ -153,10 +158,13 @@ namespace DareToEscape
             {
                 GraphicsDevice.SetRenderTarget(null);
                 GraphicsDevice.Viewport = ResInfo.Viewport;
-                _spriteBatch.Begin();
+                _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
                 _spriteBatch.Draw(_renderTarget,
                                   new Rectangle(0, 0, ResInfo.Resolution.Width, ResInfo.Resolution.Height), Color.White);
                 _spriteBatch.End();
+                var fs = new FileStream(Application.StartupPath + "\\stuff.png", FileMode.Create);
+                _renderTarget.SaveAsPng(fs, _renderTarget.Width, _renderTarget.Height);
+                fs.Close();
             }
             base.Draw(gameTime);
         }
