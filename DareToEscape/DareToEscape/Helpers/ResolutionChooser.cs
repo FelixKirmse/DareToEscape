@@ -40,41 +40,25 @@ namespace DareToEscape.Helpers
         private Matrix _matrix;
         private bool _fullScreen;
         private Size _resolution;
-        private readonly string _settings = string.Format(@"{0}\settings.cfg", Application.StartupPath);
+        public static readonly string Settings = string.Format(@"{0}\settings.cfg", Application.StartupPath);
         private readonly DareToEscape _parent;
+        private ResolutionInformation _resInfo;
 
         
 
         public ResolutionChooser(DareToEscape parent)
         {
             _parent = parent;
-            if(!Keyboard.GetState().IsKeyDown(Keys.LeftControl))
-            {
-                if (File.Exists(_settings))
-                {
-                    var fs = new FileStream(_settings, FileMode.Open);
-                    var xmls = new XmlSerializer(typeof(ResolutionInformation));
-                    var resInfo = (ResolutionInformation) xmls.Deserialize(fs);
-                    _viewport = resInfo.Viewport;
-                    _fullScreen = resInfo.FullScreen;
-                    _resolution = resInfo.Resolution;
-                    _matrix = resInfo.Matrix;
-                    StartGameBtnClick(null, null);
-                    fs.Close();
-                    
-                }
-            }
             DisplayMode cdm = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
             _aspectRatio = (float) cdm.Width/cdm.Height;
             InitializeComponent();
             _resolutionComboBox.SelectedIndex = 0;
-            Show();
         }
 
         private void ResolutionComboBoxSelectedIndexChanged(object sender, EventArgs e)
         {
             int scale = _resolutionComboBox.SelectedIndex;
-            _matrix = scale > 0 ? Matrix.CreateScale(scale) : Matrix.CreateScale(1f);
+            _matrix = scale > 0 ? Matrix.CreateScale(scale, scale, 1f) : Matrix.CreateScale(1f);
             const int width = DareToEscape.ResolutionWidth;
             const int height = DareToEscape.ResolutionHeight;
             _fullScreen = scale == 0;
@@ -114,16 +98,16 @@ namespace DareToEscape.Helpers
 
         private void StartGameBtnClick(object sender, EventArgs e)
         {
-            var resInfo = new ResolutionInformation(_viewport, _fullScreen, _resolution, _matrix);
             if(_remember)
             {
-                var fs = new FileStream(_settings, FileMode.Create);
-                var xmls = new XmlSerializer(resInfo.GetType());
-                xmls.Serialize(fs, resInfo);
+                _resInfo = new ResolutionInformation(_viewport, _fullScreen, _resolution, _matrix);
+                var fs = new FileStream(Settings, FileMode.Create);
+                var xmls = new XmlSerializer(_resInfo.GetType());
+                xmls.Serialize(fs, _resInfo);
                 fs.Close();
             }
             Hide();
-            _parent.ResInfo = resInfo;
+            _parent.ResInfo = _resInfo;
             Close();
         }
     }

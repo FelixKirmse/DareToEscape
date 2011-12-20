@@ -9,12 +9,12 @@ namespace BlackDragonEngine.Providers
     {
         public static int GameWindowWidth
         {
-            get { return VariableProvider.Game.Window.ClientBounds.Width; }
+            get { return VariableProvider.Game.GraphicsDevice.Viewport.Width; }
         }
 
         public static int GameWindowHeight
         {
-            get { return VariableProvider.Game.Window.ClientBounds.Height; }
+            get { return VariableProvider.Game.GraphicsDevice.Viewport.Height; }
         }
 
         public static Vector2 ScreenCenter
