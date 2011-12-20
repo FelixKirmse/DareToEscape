@@ -162,9 +162,6 @@ namespace DareToEscape
                 _spriteBatch.Draw(_renderTarget,
                                   new Rectangle(0, 0, ResInfo.Resolution.Width, ResInfo.Resolution.Height), Color.White);
                 _spriteBatch.End();
-                var fs = new FileStream(Application.StartupPath + "\\stuff.png", FileMode.Create);
-                _renderTarget.SaveAsPng(fs, _renderTarget.Width, _renderTarget.Height);
-                fs.Close();
             }
             base.Draw(gameTime);
         }
