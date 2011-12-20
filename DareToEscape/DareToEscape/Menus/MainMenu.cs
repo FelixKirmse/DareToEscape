@@ -14,9 +14,7 @@ namespace DareToEscape.Menus
     {
         private const string NewGame = "New Game";
         private const string Resume = "Resume";
-        private const string Tutorial = "Play tutorial";
         private const string Editor = "Map Editor";
-        private const string FullScreen = "Toggle Fullscreen";
         private const string Quit = "Quit";
 
         public MainMenu()
@@ -25,9 +23,7 @@ namespace DareToEscape.Menus
                                        new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(NewGame, fontName, !File.Exists(SaveManager<SaveState>.CurrentSaveFile),
                                        new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(Tutorial, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(Editor, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(FullScreen, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(Quit, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
 
             EnableMouseSelection = false;
@@ -63,19 +59,8 @@ namespace DareToEscape.Menus
                     SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
                     break;
 
-                case Tutorial:
-                    GameStateManager.State = States.Tutorial;
-                    ingameManager.Activate();
-                    LevelManager.LoadLevel("Tutorial");
-                    SaveManager<SaveState>.Save();
-                    break;
-
                 case Editor:
                     EditorManager.GetInstance().Activate();
-                    break;
-
-                case FullScreen:
-                    DareToEscape.ToggleFullScreen();
                     break;
 
                 case Quit:

@@ -96,6 +96,8 @@
     <Reference Include="mscorlib">
       <Private>False</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
@@ -114,6 +116,7 @@
     <Reference Include="System.Net">
       <Private>False</Private>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bullets\Behaviors\IBehavior.cs" />
@@ -147,6 +150,12 @@
       <DependentUpon>MapEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Entities\Player.cs" />
+    <Compile Include="Helpers\ResolutionChooser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Helpers\ResolutionChooser.Designer.cs">
+      <DependentUpon>ResolutionChooser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Managers\BulletManager.cs" />
     <Compile Include="States.cs" />
     <Compile Include="Helpers\ContentLoader.cs" />
@@ -218,8 +227,10 @@
     <EmbeddedResource Include="Editor\MapEditor.resx">
       <DependentUpon>MapEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\ResolutionChooser.resx">
+      <DependentUpon>ResolutionChooser.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

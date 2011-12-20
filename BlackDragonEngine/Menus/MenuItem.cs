@@ -6,15 +6,15 @@ namespace BlackDragonEngine.Menus
 {
     public class MenuItem
     {
-        private readonly SpriteFont font;
-        private Color itemColor;
+        private readonly SpriteFont _font;
+        private Color _itemColor;
 
         public MenuItem(string itemName, Vector2 itemPosition, bool isSelected, SpriteFont font)
         {
             ItemName = itemName;
             ItemPosition = itemPosition;
             IsSelected = isSelected;
-            this.font = font;
+            _font = font;
 
             SelectedColor = Color.Red;
             UnSelectedcolor = Color.White;
@@ -55,21 +55,21 @@ namespace BlackDragonEngine.Menus
         public Color UnSelectedcolor { get; set; }
 
 
-        public void Update()
+        public virtual void Update()
         {
             if (IsSelected)
-                itemColor = SelectedColor;
+                _itemColor = SelectedColor;
             else
-                itemColor = UnSelectedcolor;
+                _itemColor = UnSelectedcolor;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(
-                font,
+                _font,
                 ItemName,
                 ShortcutProvider.Vector2Point(ItemPosition),
-                itemColor,
+                _itemColor,
                 0,
                 Vector2.Zero,
                 1,
