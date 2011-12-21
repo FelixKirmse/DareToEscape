@@ -3,6 +3,7 @@ using BlackDragonEngine.Providers;
 using DareToEscape.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace DareToEscape.GameStates
 {
@@ -36,7 +37,7 @@ namespace DareToEscape.GameStates
 
         public bool Update()
         {
-            if (InputProvider.KeyState.GetPressedKeys().Length > 0)
+            if (InputProvider.KeyState.IsKeyDown(Keys.Enter))
                 GameStateManager.State = States.Menu;
             return false;
         }

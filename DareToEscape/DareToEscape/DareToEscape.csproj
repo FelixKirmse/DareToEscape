@@ -166,8 +166,8 @@
     <Compile Include="Helpers\SaveHelper.cs" />
     <Compile Include="Helpers\SaveState.cs" />
     <Compile Include="Managers\GameStateManager.cs" />
-    <Compile Include="GameStates\IngameManager.cs" />
-    <Compile Include="GameStates\MenuManager.cs" />
+    <Compile Include="GameStates\Ingame.cs" />
+    <Compile Include="GameStates\Menu.cs" />
     <Compile Include="Managers\CodeHandler.cs" />
     <Compile Include="GameStates\MapGenerator.cs" />
     <Compile Include="Menus\IngameMenu.cs" />

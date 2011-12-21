@@ -11,7 +11,7 @@ namespace DareToEscape.Managers
         public GameStateManager()
         {
             var editorManager = EditorManager.GetInstance();
-            var ingameManager = IngameManager.GetInstance();
+            var ingameManager = Ingame.GetInstance();
             var dialogManager = DialogManager.GetInstance();
             var mapGenerator = MapGenerator.GetInstance();
             var bulletManager = BulletManager.GetInstance();
@@ -23,13 +23,13 @@ namespace DareToEscape.Managers
             AddGameState(ingameManager);
             AddGameState(dialogManager);
             AddGameState(mapGenerator);
-            AddGameState(new MenuManager());
+            AddGameState(new Menu());
             AddGameState(new GeneralHelper());
             AddGameState(new Titlescreen());
 
             FastDead = true;
             State = States.Titlescreen;
-            MenuManager.MenuState = MenuStates.Main;
+            Menu.MenuState = MenuStates.Main;
             EngineStates.GameStates = EEngineStates.Running;
             EngineStates.DialogState = DialogueStates.Inactive;
         }

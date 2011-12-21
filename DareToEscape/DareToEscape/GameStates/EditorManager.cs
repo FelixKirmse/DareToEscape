@@ -154,7 +154,7 @@ namespace DareToEscape.GameStates
         {
             Deactivate();
             GameStateManager.State = States.Ingame;
-            IngameManager.GetInstance().Activate();
+            Ingame.GetInstance().Activate();
             LevelManager.LoadLevel(levelName);
         }
 

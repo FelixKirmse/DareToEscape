@@ -9,11 +9,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.GameStates
 {
-    internal sealed class IngameManager : IUpdateableGameState, IDrawableGameState
+    internal sealed class Ingame : IUpdateableGameState, IDrawableGameState
     {
-        private static IngameManager _instance;
+        private static Ingame _instance;
 
-        private IngameManager()
+        private Ingame()
         {
         }
 
@@ -55,7 +55,7 @@ namespace DareToEscape.GameStates
             if (InputMapper.StrictCancel)
             {
                 EngineStates.GameStates = EEngineStates.Paused;
-                MenuManager.MenuState = MenuStates.Ingame;
+                Menu.MenuState = MenuStates.Ingame;
                 GameStateManager.State = States.Menu;
                 return false;
             }
@@ -66,9 +66,9 @@ namespace DareToEscape.GameStates
 
         #endregion
 
-        public static IngameManager GetInstance()
+        public static Ingame GetInstance()
         {
-            return _instance ?? (_instance = new IngameManager());
+            return _instance ?? (_instance = new Ingame());
         }
 
         public void Activate()

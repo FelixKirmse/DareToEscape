@@ -7,6 +7,7 @@ using DareToEscape.GameStates;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
 using Microsoft.Xna.Framework;
+using Menu = BlackDragonEngine.Menus.Menu;
 
 namespace DareToEscape.Menus
 {
@@ -43,7 +44,7 @@ namespace DareToEscape.Menus
             string selectedItem;
             GetSelectedItem(out selectedItem);
 
-            IngameManager ingameManager = IngameManager.GetInstance();
+            Ingame ingameManager = Ingame.GetInstance();
 
             switch (selectedItem)
             {

@@ -95,7 +95,7 @@ namespace DareToEscape.Managers
             switch (codeArray[0])
             {
                 case "TRANSITION":
-                    IngameManager.GetInstance().Activate();
+                    Ingame.GetInstance().Activate();
                     LevelManager.LoadLevel(codeArray[1]);
                     SaveManager<SaveState>.CurrentSaveState.Keys.Clear();
                     SaveManager<SaveState>.CurrentSaveState.BossDead = false;
@@ -103,7 +103,7 @@ namespace DareToEscape.Managers
 
                 case "MAINMENU":
                     GameStateManager.State = States.Menu;
-                    MenuManager.MenuState = MenuStates.Main;
+                    Menu.MenuState = MenuStates.Main;
                     SaveManager<SaveState>.CurrentSaveState.Keys.Clear();
                     SaveManager<SaveState>.CurrentSaveState.BossDead = false;
                     break;

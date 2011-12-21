@@ -7,6 +7,8 @@ using DareToEscape.GameStates;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
 using Microsoft.Xna.Framework;
+using Menu = BlackDragonEngine.Menus.Menu;
+using DMenu = DareToEscape.GameStates.Menu;
 
 namespace DareToEscape.Menus
 {
@@ -62,7 +64,7 @@ namespace DareToEscape.Menus
 
                 case Back:
                     EngineStates.GameStates = EEngineStates.Running;
-                    MenuManager.MenuState = MenuStates.Main;
+                    DMenu.MenuState = MenuStates.Main;
                     break;
 
                 case RestartLevel:
