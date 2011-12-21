@@ -9,74 +9,67 @@ namespace DareToEscape.Components.PlayerComponents
 {
     internal class PlayerPhysicsComponent : PhysicsComponent
     {
-        private readonly Rectangle collisionRectangle = new Rectangle(0, 0, 16, 24);
-        private bool focused;
-        private float gravity;
-        private float horiz;
-        private bool inWater;
-        private bool jumpThroughCheck;
+        private readonly Rectangle _collisionRectangle = new Rectangle(0, 0, 16, 22);
+        private bool _focused;
+        private float _gravity;
+        private float _horiz;
+        private bool _inWater;
+        private bool _jumpThroughCheck;
 
-        private bool noLeft;
-        private bool noRight;
-        private bool onGround;
-        private bool setRectangle = true;
+        private bool _noLeft;
+        private bool _noRight;
+        private bool _onGround;
+        private bool _setRectangle = true;
 
         public override void Update(GameObject obj)
         {
             Vector2 wantedPosition = obj.Position;
 
-            if (setRectangle)
+            if (_setRectangle)
             {
-                obj.CollisionRectangle = collisionRectangle;
-                setRectangle = false;
+                obj.CollisionRectangle = _collisionRectangle;
+                _setRectangle = false;
             }
 
-            Vector2 bottomLeftCorner, bottomRightCorner, topLeftCorner, topRightCorner, middleLeft, middleRight;
-
-            if (horiz != 0)
+            if (_horiz != 0)
             {
-                obj.Send("GRAPHICS_SET_ONGROUND", onGround);
-                if ((horiz > 0 && noRight) || (horiz < 0 && noLeft))
+                obj.Send("GRAPHICS_SET_ONGROUND", _onGround);
+                if ((_horiz > 0 && _noRight) || (_horiz < 0 && _noLeft))
                 {
-                    noRight = false;
-                    noLeft = false;
+                    _noRight = false;
+                    _noLeft = false;
                     obj.Send("GRAPHICS_PLAYANIMATION", "Idle");
                     return;
                 }
-                for (int i = 0; i < Math.Abs(horiz); ++i)
+                for (int i = 0; i < Math.Abs(_horiz); ++i)
                 {
-                    if (inWater || focused)
-                        wantedPosition.X += (horiz/Math.Abs(horiz))/2;
+                    if (_inWater || _focused)
+                        wantedPosition.X += (_horiz/Math.Abs(_horiz))/2;
                     else
-                        wantedPosition.X += horiz/Math.Abs(horiz);
+                        wantedPosition.X += _horiz/Math.Abs(_horiz);
 
-                    Rectangle CollisionRectangle = obj.GetCustomCollisionRectangle(wantedPosition);
+                    Rectangle collisionRectangle = obj.GetCustomCollisionRectangle(wantedPosition);
 
-                    bottomLeftCorner =
-                        TileMap.GetCellByPixel(new Vector2(CollisionRectangle.Left, CollisionRectangle.Bottom));
-                    bottomRightCorner =
-                        TileMap.GetCellByPixel(new Vector2(CollisionRectangle.Right, CollisionRectangle.Bottom));
+                    Vector2 bottomLeftCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Bottom));
+                    Vector2 bottomRightCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Bottom));
 
-                    topLeftCorner = TileMap.GetCellByPixel(new Vector2(CollisionRectangle.Left, CollisionRectangle.Top));
-                    topRightCorner =
-                        TileMap.GetCellByPixel(new Vector2(CollisionRectangle.Right, CollisionRectangle.Top));
+                    Vector2 topLeftCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Top));
+                    Vector2 topRightCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Top));
 
-                    middleLeft =
-                        TileMap.GetCellByPixel(new Vector2(CollisionRectangle.Left,
-                                                           (CollisionRectangle.Bottom + CollisionRectangle.Top)/2));
-                    middleRight =
-                        TileMap.GetCellByPixel(new Vector2(CollisionRectangle.Right,
-                                                           (CollisionRectangle.Bottom + CollisionRectangle.Top)/2));
+                    Vector2 middleLeft = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Left,
+                                                                            (collisionRectangle.Bottom + collisionRectangle.Top)/2));
+                    Vector2 middleRight = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Right,
+                                                                             (collisionRectangle.Bottom + collisionRectangle.Top)/2));
 
                     if (!TileMap.CellIsPassable(bottomLeftCorner) || !TileMap.CellIsPassable(bottomRightCorner) ||
                         !TileMap.CellIsPassable(topRightCorner) || !TileMap.CellIsPassable(topLeftCorner) ||
                         !TileMap.CellIsPassable(middleRight) || !TileMap.CellIsPassable(middleLeft))
                     {
-                        if (inWater || focused)
-                            wantedPosition.X -= (horiz/Math.Abs(horiz))/2;
+                        if (_inWater || _focused)
+                            wantedPosition.X -= (_horiz/Math.Abs(_horiz))/2;
                         else
-                            wantedPosition.X -= horiz/Math.Abs(horiz);
-                        horiz = 0;
+                            wantedPosition.X -= _horiz/Math.Abs(_horiz);
+                        _horiz = 0;
                         break;
                     }
                 }
@@ -84,36 +77,29 @@ namespace DareToEscape.Components.PlayerComponents
             }
         }
 
-        private void gravityLoop(GameObject obj)
+        private void GravityLoop(GameObject obj)
         {
             Vector2 wantedPosition = obj.Position;
-            Vector2 bottomLeftCorner, bottomRightCorner, topLeftCorner, topRightCorner, middleTop, middleBottom;
 
-            if (gravity != 0)
+            if (_gravity != 0)
             {
-                for (int i = 0; i < Math.Abs(gravity); ++i)
+                for (int i = 0; i < Math.Abs(_gravity); ++i)
                 {
-                    Rectangle CollisionRectangle = obj.GetCustomCollisionRectangle(wantedPosition);
+                    Rectangle collisionRectangle = obj.GetCustomCollisionRectangle(wantedPosition);
                     bool collisionWithSpecialBlock = false;
 
-                    bottomLeftCorner =
-                        TileMap.GetCellByPixel(new Vector2(CollisionRectangle.Left, CollisionRectangle.Bottom + 1));
-                    bottomRightCorner =
-                        TileMap.GetCellByPixel(new Vector2(CollisionRectangle.Right, CollisionRectangle.Bottom + 1));
+                    Vector2 bottomLeftCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Bottom + 1));
+                    Vector2 bottomRightCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Bottom + 1));
 
-                    topLeftCorner =
-                        TileMap.GetCellByPixel(new Vector2(CollisionRectangle.Left, CollisionRectangle.Top - 1));
-                    topRightCorner =
-                        TileMap.GetCellByPixel(new Vector2(CollisionRectangle.Right, CollisionRectangle.Top - 1));
+                    Vector2 topLeftCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Top - 1));
+                    Vector2 topRightCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Top - 1));
 
-                    middleTop =
-                        TileMap.GetCellByPixel(new Vector2((CollisionRectangle.Left + CollisionRectangle.Right)/2,
-                                                           CollisionRectangle.Top - 1));
-                    middleBottom =
-                        TileMap.GetCellByPixel(new Vector2((CollisionRectangle.Left + CollisionRectangle.Right)/2,
-                                                           CollisionRectangle.Bottom + 1));
+                    Vector2 middleTop = TileMap.GetCellByPixel(new Vector2((collisionRectangle.Left + collisionRectangle.Right)/2,
+                                                                           collisionRectangle.Top - 1));
+                    Vector2 middleBottom = TileMap.GetCellByPixel(new Vector2((collisionRectangle.Left + collisionRectangle.Right)/2,
+                                                                              collisionRectangle.Bottom + 1));
 
-                    if (jumpThroughCheck)
+                    if (_jumpThroughCheck)
                     {
                         List<string> codePartsLeft = TileMap.GetCellCodes(bottomLeftCorner);
                         List<string> codePartsRight = TileMap.GetCellCodes(bottomRightCorner);
@@ -124,51 +110,51 @@ namespace DareToEscape.Components.PlayerComponents
                             collisionWithSpecialBlock = true;
                     }
 
-                    if (gravity > 0 &&
+                    if (_gravity > 0 &&
                         (!TileMap.CellIsPassable(bottomLeftCorner) || !TileMap.CellIsPassable(bottomRightCorner) ||
                          !TileMap.CellIsPassable(middleBottom) || collisionWithSpecialBlock))
                     {
-                        gravity = 0;
+                        _gravity = 0;
                         obj.Send("INPUT_SET_JUMPCOUNT", 0);
                         obj.Send("INPUT_SET_ONGROUND", true);
-                        onGround = true;
+                        _onGround = true;
                         break;
                     }
 
-                    if (gravity < 0 &&
+                    if (_gravity < 0 &&
                         (!TileMap.CellIsPassable(topLeftCorner) || !TileMap.CellIsPassable(topRightCorner) ||
                          !TileMap.CellIsPassable(middleTop)))
                     {
-                        gravity = 0;
-                        wantedPosition.Y += 1;
+                        _gravity = 0;
+                        wantedPosition.Y += .5f;
                         break;
                     }
 
-                    if (gravity > 0)
+                    if (_gravity > 0)
                     {
-                        if (inWater)
-                            wantedPosition.Y += .5f;
+                        if (_inWater)
+                            wantedPosition.Y += .25f;
                         else
-                            wantedPosition.Y += 1;
+                            wantedPosition.Y += .5f;
 
                         obj.Send("GRAPHICS_PLAYANIMATION", "JumpDown");
                     }
 
-                    if (gravity < 0)
+                    if (_gravity < 0)
                     {
-                        if (inWater)
-                            wantedPosition.Y -= .5f;
+                        if (_inWater)
+                            wantedPosition.Y -= .25f;
                         else
-                            wantedPosition.Y -= 1;
+                            wantedPosition.Y -= .5f;
                         obj.Send("GRAPHICS_PLAYANIMATION", "JumpUp");
                     }
                 }
             }
-            if (inWater)
+            if (_inWater)
                 obj.Send("INPUT_SET_JUMPCOUNT", 0);
-            jumpThroughCheck = false;
-            inWater = false;
-            obj.Send("INPUT_SET_GRAVITY", gravity);
+            _jumpThroughCheck = false;
+            _inWater = false;
+            obj.Send("INPUT_SET_GRAVITY", _gravity);
 
             obj.Position = wantedPosition;
         }
@@ -185,42 +171,42 @@ namespace DareToEscape.Components.PlayerComponents
                     {
                         case "GRAVITY":
                             if (obj is float)
-                                gravity = (float) (object) obj;
+                                _gravity = (float) (object) obj;
                             break;
 
                         case "HORIZ":
                             if (obj is float)
-                                horiz = (float) (object) obj;
+                                _horiz = (float) (object) obj;
                             break;
 
                         case "ONGROUND":
                             if (obj is bool)
-                                onGround = (bool) (object) obj;
+                                _onGround = (bool) (object) obj;
                             break;
 
                         case "JUMPTHROUGHCHECK":
                             if (obj is bool)
-                                jumpThroughCheck = (bool) (object) obj;
+                                _jumpThroughCheck = (bool) (object) obj;
                             break;
 
                         case "INWATER":
                             if (obj is bool)
-                                inWater = (bool) (object) obj;
+                                _inWater = (bool) (object) obj;
                             break;
 
                         case "NORIGHT":
                             if (obj is bool)
-                                noRight = (bool) (object) obj;
+                                _noRight = (bool) (object) obj;
                             break;
 
                         case "NOLEFT":
                             if (obj is bool)
-                                noLeft = (bool) (object) obj;
+                                _noLeft = (bool) (object) obj;
                             break;
 
                         case "FOCUSED":
                             if (obj is bool)
-                                focused = (bool) (object) obj;
+                                _focused = (bool) (object) obj;
                             break;
                     }
                 }
@@ -228,7 +214,7 @@ namespace DareToEscape.Components.PlayerComponents
                 {
                     if (messageParts[2] == "GRAVITYLOOP")
                     {
-                        gravityLoop((GameObject) (object) obj);
+                        GravityLoop((GameObject) (object) obj);
                     }
                 }
             }

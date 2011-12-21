@@ -132,25 +132,6 @@ namespace DareToEscape
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             _stateManager.Draw(_spriteBatch);
-            _spriteBatch.DrawString(
-                FontProvider.GetFont("Mono8"),
-                string.Format(
-                    "Your backbuffer is {0}x{1}.",
-                    GraphicsDevice.PresentationParameters.BackBufferWidth,
-                    GraphicsDevice.PresentationParameters.BackBufferHeight),
-                new Vector2(10f, 10f),
-                Color.White);
-            _spriteBatch.DrawString(
-                FontProvider.GetFont("Mono8"),
-                string.Format(
-                    "Your viewport is {0}x{1} \nstarting at ({2}|{3}) \nwith Scale {4}",
-                    GraphicsDevice.Viewport.Width,
-                    GraphicsDevice.Viewport.Height,
-                    GraphicsDevice.Viewport.X,
-                    GraphicsDevice.Viewport.Y,
-                    _scaleMatrix.M11),
-                new Vector2(10f, 30f),
-                Color.White);
             _spriteBatch.End();
             DrawHelper.Draw(_spriteBatch);
 

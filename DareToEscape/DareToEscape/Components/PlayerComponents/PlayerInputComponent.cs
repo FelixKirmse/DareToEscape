@@ -44,7 +44,7 @@ namespace DareToEscape.Components.PlayerComponents
 
             if (InputMapper.Left)
             {
-                obj.Send<float>("PHYSICS_SET_HORIZ", -5);
+                obj.Send<float>("PHYSICS_SET_HORIZ", -2);
                 if (onGround)
                 {
                     obj.Send("GRAPHICS_PLAYANIMATION", "Walk");
@@ -53,7 +53,7 @@ namespace DareToEscape.Components.PlayerComponents
             }
             else if (InputMapper.Right)
             {
-                obj.Send<float>("PHYSICS_SET_HORIZ", 5);
+                obj.Send<float>("PHYSICS_SET_HORIZ", 2);
                 if (onGround)
                 {
                     obj.Send("GRAPHICS_PLAYANIMATION", "Walk");
