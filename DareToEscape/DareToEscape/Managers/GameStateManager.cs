@@ -10,19 +10,15 @@ namespace DareToEscape.Managers
     {
         public GameStateManager()
         {
-            var editorManager = EditorManager.GetInstance();
             var ingameManager = Ingame.GetInstance();
             var dialogManager = DialogManager.GetInstance();
-            var mapGenerator = MapGenerator.GetInstance();
             var bulletManager = BulletManager.GetInstance();
 
             DialogHelper.Initialize(dialogManager);
 
             AddGameState(bulletManager);
-            AddGameState(editorManager);
             AddGameState(ingameManager);
             AddGameState(dialogManager);
-            AddGameState(mapGenerator);
             AddGameState(new Menu());
             AddGameState(new GeneralHelper());
             AddGameState(new Titlescreen());

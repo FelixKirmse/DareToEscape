@@ -47,9 +47,7 @@ namespace DareToEscape.Editor
 
         private void LoadImageLists(bool createImages = false)
         {
-            string filepath;
-
-            filepath = Application.StartupPath + @"\Content\textures\tilesheets\tilesheet.png";
+            string filepath = Application.StartupPath + @"\Content\textures\tilesheets\tilesheet.png";
             tileList.Images.Clear();
 
             var tileSheet = new Bitmap(filepath);

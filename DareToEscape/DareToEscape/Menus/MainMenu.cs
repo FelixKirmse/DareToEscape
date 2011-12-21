@@ -15,7 +15,6 @@ namespace DareToEscape.Menus
     {
         private const string NewGame = "New Game";
         private const string Resume = "Resume";
-        private const string Editor = "Map Editor";
         private const string Quit = "Quit";
 
         public MainMenu()
@@ -24,7 +23,6 @@ namespace DareToEscape.Menus
                                        new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(NewGame, fontName, !File.Exists(SaveManager<SaveState>.CurrentSaveFile),
                                        new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(Editor, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
             menuItems.Add(new MenuItem(Quit, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
 
             EnableMouseSelection = false;
@@ -58,10 +56,6 @@ namespace DareToEscape.Menus
                     GameStateManager.State = States.Ingame;
                     ingameManager.Activate();
                     SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
-                    break;
-
-                case Editor:
-                    EditorManager.GetInstance().Activate();
                     break;
 
                 case Quit:
