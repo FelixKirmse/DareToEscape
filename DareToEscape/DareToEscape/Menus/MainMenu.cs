@@ -3,6 +3,7 @@ using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.Menus;
 using BlackDragonEngine.Providers;
+using BlackDragonEngine.TileEngine;
 using DareToEscape.GameStates;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
@@ -49,7 +50,7 @@ namespace DareToEscape.Menus
                 case NewGame:
                     GameStateManager.State = States.Ingame;
                     ingameManager.Activate();
-                    LevelManager.LoadLevel("Level1");
+                    LevelManager.LoadLevel<Map<TileCode>, TileCode>("Level1");
                     SaveManager<SaveState>.Save();
                     break;
                 case Resume:

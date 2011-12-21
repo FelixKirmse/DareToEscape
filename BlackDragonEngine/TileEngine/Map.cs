@@ -7,19 +7,19 @@ using BlackDragonEngine.Providers;
 namespace BlackDragonEngine.TileEngine
 {
     [Serializable]
-    public sealed class Map
+    public sealed class Map<TCodes> : IMap<TCodes>
     {
-        public Dictionary<Coords, List<string>> Codes;
-        public Dictionary<Coords, MapSquare> MapData;
-        public Dictionary<string, string> Properties;
-
         public Map()
         {
             var comparer = new CoordComparer();
-            Codes = new Dictionary<Coords, List<string>>(comparer);
+            Codes = new Dictionary<Coords, List<TCodes>>(comparer);
             MapData = new Dictionary<Coords, MapSquare>(comparer);
-            Properties = new Dictionary<string, string>();
         }
+
+        #region IMap<TCodes> Members
+
+        public Dictionary<Coords, List<TCodes>> Codes { get; private set; }
+        public Dictionary<Coords, MapSquare> MapData { get; private set; }
 
         public int MapWidth
         {
@@ -74,5 +74,7 @@ namespace BlackDragonEngine.TileEngine
                 }
             }
         }
+
+        #endregion
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
+using BlackDragonEngine.TileEngine;
 using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 
@@ -15,7 +16,7 @@ namespace DareToEscape.Helpers
 
         public static void OnLoad()
         {
-            LevelManager.LoadLevel(SaveManager<SaveState>.CurrentSaveState.CurrentLevel);
+            LevelManager.LoadLevel<Map<TileCode>, TileCode>(SaveManager<SaveState>.CurrentSaveState.CurrentLevel);
             VariableProvider.CurrentPlayer.Position =
                 new Vector2(SaveManager<SaveState>.CurrentSaveState.PlayerPosition.X,
                             SaveManager<SaveState>.CurrentSaveState.PlayerPosition.Y - 8);

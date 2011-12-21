@@ -56,13 +56,14 @@ namespace DareToEscape.Components.Entities
 
             if (pos.X >= startX && pos.X <= endX && pos.Y >= startY && pos.Y <= endY)
             {
+                TileMap<Map<TileCode>, TileCode> tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
                 Vector2 direction = playerPosition - BulletOrigin;
-                direction /= (TileMap.TileWidth*32);
+                direction /= (tileMap.TileWidth*32);
                 Vector2 particlePosition = BulletOrigin;
 
                 while (particlePosition != playerPosition)
                 {
-                    if (!TileMap.CellIsPassableByPixel(particlePosition))
+                    if (!tileMap.CellIsPassableByPixel(particlePosition))
                         return false;
                     particlePosition += direction;
                 }

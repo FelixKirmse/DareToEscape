@@ -139,6 +139,7 @@
     <Compile Include="TileEngine\CoordList.cs" />
     <Compile Include="TileEngine\Coords.cs" />
     <Compile Include="TileEngine\Map.cs" />
+    <Compile Include="TileEngine\IMap.cs" />
     <Compile Include="TileEngine\MapSquare.cs" />
     <Compile Include="TileEngine\RandomMapGenerator.cs" />
     <Compile Include="TileEngine\TileMap.cs" />

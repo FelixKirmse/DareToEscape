@@ -17,7 +17,7 @@ namespace BlackDragonEngine.TileEngine
 
         public MapSquare(int layer, int tile)
         {
-            LayerTiles = new int[TileMap.MapLayers];
+            LayerTiles = new int[1];
             LayerTiles[layer] = tile;
             Passable = true;
             InValidSquare = false;

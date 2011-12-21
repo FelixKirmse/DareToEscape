@@ -18,6 +18,7 @@ namespace DareToEscape.Bullets
 
         private readonly BlendState _blendState;
         private readonly Texture2D _texture;
+        private readonly TileMap<Map<TileCode>, TileCode> _tileMap;
         public float Acceleration;
         public bool Active;
         public bool AutomaticCollision;
@@ -123,6 +124,7 @@ namespace DareToEscape.Bullets
             KillTime = -1;
             _sourceRect = BulletInformationProvider.GetSourceRectangle(id);
             _blendState = BlendState.AlphaBlend;
+            _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
         }
 
 
@@ -173,7 +175,7 @@ namespace DareToEscape.Bullets
 
             if (AutomaticCollision)
             {
-                if (!TileMap.CellIsPassableByPixel(CircleCollisionCenter) ||
+                if (!_tileMap.CellIsPassableByPixel(CircleCollisionCenter) ||
                     !Camera.WorldRectangle.Contains((int) Position.X, (int) Position.Y))
                 {
                     Active = false;

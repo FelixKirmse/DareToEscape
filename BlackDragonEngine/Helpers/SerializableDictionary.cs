@@ -40,7 +40,7 @@ namespace BlackDragonEngine.Helpers
         {
         }
 
-        protected SerializableDictionary(SerializationInfo info, StreamingContext context)
+        public SerializableDictionary(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

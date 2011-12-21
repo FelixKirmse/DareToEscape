@@ -15,15 +15,17 @@ namespace BlackDragonEngine.TileEngine
         private readonly List<Digger> _diggers = new List<Digger>();
         public int ProgressCounter;
         public int ProgressMax;
+        private TileMap<Map<string>, string> _tileMap;
         public int AddedDiggers { get; private set; }
 
         public void GenerateNewMap(int maxDiggers)
         {
             MaxDiggers = maxDiggers;
-            TileMap.Map = new Map();
+            _tileMap = TileMap<Map<string>, string>.GetInstance();
+            _tileMap.Map = new Map<string>();
             _diggers.Clear();
             AddDigger(VariableProvider.CoordList[0, 0]);
-            TileMap.AddCodeToCell(0, 0, "START");
+            _tileMap.AddCodeToCell(0, 0, "START");
             do
             {
                 for (int i = 0; i < _diggers.Count; ++i)
@@ -50,9 +52,9 @@ namespace BlackDragonEngine.TileEngine
 
         public void InvertMap()
         {
-            Map map = TileMap.Map;
-            ProgressMax = TileMap.Map.Codes.Count;
-            List<Coords> cells = TileMap.Map.Codes.Keys.ToList();
+            Map<string> map = _tileMap.Map;
+            ProgressMax = _tileMap.Map.Codes.Count;
+            List<Coords> cells = _tileMap.Map.Codes.Keys.ToList();
             foreach (var cell in cells)
             {
                 ++ProgressCounter;
@@ -64,25 +66,25 @@ namespace BlackDragonEngine.TileEngine
                 map[cell.UpRight] = new MapSquare(0, false);
                 map[cell.DownLeft] = new MapSquare(0, false);
                 map[cell.DownRight] = new MapSquare(0, false);
-                TileMap.AddCodeToCell(cell.Up, "AddedByInvert");
-                TileMap.AddCodeToCell(cell.Down, "AddedByInvert");
-                TileMap.AddCodeToCell(cell.Left, "AddedByInvert");
-                TileMap.AddCodeToCell(cell.Right, "AddedByInvert");
-                TileMap.AddCodeToCell(cell.UpLeft, "AddedByInvert");
-                TileMap.AddCodeToCell(cell.UpRight, "AddedByInvert");
-                TileMap.AddCodeToCell(cell.DownLeft, "AddedByInvert");
-                TileMap.AddCodeToCell(cell.DownRight, "AddedByInvert");
+                _tileMap.AddCodeToCell(cell.Up, "AddedByInvert");
+                _tileMap.AddCodeToCell(cell.Down, "AddedByInvert");
+                _tileMap.AddCodeToCell(cell.Left, "AddedByInvert");
+                _tileMap.AddCodeToCell(cell.Right, "AddedByInvert");
+                _tileMap.AddCodeToCell(cell.UpLeft, "AddedByInvert");
+                _tileMap.AddCodeToCell(cell.UpRight, "AddedByInvert");
+                _tileMap.AddCodeToCell(cell.DownLeft, "AddedByInvert");
+                _tileMap.AddCodeToCell(cell.DownRight, "AddedByInvert");
             }
             ProgressMax = map.MapData.Count;
             ProgressCounter = 0;
             RemoveCellsByCondition(cell =>
                                        {
                                            ++ProgressCounter;
-                                           return TileMap.GetCellCodes(cell).Contains("OriginalPlaced");
+                                           return _tileMap.GetCellCodes(cell).Contains("OriginalPlaced");
                                        });
             List<Coords> codesToDelete =
-                (from cell in TileMap.Map.Codes
-                 where TileMap.Map.Codes[cell.Key].Contains("OriginalPlaced")
+                (from cell in _tileMap.Map.Codes
+                 where _tileMap.Map.Codes[cell.Key].Contains("OriginalPlaced")
                  select cell.Key).
                     ToList();
             codesToDelete.ForEach(cell => map.Codes[cell].RemoveAll(s => s == "OriginalPlaced"));
@@ -90,15 +92,15 @@ namespace BlackDragonEngine.TileEngine
 
         public void RemoveCellsByCondition(CellCondition condition)
         {
-            ManipulateCellsByCondition(TileMap.RemoveEverythingAtCell, condition);
+            ManipulateCellsByCondition(_tileMap.RemoveEverythingAtCell, condition);
         }
 
         public void ManipulateCellsByCondition(CustomAction action, CellCondition condition)
         {
-            ProgressMax = TileMap.Map.MapData.Count;
+            ProgressMax = _tileMap.Map.MapData.Count;
             ProgressCounter = 0;
             List<Coords> cellsToManipulate =
-                (from cell in TileMap.Map.MapData where condition(cell.Key) select cell.Key).ToList();
+                (from cell in _tileMap.Map.MapData where condition(cell.Key) select cell.Key).ToList();
             cellsToManipulate.ForEach(cell => action(cell));
         }
 
@@ -110,19 +112,21 @@ namespace BlackDragonEngine.TileEngine
             private readonly Coords[] _positions;
 
             private readonly Random _rand;
+            private readonly TileMap<Map<string>, string> _tileMap;
             public bool LastManStanding;
 
             public Digger(Coords position, RandomMapGenerator mapGen)
                 : this()
             {
+                _tileMap = TileMap<Map<string>, string>.GetInstance();
                 _mapGen = mapGen;
                 _positions = new Coords[4];
                 _rand = VariableProvider.RandomSeed;
                 Position = position;
                 foreach (var cell in _positions)
                 {
-                    TileMap.SetSolidTileAtCell(cell);
-                    TileMap.AddUniqueCodeToCell(cell, "OriginalPlaced");
+                    _tileMap.SetSolidTileAtCell(cell);
+                    _tileMap.AddUniqueCodeToCell(cell, "OriginalPlaced");
                 }
             }
 
@@ -147,8 +151,8 @@ namespace BlackDragonEngine.TileEngine
                     Position = diggableBlocks[_rand.Next(0, diggableBlocks.Count)];
                     foreach (var cell in _positions)
                     {
-                        TileMap.SetSolidTileAtCell(cell);
-                        TileMap.AddUniqueCodeToCell(cell, "OriginalPlaced");
+                        _tileMap.SetSolidTileAtCell(cell);
+                        _tileMap.AddUniqueCodeToCell(cell, "OriginalPlaced");
                     }
                     if (_rand.Next(1, 101) < 4)
                     {
@@ -200,7 +204,7 @@ namespace BlackDragonEngine.TileEngine
 
             private bool BlockIsMineAble(Coords coords)
             {
-                return LastManStanding || TileMap.CellIsPassable(coords);
+                return LastManStanding || _tileMap.CellIsPassable(coords);
             }
         }
 

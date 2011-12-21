@@ -1,6 +1,4 @@
 using System;
-using System.Windows.Forms;
-using DareToEscape.Helpers;
 
 namespace DareToEscape
 {
@@ -13,7 +11,7 @@ namespace DareToEscape
         [STAThread]
         private static void Main(string[] args)
         {
-            using(var game = new DareToEscape())
+            using (var game = new DareToEscape())
             {
                 game.Run();
             }

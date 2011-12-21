@@ -6,33 +6,33 @@ using Microsoft.Xna.Framework;
 
 namespace BlackDragonEngine.Managers
 {
-    public delegate void OnMapCodeCheckHandler(string[] code, Vector2 location, GameObject player);
+    public delegate void OnMapCodeCheckHandler<TCodes>(TCodes code, Vector2 location, GameObject player);
 
-    public delegate void UnderPlayerCheckCodeHandler(string[] code, GameObject player);
+    public delegate void UnderPlayerCheckCodeHandler<TCodes>(TCodes code, GameObject player);
 
-    public delegate int InPlayerCheckCodeHandler(
-        string[] code, List<string> codes, Vector2 collisionCenter, int i, GameObject player);
+    public delegate int InPlayerCheckCodeHandler<TCodes>(
+        TCodes code, List<TCodes> codes, Vector2 collisionCenter, int i, GameObject player);
 
-    public static class CodeManager
+    public static class CodeManager<TCodes>
     {
-        public static event OnMapCodeCheckHandler OnMapCodeCheck;
-        public static event UnderPlayerCheckCodeHandler OnCodeUnderPlayerCheck;
-        public static event InPlayerCheckCodeHandler OnCodeInPlayerCenterCheck;
+        public static event OnMapCodeCheckHandler<TCodes> OnMapCodeCheck;
+        public static event UnderPlayerCheckCodeHandler<TCodes> OnCodeUnderPlayerCheck;
+        public static event InPlayerCheckCodeHandler<TCodes> OnCodeInPlayerCenterCheck;
 
-        public static void CheckCodes()
+        public static void CheckCodes<TMap>() where TMap : IMap<TCodes>, new()
         {
+            TileMap<TMap, TCodes> tileMap = TileMap<TMap, TCodes>.GetInstance();
             EntityManager.ClearEntities();
             GameObject player = VariableProvider.CurrentPlayer;
             EntityManager.SetPlayer();
 
             if (OnMapCodeCheck != null)
             {
-                foreach (var item in TileMap.Map.Codes)
+                foreach (var item in tileMap.Map.Codes)
                 {
-                    var location = new Vector2(item.Key.X*TileMap.TileWidth, item.Key.Y*TileMap.TileHeight);
-                    foreach (var codePart in item.Value)
+                    var location = new Vector2(item.Key.X*tileMap.TileWidth, item.Key.Y*tileMap.TileHeight);
+                    foreach (var code in item.Value)
                     {
-                        string[] code = codePart.Split('_');
                         OnMapCodeCheck(code, location, player);
                     }
                 }
@@ -40,39 +40,40 @@ namespace BlackDragonEngine.Managers
         }
 
 
-        public static void CheckPlayerCodes()
+        public static void CheckPlayerCodes<TMap>(TileMap<TMap, TCodes> tileMap) where TMap : IMap<TCodes>, new()
         {
             GameObject player = VariableProvider.CurrentPlayer;
             if (OnCodeInPlayerCenterCheck != null)
-                checkCodesInPlayerCenter(player);
+                CheckCodesInPlayerCenter(player, tileMap);
             if (OnCodeUnderPlayerCheck != null)
-                checkCodesUnderPlayer(player);
+                CheckCodesUnderPlayer(player, tileMap);
         }
 
-        private static void checkCodesUnderPlayer(GameObject player)
+        private static void CheckCodesUnderPlayer<TMap>(GameObject player, TileMap<TMap, TCodes> tileMap)
+            where TMap : IMap<TCodes>, new()
         {
             Rectangle playerCollisionRectangle = player.CollisionRectangle;
-            checkCodesUnderPlayer(player, TileMap.GetCellCodes
+            CheckCodesUnderPlayer(player, tileMap.GetCellCodes
                                               (
-                                                  TileMap.GetCellByPixel(
+                                                  tileMap.GetCellByPixel(
                                                       new Vector2(
                                                           playerCollisionRectangle.Left,
                                                           playerCollisionRectangle.Bottom
                                                           )
                                                       )
                                               ));
-            checkCodesUnderPlayer(player, TileMap.GetCellCodes
+            CheckCodesUnderPlayer(player, tileMap.GetCellCodes
                                               (
-                                                  TileMap.GetCellByPixel(
+                                                  tileMap.GetCellByPixel(
                                                       new Vector2(
                                                           playerCollisionRectangle.Right,
                                                           playerCollisionRectangle.Bottom
                                                           )
                                                       )
                                               ));
-            checkCodesUnderPlayer(player, TileMap.GetCellCodes
+            CheckCodesUnderPlayer(player, tileMap.GetCellCodes
                                               (
-                                                  TileMap.GetCellByPixel(
+                                                  tileMap.GetCellByPixel(
                                                       new Vector2(
                                                           playerCollisionRectangle.Center.X,
                                                           playerCollisionRectangle.Bottom
@@ -81,29 +82,27 @@ namespace BlackDragonEngine.Managers
                                               ));
         }
 
-        private static void checkCodesUnderPlayer(GameObject player, List<string> codes)
+        private static void CheckCodesUnderPlayer(GameObject player, List<TCodes> codes)
         {
             if (codes == null)
                 return;
             foreach (var code in codes)
             {
-                string[] codeArray = code.Split('_');
-                OnCodeUnderPlayerCheck(codeArray, player);
+                OnCodeUnderPlayerCheck(code, player);
             }
         }
 
-        private static void checkCodesInPlayerCenter(GameObject player)
+        private static void CheckCodesInPlayerCenter<TMap>(GameObject player, TileMap<TMap, TCodes> tileMap)
+            where TMap : IMap<TCodes>, new()
         {
             Vector2 collisionCenter = player.RectCollisionCenter;
-            collisionCenter /= TileMap.TileWidth;
+            collisionCenter /= tileMap.TileWidth;
 
-            List<string> codes = TileMap.GetCellCodes(collisionCenter);
+            List<TCodes> codes = tileMap.GetCellCodes(collisionCenter);
 
             for (int i = 0; i < codes.Count; ++i)
             {
-                string codePart = codes[i];
-                string[] codeArray = codePart.Split('_');
-                i = OnCodeInPlayerCenterCheck(codeArray, codes, collisionCenter, i, player);
+                i = OnCodeInPlayerCenterCheck(codes[i], codes, collisionCenter, i, player);
             }
         }
     }

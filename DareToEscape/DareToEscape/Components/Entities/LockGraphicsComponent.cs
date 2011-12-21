@@ -11,52 +11,54 @@ namespace DareToEscape.Components.Entities
 {
     internal class LockGraphicsComponent : GraphicsComponent
     {
-        private Color drawColor;
-        private bool enabled = true;
-        private string keystring;
-        private bool setRectangle = true;
+        private readonly TileMap<Map<TileCode>, TileCode> _tileMap;
+        private Color _drawColor;
+        private bool _enabled = true;
+        private string _keystring;
+        private bool _setRectangle = true;
 
         public LockGraphicsComponent()
         {
             texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/lock");
+            _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
         }
 
         public override void Update(GameObject obj)
         {
-            if (enabled)
+            if (_enabled)
             {
-                if (setRectangle)
+                if (_setRectangle)
                 {
-                    setRectangle = false;
+                    _setRectangle = false;
                     obj.CollisionRectangle = new Rectangle(-16, -16, 48, 48);
                 }
 
-                if (SaveManager<SaveState>.CurrentSaveState.Keys.Contains(keystring))
+                if (SaveManager<SaveState>.CurrentSaveState.Keys.Contains(_keystring))
                 {
                     if (obj.CollisionRectangle.Intersects(VariableProvider.CurrentPlayer.CollisionRectangle))
                     {
-                        enabled = false;
-                        Vector2 cell = TileMap.GetCellByPixel(obj.Position);
-                        TileMap.SetPassabilityAtCell(cell, true);
+                        _enabled = false;
+                        Vector2 cell = _tileMap.GetCellByPixel(obj.Position);
+                        _tileMap.SetPassabilityAtCell(cell, true);
                     }
                 }
                 else
                 {
-                    Vector2 cell = TileMap.GetCellByPixel(obj.Position);
-                    TileMap.SetPassabilityAtCell(cell, false);
+                    Vector2 cell = _tileMap.GetCellByPixel(obj.Position);
+                    _tileMap.SetPassabilityAtCell(cell, false);
                 }
             }
         }
 
         public override void Draw(GameObject obj, SpriteBatch spriteBatch)
         {
-            if (enabled)
+            if (_enabled)
             {
                 spriteBatch.Draw(
                     texture,
                     obj.ScreenPosition,
                     null,
-                    drawColor,
+                    _drawColor,
                     0f,
                     Vector2.Zero,
                     1f,
@@ -71,27 +73,27 @@ namespace DareToEscape.Components.Entities
             {
                 if (obj is string)
                 {
-                    keystring = (string) (object) obj;
-                    switch (keystring)
+                    _keystring = (string) (object) obj;
+                    switch (_keystring)
                     {
                         case "RED":
-                            drawColor = Color.PaleVioletRed;
+                            _drawColor = Color.PaleVioletRed;
                             break;
 
                         case "BLUE":
-                            drawColor = Color.Blue;
+                            _drawColor = Color.Blue;
                             break;
 
                         case "YELLOW":
-                            drawColor = Color.Yellow;
+                            _drawColor = Color.Yellow;
                             break;
 
                         case "GREEN":
-                            drawColor = Color.LightGreen;
+                            _drawColor = Color.LightGreen;
                             break;
 
                         default:
-                            drawColor = Color.White;
+                            _drawColor = Color.White;
                             break;
                     }
                 }

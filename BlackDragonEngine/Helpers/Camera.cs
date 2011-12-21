@@ -91,11 +91,12 @@ namespace BlackDragonEngine.Helpers
                                  screenRectangle.Width, screenRectangle.Height);
         }
 
-        public static void UpdateWorldRectangle()
+        public static void UpdateWorldRectangle<TMap, TCodes>(TileMap<TMap, TCodes> tileMap)
+            where TMap : IMap<TCodes>, new()
         {
-            WorldRectangle = new Rectangle(TileMap.Map.LowestX*TileMap.TileWidth, TileMap.Map.LowestY*TileMap.TileHeight,
-                                           TileMap.TileWidth*(TileMap.MapWidth + 1),
-                                           TileMap.TileHeight*(TileMap.MapHeight + 1));
+            WorldRectangle = new Rectangle(tileMap.Map.LowestX*tileMap.TileWidth, tileMap.Map.LowestY*tileMap.TileHeight,
+                                           tileMap.TileWidth*(tileMap.MapWidth + 1),
+                                           tileMap.TileHeight*(tileMap.MapHeight + 1));
         }
 
         #endregion

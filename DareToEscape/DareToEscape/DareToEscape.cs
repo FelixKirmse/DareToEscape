@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -29,13 +30,15 @@ namespace DareToEscape
         {
             Task task = Task.Factory.StartNew(() =>
                                                   {
-                                                      if(!Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+                                                      if (!Keyboard.GetState().IsKeyDown(Keys.LeftControl))
                                                       {
                                                           if (File.Exists(ResolutionChooser.Settings))
                                                           {
-                                                              var fs = new FileStream(ResolutionChooser.Settings, FileMode.Open);
-                                                              var xmls = new XmlSerializer(typeof(ResolutionInformation));
-                                                              ResInfo = (ResolutionInformation)xmls.Deserialize(fs);
+                                                              var fs = new FileStream(ResolutionChooser.Settings,
+                                                                                      FileMode.Open);
+                                                              var xmls =
+                                                                  new XmlSerializer(typeof (ResolutionInformation));
+                                                              ResInfo = (ResolutionInformation) xmls.Deserialize(fs);
                                                               fs.Close();
                                                               return;
                                                           }
@@ -53,7 +56,7 @@ namespace DareToEscape
                                    ResInfo.FullScreen ? ResolutionWidth : ResInfo.Resolution.Width,
                                PreferredBackBufferHeight =
                                    ResInfo.FullScreen ? ResolutionHeight : ResInfo.Resolution.Height,
-                                   PreferMultiSampling = false
+                               PreferMultiSampling = false
                            };
             _scaleMatrix = ResInfo.Matrix;
             Content.RootDirectory = "Content";
@@ -101,9 +104,9 @@ namespace DareToEscape
                                                GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
         }
 
-        protected override void OnDeactivated(object sender, System.EventArgs args)
+        protected override void OnDeactivated(object sender, EventArgs args)
         {
-            var myForm = (Form)Control.FromHandle(Window.Handle);
+            var myForm = (Form) Control.FromHandle(Window.Handle);
             myForm.Activate();
         }
 
@@ -149,7 +152,7 @@ namespace DareToEscape
 
         public void OnLevelLoad()
         {
-            CodeManager.CheckCodes();
+            CodeManager<TileCode>.CheckCodes<Map<TileCode>>();
             BulletManager.GetInstance().ClearAllBullets();
         }
     }

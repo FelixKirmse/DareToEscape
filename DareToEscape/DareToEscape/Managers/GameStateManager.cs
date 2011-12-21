@@ -10,9 +10,9 @@ namespace DareToEscape.Managers
     {
         public GameStateManager()
         {
-            var ingameManager = Ingame.GetInstance();
-            var dialogManager = DialogManager.GetInstance();
-            var bulletManager = BulletManager.GetInstance();
+            Ingame ingameManager = Ingame.GetInstance();
+            DialogManager dialogManager = DialogManager.GetInstance();
+            BulletManager bulletManager = BulletManager.GetInstance();
 
             DialogHelper.Initialize(dialogManager);
 

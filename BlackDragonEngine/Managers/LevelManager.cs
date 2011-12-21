@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.TileEngine;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace BlackDragonEngine.Managers
 {
@@ -14,24 +13,20 @@ namespace BlackDragonEngine.Managers
 
         public static event OnLevelLoadEventHandler OnLevelLoad;
 
-        public static void LoadLevel(string levelName)
+        public static void LoadLevel<TMap, TCodes>(string levelName) where TMap : IMap<TCodes>, new()
         {
+            TileMap<TMap, TCodes> tileMap = TileMap<TMap, TCodes>.GetInstance();
             CurrentLevel = levelName;
-            TileMap.LoadMap(new FileStream(Application.StartupPath + @"\Content\maps\" + levelName + ".map",
+            tileMap.LoadMap(new FileStream(Application.StartupPath + @"\Content\maps\" + levelName + ".map",
                                            FileMode.Open));
-            Camera.UpdateWorldRectangle();
+            Camera.UpdateWorldRectangle(tileMap);
             if (OnLevelLoad != null)
                 OnLevelLoad();
         }
 
-        public static void Draw(SpriteBatch spriteBatch)
+        public static void ReloadLevel<TMap, TCodes>() where TMap : IMap<TCodes>, new()
         {
-            TileMap.Draw(spriteBatch);
-        }
-
-        public static void ReloadLevel()
-        {
-            LoadLevel(CurrentLevel);
+            LoadLevel<TMap, TCodes>(CurrentLevel);
         }
     }
 }

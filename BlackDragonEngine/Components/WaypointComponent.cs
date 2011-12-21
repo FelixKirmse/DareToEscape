@@ -13,54 +13,56 @@ namespace BlackDragonEngine.Components
     public class WaypointComponent : PhysicsComponent
     {
         /// <summary>
+        ///   Speed at which to move the entity towards the current goal
+        /// </summary>
+        private const float Speed = 1;
+
+        private readonly TileMap<Map<string>, string> _tileMap = TileMap<Map<string>, string>.GetInstance();
+
+        /// <summary>
         ///   Disregard this, WTF?!
         /// </summary>
-        protected Rectangle collisionRectangle = new Rectangle(2, 14, 12, 12);
+        protected Rectangle CollisionRectangle = new Rectangle(2, 14, 12, 12);
 
         /// <summary>
         ///   The waypoint that needs to be reached to finish the path
         /// </summary>
-        protected Vector2 currentGoal;
+        protected Vector2 CurrentGoal;
 
         /// <summary>
         ///   The current path to the next waypoint
         /// </summary>
-        protected List<Vector2> currentPath;
+        protected List<Vector2> CurrentPath;
 
         /// <summary>
         ///   The current waypoint to head to
         /// </summary>
-        protected Vector2 currentWaypoint;
+        protected Vector2 CurrentWaypoint;
 
         /// <summary>
         ///   The current direction to head to
         /// </summary>
-        protected Vector2 direction;
+        protected Vector2 Direction;
 
         /// <summary>
         ///   The current ObjectState
         /// </summary>
-        protected ObjectStates objectState;
+        protected ObjectStates ObjectState;
 
         /// <summary>
         ///   The current path index
         /// </summary>
-        protected int pathIndex;
+        protected int PathIndex;
 
         /// <summary>
         ///   The fuck is this?
         /// </summary>
-        protected bool setRectangle = true;
-
-        /// <summary>
-        ///   Speed at which to move the entity towards the current goal
-        /// </summary>
-        protected float speed = 1;
+        protected bool SetRectangle = true;
 
         /// <summary>
         ///   The current waypoint index
         /// </summary>
-        protected int waypointIndex;
+        protected int WaypointIndex;
 
         /// <summary>
         ///   A list of waypoints
@@ -73,21 +75,21 @@ namespace BlackDragonEngine.Components
         /// <param name = "obj">The object to update</param>
         public override void Update(GameObject obj)
         {
-            if (setRectangle)
+            if (SetRectangle)
             {
-                setRectangle = false;
-                obj.CollisionRectangle = collisionRectangle;
+                SetRectangle = false;
+                obj.CollisionRectangle = CollisionRectangle;
             }
             Vector2 collisionCenter = obj.RectCollisionCenter;
 
-            if (objectState == ObjectStates.IDLE)
+            if (ObjectState == ObjectStates.IDLE)
             {
-                idleUpdate(collisionCenter, obj);
+                IDLEUpdate(collisionCenter, obj);
             }
 
-            if (objectState == ObjectStates.WALKING)
+            if (ObjectState == ObjectStates.Walking)
             {
-                walkingUpdate(collisionCenter, obj);
+                WalkingUpdate(collisionCenter, obj);
             }
         }
 
@@ -96,17 +98,18 @@ namespace BlackDragonEngine.Components
         /// </summary>
         /// <param name = "collisionCenter">The objects collisioncenter</param>
         /// <param name = "obj">The object to update</param>
-        protected virtual void idleUpdate(Vector2 collisionCenter, GameObject obj)
+        protected virtual void IDLEUpdate(Vector2 collisionCenter, GameObject obj)
         {
             do
             {
-                currentWaypoint = getNextWaypoint();
-                currentPath = PathFinder.FindReducedPath(TileMap.GetCellByPixel(collisionCenter), currentWaypoint);
-            } while (currentPath == null);
-            pathIndex = 0;
-            currentGoal = currentPath[pathIndex];
-            changeDirection(collisionCenter, obj);
-            objectState = ObjectStates.WALKING;
+                CurrentWaypoint = GetNextWaypoint();
+                CurrentPath = PathFinder<Map<string>, string>.FindReducedPath(_tileMap.GetCellByPixel(collisionCenter),
+                                                                              CurrentWaypoint, _tileMap);
+            } while (CurrentPath == null);
+            PathIndex = 0;
+            CurrentGoal = CurrentPath[PathIndex];
+            ChangeDirection(collisionCenter, obj);
+            ObjectState = ObjectStates.Walking;
         }
 
         /// <summary>
@@ -114,12 +117,12 @@ namespace BlackDragonEngine.Components
         /// </summary>
         /// <param name = "collisionCenter">The objects collisioncenter</param>
         /// <param name = "obj">The object to update</param>
-        protected void changeDirection(Vector2 collisionCenter, GameObject obj)
+        protected void ChangeDirection(Vector2 collisionCenter, GameObject obj)
         {
-            direction = TileMap.GetCellCenter(currentGoal) - collisionCenter;
-            if (direction != Vector2.Zero)
-                direction.Normalize();
-            determineAnimation(obj);
+            Direction = _tileMap.GetCellCenter(CurrentGoal) - collisionCenter;
+            if (Direction != Vector2.Zero)
+                Direction.Normalize();
+            DetermineAnimation(obj);
         }
 
         /// <summary>
@@ -127,20 +130,20 @@ namespace BlackDragonEngine.Components
         /// </summary>
         /// <param name = "collisionCenter">The objects collisioncenter</param>
         /// <param name = "obj">The object to update</param>
-        protected virtual void walkingUpdate(Vector2 collisionCenter, GameObject obj)
+        protected virtual void WalkingUpdate(Vector2 collisionCenter, GameObject obj)
         {
-            obj.Position += speed*direction;
+            obj.Position += Speed*Direction;
 
-            if (Vector2.Distance(collisionCenter, TileMap.GetCellCenter(currentGoal)) <= speed*2 &&
-                pathIndex != currentPath.Count - 1)
+            if (Vector2.Distance(collisionCenter, _tileMap.GetCellCenter(CurrentGoal)) <= Speed*2 &&
+                PathIndex != CurrentPath.Count - 1)
             {
-                currentGoal = currentPath[++pathIndex];
-                changeDirection(collisionCenter, obj);
+                CurrentGoal = CurrentPath[++PathIndex];
+                ChangeDirection(collisionCenter, obj);
             }
 
-            if (Vector2.Distance(collisionCenter, TileMap.GetCellCenter(currentWaypoint)) <= speed*2)
+            if (Vector2.Distance(collisionCenter, _tileMap.GetCellCenter(CurrentWaypoint)) <= Speed*2)
             {
-                objectState = ObjectStates.IDLE;
+                ObjectState = ObjectStates.IDLE;
             }
         }
 
@@ -148,37 +151,37 @@ namespace BlackDragonEngine.Components
         ///   Returns the next waypoint to generate a path for
         /// </summary>
         /// <returns>Waypoint to generate a path for</returns>
-        protected virtual Vector2 getNextWaypoint()
+        protected virtual Vector2 GetNextWaypoint()
         {
-            if (waypointIndex == waypoints.Count - 1)
+            if (WaypointIndex == waypoints.Count - 1)
             {
-                waypointIndex = 0;
-                return waypoints[waypointIndex];
+                WaypointIndex = 0;
+                return waypoints[WaypointIndex];
             }
 
-            return waypoints[++waypointIndex];
+            return waypoints[++WaypointIndex];
         }
 
         /// <summary>
         ///   Determines the animation based on the direction
         /// </summary>
         /// <param name = "obj">The object to update</param>
-        protected virtual void determineAnimation(GameObject obj)
+        protected virtual void DetermineAnimation(GameObject obj)
         {
-            string animation = direction.Y > 0 ? "WalkDown" : "WalkUp";
-            bool flipped = direction.X < 0;
+            string animation = Direction.Y > 0 ? "WalkDown" : "WalkUp";
+            bool flipped = Direction.X < 0;
 
-            if (direction.X != 0)
+            if (Direction.X != 0)
             {
-                if (direction.Y == 0)
+                if (Direction.Y == 0)
                 {
                     animation = "WalkSide";
                 }
                 else
                 {
-                    if (Math.Abs(direction.X) > .85f)
+                    if (Math.Abs(Direction.X) > .85f)
                         animation = "WalkSide";
-                    else if (Math.Abs(direction.X) > .15f)
+                    else if (Math.Abs(Direction.X) > .15f)
                         animation += "Side";
                 }
             }
@@ -194,7 +197,7 @@ namespace BlackDragonEngine.Components
         protected enum ObjectStates
         {
             IDLE,
-            WALKING
+            Walking
         };
 
         #endregion

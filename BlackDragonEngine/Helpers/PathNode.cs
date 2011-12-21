@@ -4,15 +4,16 @@ using Microsoft.Xna.Framework;
 
 namespace BlackDragonEngine.Helpers
 {
-    public sealed class PathNode
+    public sealed class PathNode<TMap, TCodes> where TMap : IMap<TCodes>, new()
     {
         #region Declarations
 
-        public float DirectCost;
-        public PathNode EndNode;
-        public PathNode ParentNode;
-        public float TotalCost;
-        private Vector2 gridLocation;
+        public readonly float DirectCost;
+        public readonly PathNode<TMap, TCodes> EndNode;
+        public readonly PathNode<TMap, TCodes> ParentNode;
+        public readonly float TotalCost;
+        private readonly TileMap<TMap, TCodes> _tileMap;
+        private Vector2 _gridLocation;
 
         #endregion
 
@@ -20,35 +21,37 @@ namespace BlackDragonEngine.Helpers
 
         public Vector2 GridLocation
         {
-            get { return gridLocation; }
+            get { return _gridLocation; }
             set
             {
-                gridLocation = new Vector2(MathHelper.Clamp(value.X, 0f, TileMap.MapWidth),
-                                           MathHelper.Clamp(value.Y, 0f, TileMap.MapHeight));
+                _gridLocation = new Vector2(MathHelper.Clamp(value.X, 0f, _tileMap.MapWidth),
+                                            MathHelper.Clamp(value.Y, 0f, _tileMap.MapHeight));
             }
         }
 
         public int GridX
         {
-            get { return (int) gridLocation.X; }
+            get { return (int) _gridLocation.X; }
         }
 
         public int GridY
         {
-            get { return (int) gridLocation.Y; }
+            get { return (int) _gridLocation.Y; }
         }
 
         #endregion
 
         #region Constructor
 
-        public PathNode(PathNode parentNode, PathNode endNode, Vector2 gridLocation, float cost)
+        public PathNode(PathNode<TMap, TCodes> parentNode, PathNode<TMap, TCodes> endNode, Vector2 gridLocation,
+                        float cost, TileMap<TMap, TCodes> tileMap)
         {
             ParentNode = parentNode;
             GridLocation = gridLocation;
             EndNode = endNode;
             DirectCost = cost;
-            if (!(endNode == null))
+            _tileMap = tileMap;
+            if (endNode != null)
             {
                 TotalCost = DirectCost + LinearCost();
             }
@@ -67,7 +70,7 @@ namespace BlackDragonEngine.Helpers
 
         #region Public Methods
 
-        public bool IsEqualToNode(PathNode node)
+        public bool IsEqualToNode(PathNode<TMap, TCodes> node)
         {
             return GridLocation == node.GridLocation;
         }

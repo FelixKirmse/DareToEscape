@@ -5,6 +5,7 @@ using BlackDragonEngine.Entities;
 using BlackDragonEngine.GameStates;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Managers;
+using BlackDragonEngine.TileEngine;
 using DareToEscape.GameStates;
 using DareToEscape.Helpers;
 using DareToEscape.Providers;
@@ -16,56 +17,50 @@ namespace DareToEscape.Managers
     {
         public static void BindEvents()
         {
-            CodeManager.OnMapCodeCheck += OnMapCodeCheck;
-            CodeManager.OnCodeUnderPlayerCheck += OnCodeUnderPlayerCheck;
-            CodeManager.OnCodeInPlayerCenterCheck += OnCodeInPlayerCenterCheck;
+            CodeManager<TileCode>.OnMapCodeCheck += OnMapCodeCheck;
+            CodeManager<TileCode>.OnCodeUnderPlayerCheck += OnCodeUnderPlayerCheck;
+            CodeManager<TileCode>.OnCodeInPlayerCenterCheck += OnCodeInPlayerCenterCheck;
         }
 
-        private static void OnMapCodeCheck(string[] code, Vector2 location, GameObject player)
+        private static void OnMapCodeCheck(TileCode code, Vector2 location, GameObject player)
         {
-            switch (code[0])
+            switch (code.Code)
             {
-                case "START":
+                case TileCodes.Start:
                     player.Position = location;
                     break;
 
-                case "SPAWN":
+                case TileCodes.Spawn:
                     Spawn(code, location);
                     break;
 
-                case "CHECKPOINT":
+                case TileCodes.Checkpoint:
                     GameObject checkPoint = Factory.CreateCheckPoint();
                     checkPoint.Position = location;
                     EntityManager.AddEntity(checkPoint);
                     break;
 
-                case "EXIT":
+                case TileCodes.Exit:
                     GameObject exit = Factory.CreateExit();
                     exit.Position = location;
                     EntityManager.AddEntity(exit);
                     break;
 
-                case "KEY":
+                case TileCodes.Key:
                     GameObject key = Factory.CreateKey();
                     key.Position = location;
                     EntityManager.AddEntity(key);
-                    key.Send("KEYSTRING", code[1]);
+                    key.Send("KEYSTRING", code.Message);
                     break;
 
-                case "LOCK":
+                case TileCodes.Lock:
                     GameObject Lock = Factory.CreateLock();
                     Lock.Position = location;
                     EntityManager.AddEntity(Lock);
-                    Lock.Send("KEYSTRING", code[1]);
+                    Lock.Send("KEYSTRING", code.Message);
                     break;
 
-                case "BOSSKILLER":
-                    GameObject bossKiller = Factory.CreateBossKiller();
-                    bossKiller.Position = location;
-                    EntityManager.AddEntity(bossKiller);
-                    break;
-
-                case "DIALOG":
+                case TileCodes.Dialog:
                     GameObject sign = Factory.CreateSign();
                     sign.Position = location;
                     EntityManager.AddEntity(sign);
@@ -73,86 +68,61 @@ namespace DareToEscape.Managers
             }
         }
 
-        private static void OnCodeUnderPlayerCheck(string[] codeArray, GameObject player)
+        private static void OnCodeUnderPlayerCheck(TileCode code, GameObject player)
         {
-            switch (codeArray[0])
+            switch (code.Code)
             {
-                case "JUMPTHROUGHTOP":
+                case TileCodes.JumpthroughTop:
                     player.Send("PHYSICS_SET_JUMPTHROUGHCHECK", true);
                     break;
 
-                case "WATER":
+                case TileCodes.Water:
                     player.Send("PHYSICS_SET_INWATER", true);
                     break;
             }
         }
 
-        private static int OnCodeInPlayerCenterCheck(IList<string> codeArray, List<string> codes,
+        private static int OnCodeInPlayerCenterCheck(TileCode code, List<TileCode> codes,
                                                      Vector2 collisionCenter,
                                                      int i, GameObject player)
         {
             DialogManager dialogManager = DialogManager.GetInstance();
-            switch (codeArray[0])
+            switch (code.Code)
             {
-                case "TRANSITION":
+                case TileCodes.Transition:
                     Ingame.GetInstance().Activate();
-                    LevelManager.LoadLevel(codeArray[1]);
+                    LevelManager.LoadLevel<Map<TileCode>, TileCode>(code.Message);
                     SaveManager<SaveState>.CurrentSaveState.Keys.Clear();
                     SaveManager<SaveState>.CurrentSaveState.BossDead = false;
                     break;
 
-                case "MAINMENU":
-                    GameStateManager.State = States.Menu;
-                    Menu.MenuState = MenuStates.Main;
-                    SaveManager<SaveState>.CurrentSaveState.Keys.Clear();
-                    SaveManager<SaveState>.CurrentSaveState.BossDead = false;
-                    break;
-
-                case "DIALOG":
+                case TileCodes.Dialog:
                     if (InputMapper.StrictAction)
                     {
-                        DialogHelper.PlayDialog(codeArray[1]);
+                        DialogHelper.PlayDialog(code.Message);
                     }
                     break;
 
-                case "TUTORIALDIALOG":
-                    dialogManager.PlayDialog(DialogDictionaryProvider.TutorialDialog(), "Tutorial");
-                    codes.Remove("TUTORIALDIALOG");
-                    break;
-
-                case "TUTORIALFINISH":
-                    dialogManager.PlayDialog(DialogDictionaryProvider.TutorialDialogFinish(),
-                                             "TutorialFinish");
-                    codes.Remove("TUTORIALFINISH");
-                    codes.Add("MAINMENU");
-                    break;
-
-                case "GRATZ":
-                    dialogManager.PlayDialog(DialogDictionaryProvider.Gratz(), "Gratz");
-                    codes.Remove("GRATZ");
-                    codes.Add("MAINMENU");
-                    break;
-
-                case "SAVE":
+                case TileCodes.Save:
                     SaveManager<SaveState>.Save();
-                    codes.Remove("SAVE");
+                    codes.Remove(new TileCode(TileCodes.Save));
                     --i;
                     break;
 
-                case "WALKLEFT":
+                case TileCodes.WalkLeft:
                     player.Send("PHYSICS_SET_NORIGHT", true);
                     break;
 
-                case "WALKRIGHT":
+                case TileCodes.WalkRight:
                     player.Send("PHYSICS_SET_NOLEFT", true);
                     break;
 
-                case "DEADLY":
+                case TileCodes.Deadly:
                     player.Send<string>("KILL", null);
                     break;
 
-                case "TRIGGER":
-                    if (codeArray[1] == "BOSS")
+                case TileCodes.Trigger:
+                    if (code.Message == "BOSS")
                         foreach (var boss in GameVariableProvider.Bosses)
                             boss.Send<string>("SHOOT", null);
                     break;
@@ -161,8 +131,9 @@ namespace DareToEscape.Managers
         }
 
 
-        private static void Spawn(IList<string> codearray, Vector2 position)
+        private static void Spawn(TileCode code, Vector2 position)
         {
+            string[] codearray = code.Message.Split('_');
             var components = new List<IComponent>
                                  {
                                      (IComponent)

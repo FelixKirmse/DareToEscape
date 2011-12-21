@@ -1,26 +1,20 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace DareToEscape.Helpers
 {
     [Serializable]
     public struct ResolutionInformation
     {
-
-        public Viewport Viewport;
         public bool FullScreen;
-        public Size Resolution;
         public Matrix Matrix;
+        public Size Resolution;
+        public Viewport Viewport;
 
 
         public ResolutionInformation(Viewport viewport, bool fullScreen, Size resolution, Matrix matrix)
@@ -34,17 +28,16 @@ namespace DareToEscape.Helpers
 
     public partial class ResolutionChooser : Form
     {
-        private readonly float _aspectRatio;
-        private bool _remember;
-        private Viewport _viewport;
-        private Matrix _matrix;
-        private bool _fullScreen;
-        private Size _resolution;
         public static readonly string Settings = string.Format(@"{0}\settings.cfg", Application.StartupPath);
+        private readonly float _aspectRatio;
         private readonly DareToEscape _parent;
+        private bool _fullScreen;
+        private Matrix _matrix;
+        private bool _remember;
         private ResolutionInformation _resInfo;
+        private Size _resolution;
+        private Viewport _viewport;
 
-        
 
         public ResolutionChooser(DareToEscape parent)
         {
@@ -66,15 +59,14 @@ namespace DareToEscape.Helpers
             {
                 _viewport = new Viewport
                                 {
-                                    X = (int) (_aspectRatio * height - width)/2,
+                                    X = (int) (_aspectRatio*height - width)/2,
                                     Y = 0,
                                     Width = width,
                                     Height = height,
                                     MinDepth = 0,
                                     MaxDepth = 1
                                 };
-                _resolution = new Size((int)(_aspectRatio * height), height);
-                
+                _resolution = new Size((int) (_aspectRatio*height), height);
             }
             else
             {
@@ -99,7 +91,7 @@ namespace DareToEscape.Helpers
         private void StartGameBtnClick(object sender, EventArgs e)
         {
             _resInfo = new ResolutionInformation(_viewport, _fullScreen, _resolution, _matrix);
-            if(_remember)
+            if (_remember)
             {
                 var fs = new FileStream(Settings, FileMode.Create);
                 var xmls = new XmlSerializer(_resInfo.GetType());

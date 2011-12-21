@@ -3,6 +3,7 @@ using BlackDragonEngine.GameStates;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
+using BlackDragonEngine.TileEngine;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,9 +13,11 @@ namespace DareToEscape.GameStates
     internal sealed class Ingame : IUpdateableGameState, IDrawableGameState
     {
         private static Ingame _instance;
+        private readonly TileMap<Map<TileCode>, TileCode> _tileMap;
 
         private Ingame()
         {
+            _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
         }
 
         #region IDrawableGameState Members
@@ -32,7 +35,7 @@ namespace DareToEscape.GameStates
         public void Draw(SpriteBatch spriteBatch)
         {
             EntityManager.Draw(spriteBatch);
-            LevelManager.Draw(spriteBatch);
+            _tileMap.Draw(spriteBatch);
         }
 
         #endregion
@@ -59,7 +62,7 @@ namespace DareToEscape.GameStates
                 GameStateManager.State = States.Menu;
                 return false;
             }
-            CodeManager.CheckPlayerCodes();
+            CodeManager<TileCode>.CheckPlayerCodes(_tileMap);
             EntityManager.Update();
             return true;
         }

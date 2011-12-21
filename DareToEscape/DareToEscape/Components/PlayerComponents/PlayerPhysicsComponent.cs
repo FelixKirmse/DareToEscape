@@ -10,6 +10,7 @@ namespace DareToEscape.Components.PlayerComponents
     internal class PlayerPhysicsComponent : PhysicsComponent
     {
         private readonly Rectangle _collisionRectangle = new Rectangle(0, 0, 16, 22);
+        private readonly TileMap<Map<TileCode>, TileCode> _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
         private bool _focused;
         private float _gravity;
         private float _horiz;
@@ -50,20 +51,26 @@ namespace DareToEscape.Components.PlayerComponents
 
                     Rectangle collisionRectangle = obj.GetCustomCollisionRectangle(wantedPosition);
 
-                    Vector2 bottomLeftCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Bottom));
-                    Vector2 bottomRightCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Bottom));
+                    Vector2 bottomLeftCorner =
+                        _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Bottom));
+                    Vector2 bottomRightCorner =
+                        _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Bottom));
 
-                    Vector2 topLeftCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Top));
-                    Vector2 topRightCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Top));
+                    Vector2 topLeftCorner =
+                        _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Top));
+                    Vector2 topRightCorner =
+                        _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Top));
 
-                    Vector2 middleLeft = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Left,
-                                                                            (collisionRectangle.Bottom + collisionRectangle.Top)/2));
-                    Vector2 middleRight = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Right,
-                                                                             (collisionRectangle.Bottom + collisionRectangle.Top)/2));
+                    Vector2 middleLeft = _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Left,
+                                                                             (collisionRectangle.Bottom +
+                                                                              collisionRectangle.Top)/2));
+                    Vector2 middleRight = _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Right,
+                                                                              (collisionRectangle.Bottom +
+                                                                               collisionRectangle.Top)/2));
 
-                    if (!TileMap.CellIsPassable(bottomLeftCorner) || !TileMap.CellIsPassable(bottomRightCorner) ||
-                        !TileMap.CellIsPassable(topRightCorner) || !TileMap.CellIsPassable(topLeftCorner) ||
-                        !TileMap.CellIsPassable(middleRight) || !TileMap.CellIsPassable(middleLeft))
+                    if (!_tileMap.CellIsPassable(bottomLeftCorner) || !_tileMap.CellIsPassable(bottomRightCorner) ||
+                        !_tileMap.CellIsPassable(topRightCorner) || !_tileMap.CellIsPassable(topLeftCorner) ||
+                        !_tileMap.CellIsPassable(middleRight) || !_tileMap.CellIsPassable(middleLeft))
                     {
                         if (_inWater || _focused)
                             wantedPosition.X -= (_horiz/Math.Abs(_horiz))/2;
@@ -88,31 +95,38 @@ namespace DareToEscape.Components.PlayerComponents
                     Rectangle collisionRectangle = obj.GetCustomCollisionRectangle(wantedPosition);
                     bool collisionWithSpecialBlock = false;
 
-                    Vector2 bottomLeftCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Bottom + 1));
-                    Vector2 bottomRightCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Bottom + 1));
+                    Vector2 bottomLeftCorner =
+                        _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Bottom + 1));
+                    Vector2 bottomRightCorner =
+                        _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Bottom + 1));
 
-                    Vector2 topLeftCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Top - 1));
-                    Vector2 topRightCorner = TileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Top - 1));
+                    Vector2 topLeftCorner =
+                        _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Top - 1));
+                    Vector2 topRightCorner =
+                        _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Top - 1));
 
-                    Vector2 middleTop = TileMap.GetCellByPixel(new Vector2((collisionRectangle.Left + collisionRectangle.Right)/2,
-                                                                           collisionRectangle.Top - 1));
-                    Vector2 middleBottom = TileMap.GetCellByPixel(new Vector2((collisionRectangle.Left + collisionRectangle.Right)/2,
-                                                                              collisionRectangle.Bottom + 1));
+                    Vector2 middleTop =
+                        _tileMap.GetCellByPixel(new Vector2((collisionRectangle.Left + collisionRectangle.Right)/2,
+                                                            collisionRectangle.Top - 1));
+                    Vector2 middleBottom =
+                        _tileMap.GetCellByPixel(new Vector2((collisionRectangle.Left + collisionRectangle.Right)/2,
+                                                            collisionRectangle.Bottom + 1));
 
                     if (_jumpThroughCheck)
                     {
-                        List<string> codePartsLeft = TileMap.GetCellCodes(bottomLeftCorner);
-                        List<string> codePartsRight = TileMap.GetCellCodes(bottomRightCorner);
-                        List<string> codePartsCenter = TileMap.GetCellCodes(middleBottom);
+                        List<TileCode> codePartsLeft = _tileMap.GetCellCodes(bottomLeftCorner);
+                        List<TileCode> codePartsRight = _tileMap.GetCellCodes(bottomRightCorner);
+                        List<TileCode> codePartsCenter = _tileMap.GetCellCodes(middleBottom);
+                        var jumpThrough = new TileCode(TileCodes.Jumpthrough);
 
-                        if (codePartsLeft.Contains("JUMPTHROUGH") || codePartsRight.Contains("JUMPTHROUGH") ||
-                            codePartsCenter.Contains("JUMPTHROUGH"))
+                        if (codePartsLeft.Contains(jumpThrough) || codePartsRight.Contains(jumpThrough) ||
+                            codePartsCenter.Contains(jumpThrough))
                             collisionWithSpecialBlock = true;
                     }
 
                     if (_gravity > 0 &&
-                        (!TileMap.CellIsPassable(bottomLeftCorner) || !TileMap.CellIsPassable(bottomRightCorner) ||
-                         !TileMap.CellIsPassable(middleBottom) || collisionWithSpecialBlock))
+                        (!_tileMap.CellIsPassable(bottomLeftCorner) || !_tileMap.CellIsPassable(bottomRightCorner) ||
+                         !_tileMap.CellIsPassable(middleBottom) || collisionWithSpecialBlock))
                     {
                         _gravity = 0;
                         obj.Send("INPUT_SET_JUMPCOUNT", 0);
@@ -122,8 +136,8 @@ namespace DareToEscape.Components.PlayerComponents
                     }
 
                     if (_gravity < 0 &&
-                        (!TileMap.CellIsPassable(topLeftCorner) || !TileMap.CellIsPassable(topRightCorner) ||
-                         !TileMap.CellIsPassable(middleTop)))
+                        (!_tileMap.CellIsPassable(topLeftCorner) || !_tileMap.CellIsPassable(topRightCorner) ||
+                         !_tileMap.CellIsPassable(middleTop)))
                     {
                         _gravity = 0;
                         wantedPosition.Y += .5f;
