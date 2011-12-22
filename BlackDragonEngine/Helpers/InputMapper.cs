@@ -20,37 +20,37 @@ namespace BlackDragonEngine.Helpers
 
         public static bool Up
         {
-            get { return ShortcutProvider.AreAnyKeysDown(UpKeys) || ShortcutProvider.LeftStickUp(); }
+            get { return ShortCuts.AreAnyKeysDown(UpKeys) || ShortCuts.LeftStickUp(); }
         }
 
         public static bool Down
         {
-            get { return ShortcutProvider.AreAnyKeysDown(DownKeys) || ShortcutProvider.LeftStickDown(); }
+            get { return ShortCuts.AreAnyKeysDown(DownKeys) || ShortCuts.LeftStickDown(); }
         }
 
         public static bool Left
         {
-            get { return ShortcutProvider.AreAnyKeysDown(LeftKeys) || ShortcutProvider.LeftStickLeft(); }
+            get { return ShortCuts.AreAnyKeysDown(LeftKeys) || ShortCuts.LeftStickLeft(); }
         }
 
         public static bool Right
         {
-            get { return ShortcutProvider.AreAnyKeysDown(RightKeys) || ShortcutProvider.LeftStickRight(); }
+            get { return ShortCuts.AreAnyKeysDown(RightKeys) || ShortCuts.LeftStickRight(); }
         }
 
         public static bool Jump
         {
-            get { return ShortcutProvider.AreAnyKeysDown(JumpKeys); }
+            get { return ShortCuts.AreAnyKeysDown(JumpKeys); }
         }
 
         public static bool Action
         {
-            get { return ShortcutProvider.AreAnyKeysDown(ActionKeys); }
+            get { return ShortCuts.AreAnyKeysDown(ActionKeys); }
         }
 
         public static bool Cancel
         {
-            get { return ShortcutProvider.AreAnyKeysDown(CancelKeys); }
+            get { return ShortCuts.AreAnyKeysDown(CancelKeys); }
         }
 
         #endregion
@@ -59,37 +59,37 @@ namespace BlackDragonEngine.Helpers
 
         public static bool StrictUp
         {
-            get { return ShortcutProvider.AreAnyKeysDown(UpKeys, true) || ShortcutProvider.LeftStickUp(); }
+            get { return ShortCuts.AreAnyKeysDown(UpKeys, true) || ShortCuts.LeftStickUp(); }
         }
 
         public static bool StrictDown
         {
-            get { return ShortcutProvider.AreAnyKeysDown(DownKeys, true) || ShortcutProvider.LeftStickDown(); }
+            get { return ShortCuts.AreAnyKeysDown(DownKeys, true) || ShortCuts.LeftStickDown(); }
         }
 
         public static bool StrictLeft
         {
-            get { return ShortcutProvider.AreAnyKeysDown(LeftKeys, true) || ShortcutProvider.LeftStickLeft(); }
+            get { return ShortCuts.AreAnyKeysDown(LeftKeys, true) || ShortCuts.LeftStickLeft(); }
         }
 
         public static bool StrictRight
         {
-            get { return ShortcutProvider.AreAnyKeysDown(RightKeys, true) || ShortcutProvider.LeftStickRight(); }
+            get { return ShortCuts.AreAnyKeysDown(RightKeys, true) || ShortCuts.LeftStickRight(); }
         }
 
         public static bool StrictJump
         {
-            get { return ShortcutProvider.AreAnyKeysDown(JumpKeys, true); }
+            get { return ShortCuts.AreAnyKeysDown(JumpKeys, true); }
         }
 
         public static bool StrictAction
         {
-            get { return ShortcutProvider.AreAnyKeysDown(ActionKeys, true); }
+            get { return ShortCuts.AreAnyKeysDown(ActionKeys, true); }
         }
 
         public static bool StrictCancel
         {
-            get { return ShortcutProvider.AreAnyKeysDown(CancelKeys, true); }
+            get { return ShortCuts.AreAnyKeysDown(CancelKeys, true); }
         }
 
         #endregion
@@ -104,13 +104,13 @@ namespace BlackDragonEngine.Helpers
         public static bool TriggeredAction(string name)
         {
             Keys[] keys = CustomActions[name].ToArray();
-            return ShortcutProvider.AreAnyKeysDown(keys);
+            return ShortCuts.AreAnyKeysDown(keys);
         }
 
         public static bool TriggeredStrictAction(string name)
         {
             Keys[] keys = CustomActions[name].ToArray();
-            return ShortcutProvider.AreAnyKeysDown(keys, true);
+            return ShortCuts.AreAnyKeysDown(keys, true);
         }
 
         #endregion

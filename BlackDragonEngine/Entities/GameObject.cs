@@ -121,7 +121,7 @@ namespace BlackDragonEngine.Entities
         /// </summary>
         public Vector2 ScreenPosition
         {
-            get { return ShortcutProvider.Vector2Point(Camera.WorldToScreen(Position)); }
+            get { return ShortCuts.Vector2Point(Camera.WorldToScreen(Position)); }
         }
 
         #region IGameObject Members

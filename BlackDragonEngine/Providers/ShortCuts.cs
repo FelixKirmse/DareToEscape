@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace BlackDragonEngine.Providers
 {
-    public static class ShortcutProvider
+    public static class ShortCuts
     {
         public static int GameWindowWidth
         {

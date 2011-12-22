@@ -45,7 +45,7 @@ namespace BlackDragonEngine.Menus
                 ResolveMouseSelection();
 
             if (InputMapper.StrictAction ||
-                (EnableMouseSelection || ShortcutProvider.LeftButtonClickedNowButNotLastFrame()))
+                (EnableMouseSelection || ShortCuts.LeftButtonClickedNowButNotLastFrame()))
             {
                 SelectMenuItem();
             }
@@ -84,8 +84,8 @@ namespace BlackDragonEngine.Menus
         {
             for (int i = 0; i < menuItems.Count; ++i)
             {
-                menuItems[i].ItemPosition = ShortcutProvider.ScreenCenter -
-                                            ShortcutProvider.GetFontCenter(fontName, menuItems[i].ItemName) +
+                menuItems[i].ItemPosition = ShortCuts.ScreenCenter -
+                                            ShortCuts.GetFontCenter(fontName, menuItems[i].ItemName) +
                                             (i - 2)*itemOffset;
             }
         }
@@ -127,7 +127,7 @@ namespace BlackDragonEngine.Menus
             foreach (var menuItem in menuItems)
             {
                 if (
-                    ShortcutProvider.MouseIntersectsRectangle(ShortcutProvider.GetFontRectangle(menuItem.ItemPosition,
+                    ShortCuts.MouseIntersectsRectangle(ShortCuts.GetFontRectangle(menuItem.ItemPosition,
                                                                                                 fontName,
                                                                                                 menuItem.ItemName)))
                 {

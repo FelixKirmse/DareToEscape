@@ -29,7 +29,7 @@ namespace DareToEscape.GameStates
         {
             BulletManager.GetInstance().ClearAllBullets();
             VariableProvider.ScriptEngine.StopAllScripts();
-            _elapsedSeconds += ShortcutProvider.ElapsedSeconds;
+            _elapsedSeconds += ShortCuts.ElapsedSeconds;
             if (GameStateManager.FastDead || _elapsedSeconds >= TimeToAutoResume || InputMapper.StrictAction)
             {
                 if (SaveManager<SaveState>.CurrentSaveState.CurrentLevel != LevelManager.CurrentLevel)

@@ -111,7 +111,7 @@ namespace BlackDragonEngine.Helpers
 
         public void Update()
         {
-            float elapsed = ShortcutProvider.ElapsedSeconds;
+            float elapsed = ShortCuts.ElapsedSeconds;
             frameTimer += elapsed;
             if (frameTimer >= frameDelay)
             {

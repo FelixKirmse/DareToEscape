@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Helpers
 {
-    internal static class Factory
+    public static class Factory
     {
         public static GameObject CreatePlayer()
         {

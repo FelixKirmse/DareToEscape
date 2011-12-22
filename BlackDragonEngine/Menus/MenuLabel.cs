@@ -22,7 +22,7 @@ namespace BlackDragonEngine.Menus
             spriteBatch.DrawString(
                 font,
                 Text,
-                ShortcutProvider.Vector2Point(Position),
+                ShortCuts.Vector2Point(Position),
                 Color.White,
                 0,
                 Vector2.Zero,

@@ -91,6 +91,9 @@ namespace DareToEscape
 
         protected override void LoadContent()
         {
+            LevelManager.OnLevelLoad += ((DareToEscape)VariableProvider.Game).OnLevelLoad;
+            Camera.ViewPortWidth = ResolutionWidth;
+            Camera.ViewPortHeight = ResolutionHeight;
             GraphicsDevice.Viewport = new Viewport(0, 0, ResolutionWidth, ResolutionHeight);
             VariableProvider.CoordList = new CoordList();
             VariableProvider.Game = this;

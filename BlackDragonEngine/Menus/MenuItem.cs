@@ -68,7 +68,7 @@ namespace BlackDragonEngine.Menus
             spriteBatch.DrawString(
                 _font,
                 ItemName,
-                ShortcutProvider.Vector2Point(ItemPosition),
+                ShortCuts.Vector2Point(ItemPosition),
                 _itemColor,
                 0,
                 Vector2.Zero,

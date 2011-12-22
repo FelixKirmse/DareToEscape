@@ -70,6 +70,7 @@ namespace BlackDragonEngine.TileEngine
                 _tileSourceRects[i] = new Rectangle((i%_tilesPerRow)*(TileWidth + _tileOffset),
                                                     (i/_tilesPerRow)*(TileHeight + _tileOffset), TileWidth, TileHeight);
             }
+            VariableProvider.CoordList = new CoordList();
             _instance = this;
         }
 
@@ -299,6 +300,11 @@ namespace BlackDragonEngine.TileEngine
                 return;
             }
             Map[tileX, tileY].LayerTiles[layer] = tileIndex;
+        }
+
+        public void SetTileAtCell(Vector2 cell, int tileIndex)
+        {
+            SetTileAtCell((int)cell.X, (int)cell.Y, 0, tileIndex);
         }
 
         public void SetSolidTileAtCoords(Coords coords, int tileIndex)

@@ -183,9 +183,9 @@
       <Name>BlackDragonEngine</Name>
     </ProjectReference>
     <ProjectReference Include="..\DareToEscapeContent\DareToEscapeContent.contentproj">
+      <Project>{966EEE07-C1AD-4486-A73C-5CF3570C31D6}</Project>
       <Name>DareToEscapeContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
-      <Project>{966EEE07-C1AD-4486-A73C-5CF3570C31D6}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

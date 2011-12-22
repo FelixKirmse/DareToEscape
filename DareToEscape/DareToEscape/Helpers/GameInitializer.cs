@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace DareToEscape.Helpers
 {
-    internal static class GameInitializer
+    public static class GameInitializer
     {
         public static void Initialize()
         {
@@ -27,13 +27,9 @@ namespace DareToEscape.Helpers
             VariableProvider.GenerateNewRandomSeed();
             VariableProvider.SaveSlot = "1";
             SaveManager<SaveState>.CurrentSaveState = new SaveState();
-
-            LevelManager.OnLevelLoad += ((DareToEscape) VariableProvider.Game).OnLevelLoad;
+            
             SaveManager<SaveState>.SaveHelper.OnSave += SaveHelper.OnSave;
             SaveManager<SaveState>.SaveHelper.OnLoad += SaveHelper.OnLoad;
-
-            Camera.ViewPortWidth = DareToEscape.ResolutionWidth;
-            Camera.ViewPortHeight = DareToEscape.ResolutionHeight;
 
             DialogManager.DrawMugshot = false;
 

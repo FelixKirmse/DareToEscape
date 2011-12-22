@@ -81,7 +81,7 @@ namespace BlackDragonEngine.GameStates
             spriteBatch.DrawString(
                 _font,
                 _displayText,
-                ShortcutProvider.Vector2Point(_textPosition),
+                ShortCuts.Vector2Point(_textPosition),
                 Color.White,
                 0,
                 Vector2.Zero,
@@ -92,7 +92,7 @@ namespace BlackDragonEngine.GameStates
             if (DrawMugshot)
                 spriteBatch.Draw(
                     _dialog[_currentDialogue].MugShot,
-                    ShortcutProvider.Vector2Point(_mugShotPosition),
+                    ShortCuts.Vector2Point(_mugShotPosition),
                     new Rectangle(0, 0, CurrentMugShot.Width, CurrentMugShot.Height),
                     Color.White,
                     0,
