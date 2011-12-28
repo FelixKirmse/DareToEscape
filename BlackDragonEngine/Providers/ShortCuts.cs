@@ -67,24 +67,24 @@ namespace BlackDragonEngine.Providers
                                             1));
         }
 
-        public static bool LeftButtonClicked()
+        public static bool LeftMouseClicked()
         {
             return InputProvider.MouseState.LeftButton == ButtonState.Pressed;
         }
 
         public static bool LeftButtonClickedNowButNotLastFrame()
         {
-            return (LeftButtonClicked() && (InputProvider.LastMouseState.LeftButton == ButtonState.Released));
+            return (LeftMouseClicked() && (InputProvider.LastMouseState.LeftButton == ButtonState.Released));
         }
 
-        public static bool RightButtonClicked()
+        public static bool RightMouseClicked()
         {
             return InputProvider.MouseState.RightButton == ButtonState.Pressed;
         }
 
         public static bool RightButtonClickedButNotLastFrame()
         {
-            return (RightButtonClicked() && (InputProvider.LastMouseState.RightButton == ButtonState.Released));
+            return (RightMouseClicked() && (InputProvider.LastMouseState.RightButton == ButtonState.Released));
         }
 
         public static bool AreAnyKeysDown(Keys[] keys)

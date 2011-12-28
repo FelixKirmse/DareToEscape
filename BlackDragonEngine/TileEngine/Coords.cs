@@ -1,5 +1,6 @@
 ﻿using System;
 using BlackDragonEngine.Providers;
+using Microsoft.Xna.Framework;
 
 namespace BlackDragonEngine.TileEngine
 {
@@ -88,6 +89,16 @@ namespace BlackDragonEngine.TileEngine
         public static Coords operator *(Coords coords, int multiplicator)
         {
             return VariableProvider.CoordList[coords.X*multiplicator, coords.Y*multiplicator];
+        }
+
+        public static implicit operator Vector2(Coords c)
+        {
+            return new Vector2(c.X, c.Y);
+        }
+
+        public static implicit operator Coords(Vector2 v)
+        {
+            return VariableProvider.CoordList[(int) v.X, (int) v.Y];
         }
 
         public override string ToString()

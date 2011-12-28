@@ -53,6 +53,16 @@ namespace BlackDragonEngine.Helpers
             get { return ShortCuts.AreAnyKeysDown(CancelKeys); }
         }
 
+        public static bool LeftClick
+        {
+            get { return ShortCuts.LeftMouseClicked(); }
+        }
+
+        public static bool RightClick
+        {
+            get { return ShortCuts.RightMouseClicked(); }
+        }
+
         #endregion
 
         #region Strict Actionchecks
@@ -90,6 +100,16 @@ namespace BlackDragonEngine.Helpers
         public static bool StrictCancel
         {
             get { return ShortCuts.AreAnyKeysDown(CancelKeys, true); }
+        }
+
+        public static bool StrictLeftClick
+        {
+            get { return ShortCuts.LeftButtonClickedNowButNotLastFrame(); }
+        }
+
+        public static bool StrictRightClick
+        {
+            get { return ShortCuts.RightButtonClickedButNotLastFrame(); }
         }
 
         #endregion

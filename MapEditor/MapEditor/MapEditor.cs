@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.Helpers;
@@ -17,19 +18,18 @@ namespace MapEditor
 {
     public sealed class MapEditor : Game
     {
-        private readonly GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
         private readonly IntPtr _drawSurface;
         private readonly Editor _editorForm;
         private readonly Control _gameControl;
+        private readonly GraphicsDeviceManager _graphics;
         private readonly Form _parentForm;
         private readonly PictureBox _pictureBox;
-        private TileMap<Map<TileCode>, TileCode> _tileMap;
+        private readonly Viewport _renderViewport = new Viewport(0, 0, 640, 480);
+        private readonly Viewport _standardViewport = new Viewport(0, 0, 320, 240);
         private GameObject _player;
         private RenderTarget2D _renderTarget;
-        private readonly Viewport _standardViewport = new Viewport(0, 0, 320, 240);
-        private readonly Viewport _renderViewport = new Viewport(0, 0, 640, 480);
-        public int TileID { get; set; }
+        private SpriteBatch _spriteBatch;
+        private TileMap<Map<TileCode>, TileCode> _tileMap;
 
         public MapEditor()
         {
@@ -37,7 +37,7 @@ namespace MapEditor
             Content.RootDirectory = "Content";
             _editorForm = new Editor();
             _editorForm.Show();
-            
+
             _drawSurface = _editorForm.PctSurface.Handle;
             _pictureBox = _editorForm.PctSurface;
             _parentForm = _editorForm;
@@ -49,6 +49,8 @@ namespace MapEditor
             _gameControl.Visible = false;
             PictureBoxSizeChanged(null, null);
         }
+
+        internal Item CurrentItem { private get; set; }
 
         private void GraphicsPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
         {
@@ -92,46 +94,42 @@ namespace MapEditor
             MouseState ms = InputProvider.MouseState;
             if ((ms.X > 0) && (ms.Y > 0) && (ms.X < Camera.ViewPortWidth) && (ms.Y < Camera.ViewPortHeight))
             {
-                HandleCameraMovement();   
-                HandleMouseActions(ms);
+                if ((ShortCuts.AreAnyKeysDown(new[] {Keys.LeftAlt, Keys.Space}) && ms.LeftButton == ButtonState.Pressed) ||
+                    ms.MiddleButton == ButtonState.Pressed)
+                    HandleCameraMovement(ms);
+                else
+                    HandleMouseActions(ms);
             }
             base.Update(gameTime);
         }
 
         private void HandleMouseActions(MouseState ms)
         {
-            Vector2 cell = _tileMap.GetCellByPixel(Camera.ScreenToWorld(new Vector2(ms.X / 2, ms.Y / 2)));
-            if(ShortCuts.LeftButtonClicked())
+            Coords cell = _tileMap.GetCellByPixel(Camera.ScreenToWorld(new Vector2(ms.X/2, ms.Y/2)));
+            if (InputMapper.StrictLeftClick)
             {
                 _tileMap.SetTileAtCell(cell, TileID);
             }
-            if(ShortCuts.RightButtonClicked())
+            if (InputMapper.StrictRightClick)
             {
-                _tileMap.RemoveEverythingAtCell((int)cell.X, (int) cell.Y);
+                _tileMap.RemoveEverythingAtCell(cell);
             }
         }
 
-        private void HandleCameraMovement()
+        private void HandleCameraMovement(MouseState ms)
         {
-            float mod = .5f;
-            if (ShortCuts.IsKeyDown(Keys.LeftShift))
-                mod = 1f;
-            if (InputMapper.Up)
-            {
-                Camera.ForcePosition -= new Vector2(0, 5) * mod;
-            }
-            if (InputMapper.Down)
-            {
-                Camera.ForcePosition += new Vector2(0, 5) * mod;
-            }
-            if (InputMapper.Left)
-            {
-                Camera.ForcePosition -= new Vector2(5, 0) * mod;
-            }
-            if (InputMapper.Right)
-            {
-                Camera.ForcePosition += new Vector2(5, 0) * mod;
-            }
+            var currPos = new Vector2(ms.X, ms.Y);
+            var lastPos = new Vector2(InputProvider.LastMouseState.X, InputProvider.LastMouseState.Y);
+            Vector2 diff = currPos - lastPos;
+            Camera.ForcePosition -= diff;
+        }
+
+        internal void InsertItem(Coords cell)
+        {
+            Item i = CurrentItem;
+            MapSquare square = i.AddToExisting ? _tileMap.GetMapSquareAtCell(cell) : new MapSquare();
+            List<TileCode> codes = i.AddToExisting ? _tileMap.GetCellCodes(cell) : i.Codes;
+
         }
 
         protected override void Draw(GameTime gameTime)
@@ -147,7 +145,8 @@ namespace MapEditor
             GraphicsDevice.Viewport = _renderViewport;
             GraphicsDevice.Clear(Color.LightBlue);
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            _spriteBatch.Draw(_renderTarget, new Rectangle(0,0, _renderViewport.Width, _renderViewport.Height), Color.White);
+            _spriteBatch.Draw(_renderTarget, new Rectangle(0, 0, _renderViewport.Width, _renderViewport.Height),
+                              Color.White);
             _spriteBatch.End();
             base.Draw(gameTime);
         }

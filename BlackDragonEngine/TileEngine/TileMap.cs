@@ -30,6 +30,7 @@ namespace BlackDragonEngine.TileEngine
         private readonly Texture2D _tileSheet;
         private readonly Rectangle[] _tileSourceRects;
         private readonly int _tilesPerRow;
+        private readonly CoordList _coordList;
 
         public TMap Map { get; internal set; }
         public int TileWidth { get; private set; }
@@ -71,6 +72,7 @@ namespace BlackDragonEngine.TileEngine
                                                     (i/_tilesPerRow)*(TileHeight + _tileOffset), TileWidth, TileHeight);
             }
             VariableProvider.CoordList = new CoordList();
+            _coordList = VariableProvider.CoordList;
             _instance = this;
         }
 
@@ -101,9 +103,9 @@ namespace BlackDragonEngine.TileEngine
             return pixelY < 0 ? cell - 1 : cell;
         }
 
-        public Vector2 GetCellByPixel(Vector2 pixelLocation)
+        public Coords GetCellByPixel(Vector2 pixelLocation)
         {
-            return new Vector2(GetCellByPixelX((int) pixelLocation.X), GetCellByPixelY((int) pixelLocation.Y));
+            return _coordList[GetCellByPixelX((int) pixelLocation.X), GetCellByPixelY((int) pixelLocation.Y)];
         }
 
         private Vector2 GetCellCenter(int cellX, int cellY)
@@ -159,13 +161,13 @@ namespace BlackDragonEngine.TileEngine
 
         public List<TCodes> GetCellCodes(int cellX, int cellY)
         {
-            Coords coords = VariableProvider.CoordList[cellX, cellY];
+            Coords coords = _coordList[cellX, cellY];
             return !Map.Codes.ContainsKey(coords) ? new List<TCodes>() : Map.Codes[coords];
         }
 
         public void SetCellCodes(int cellX, int cellY, List<TCodes> codes)
         {
-            Coords coords = VariableProvider.CoordList[cellX, cellY];
+            Coords coords = _coordList[cellX, cellY];
             if (codes == null || codes.Count == 0)
             {
                 Map.Codes.Remove(coords);
@@ -189,7 +191,7 @@ namespace BlackDragonEngine.TileEngine
 
         public void AddCodeToCell(int cellX, int cellY, TCodes code)
         {
-            AddCodeToCell(VariableProvider.CoordList[cellX, cellY], code);
+            AddCodeToCell(_coordList[cellX, cellY], code);
         }
 
         public void AddUniqueCodeToCell(Coords cell, TCodes code)
@@ -221,7 +223,7 @@ namespace BlackDragonEngine.TileEngine
 
         public void RemoveCodeFromCell(int cellX, int cellY, TCodes code)
         {
-            Coords coords = VariableProvider.CoordList[cellX, cellY];
+            Coords coords = _coordList[cellX, cellY];
             if (!Map.Codes.ContainsKey(coords)) return;
             Map.Codes[coords].Remove(code);
             if (Map.Codes[coords].Count != 0) return;
@@ -234,7 +236,7 @@ namespace BlackDragonEngine.TileEngine
 
         public void RemoveEverythingAtCell(int tileX, int tileY)
         {
-            RemoveEverythingAtCell(VariableProvider.CoordList[tileX, tileY]);
+            RemoveEverythingAtCell(_coordList[tileX, tileY]);
         }
 
         public void RemoveEverythingAtCell(Coords coords)
@@ -306,7 +308,7 @@ namespace BlackDragonEngine.TileEngine
         {
             SetTileAtCell((int)cell.X, (int)cell.Y, 0, tileIndex);
         }
-
+        
         public void SetSolidTileAtCoords(Coords coords, int tileIndex)
         {
             SetTileAtCell(coords.X, coords.Y, 0, tileIndex);

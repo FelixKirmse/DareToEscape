@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BlackDragonEngine.Components;
 using BlackDragonEngine.Entities;
+using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
 using Microsoft.Xna.Framework;
 
@@ -50,21 +51,21 @@ namespace DareToEscape.Components.PlayerComponents
                         wantedPosition.X += _horiz/Math.Abs(_horiz);
 
                     Rectangle collisionRectangle = obj.GetCustomCollisionRectangle(wantedPosition);
-
-                    Vector2 bottomLeftCorner =
+                    
+                    Coords bottomLeftCorner =
                         _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Bottom));
-                    Vector2 bottomRightCorner =
+                    Coords bottomRightCorner =
                         _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Bottom));
 
-                    Vector2 topLeftCorner =
+                    Coords topLeftCorner =
                         _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Top));
-                    Vector2 topRightCorner =
+                    Coords topRightCorner =
                         _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Top));
 
-                    Vector2 middleLeft = _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Left,
+                    Coords middleLeft = _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Left,
                                                                              (collisionRectangle.Bottom +
                                                                               collisionRectangle.Top)/2));
-                    Vector2 middleRight = _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Right,
+                    Coords middleRight = _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Right,
                                                                               (collisionRectangle.Bottom +
                                                                                collisionRectangle.Top)/2));
 
@@ -95,20 +96,20 @@ namespace DareToEscape.Components.PlayerComponents
                     Rectangle collisionRectangle = obj.GetCustomCollisionRectangle(wantedPosition);
                     bool collisionWithSpecialBlock = false;
 
-                    Vector2 bottomLeftCorner =
+                    Coords bottomLeftCorner =
                         _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Bottom + 1));
-                    Vector2 bottomRightCorner =
+                    Coords bottomRightCorner =
                         _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Bottom + 1));
 
-                    Vector2 topLeftCorner =
+                    Coords topLeftCorner =
                         _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Top - 1));
-                    Vector2 topRightCorner =
+                    Coords topRightCorner =
                         _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Top - 1));
 
-                    Vector2 middleTop =
+                    Coords middleTop =
                         _tileMap.GetCellByPixel(new Vector2((collisionRectangle.Left + collisionRectangle.Right)/2,
                                                             collisionRectangle.Top - 1));
-                    Vector2 middleBottom =
+                    Coords middleBottom =
                         _tileMap.GetCellByPixel(new Vector2((collisionRectangle.Left + collisionRectangle.Right)/2,
                                                             collisionRectangle.Bottom + 1));
 

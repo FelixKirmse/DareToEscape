@@ -103,7 +103,8 @@ namespace BlackDragonEngine.Components
             do
             {
                 CurrentWaypoint = GetNextWaypoint();
-                CurrentPath = PathFinder<Map<string>, string>.FindReducedPath(_tileMap.GetCellByPixel(collisionCenter),
+                Coords coordCell = _tileMap.GetCellByPixel(collisionCenter);
+                CurrentPath = PathFinder<Map<string>, string>.FindReducedPath(coordCell, 
                                                                               CurrentWaypoint, _tileMap);
             } while (CurrentPath == null);
             PathIndex = 0;
