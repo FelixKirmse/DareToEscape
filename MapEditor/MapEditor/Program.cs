@@ -3,13 +3,13 @@ using System;
 namespace MapEditor
 {
 #if WINDOWS || XBOX
-    static class Program
+    internal static class Program
     {
         /// <summary>
-        /// The main entry point for the application.
+        ///   The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             using (var game = new MapEditor())
             {
@@ -19,4 +19,3 @@ namespace MapEditor
     }
 #endif
 }
-

@@ -15,8 +15,6 @@ namespace DareToEscape.Helpers
             FontProvider.AddFont("Mono8", content.Load<SpriteFont>(@"fonts/mono8"));
             FontProvider.AddFont("Mono21", content.Load<SpriteFont>(@"fonts/mono21"));
 
-            VariableProvider.WhiteTexture = content.Load<Texture2D>(@"textures/white");
-
             Titlescreen.TitleTexture = content.Load<Texture2D>(@"textures/titlescreen");
 
             new TileMap<Map<TileCode>, TileCode>(8, 8, 0, FontProvider.GetFont("Mono8"),

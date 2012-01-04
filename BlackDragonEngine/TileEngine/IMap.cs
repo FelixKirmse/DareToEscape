@@ -13,8 +13,8 @@ namespace BlackDragonEngine.TileEngine
         int LowestY { get; }
         int HighestY { get; }
 
-        MapSquare this[int x, int y] { get; set; }
+        MapSquare? this[int x, int y] { get; set; }
 
-        MapSquare this[Coords coords] { get; set; }
+        MapSquare? this[Coords coords] { get; set; }
     }
 }

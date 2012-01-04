@@ -51,26 +51,31 @@ namespace BlackDragonEngine.TileEngine
             get { return MapData.Keys.Select(coords => coords.Y).Concat(new[] {0}).Max(); }
         }
 
-        public MapSquare this[int x, int y]
+        public MapSquare? this[int x, int y]
         {
             get { return this[VariableProvider.CoordList[x, y]]; }
 
             set { this[VariableProvider.CoordList[x, y]] = value; }
         }
 
-        public MapSquare this[Coords coords]
+        public MapSquare? this[Coords coords]
         {
-            get { return MapData.ContainsKey(coords) ? MapData[coords] : new MapSquare(true); }
+            get { return MapData.ContainsKey(coords) ? MapData[coords] : (MapSquare?)null; }
 
             set
             {
                 if (MapData.ContainsKey(coords))
                 {
-                    MapData[coords] = value;
+                    if(value == null)
+                    {
+                        MapData.Remove(coords);
+                        return;
+                    }
+                    MapData[coords] = value.GetValueOrDefault();
                 }
                 else
                 {
-                    MapData.Add(coords, value);
+                    MapData.Add(coords, value.GetValueOrDefault());
                 }
             }
         }

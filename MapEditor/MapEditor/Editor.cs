@@ -5,25 +5,29 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
+using BlackDragonEngine.TileEngine;
+using DareToEscape;
 
 namespace MapEditor
 {
     public partial class Editor : Form
     {
         private readonly string _mapPath = Application.StartupPath +
-                                           @"/../../../../../DareToEscape/DareToEscapeContent/maps/";
+                                           @"/../../../../../DareToEscape/DareToEscapeContent/";
 
-        private const int ScaleFactor = 4;
+        private const int ScaleFactor = 1;
         private const int TileSize = 8;
         private Rectangle _marker;
         private bool _drawMarker;
-        private int Tile { get { return ScaleFactor*TileSize - 1; } }
+        private int Tile { get { return ScaleFactor*TileSize; } }
+        private string _currentMapName;
+        private bool _firstTime = true;
 
         public Editor()
         {
             InitializeComponent();
-            _treeView.Nodes.Add("Maps");
-            PopulateTree(_mapPath, _treeView.Nodes[0]);
+            _treeView.Nodes.Add("maps");
+            PopulateTree(_mapPath + "maps/", _treeView.Nodes[0]);
             var image = Image.FromFile(Application.StartupPath + @"/Content/textures/tilesheets/tilesheet.png");
             _tileSheetBox.Image = ResizeImage(image, image.Width * ScaleFactor, image.Height * ScaleFactor);
             _marker = new Rectangle(0, 0, Tile, Tile);
@@ -92,8 +96,8 @@ namespace MapEditor
         {
             int tilesPerRow = _tileSheetBox.Image.Width/Tile;
             int tileIndex = (e.X/Tile) + ((e.Y/Tile)*tilesPerRow);
-            Game.TileID = tileIndex;
-            _marker = new Rectangle((tileIndex%tilesPerRow) * Tile - 1, (tileIndex / tilesPerRow) * Tile - 1, Tile, Tile);
+            Game.CurrentItem = Item.GetItemByTileId(tileIndex);
+            _marker = new Rectangle((tileIndex%tilesPerRow) * Tile, (tileIndex / tilesPerRow) * Tile, Tile, Tile);
             _drawMarker = true;
         }
 
@@ -101,6 +105,26 @@ namespace MapEditor
         {
             Game.Tick();
             _tileSheetBox.Refresh();
+        }
+
+        private void TreeViewAfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (!e.Node.Text.Contains(".map")) return;
+            if(!_firstTime)
+            {
+                Game.SaveMap(_currentMapName);
+            }
+            else
+            {
+                _firstTime = false;
+            }
+            Game.LoadMap(_mapPath + e.Node.FullPath);
+            _currentMapName = _mapPath + e.Node.FullPath;
+        }
+
+        private void EnableEditorViewToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            Game.TileMap.EditorMode = enableEditorViewToolStripMenuItem.Checked;
         }
     }
 }

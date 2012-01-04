@@ -8,25 +8,25 @@ namespace BlackDragonEngine.TileEngine
         #region Declarations
 
         public bool InValidSquare;
-        public int[] LayerTiles;
+        public int?[] LayerTiles;
         public bool Passable;
 
         #endregion
 
         #region Constructor
 
-        public MapSquare(int layer, int tile)
+        public MapSquare(int layer, int? tile)
         {
-            LayerTiles = new int[1];
+            LayerTiles = new int?[1];
             LayerTiles[layer] = tile;
             Passable = true;
             InValidSquare = false;
         }
 
-        public MapSquare(int tile, bool passable)
+        public MapSquare(int? tile, bool? passable)
             : this(0, tile)
         {
-            Passable = passable;
+            Passable = passable ?? true;
         }
 
         public MapSquare(bool invalid)

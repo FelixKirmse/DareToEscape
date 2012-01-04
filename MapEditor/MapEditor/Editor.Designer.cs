@@ -30,49 +30,48 @@
         {
             this.components = new System.ComponentModel.Container();
             this._pctSurface = new System.Windows.Forms.PictureBox();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this._menustrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableEditorViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._treeView = new System.Windows.Forms.TreeView();
             this._tileSheetBox = new System.Windows.Forms.PictureBox();
             this.tickTimer = new System.Windows.Forms.Timer(this.components);
             this.EntityList = new System.Windows.Forms.ImageList(this.components);
             this.listView1 = new System.Windows.Forms.ListView();
-            this._codeGroupBox = new System.Windows.Forms.GroupBox();
-            this._codeBox = new System.Windows.Forms.ComboBox();
-            this._addCodeBtn = new System.Windows.Forms.Button();
-            this._existingCodesBox = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this._pctSurface)).BeginInit();
-            this.menuStrip1.SuspendLayout();
+            this._menustrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._tileSheetBox)).BeginInit();
-            this._codeGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // _pctSurface
             // 
             this._pctSurface.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._pctSurface.Location = new System.Drawing.Point(236, 27);
+            this._pctSurface.Location = new System.Drawing.Point(602, 27);
             this._pctSurface.Name = "_pctSurface";
             this._pctSurface.Size = new System.Drawing.Size(640, 480);
             this._pctSurface.TabIndex = 0;
             this._pctSurface.TabStop = false;
             // 
-            // menuStrip1
+            // _menustrip
             // 
-            this.menuStrip1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this._menustrip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(45, 24);
-            this.menuStrip1.TabIndex = 1;
-            this.menuStrip1.Text = "menuStrip1";
+            this._menustrip.Dock = System.Windows.Forms.DockStyle.None;
+            this._menustrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.viewToolStripMenuItem});
+            this._menustrip.Location = new System.Drawing.Point(12, 0);
+            this._menustrip.MaximumSize = new System.Drawing.Size(50121, 5410212);
+            this._menustrip.Name = "_menustrip";
+            this._menustrip.Size = new System.Drawing.Size(89, 24);
+            this._menustrip.TabIndex = 1;
+            this._menustrip.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
@@ -120,21 +119,39 @@
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItemClick);
             // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableEditorViewToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // enableEditorViewToolStripMenuItem
+            // 
+            this.enableEditorViewToolStripMenuItem.CheckOnClick = true;
+            this.enableEditorViewToolStripMenuItem.Name = "enableEditorViewToolStripMenuItem";
+            this.enableEditorViewToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Space)));
+            this.enableEditorViewToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.enableEditorViewToolStripMenuItem.Text = "Enable Editor View";
+            this.enableEditorViewToolStripMenuItem.Click += new System.EventHandler(this.EnableEditorViewToolStripMenuItemClick);
+            // 
             // _treeView
             // 
             this._treeView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this._treeView.Location = new System.Drawing.Point(12, 27);
             this._treeView.Name = "_treeView";
-            this._treeView.Size = new System.Drawing.Size(219, 947);
+            this._treeView.Size = new System.Drawing.Size(334, 338);
             this._treeView.TabIndex = 2;
+            this._treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeViewAfterSelect);
             // 
             // _tileSheetBox
             // 
             this._tileSheetBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._tileSheetBox.Location = new System.Drawing.Point(236, 513);
+            this._tileSheetBox.Location = new System.Drawing.Point(12, 371);
             this._tileSheetBox.Name = "_tileSheetBox";
-            this._tileSheetBox.Size = new System.Drawing.Size(334, 254);
+            this._tileSheetBox.Size = new System.Drawing.Size(334, 603);
             this._tileSheetBox.TabIndex = 3;
             this._tileSheetBox.TabStop = false;
             this._tileSheetBox.Paint += new System.Windows.Forms.PaintEventHandler(this.TileSheetBoxPaint);
@@ -155,70 +172,30 @@
             // 
             this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.Location = new System.Drawing.Point(237, 773);
+            this.listView1.Location = new System.Drawing.Point(352, 27);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(639, 201);
+            this.listView1.Size = new System.Drawing.Size(243, 947);
             this.listView1.TabIndex = 4;
             this.listView1.UseCompatibleStateImageBehavior = false;
-            // 
-            // _codeGroupBox
-            // 
-            this._codeGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._codeGroupBox.Controls.Add(this._existingCodesBox);
-            this._codeGroupBox.Controls.Add(this._addCodeBtn);
-            this._codeGroupBox.Controls.Add(this._codeBox);
-            this._codeGroupBox.Location = new System.Drawing.Point(576, 513);
-            this._codeGroupBox.Name = "_codeGroupBox";
-            this._codeGroupBox.Size = new System.Drawing.Size(300, 254);
-            this._codeGroupBox.TabIndex = 5;
-            this._codeGroupBox.TabStop = false;
-            this._codeGroupBox.Text = "Code Handling";
-            // 
-            // _codeBox
-            // 
-            this._codeBox.FormattingEnabled = true;
-            this._codeBox.Location = new System.Drawing.Point(7, 20);
-            this._codeBox.Name = "_codeBox";
-            this._codeBox.Size = new System.Drawing.Size(174, 21);
-            this._codeBox.TabIndex = 0;
-            // 
-            // _addCodeBtn
-            // 
-            this._addCodeBtn.Location = new System.Drawing.Point(188, 20);
-            this._addCodeBtn.Name = "_addCodeBtn";
-            this._addCodeBtn.Size = new System.Drawing.Size(106, 23);
-            this._addCodeBtn.TabIndex = 1;
-            this._addCodeBtn.Text = "Add Code";
-            this._addCodeBtn.UseVisualStyleBackColor = true;
-            // 
-            // _existingCodesBox
-            // 
-            this._existingCodesBox.FormattingEnabled = true;
-            this._existingCodesBox.Location = new System.Drawing.Point(7, 47);
-            this._existingCodesBox.Name = "_existingCodesBox";
-            this._existingCodesBox.Size = new System.Drawing.Size(287, 199);
-            this._existingCodesBox.TabIndex = 2;
             // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(888, 986);
-            this.Controls.Add(this._codeGroupBox);
+            this.ClientSize = new System.Drawing.Size(1254, 986);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this._tileSheetBox);
             this.Controls.Add(this._treeView);
             this.Controls.Add(this._pctSurface);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this._menustrip);
+            this.MainMenuStrip = this._menustrip;
             this.Name = "Editor";
             this.Text = "Editor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditorFormClosing);
             ((System.ComponentModel.ISupportInitialize)(this._pctSurface)).EndInit();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this._menustrip.ResumeLayout(false);
+            this._menustrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this._tileSheetBox)).EndInit();
-            this._codeGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -227,7 +204,7 @@
         #endregion
 
         private System.Windows.Forms.PictureBox _pctSurface;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip _menustrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
@@ -239,9 +216,7 @@
         private System.Windows.Forms.Timer tickTimer;
         private System.Windows.Forms.ImageList EntityList;
         private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.GroupBox _codeGroupBox;
-        private System.Windows.Forms.ListBox _existingCodesBox;
-        private System.Windows.Forms.Button _addCodeBtn;
-        private System.Windows.Forms.ComboBox _codeBox;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableEditorViewToolStripMenuItem;
     }
 }

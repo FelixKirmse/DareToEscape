@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.Helpers;
@@ -29,8 +30,8 @@ namespace MapEditor
         private GameObject _player;
         private RenderTarget2D _renderTarget;
         private SpriteBatch _spriteBatch;
-        private TileMap<Map<TileCode>, TileCode> _tileMap;
-
+        public TileMap<Map<TileCode>, TileCode> TileMap;
+        
         public MapEditor()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -48,6 +49,8 @@ namespace MapEditor
             _gameControl.SizeChanged += PictureBoxSizeChanged;
             _gameControl.Visible = false;
             PictureBoxSizeChanged(null, null);
+            CurrentItem = Item.GetItemByTileId(0);
+            VariableProvider.Game = this;
         }
 
         internal Item CurrentItem { private get; set; }
@@ -77,9 +80,8 @@ namespace MapEditor
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _tileMap = new TileMap<Map<TileCode>, TileCode>(8, 8, 0, Content.Load<SpriteFont>(@"fonts/mono8"),
-                                                            Content.Load<Texture2D>(@"textures/tilesheets/tilesheet"))
-                           {EditorMode = true};
+            TileMap = new TileMap<Map<TileCode>, TileCode>(8, 8, 0, Content.Load<SpriteFont>(@"fonts/mono8"),
+                                                           Content.Load<Texture2D>(@"textures/tilesheets/tilesheet"));
             AnimationDictionaryProvider.Content = Content;
             _player = Factory.CreatePlayer();
             _renderTarget = new RenderTarget2D(GraphicsDevice, 320, 240, false,
@@ -94,7 +96,7 @@ namespace MapEditor
             MouseState ms = InputProvider.MouseState;
             if ((ms.X > 0) && (ms.Y > 0) && (ms.X < Camera.ViewPortWidth) && (ms.Y < Camera.ViewPortHeight))
             {
-                if ((ShortCuts.AreAnyKeysDown(new[] {Keys.LeftAlt, Keys.Space}) && ms.LeftButton == ButtonState.Pressed) ||
+                if ((ShortCuts.AreAnyKeysDown(new[] {Keys.LeftAlt, Keys.Space}) && InputMapper.LeftClick) ||
                     ms.MiddleButton == ButtonState.Pressed)
                     HandleCameraMovement(ms);
                 else
@@ -105,14 +107,14 @@ namespace MapEditor
 
         private void HandleMouseActions(MouseState ms)
         {
-            Coords cell = _tileMap.GetCellByPixel(Camera.ScreenToWorld(new Vector2(ms.X/2, ms.Y/2)));
-            if (InputMapper.StrictLeftClick)
+            Coords cell = TileMap.GetCellByPixel(Camera.ScreenToWorld(new Vector2(ms.X/2, ms.Y/2)));
+            if (InputMapper.StrictLeftClick || ShortCuts.IsKeyDown(Keys.LeftShift) && InputMapper.LeftClick)
             {
-                _tileMap.SetTileAtCell(cell, TileID);
+                InsertItem(cell);
             }
-            if (InputMapper.StrictRightClick)
+            if (InputMapper.StrictRightClick || ShortCuts.IsKeyDown(Keys.LeftShift) && InputMapper.RightClick)
             {
-                _tileMap.RemoveEverythingAtCell(cell);
+                TileMap.RemoveEverythingAtCell(cell);
             }
         }
 
@@ -124,12 +126,40 @@ namespace MapEditor
             Camera.ForcePosition -= diff;
         }
 
-        internal void InsertItem(Coords cell)
+        private void InsertItem(Coords cell)
         {
             Item i = CurrentItem;
-            MapSquare square = i.AddToExisting ? _tileMap.GetMapSquareAtCell(cell) : new MapSquare();
-            List<TileCode> codes = i.AddToExisting ? _tileMap.GetCellCodes(cell) : i.Codes;
+            MapSquare? square = i.AddToExisting
+                                    ? TileMap.GetMapSquareAtCell(cell)
+                                    : new MapSquare(i.TileID, i.Passable);
+            List<TileCode> codes = i.AddToExisting ? TileMap.GetCellCodes(cell) : i.Codes;
 
+            if (i.Unique)
+            {
+                Coords cellToRemoveFrom = null;
+                TileCode? codeToRemove = null;
+                foreach (var cellCodePair in TileMap.Map.Codes)
+                {
+                    foreach (var mapCode in cellCodePair.Value)
+                    {
+                        foreach (var thisCode in codes)
+                        {
+                            if (mapCode == thisCode)
+                            {
+                                cellToRemoveFrom = cellCodePair.Key;
+                                codeToRemove = thisCode;
+                                goto BREAK;
+                            }
+                        }
+                    }
+                }
+                BREAK:
+                if (cellToRemoveFrom != null)
+                {
+                    TileMap.Map.Codes[cellToRemoveFrom].Remove(codeToRemove.Value);
+                }
+            }
+            TileMap.SetEverythingAtCell(square, codes, cell);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -138,7 +168,7 @@ namespace MapEditor
             GraphicsDevice.Viewport = _standardViewport;
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            _tileMap.Draw(_spriteBatch);
+            TileMap.Draw(_spriteBatch);
             _player.Draw(_spriteBatch);
             _spriteBatch.End();
             GraphicsDevice.SetRenderTarget(null);
@@ -149,6 +179,22 @@ namespace MapEditor
                               Color.White);
             _spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        public void LoadMap(string fileName)
+        {
+            using (var fs = new FileStream(fileName, FileMode.Open))
+            {
+                TileMap.LoadMap(fs);
+            }
+        }
+
+        public void SaveMap(string fileName)
+        {
+            using(var fs = new FileStream(fileName, FileMode.Create))
+            {
+                TileMap.SaveMap(fs);
+            }
         }
     }
 }

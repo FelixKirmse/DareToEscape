@@ -31,6 +31,7 @@ namespace BlackDragonEngine.TileEngine
         private readonly Rectangle[] _tileSourceRects;
         private readonly int _tilesPerRow;
         private readonly CoordList _coordList;
+        private readonly Texture2D _whiteTexture;
 
         public TMap Map { get; internal set; }
         public int TileWidth { get; private set; }
@@ -73,6 +74,11 @@ namespace BlackDragonEngine.TileEngine
             }
             VariableProvider.CoordList = new CoordList();
             _coordList = VariableProvider.CoordList;
+
+            _whiteTexture = new Texture2D(VariableProvider.Game.GraphicsDevice, 1,1);
+            Color[] data = {Color.White};
+            _whiteTexture.SetData(data);
+            
             _instance = this;
         }
 
@@ -140,8 +146,8 @@ namespace BlackDragonEngine.TileEngine
 
         public bool CellIsPassable(int cellX, int cellY)
         {
-            MapSquare square = GetMapSquareAtCell(cellX, cellY);
-            return square.InValidSquare || square.Passable;
+            MapSquare? square = GetMapSquareAtCell(cellX, cellY);
+            return !square.HasValue || square.Value.Passable;
         }
 
         public bool CellIsPassable(Vector2 cell)
@@ -165,9 +171,8 @@ namespace BlackDragonEngine.TileEngine
             return !Map.Codes.ContainsKey(coords) ? new List<TCodes>() : Map.Codes[coords];
         }
 
-        public void SetCellCodes(int cellX, int cellY, List<TCodes> codes)
+        public void SetCellCodes(Coords coords, List<TCodes> codes)
         {
-            Coords coords = _coordList[cellX, cellY];
             if (codes == null || codes.Count == 0)
             {
                 Map.Codes.Remove(coords);
@@ -177,6 +182,11 @@ namespace BlackDragonEngine.TileEngine
                 Map.Codes[coords] = codes;
             else
                 Map.Codes.Add(coords, codes);
+        }
+
+        public void SetCellCodes(int cellX, int cellY, List<TCodes> codes)
+        {
+            SetCellCodes(_coordList[cellX, cellY], codes);
         }
 
         public List<TCodes> GetCellCodes(Vector2 cell)
@@ -230,6 +240,12 @@ namespace BlackDragonEngine.TileEngine
             Map.Codes.Remove(coords);
         }
 
+        public void SetEverythingAtCell(MapSquare? square, List<TCodes> codes, Coords cell)
+        {
+            SetCellCodes(cell, codes);
+            SetMapSquareAtCell(cell, square);
+        }
+
         #endregion
 
         #region Information about MapSquare objects
@@ -255,12 +271,12 @@ namespace BlackDragonEngine.TileEngine
             Map[coords] = new MapSquare(0, false);
         }
 
-        public MapSquare GetMapSquareAtCell(int cellX, int cellY)
+        public MapSquare? GetMapSquareAtCell(int cellX, int cellY)
         {
             return Map[cellX, cellY];
         }
 
-        public MapSquare GetMapSquareAtCell(Vector2 cell)
+        public MapSquare? GetMapSquareAtCell(Vector2 cell)
         {
             return Map[(int) cell.X, (int) cell.Y];
         }
@@ -275,9 +291,14 @@ namespace BlackDragonEngine.TileEngine
             Map[tileX, tileY] = tile;
         }
 
+        public void SetMapSquareAtCell(Coords cell, MapSquare? square)
+        {
+            Map[cell] = square;
+        }
+
         public void SetPassabilityAtCell(Vector2 cell, bool passable)
         {
-            MapSquare square = GetMapSquareAtCell(cell);
+            MapSquare square = GetMapSquareAtCell(cell).GetValueOrDefault();
             square.Passable = passable;
             SetMapSquareAtCell(cell, square);
         }
@@ -294,14 +315,14 @@ namespace BlackDragonEngine.TileEngine
 
         public void SetTileAtCell(int tileX, int tileY, int layer, int tileIndex)
         {
-            MapSquare square = GetMapSquareAtCell(tileX, tileY);
+            MapSquare square = GetMapSquareAtCell(tileX, tileY).GetValueOrDefault();
             if (square.InValidSquare)
             {
                 var newSquare = new MapSquare(layer, tileIndex);
                 Map[tileX, tileY] = newSquare;
                 return;
             }
-            Map[tileX, tileY].LayerTiles[layer] = tileIndex;
+            Map[tileX, tileY].GetValueOrDefault().LayerTiles[layer] = tileIndex;
         }
 
         public void SetTileAtCell(Vector2 cell, int tileIndex)
@@ -312,17 +333,17 @@ namespace BlackDragonEngine.TileEngine
         public void SetSolidTileAtCoords(Coords coords, int tileIndex)
         {
             SetTileAtCell(coords.X, coords.Y, 0, tileIndex);
-            MapSquare square = Map[coords];
+            MapSquare square = Map[coords].GetValueOrDefault();
             square.Passable = false;
             Map[coords] = square;
         }
 
-        private MapSquare GetMapSquareAtPixel(int pixelX, int pixelY)
+        private MapSquare? GetMapSquareAtPixel(int pixelX, int pixelY)
         {
             return GetMapSquareAtCell(GetCellByPixelX(pixelX), GetCellByPixelY(pixelY));
         }
 
-        public MapSquare GetMapSquareAtPixel(Vector2 pixelLocation)
+        public MapSquare? GetMapSquareAtPixel(Vector2 pixelLocation)
         {
             return GetMapSquareAtPixel((int) pixelLocation.X, (int) pixelLocation.Y);
         }
@@ -359,7 +380,8 @@ namespace BlackDragonEngine.TileEngine
                 for (int z = 0; z < MapLayers; ++z)
                 {
                     spriteBatch.Draw(_tileSheet, CellScreenRectangle(coords.X, coords.Y),
-                                     TileSourceRectangle(Map[coords].LayerTiles[z]), Color.White, 0.0f,
+                                     Map[coords] == null ? null : TileSourceRectangle(Map[coords].Value.LayerTiles[z]),
+                                     Color.White, 0.0f,
                                      Vector2.Zero, SpriteEffects.None, 1f - (z*0.1f));
                 }
                 if (EditorMode)
@@ -372,7 +394,7 @@ namespace BlackDragonEngine.TileEngine
             foreach (var cell in Map.Codes)
             {
                 Coords coords = cell.Key;
-                spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(coords.X, coords.Y),
+                spriteBatch.Draw(_whiteTexture, CellScreenRectangle(coords.X, coords.Y),
                                  new Rectangle(0, 0, TileWidth, TileHeight), new Color(0, 0, 255, 80), 0f,
                                  Vector2.Zero, SpriteEffects.None, 0.1f);
                 spriteBatch.DrawString(_spriteFont, Map.Codes[coords].Count.ToString(),
@@ -384,7 +406,7 @@ namespace BlackDragonEngine.TileEngine
         private void DrawEditModeItems(SpriteBatch spriteBatch, int x, int y)
         {
             if (CellIsPassable(x, y)) return;
-            spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(x, y),
+            spriteBatch.Draw(_whiteTexture, CellScreenRectangle(x, y),
                              new Rectangle(0, 0, TileWidth, TileHeight), new Color(255, 0, 0, 80), 0f, Vector2.Zero,
                              SpriteEffects.None, 0.2f);
         }
@@ -401,7 +423,7 @@ namespace BlackDragonEngine.TileEngine
             {
                 for (var celly = (int) startCell.Y; celly <= cellY; ++celly)
                 {
-                    spriteBatch.Draw(VariableProvider.WhiteTexture, CellScreenRectangle(cellx, celly),
+                    spriteBatch.Draw(_whiteTexture, CellScreenRectangle(cellx, celly),
                                      new Rectangle(0, 0, TileWidth, TileHeight), new Color(1, 1, 1, 80), 0f,
                                      Vector2.Zero, SpriteEffects.None, 0f);
                 }
@@ -447,12 +469,10 @@ namespace BlackDragonEngine.TileEngine
                     Map = (TMap) bFormatter.Deserialize(gzs);
                 }
                 gzs.Close();
-                fileStream.Close();
             }
             catch
             {
                 ClearMap();
-                fileStream.Close();
             }
         }
 
