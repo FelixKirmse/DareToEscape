@@ -7,24 +7,24 @@ namespace BlackDragonEngine.Managers
 {
     public static class EntityManager
     {
-        private static IGameObject player;
+        private static IGameObject _player;
         private static readonly List<IGameObject> Entities = new List<IGameObject>();
 
         public static void Update()
         {
             Entities.ForEach(e => e.Update());
-            player.Update();
+            _player.Update();
         }
 
         public static void Draw(SpriteBatch spriteBatch)
         {
             Entities.ForEach((e => e.Draw(spriteBatch)));
-            player.Draw(spriteBatch);
+            _player.Draw(spriteBatch);
         }
 
         public static void SetPlayer()
         {
-            player = VariableProvider.CurrentPlayer;
+            _player = VariableProvider.CurrentPlayer;
         }
 
         public static void AddEntity(GameObject entity)

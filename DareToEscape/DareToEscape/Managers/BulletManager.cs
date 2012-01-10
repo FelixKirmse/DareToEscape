@@ -86,7 +86,7 @@ namespace DareToEscape.Managers
                                           if (x > y) return -1;
                                           return 0;
                                       });
-            foreach (var id in _bulletsToDelete)
+            foreach (int id in _bulletsToDelete)
             {
                 _bullets[id] = _bullets[_bullets.Count - 1];
                 _bullets.RemoveAt(_bullets.Count - 1);

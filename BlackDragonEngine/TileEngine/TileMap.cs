@@ -241,7 +241,7 @@ namespace BlackDragonEngine.TileEngine
 
         public void RemoveCodeFromCell(int cellX, int cellY, TCodes code)
         {
-            RemoveCodeFromCell(_coordList[cellX, cellY], code); 
+            RemoveCodeFromCell(_coordList[cellX, cellY], code);
         }
 
         public void SetEverythingAtCell(MapSquare? square, List<TCodes> codes, Coords cell)
@@ -378,7 +378,7 @@ namespace BlackDragonEngine.TileEngine
             int startY = GetCellByPixelY((int) Camera.Position.Y) - 1;
             int endY = GetCellByPixelY((int) Camera.Position.Y + Camera.ViewPortHeight);
 
-            foreach (var coords in Map.MapData.Keys)
+            foreach (Coords coords in Map.MapData.Keys)
             {
                 if (coords.X < startX || coords.X > endX || coords.Y < startY || coords.Y > endY) continue;
                 for (int z = 0; z < MapLayers; ++z)

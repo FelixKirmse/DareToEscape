@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using BlackDragonEngine.TileEngine;
 using DareToEscape;
 
@@ -10,12 +8,12 @@ namespace MapEditor
     {
         public bool AddToExisting;
         public List<TileCode> Codes;
+        public List<Coords> ExtraCells;
+        public List<Item> ExtraItems;
+        public bool IsTurret;
         public bool? Passable;
         public int? TileID;
         public bool Unique;
-        public bool IsTurret;
-        public List<Coords> ExtraCells;
-        public List<Item> ExtraItems; 
 
         public static Item GetItemByTileId(int id)
         {
@@ -32,7 +30,7 @@ namespace MapEditor
 
         public static Item GetItemByEntityId(int id)
         {
-            switch(id)
+            switch (id)
             {
                 case 0:
                     return new Item
@@ -43,13 +41,13 @@ namespace MapEditor
                 case 1:
                     return new Item
                                {
-                                   Codes = new List<TileCode>{new TileCode(TileCodes.Spawn, "SmallTurret_")},
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Spawn, "SmallTurret_")},
                                    IsTurret = true
                                };
                 case 2:
                     return new Item
                                {
-                                   Codes = new List<TileCode>{new TileCode(TileCodes.Spawn, "MediumTurret_")},
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Spawn, "MediumTurret_")},
                                    IsTurret = true
                                };
                 case 3:
@@ -62,7 +60,7 @@ namespace MapEditor
                 case 4:
                     return new Item
                                {
-                                   Codes = new List<TileCode>{new TileCode(TileCodes.Exit)}
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Exit)}
                                };
                 case 5:
                     return new Item
@@ -75,16 +73,16 @@ namespace MapEditor
                                        new List<Item>
                                            {new Item {Codes = new List<TileCode> {new TileCode(TileCodes.Save)}}}
                                };
-                       
 
-                default: 
+
+                default:
                     return new Item();
             }
         }
 
         public static Item GetItemByCodeId(int id)
         {
-            switch(id)
+            switch (id)
             {
                 case 0:
                     return new Item

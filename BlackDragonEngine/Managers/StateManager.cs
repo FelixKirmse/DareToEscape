@@ -37,7 +37,7 @@ namespace BlackDragonEngine.Managers
 
         public void Update()
         {
-            foreach (var state in _updateableStates)
+            foreach (IUpdateableGameState state in _updateableStates)
             {
                 if (state.UpdateCondition)
                     if (!state.Update()) return;
@@ -46,7 +46,7 @@ namespace BlackDragonEngine.Managers
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var state in _drawableStates)
+            foreach (IDrawableGameState state in _drawableStates)
             {
                 if (state.DrawCondition)
                     state.Draw(spriteBatch);

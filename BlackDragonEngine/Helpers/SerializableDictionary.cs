@@ -82,7 +82,7 @@ namespace BlackDragonEngine.Helpers
             var keySerializer = new XmlSerializer(typeof (TKey));
             var valueSerializer = new XmlSerializer(typeof (TValue));
 
-            foreach (var key in Keys)
+            foreach (TKey key in Keys)
             {
                 writer.WriteStartElement("item");
                 writer.WriteStartElement("key");

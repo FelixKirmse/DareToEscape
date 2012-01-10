@@ -91,6 +91,7 @@ namespace MapEditor
             AnimationDictionaryProvider.Content = Content;
             _player = Factory.CreatePlayer();
             VariableProvider.CurrentPlayer = _player;
+            EntityManager.SetPlayer();
             _renderTarget = new RenderTarget2D(GraphicsDevice, 320, 240, false,
                                                GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
             GameInitializer.Initialize();
@@ -184,7 +185,7 @@ namespace MapEditor
 
             List<TileCode> codes = i.AddToExisting
                                        ? TileMap.GetCellCodes(cell).Union(i.Codes).ToList()
-                                       : i.Codes.ToList();
+                                       : i.Codes == null ? null : i.Codes.ToList();
 
             if (i.Unique)
             {

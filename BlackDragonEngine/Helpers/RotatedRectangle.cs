@@ -102,7 +102,7 @@ namespace BlackDragonEngine.Helpers
             //immediately and notify the calling function that no collision was detected. If
             //a collision DOES occur on ALL of the Axis, then there is a collision occurring
             //between the rotated rectangles. We know this to be true by the Seperating Axis Theorem
-            foreach (var aAxis in aRectangleAxis)
+            foreach (Vector2 aAxis in aRectangleAxis)
             {
                 if (!IsAxisCollision(theRectangle, aAxis))
                 {

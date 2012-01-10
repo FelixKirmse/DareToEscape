@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace MapEditor
 {
@@ -11,8 +12,9 @@ namespace MapEditor
         private const int ScaleFactor = 1;
         private const int TileSize = 8;
 
-        private readonly string _mapPath = Application.StartupPath +
-                                           @"/../../../../../DareToEscape/DareToEscapeContent/";
+        private string _mapPath; //Path to DareToEscapeContent
+
+        private const string ConfigFile = "editorConfig.cfg";
 
         private string _currentMapName;
         private bool _drawMarker;
@@ -22,6 +24,8 @@ namespace MapEditor
         public Editor()
         {
             InitializeComponent();
+            LoadPath();
+            _mapPath += "/";
             _treeView.Nodes.Add("maps");
             PopulateTree(_mapPath + "maps/", _treeView.Nodes[0]);
             Image image = Image.FromFile(Application.StartupPath + @"/Content/textures/tilesheets/tilesheet.png");
@@ -32,6 +36,45 @@ namespace MapEditor
             LoadCodes();
         }
 
+        private void LoadPath()
+        {
+            if(File.Exists(Application.StartupPath + "/" + ConfigFile))
+            {
+                try
+                {
+                    using (var sr = new StreamReader(Application.StartupPath + "/" + ConfigFile))
+                    {
+                        _mapPath = sr.ReadLine();
+                        if (!Directory.Exists(_mapPath + "/maps"))
+                            SetNewMapPath();
+                    }
+                }
+                catch (Exception)
+                {
+                    SetNewMapPath();
+                }
+            }
+            else
+            {
+                SetNewMapPath();
+            }
+        }
+
+        private void SetNewMapPath()
+        {
+            _mapSelectorDialog.ShowDialog();
+            _mapPath = _mapSelectorDialog.SelectedPath;
+            if(!Directory.Exists(_mapPath + "/maps"))
+            {
+                SetNewMapPath();
+                return;
+            }
+            using(var sw = new StreamWriter(Application.StartupPath + "/" + ConfigFile))
+            {
+                sw.WriteLine(_mapPath);
+            }
+        }
+        
         private void LoadEntities()
         {
             _entitiesList.Items.Add("Player");
@@ -117,6 +160,19 @@ namespace MapEditor
             Game.CurrentItem = Item.GetItemByTileId(tileIndex);
             _marker = new Rectangle((tileIndex%tilesPerRow)*Tile, (tileIndex/tilesPerRow)*Tile, Tile, Tile);
             _drawMarker = true;
+            _doNothing = true;
+            try
+            {
+                _entitiesList.SelectedItems[0].Selected = false;
+                _codesList.SelectedItems[0].Selected = false;
+            }
+            catch(Exception)
+            {
+            }
+            finally
+            {
+                _doNothing = false;
+            }
         }
 
         private void TickTimerTick(object sender, EventArgs e)
@@ -178,6 +234,74 @@ namespace MapEditor
                 _doNothing = false;
                 Game.CurrentItem = Item.GetItemByEntityId(_entitiesList.SelectedIndices[0]);
             }
+        }
+
+        private void SaveToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            Game.SaveMap(_currentMapName);
+        }
+
+        private string _oldLabel;
+
+        private void TreeViewAfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            if(File.Exists(_mapPath + _oldLabel))
+            {
+                File.Move(_mapPath + _oldLabel, _mapPath + e.Node.Parent.FullPath + "/" + e.Label);
+                _currentMapName = _mapPath + e.Node.Parent.FullPath + "/" + e.Label;
+            }
+            else
+            {
+                Directory.Move(_mapPath + _oldLabel, _mapPath + e.Node.Parent.FullPath + "/" + e.Label);
+            }
+        }
+
+        private void TreeViewBeforeLabelEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            if (e.Node.FullPath == "maps")
+            {
+                e.CancelEdit = true;
+                return;
+            }
+            _oldLabel = e.Node.FullPath;
+        }
+
+        private void RenameToolStripMenuItem1Click(object sender, EventArgs e)
+        {
+            _treeView.SelectedNode.BeginEdit();
+        }
+
+        private void NewFileToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            var node = _treeView.SelectedNode.Text.Contains(".map") ? _treeView.SelectedNode.Parent : _treeView.SelectedNode;
+            var newNode = node.Nodes.Add("New Map.map");
+            File.Create(_mapPath + node.FullPath + "/New Map.map");
+            newNode.BeginEdit();
+        }
+
+        private void NewFolderToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            if (_treeView.SelectedNode.Text == "maps") return;
+            var node = _treeView.SelectedNode.Parent;
+            var newNode = node.Nodes.Add("New Folder");
+            Directory.CreateDirectory(_mapPath + node.FullPath + "/New Folder");
+            newNode.BeginEdit();
+        }
+
+        private void DeleteToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            if (_treeView.SelectedNode.Text == "maps") return;
+            var node = _treeView.SelectedNode;
+            if(node.Text.Contains(".map"))
+            {
+                File.Delete(_mapPath + node.FullPath);
+            }
+            else
+            {
+                Directory.Delete(_mapPath + node.FullPath, true);
+            }
+            node.Remove();
+            _currentMapName = null;
         }
     }
 }

@@ -31,7 +31,7 @@ namespace BlackDragonEngine.Managers
                 foreach (var item in tileMap.Map.Codes)
                 {
                     var location = new Vector2(item.Key.X*tileMap.TileWidth, item.Key.Y*tileMap.TileHeight);
-                    foreach (var code in item.Value)
+                    foreach (TCodes code in item.Value)
                     {
                         OnMapCodeCheck(code, location, player);
                     }
@@ -86,7 +86,7 @@ namespace BlackDragonEngine.Managers
         {
             if (codes == null)
                 return;
-            foreach (var code in codes)
+            foreach (TCodes code in codes)
             {
                 OnCodeUnderPlayerCheck(code, player);
             }

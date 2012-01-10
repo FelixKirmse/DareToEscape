@@ -18,7 +18,7 @@ namespace BlackDragonEngine.Menus
         {
             get
             {
-                foreach (var menuItem in menuItems)
+                foreach (MenuItem menuItem in menuItems)
                 {
                     if (menuItem.IsSelected)
                     {
@@ -49,7 +49,7 @@ namespace BlackDragonEngine.Menus
             {
                 SelectMenuItem();
             }
-            foreach (var menuItem in menuItems)
+            foreach (MenuItem menuItem in menuItems)
             {
                 menuItem.Update();
             }
@@ -69,12 +69,12 @@ namespace BlackDragonEngine.Menus
                 SpriteEffects.None,
                 0.3f);
 
-            foreach (var menuItem in menuItems)
+            foreach (MenuItem menuItem in menuItems)
             {
                 menuItem.Draw(spriteBatch);
             }
 
-            foreach (var menuLabel in menuLabels)
+            foreach (MenuLabel menuLabel in menuLabels)
             {
                 menuLabel.Draw(spriteBatch);
             }
@@ -124,14 +124,14 @@ namespace BlackDragonEngine.Menus
 
         public virtual void ResolveMouseSelection()
         {
-            foreach (var menuItem in menuItems)
+            foreach (MenuItem menuItem in menuItems)
             {
                 if (
                     ShortCuts.MouseIntersectsRectangle(ShortCuts.GetFontRectangle(menuItem.ItemPosition,
                                                                                   fontName,
                                                                                   menuItem.ItemName)))
                 {
-                    foreach (var item in menuItems)
+                    foreach (MenuItem item in menuItems)
                         item.IsSelected = false;
                     menuItem.IsSelected = true;
                     break;
@@ -142,7 +142,7 @@ namespace BlackDragonEngine.Menus
         protected void GetSelectedItem(out string selectedItem)
         {
             selectedItem = "";
-            foreach (var menuItem in menuItems)
+            foreach (MenuItem menuItem in menuItems)
             {
                 if (menuItem.IsSelected)
                 {
