@@ -1,37 +1,55 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
-using BlackDragonEngine.TileEngine;
-using DareToEscape;
 
 namespace MapEditor
 {
     public partial class Editor : Form
     {
+        private const int ScaleFactor = 1;
+        private const int TileSize = 8;
+
         private readonly string _mapPath = Application.StartupPath +
                                            @"/../../../../../DareToEscape/DareToEscapeContent/";
 
-        private const int ScaleFactor = 1;
-        private const int TileSize = 8;
-        private Rectangle _marker;
-        private bool _drawMarker;
-        private int Tile { get { return ScaleFactor*TileSize; } }
         private string _currentMapName;
+        private bool _drawMarker;
         private bool _firstTime = true;
+        private Rectangle _marker;
 
         public Editor()
         {
             InitializeComponent();
             _treeView.Nodes.Add("maps");
             PopulateTree(_mapPath + "maps/", _treeView.Nodes[0]);
-            var image = Image.FromFile(Application.StartupPath + @"/Content/textures/tilesheets/tilesheet.png");
-            _tileSheetBox.Image = ResizeImage(image, image.Width * ScaleFactor, image.Height * ScaleFactor);
+            Image image = Image.FromFile(Application.StartupPath + @"/Content/textures/tilesheets/tilesheet.png");
+            _tileSheetBox.Image = ResizeImage(image, image.Width*ScaleFactor, image.Height*ScaleFactor);
             _marker = new Rectangle(0, 0, Tile, Tile);
             tickTimer.Start();
+            LoadEntities();
+            LoadCodes();
+        }
+
+        private void LoadEntities()
+        {
+            _entitiesList.Items.Add("Player");
+            _entitiesList.Items.Add("Small Turret");
+            _entitiesList.Items.Add("Medium Turret");
+            _entitiesList.Items.Add("Boss 1 (Turret)");
+            _entitiesList.Items.Add("Exit");
+            _entitiesList.Items.Add("Checkpoint");
+        }
+
+        private void LoadCodes()
+        {
+            _codesList.Items.Add("Bosstrigger");
+        }
+
+        private int Tile
+        {
+            get { return ScaleFactor*TileSize; }
         }
 
         public MapEditor Game { private get; set; }
@@ -61,8 +79,8 @@ namespace MapEditor
         public Image ResizeImage(Image image, int width, int height)
         {
             var result = new Bitmap(width, height);
-           
-            using (var graphics = Graphics.FromImage(result))
+
+            using (Graphics graphics = Graphics.FromImage(result))
             {
                 graphics.CompositingQuality = CompositingQuality.AssumeLinear;
                 graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
@@ -86,7 +104,7 @@ namespace MapEditor
         private void TileSheetBoxPaint(object sender, PaintEventArgs e)
         {
             if (!_drawMarker) return;
-            using(var pen = new Pen(Color.Red, 1))
+            using (var pen = new Pen(Color.Red, 1))
             {
                 e.Graphics.DrawRectangle(pen, _marker);
             }
@@ -97,7 +115,7 @@ namespace MapEditor
             int tilesPerRow = _tileSheetBox.Image.Width/Tile;
             int tileIndex = (e.X/Tile) + ((e.Y/Tile)*tilesPerRow);
             Game.CurrentItem = Item.GetItemByTileId(tileIndex);
-            _marker = new Rectangle((tileIndex%tilesPerRow) * Tile, (tileIndex / tilesPerRow) * Tile, Tile, Tile);
+            _marker = new Rectangle((tileIndex%tilesPerRow)*Tile, (tileIndex/tilesPerRow)*Tile, Tile, Tile);
             _drawMarker = true;
         }
 
@@ -110,7 +128,7 @@ namespace MapEditor
         private void TreeViewAfterSelect(object sender, TreeViewEventArgs e)
         {
             if (!e.Node.Text.Contains(".map")) return;
-            if(!_firstTime)
+            if (!_firstTime)
             {
                 Game.SaveMap(_currentMapName);
             }
@@ -125,6 +143,41 @@ namespace MapEditor
         private void EnableEditorViewToolStripMenuItemClick(object sender, EventArgs e)
         {
             Game.TileMap.EditorMode = enableEditorViewToolStripMenuItem.Checked;
+        }
+
+        private void CodesListSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_doNothing) return;
+            _drawMarker = false;
+            _doNothing = true;
+            try
+            {
+                _entitiesList.SelectedItems[0].Selected = false;
+            }
+            finally
+            {
+                _doNothing = false;
+                Game.CurrentItem = Item.GetItemByCodeId(_codesList.SelectedIndices[0]);
+            }
+            
+        }
+
+        private bool _doNothing;
+
+        private void EntitiesListSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_doNothing) return;
+            _drawMarker = false;
+            _doNothing = true;
+            try
+            {
+                _codesList.SelectedItems[0].Selected = false;
+            }
+            finally
+            {
+                _doNothing = false;
+                Game.CurrentItem = Item.GetItemByEntityId(_entitiesList.SelectedIndices[0]);
+            }
         }
     }
 }

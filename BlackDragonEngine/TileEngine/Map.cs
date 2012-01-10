@@ -60,22 +60,23 @@ namespace BlackDragonEngine.TileEngine
 
         public MapSquare? this[Coords coords]
         {
-            get { return MapData.ContainsKey(coords) ? MapData[coords] : (MapSquare?)null; }
+            get { return MapData.ContainsKey(coords) ? MapData[coords] : (MapSquare?) null; }
 
             set
             {
                 if (MapData.ContainsKey(coords))
                 {
-                    if(value == null)
+                    if (value == null)
                     {
                         MapData.Remove(coords);
                         return;
                     }
-                    MapData[coords] = value.GetValueOrDefault();
+                    MapData[coords] = value.Value;
                 }
                 else
                 {
-                    MapData.Add(coords, value.GetValueOrDefault());
+                    if (value == null) return;
+                    MapData.Add(coords, value.Value);
                 }
             }
         }

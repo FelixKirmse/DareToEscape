@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using BlackDragonEngine.Helpers;
-using BlackDragonEngine.Providers;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 

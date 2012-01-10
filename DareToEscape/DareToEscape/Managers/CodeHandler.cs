@@ -138,11 +138,11 @@ namespace DareToEscape.Managers
                                  {
                                      (IComponent)
                                      Activator.CreateInstance(
-                                         Type.GetType("DareToEscape.Components.Entities." + codearray[1] + "Component"))
+                                         Type.GetType("DareToEscape.Components.Entities." + codearray[0] + "Component"))
                                  };
             var turret = new GameObject(components) {Position = position};
-            turret.Send("SET_" + codearray[2], turret);
-            if (codearray[1].Contains("Boss"))
+            turret.Send("SET_" + codearray[1], turret);
+            if (codearray[0].Contains("Boss"))
             {
                 GameVariableProvider.Bosses.Add(turret);
             }

@@ -1,25 +1,25 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using BlackDragonEngine.Entities;
+using BlackDragonEngine.TileEngine;
 using DareToEscape;
-using Microsoft.Xna.Framework;
 
 namespace MapEditor
 {
     internal struct Item
     {
-        public int? TileID;
+        public bool AddToExisting;
         public List<TileCode> Codes;
         public bool? Passable;
+        public int? TileID;
         public bool Unique;
-        public bool AddToExisting;
+        public bool IsTurret;
+        public List<Coords> ExtraCells;
+        public List<Item> ExtraItems; 
 
         public static Item GetItemByTileId(int id)
         {
-            switch(id)
+            switch (id)
             {
                 default:
                     return new Item
@@ -32,21 +32,68 @@ namespace MapEditor
 
         public static Item GetItemByEntityId(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Demo()
-        {
-            var intList = new List<int>(); //The data is saved in the Heap, the reference in the stack is assigend to intList
-            PopulateList(intList); //PopulateList is called with the reference that intList holds
-            Console.WriteLine(intList); //intList ist still the same reference, but the Data in the Heap is now modified
-        }
-
-        public void PopulateList(List<int> list) //the new variable list contains a reference to Data in the Heap
-        {
-            for(int i = 0; i < 100; ++i)
+            switch(id)
             {
-                list.Add(i); //This data is now accessed and modified
+                case 0:
+                    return new Item
+                               {
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Start)},
+                                   Unique = true
+                               };
+                case 1:
+                    return new Item
+                               {
+                                   Codes = new List<TileCode>{new TileCode(TileCodes.Spawn, "SmallTurret_")},
+                                   IsTurret = true
+                               };
+                case 2:
+                    return new Item
+                               {
+                                   Codes = new List<TileCode>{new TileCode(TileCodes.Spawn, "MediumTurret_")},
+                                   IsTurret = true
+                               };
+                case 3:
+                    return new Item
+                               {
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Spawn, "Boss1_")},
+                                   IsTurret = true
+                               };
+
+                case 4:
+                    return new Item
+                               {
+                                   Codes = new List<TileCode>{new TileCode(TileCodes.Exit)}
+                               };
+                case 5:
+                    return new Item
+                               {
+                                   Codes =
+                                       new List<TileCode>
+                                           {new TileCode(TileCodes.Checkpoint), new TileCode(TileCodes.Save)},
+                                   ExtraCells = new List<Coords> {new Coords(0, 1)},
+                                   ExtraItems =
+                                       new List<Item>
+                                           {new Item {Codes = new List<TileCode> {new TileCode(TileCodes.Save)}}}
+                               };
+                       
+
+                default: 
+                    return new Item();
+            }
+        }
+
+        public static Item GetItemByCodeId(int id)
+        {
+            switch(id)
+            {
+                case 0:
+                    return new Item
+                               {
+                                   AddToExisting = true,
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Trigger, "Boss")}
+                               };
+                default:
+                    return new Item();
             }
         }
     }

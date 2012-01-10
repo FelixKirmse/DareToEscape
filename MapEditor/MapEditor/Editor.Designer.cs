@@ -43,7 +43,12 @@
             this._tileSheetBox = new System.Windows.Forms.PictureBox();
             this.tickTimer = new System.Windows.Forms.Timer(this.components);
             this.EntityList = new System.Windows.Forms.ImageList(this.components);
-            this.listView1 = new System.Windows.Forms.ListView();
+            this._entitiesList = new System.Windows.Forms.ListView();
+            this._codesList = new System.Windows.Forms.ListView();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this._pctSurface)).BeginInit();
             this._menustrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._tileSheetBox)).BeginInit();
@@ -140,18 +145,18 @@
             // 
             this._treeView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this._treeView.Location = new System.Drawing.Point(12, 27);
+            this._treeView.Location = new System.Drawing.Point(12, 54);
             this._treeView.Name = "_treeView";
-            this._treeView.Size = new System.Drawing.Size(334, 338);
+            this._treeView.Size = new System.Drawing.Size(334, 311);
             this._treeView.TabIndex = 2;
             this._treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeViewAfterSelect);
             // 
             // _tileSheetBox
             // 
             this._tileSheetBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._tileSheetBox.Location = new System.Drawing.Point(12, 371);
+            this._tileSheetBox.Location = new System.Drawing.Point(12, 388);
             this._tileSheetBox.Name = "_tileSheetBox";
-            this._tileSheetBox.Size = new System.Drawing.Size(334, 603);
+            this._tileSheetBox.Size = new System.Drawing.Size(334, 586);
             this._tileSheetBox.TabIndex = 3;
             this._tileSheetBox.TabStop = false;
             this._tileSheetBox.Paint += new System.Windows.Forms.PaintEventHandler(this.TileSheetBoxPaint);
@@ -168,22 +173,75 @@
             this.EntityList.ImageSize = new System.Drawing.Size(16, 16);
             this.EntityList.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // listView1
+            // _entitiesList
             // 
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this._entitiesList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.Location = new System.Drawing.Point(352, 27);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(243, 947);
-            this.listView1.TabIndex = 4;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this._entitiesList.Location = new System.Drawing.Point(352, 54);
+            this._entitiesList.Name = "_entitiesList";
+            this._entitiesList.Size = new System.Drawing.Size(243, 920);
+            this._entitiesList.TabIndex = 4;
+            this._entitiesList.UseCompatibleStateImageBehavior = false;
+            this._entitiesList.View = System.Windows.Forms.View.SmallIcon;
+            this._entitiesList.SelectedIndexChanged += new System.EventHandler(this.EntitiesListSelectedIndexChanged);
+            // 
+            // _codesList
+            // 
+            this._codesList.Location = new System.Drawing.Point(602, 531);
+            this._codesList.Name = "_codesList";
+            this._codesList.Size = new System.Drawing.Size(360, 443);
+            this._codesList.TabIndex = 5;
+            this._codesList.UseCompatibleStateImageBehavior = false;
+            this._codesList.View = System.Windows.Forms.View.List;
+            this._codesList.SelectedIndexChanged += new System.EventHandler(this.CodesListSelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(602, 512);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(67, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Codes/Flags";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(353, 35);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(41, 13);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Entities";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(13, 35);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(33, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Maps";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(16, 372);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(52, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "TileSheet";
             // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1254, 986);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this._codesList);
+            this.Controls.Add(this._entitiesList);
             this.Controls.Add(this._tileSheetBox);
             this.Controls.Add(this._treeView);
             this.Controls.Add(this._pctSurface);
@@ -215,8 +273,13 @@
         private System.Windows.Forms.PictureBox _tileSheetBox;
         private System.Windows.Forms.Timer tickTimer;
         private System.Windows.Forms.ImageList EntityList;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView _entitiesList;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enableEditorViewToolStripMenuItem;
+        private System.Windows.Forms.ListView _codesList;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
     }
 }

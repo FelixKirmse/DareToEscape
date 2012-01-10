@@ -27,7 +27,7 @@ namespace DareToEscape.Helpers
             VariableProvider.GenerateNewRandomSeed();
             VariableProvider.SaveSlot = "1";
             SaveManager<SaveState>.CurrentSaveState = new SaveState();
-            
+
             SaveManager<SaveState>.SaveHelper.OnSave += SaveHelper.OnSave;
             SaveManager<SaveState>.SaveHelper.OnLoad += SaveHelper.OnLoad;
 

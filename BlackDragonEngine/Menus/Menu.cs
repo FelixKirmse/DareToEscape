@@ -128,8 +128,8 @@ namespace BlackDragonEngine.Menus
             {
                 if (
                     ShortCuts.MouseIntersectsRectangle(ShortCuts.GetFontRectangle(menuItem.ItemPosition,
-                                                                                                fontName,
-                                                                                                menuItem.ItemName)))
+                                                                                  fontName,
+                                                                                  menuItem.ItemName)))
                 {
                     foreach (var item in menuItems)
                         item.IsSelected = false;

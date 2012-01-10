@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using BlackDragonEngine.Components;
 using BlackDragonEngine.Entities;
-using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
 using Microsoft.Xna.Framework;
 
@@ -51,7 +50,7 @@ namespace DareToEscape.Components.PlayerComponents
                         wantedPosition.X += _horiz/Math.Abs(_horiz);
 
                     Rectangle collisionRectangle = obj.GetCustomCollisionRectangle(wantedPosition);
-                    
+
                     Coords bottomLeftCorner =
                         _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Left, collisionRectangle.Bottom));
                     Coords bottomRightCorner =
@@ -63,11 +62,11 @@ namespace DareToEscape.Components.PlayerComponents
                         _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Right, collisionRectangle.Top));
 
                     Coords middleLeft = _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Left,
+                                                                            (collisionRectangle.Bottom +
+                                                                             collisionRectangle.Top)/2));
+                    Coords middleRight = _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Right,
                                                                              (collisionRectangle.Bottom +
                                                                               collisionRectangle.Top)/2));
-                    Coords middleRight = _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Right,
-                                                                              (collisionRectangle.Bottom +
-                                                                               collisionRectangle.Top)/2));
 
                     if (!_tileMap.CellIsPassable(bottomLeftCorner) || !_tileMap.CellIsPassable(bottomRightCorner) ||
                         !_tileMap.CellIsPassable(topRightCorner) || !_tileMap.CellIsPassable(topLeftCorner) ||

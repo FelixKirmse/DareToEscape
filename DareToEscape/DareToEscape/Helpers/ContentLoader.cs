@@ -21,6 +21,7 @@ namespace DareToEscape.Helpers
                                                  content.Load<Texture2D>(@"textures/tilesheets/tilesheet"));
 
             BulletInformationProvider.LoadBulletData(content);
+            AnimationDictionaryProvider.Content = content;
         }
     }
 }

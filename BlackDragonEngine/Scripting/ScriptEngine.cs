@@ -61,20 +61,20 @@ namespace BlackDragonEngine.Scripting
 
         private class ScriptState
         {
-            private readonly float[] scriptParameter;
-            private IEnumerator<int> scriptEnumerator;
-            private int sleepLength;
+            private readonly float[] _scriptParameter;
+            private IEnumerator<int> _scriptEnumerator;
+            private int _sleepLength;
 
             public ScriptState(Script script)
             {
                 Script = script;
-                scriptParameter = null;
+                _scriptParameter = null;
             }
 
             public ScriptState(Script script, params float[] parameters)
                 : this(script)
             {
-                scriptParameter = parameters;
+                _scriptParameter = parameters;
             }
 
             public Script Script { get; private set; }
@@ -86,29 +86,29 @@ namespace BlackDragonEngine.Scripting
 
             public void Execute()
             {
-                if (scriptEnumerator == null)
+                if (_scriptEnumerator == null)
                 {
-                    scriptEnumerator = Script(scriptParameter);
-                    sleepLength = scriptEnumerator.Current;
+                    _scriptEnumerator = Script(_scriptParameter);
+                    _sleepLength = _scriptEnumerator.Current;
                 }
 
-                if (sleepLength > 0)
+                if (_sleepLength > 0)
                 {
-                    --sleepLength;
+                    --_sleepLength;
                 }
                 else
                 {
-                    bool unfinished = false;
+                    bool unfinished;
                     do
                     {
-                        unfinished = scriptEnumerator.MoveNext();
-                        sleepLength = scriptEnumerator.Current;
-                    } while (sleepLength <= 0 && unfinished);
+                        unfinished = _scriptEnumerator.MoveNext();
+                        _sleepLength = _scriptEnumerator.Current;
+                    } while (_sleepLength <= 0 && unfinished);
 
                     if (!unfinished)
                     {
                         Script = null;
-                        scriptEnumerator = null;
+                        _scriptEnumerator = null;
                     }
                 }
             }

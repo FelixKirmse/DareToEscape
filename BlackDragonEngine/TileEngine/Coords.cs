@@ -68,7 +68,14 @@ namespace BlackDragonEngine.TileEngine
 
         public static bool operator ==(Coords leftCoords, Coords rightCoords)
         {
-            return (rightCoords.X == leftCoords.X && rightCoords.Y == leftCoords.Y);
+            try
+            {
+                return (rightCoords.X == leftCoords.X && rightCoords.Y == leftCoords.Y);
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
 
         public static bool operator !=(Coords leftCoords, Coords rightCoords)

@@ -91,12 +91,15 @@ namespace DareToEscape
 
         protected override void LoadContent()
         {
-            LevelManager.OnLevelLoad += ((DareToEscape)VariableProvider.Game).OnLevelLoad;
+            LevelManager.OnLevelLoad += OnLevelLoad;
             Camera.ViewPortWidth = ResolutionWidth;
             Camera.ViewPortHeight = ResolutionHeight;
             GraphicsDevice.Viewport = new Viewport(0, 0, ResolutionWidth, ResolutionHeight);
             VariableProvider.CoordList = new CoordList();
             VariableProvider.Game = this;
+            VariableProvider.WhiteTexture = new Texture2D(VariableProvider.Game.GraphicsDevice, 1, 1);
+            Color[] data = {Color.White};
+            VariableProvider.WhiteTexture.SetData(data);
             GameInitializer.Initialize();
 
 

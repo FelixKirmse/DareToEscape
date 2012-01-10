@@ -25,12 +25,12 @@ namespace BlackDragonEngine.TileEngine
         #region Declarations
 
         private const int MapLayers = 1;
+        private readonly CoordList _coordList;
         private readonly SpriteFont _spriteFont;
         private readonly int _tileOffset;
         private readonly Texture2D _tileSheet;
         private readonly Rectangle[] _tileSourceRects;
         private readonly int _tilesPerRow;
-        private readonly CoordList _coordList;
         private readonly Texture2D _whiteTexture;
 
         public TMap Map { get; internal set; }
@@ -75,10 +75,10 @@ namespace BlackDragonEngine.TileEngine
             VariableProvider.CoordList = new CoordList();
             _coordList = VariableProvider.CoordList;
 
-            _whiteTexture = new Texture2D(VariableProvider.Game.GraphicsDevice, 1,1);
+            _whiteTexture = new Texture2D(VariableProvider.Game.GraphicsDevice, 1, 1);
             Color[] data = {Color.White};
             _whiteTexture.SetData(data);
-            
+
             _instance = this;
         }
 
@@ -231,13 +231,17 @@ namespace BlackDragonEngine.TileEngine
             }
         }
 
-        public void RemoveCodeFromCell(int cellX, int cellY, TCodes code)
+        public void RemoveCodeFromCell(Coords coords, TCodes code)
         {
-            Coords coords = _coordList[cellX, cellY];
             if (!Map.Codes.ContainsKey(coords)) return;
             Map.Codes[coords].Remove(code);
             if (Map.Codes[coords].Count != 0) return;
             Map.Codes.Remove(coords);
+        }
+
+        public void RemoveCodeFromCell(int cellX, int cellY, TCodes code)
+        {
+            RemoveCodeFromCell(_coordList[cellX, cellY], code); 
         }
 
         public void SetEverythingAtCell(MapSquare? square, List<TCodes> codes, Coords cell)
@@ -327,9 +331,9 @@ namespace BlackDragonEngine.TileEngine
 
         public void SetTileAtCell(Vector2 cell, int tileIndex)
         {
-            SetTileAtCell((int)cell.X, (int)cell.Y, 0, tileIndex);
+            SetTileAtCell((int) cell.X, (int) cell.Y, 0, tileIndex);
         }
-        
+
         public void SetSolidTileAtCoords(Coords coords, int tileIndex)
         {
             SetTileAtCell(coords.X, coords.Y, 0, tileIndex);
