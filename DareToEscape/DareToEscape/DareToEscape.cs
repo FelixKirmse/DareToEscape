@@ -104,6 +104,7 @@ namespace DareToEscape
 
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            VariableProvider.SpriteBatch = _spriteBatch;
             ContentLoader.LoadContent(Content);
             _stateManager = new GameStateManager();
             _renderTarget = new RenderTarget2D(GraphicsDevice, ResolutionWidth, ResolutionHeight, false,
@@ -140,9 +141,9 @@ namespace DareToEscape
             }
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            _stateManager.Draw(_spriteBatch);
+            _stateManager.Draw();
             _spriteBatch.End();
-            DrawHelper.Draw(_spriteBatch);
+            DrawHelper.Draw();
 
             if (!ResInfo.FullScreen)
             {

@@ -16,10 +16,11 @@ namespace BlackDragonEngine.Managers
             _player.Update();
         }
 
-        public static void Draw(SpriteBatch spriteBatch)
+        public static void Draw()
         {
-            Entities.ForEach((e => e.Draw(spriteBatch)));
-            _player.Draw(spriteBatch);
+            SpriteBatch spriteBatch = VariableProvider.SpriteBatch;
+            Entities.ForEach((e => e.Draw()));
+            _player.Draw();
         }
 
         public static void SetPlayer()

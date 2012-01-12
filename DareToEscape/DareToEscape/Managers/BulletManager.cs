@@ -5,7 +5,6 @@ using BlackDragonEngine.GameStates;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
 using DareToEscape.Bullets;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Managers
 {
@@ -26,7 +25,7 @@ namespace DareToEscape.Managers
             get { return GameStateManager.State == States.Ingame || GameStateManager.State == States.Editor; }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
             for (int i = 0; i < _bullets.Count; ++i)
             {

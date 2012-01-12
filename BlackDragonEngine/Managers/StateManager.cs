@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using BlackDragonEngine.GameStates;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace BlackDragonEngine.Managers
 {
@@ -44,12 +43,12 @@ namespace BlackDragonEngine.Managers
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
             foreach (var state in _drawableStates)
             {
                 if (state.DrawCondition)
-                    state.Draw(spriteBatch);
+                    state.Draw();
             }
         }
     }

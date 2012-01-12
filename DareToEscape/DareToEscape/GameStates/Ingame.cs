@@ -6,7 +6,6 @@ using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.GameStates
 {
@@ -32,10 +31,10 @@ namespace DareToEscape.GameStates
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
-            EntityManager.Draw(spriteBatch);
-            _tileMap.Draw(spriteBatch);
+            EntityManager.Draw();
+            _tileMap.Draw();
         }
 
         #endregion

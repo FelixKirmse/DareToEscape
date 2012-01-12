@@ -1,4 +1,5 @@
 ﻿using BlackDragonEngine.Entities;
+using BlackDragonEngine.Providers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -6,11 +7,13 @@ namespace BlackDragonEngine.Components
 {
     public class GraphicsComponent : IComponent
     {
-        protected float drawDepth = .82f;
-        protected Texture2D texture;
+        protected const float DrawDepth = .82f;
+        protected Texture2D Texture;
+        protected SpriteBatch SpriteBatch;
 
         public GraphicsComponent()
         {
+            SpriteBatch = VariableProvider.SpriteBatch;
         }
 
         /// <summary>
@@ -18,8 +21,9 @@ namespace BlackDragonEngine.Components
         /// </summary>
         /// <param name = "texture"></param>
         public GraphicsComponent(Texture2D texture)
+            :this()
         {
-            this.texture = texture;
+            Texture = texture;
         }
 
         #region IComponent Members
@@ -34,10 +38,10 @@ namespace BlackDragonEngine.Components
 
         #endregion
 
-        public virtual void Draw(GameObject obj, SpriteBatch spriteBatch)
+        public virtual void Draw(GameObject obj)
         {
-            spriteBatch.Draw(
-                texture,
+            SpriteBatch.Draw(
+                Texture,
                 obj.ScreenPosition,
                 null,
                 Color.White,
@@ -45,7 +49,7 @@ namespace BlackDragonEngine.Components
                 Vector2.Zero,
                 1f,
                 SpriteEffects.None,
-                drawDepth);
+                DrawDepth);
         }
     }
 }

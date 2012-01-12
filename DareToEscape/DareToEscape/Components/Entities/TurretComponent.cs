@@ -17,7 +17,7 @@ namespace DareToEscape.Components.Entities
 
         private Vector2 RotationOrigin
         {
-            get { return new Vector2(texture.Width/2, texture.Height/2); }
+            get { return new Vector2(Texture.Width/2, Texture.Height/2); }
         }
 
         public override void Update(GameObject obj)
@@ -31,10 +31,10 @@ namespace DareToEscape.Components.Entities
             }
         }
 
-        public override void Draw(GameObject obj, SpriteBatch spriteBatch)
+        public override void Draw(GameObject obj)
         {
-            spriteBatch.Draw(
-                texture,
+            SpriteBatch.Draw(
+                Texture,
                 Camera.WorldToScreen(obj.Position + RotationOrigin),
                 null,
                 Color.White,
@@ -42,7 +42,7 @@ namespace DareToEscape.Components.Entities
                 RotationOrigin,
                 1f,
                 SpriteEffects.None,
-                drawDepth);
+                DrawDepth);
         }
 
         protected virtual bool ShootCondition(Vector2 playerPosition, GameObject turret)
@@ -79,33 +79,33 @@ namespace DareToEscape.Components.Entities
 
         protected void SetDown(GameObject obj)
         {
-            if (texture.Height != 16)
-                obj.Position += new Vector2(0, -texture.Height/2);
-            if (texture.Height == 64)
-                obj.Position += new Vector2(0, -texture.Height/4);
-            BulletOrigin = obj.Position + RotationOrigin + new Vector2(0, -texture.Height/2);
+            if (Texture.Height != 16)
+                obj.Position += new Vector2(0, -Texture.Height/2);
+            if (Texture.Height == 64)
+                obj.Position += new Vector2(0, -Texture.Height/4);
+            BulletOrigin = obj.Position + RotationOrigin + new Vector2(0, -Texture.Height/2);
             _rotation = MathHelper.ToRadians(180);
         }
 
         protected void SetLeft(GameObject obj)
         {
-            BulletOrigin = obj.Position + RotationOrigin + new Vector2(texture.Width/2, 0);
+            BulletOrigin = obj.Position + RotationOrigin + new Vector2(Texture.Width/2, 0);
             _rotation = MathHelper.ToRadians(270);
         }
 
         protected void SetRight(GameObject obj)
         {
-            if (texture.Height != 16)
-                obj.Position += new Vector2(-texture.Width/2, 0);
-            if (texture.Height == 64)
-                obj.Position += new Vector2(-texture.Width/4, 0);
-            BulletOrigin = obj.Position + RotationOrigin + new Vector2(-texture.Width/2, 0);
+            if (Texture.Height != 16)
+                obj.Position += new Vector2(-Texture.Width/2, 0);
+            if (Texture.Height == 64)
+                obj.Position += new Vector2(-Texture.Width/4, 0);
+            BulletOrigin = obj.Position + RotationOrigin + new Vector2(-Texture.Width/2, 0);
             _rotation = MathHelper.ToRadians(90);
         }
 
         protected void SetUp(GameObject obj)
         {
-            BulletOrigin = obj.Position + RotationOrigin + new Vector2(0, texture.Height/2);
+            BulletOrigin = obj.Position + RotationOrigin + new Vector2(0, Texture.Height/2);
             _rotation = MathHelper.ToRadians(0);
         }
 

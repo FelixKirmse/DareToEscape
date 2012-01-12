@@ -67,18 +67,20 @@ namespace BlackDragonEngine.GameStates
 
         #endregion
 
+        private SpriteBatch _spriteBatch;
         #endregion
 
         private DialogManager()
         {
+            _spriteBatch = VariableProvider.SpriteBatch;
             _font = FontProvider.GetFont("Mono14");
         }
 
         #region IDrawableGameState Members
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
-            spriteBatch.DrawString(
+            _spriteBatch.DrawString(
                 _font,
                 _displayText,
                 ShortCuts.Vector2Point(_textPosition),
@@ -90,7 +92,7 @@ namespace BlackDragonEngine.GameStates
                 0.2f);
 
             if (DrawMugshot)
-                spriteBatch.Draw(
+                _spriteBatch.Draw(
                     _dialog[_currentDialogue].MugShot,
                     ShortCuts.Vector2Point(_mugShotPosition),
                     new Rectangle(0, 0, CurrentMugShot.Width, CurrentMugShot.Height),
@@ -101,7 +103,7 @@ namespace BlackDragonEngine.GameStates
                     SpriteEffects.None,
                     0.2f);
 
-            spriteBatch.DrawString(
+            _spriteBatch.DrawString(
                 _font,
                 CurrentName,
                 new Vector2(83, 480),
@@ -112,7 +114,7 @@ namespace BlackDragonEngine.GameStates
                 SpriteEffects.None,
                 .2f);
 
-            spriteBatch.Draw(
+            _spriteBatch.Draw(
                 VariableProvider.WhiteTexture,
                 new Vector2(80, 480),
                 new Rectangle(0, 0, 640, 120),

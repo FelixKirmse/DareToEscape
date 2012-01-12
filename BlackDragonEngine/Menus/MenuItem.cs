@@ -8,9 +8,11 @@ namespace BlackDragonEngine.Menus
     {
         private readonly SpriteFont _font;
         private Color _itemColor;
+        protected readonly SpriteBatch SpriteBatch;
 
         public MenuItem(string itemName, Vector2 itemPosition, bool isSelected, SpriteFont font)
         {
+            SpriteBatch = VariableProvider.SpriteBatch;
             ItemName = itemName;
             ItemPosition = itemPosition;
             IsSelected = isSelected;
@@ -63,9 +65,9 @@ namespace BlackDragonEngine.Menus
                 _itemColor = UnSelectedcolor;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
-            spriteBatch.DrawString(
+            SpriteBatch.DrawString(
                 _font,
                 ItemName,
                 ShortCuts.Vector2Point(ItemPosition),

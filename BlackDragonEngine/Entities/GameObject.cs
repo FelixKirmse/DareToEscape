@@ -3,7 +3,6 @@ using BlackDragonEngine.Components;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace BlackDragonEngine.Entities
 {
@@ -140,14 +139,13 @@ namespace BlackDragonEngine.Entities
         /// <summary>
         ///   Draws all drawable components
         /// </summary>
-        /// <param name = "spriteBatch"></param>
-        public virtual void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw()
         {
             foreach (var component in components)
             {
                 if (component is GraphicsComponent)
                 {
-                    ((GraphicsComponent) component).Draw(this, spriteBatch);
+                    ((GraphicsComponent) component).Draw(this);
                 }
             }
         }

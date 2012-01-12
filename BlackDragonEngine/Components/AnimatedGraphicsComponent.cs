@@ -40,14 +40,13 @@ namespace BlackDragonEngine.Components
         ///   Draws the entity
         /// </summary>
         /// <param name = "obj">The entity to draw</param>
-        /// <param name = "spriteBatch">The spritebatch to use</param>
-        public override void Draw(GameObject obj, SpriteBatch spriteBatch)
+        public override void Draw(GameObject obj)
         {
             SpriteEffects effects = SpriteEffects.None;
             if (Flipped)
                 effects = SpriteEffects.FlipHorizontally;
 
-            spriteBatch.Draw(
+            SpriteBatch.Draw(
                 Animations[CurrentAnimation].Texture,
                 obj.ScreenPosition,
                 Animations[CurrentAnimation].FrameRectangle,

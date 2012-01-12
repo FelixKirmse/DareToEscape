@@ -18,6 +18,7 @@ namespace BlackDragonEngine.Providers
         public static ScriptEngine ScriptEngine { get; set; }
         public static int ProcessorCount { get; set; }
         public static CoordList CoordList { get; set; }
+        public static SpriteBatch SpriteBatch { get; set; }
 
         public static void GenerateNewRandomSeed()
         {

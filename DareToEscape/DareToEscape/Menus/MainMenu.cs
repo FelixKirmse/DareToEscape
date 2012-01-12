@@ -20,11 +20,11 @@ namespace DareToEscape.Menus
 
         public MainMenu()
         {
-            menuItems.Add(new MenuItem(Resume, fontName, File.Exists(SaveManager<SaveState>.CurrentSaveFile),
+            MenuItems.Add(new MenuItem(Resume, FontName, File.Exists(SaveManager<SaveState>.CurrentSaveFile),
                                        new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(NewGame, fontName, !File.Exists(SaveManager<SaveState>.CurrentSaveFile),
+            MenuItems.Add(new MenuItem(NewGame, FontName, !File.Exists(SaveManager<SaveState>.CurrentSaveFile),
                                        new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(Quit, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
+            MenuItems.Add(new MenuItem(Quit, FontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
 
             EnableMouseSelection = false;
 

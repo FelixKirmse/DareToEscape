@@ -17,7 +17,7 @@ namespace DareToEscape.Components.Entities
 
         public KeyGraphicsComponent()
         {
-            texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/key");
+            Texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/key");
         }
 
         public override void Update(GameObject obj)
@@ -38,12 +38,12 @@ namespace DareToEscape.Components.Entities
             }
         }
 
-        public override void Draw(GameObject obj, SpriteBatch spriteBatch)
+        public override void Draw(GameObject obj)
         {
             if (enabled)
             {
-                spriteBatch.Draw(
-                    texture,
+                SpriteBatch.Draw(
+                    Texture,
                     obj.ScreenPosition,
                     null,
                     drawColor,
@@ -51,7 +51,7 @@ namespace DareToEscape.Components.Entities
                     Vector2.Zero,
                     1f,
                     SpriteEffects.None,
-                    drawDepth);
+                    DrawDepth);
             }
         }
 

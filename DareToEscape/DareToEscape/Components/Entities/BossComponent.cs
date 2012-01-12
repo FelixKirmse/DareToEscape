@@ -21,7 +21,7 @@ namespace DareToEscape.Components.Entities
 
         protected BossComponent()
         {
-            texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/boss1");
+            Texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/boss1");
             Patterns = new Patterns(this);
         }
 
@@ -50,10 +50,10 @@ namespace DareToEscape.Components.Entities
             }
         }
 
-        public override void Draw(GameObject obj, SpriteBatch spriteBatch)
+        public override void Draw(GameObject obj)
         {
             if (_active || !SaveManager<SaveState>.CurrentSaveState.BossDead)
-                base.Draw(obj, spriteBatch);
+                base.Draw(obj);
         }
 
         protected void StartScript(Script script, params float[] parameters)

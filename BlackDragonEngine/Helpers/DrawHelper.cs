@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BlackDragonEngine.Providers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -31,14 +32,15 @@ namespace BlackDragonEngine.Helpers
             AddNewJob(new DrawOptions(texture, position, drawDepth));
         }
 
-        public static void Draw(SpriteBatch spriteBatch)
+        public static void Draw()
         {
+            SpriteBatch spriteBatch = VariableProvider.SpriteBatch;
             int alphaJobCount = AlphaBlendStateBatch.Count;
             int addJobCount = AddBlendStateBatch.Count;
 
             if (alphaJobCount > 0)
             {
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
                 for (int i = 0; i < alphaJobCount; ++i)
                 {
                     DrawOptions o = AlphaBlendStateBatch.Dequeue();
@@ -50,7 +52,7 @@ namespace BlackDragonEngine.Helpers
 
             if (addJobCount > 0)
             {
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, null, null);
                 for (int i = 0; i < addJobCount; ++i)
                 {
                     DrawOptions o = AddBlendStateBatch.Dequeue();

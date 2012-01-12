@@ -2,7 +2,6 @@
 using BlackDragonEngine.GameStates;
 using DareToEscape.Managers;
 using DareToEscape.Menus;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.GameStates
 {
@@ -26,16 +25,16 @@ namespace DareToEscape.GameStates
             get { return GameStateManager.State == States.Menu; }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
             switch (MenuState)
             {
                 case MenuStates.Main:
-                    _mainMenu.Draw(spriteBatch);
+                    _mainMenu.Draw();
                     break;
 
                 case MenuStates.Ingame:
-                    _ingameMenu.Draw(spriteBatch);
+                    _ingameMenu.Draw();
                     break;
             }
         }

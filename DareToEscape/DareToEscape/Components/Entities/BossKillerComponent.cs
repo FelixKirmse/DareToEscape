@@ -14,7 +14,7 @@ namespace DareToEscape.Components.Entities
 
         public BossKillerComponent()
         {
-            texture = VariableProvider.Game.Content.Load<Texture2D>("textures/entities/bosskiller");
+            Texture = VariableProvider.Game.Content.Load<Texture2D>("textures/entities/bosskiller");
         }
 
         public override void Update(GameObject obj)
@@ -35,10 +35,10 @@ namespace DareToEscape.Components.Entities
             }
         }
 
-        public override void Draw(GameObject obj, SpriteBatch spriteBatch)
+        public override void Draw(GameObject obj)
         {
             if (enabled)
-                base.Draw(obj, spriteBatch);
+                base.Draw(obj);
         }
     }
 }

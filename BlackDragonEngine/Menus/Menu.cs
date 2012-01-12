@@ -9,16 +9,22 @@ namespace BlackDragonEngine.Menus
     public class Menu
     {
         public bool EnableMouseSelection = true;
-        protected string fontName = "Mono8";
-        protected Vector2 itemOffset = new Vector2(0, 16);
-        protected List<MenuItem> menuItems = new List<MenuItem>();
-        protected List<MenuLabel> menuLabels = new List<MenuLabel>();
+        protected const string FontName = "Mono8";
+        protected Vector2 ItemOffset = new Vector2(0, 16);
+        protected readonly List<MenuItem> MenuItems = new List<MenuItem>();
+        protected readonly List<MenuLabel> MenuLabels = new List<MenuLabel>();
+        protected readonly SpriteBatch SpriteBatch;
+
+        public Menu()
+        {
+            SpriteBatch = VariableProvider.SpriteBatch;
+        }
 
         protected string SelectedItem
         {
             get
             {
-                foreach (var menuItem in menuItems)
+                foreach (var menuItem in MenuItems)
                 {
                     if (menuItem.IsSelected)
                     {
@@ -49,15 +55,15 @@ namespace BlackDragonEngine.Menus
             {
                 SelectMenuItem();
             }
-            foreach (var menuItem in menuItems)
+            foreach (var menuItem in MenuItems)
             {
                 menuItem.Update();
             }
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw()
         {
-            spriteBatch.Draw(
+            SpriteBatch.Draw(
                 VariableProvider.WhiteTexture,
                 Vector2.Zero,
                 new Rectangle(0, 0, VariableProvider.Game.Window.ClientBounds.Width,
@@ -69,38 +75,38 @@ namespace BlackDragonEngine.Menus
                 SpriteEffects.None,
                 0.3f);
 
-            foreach (var menuItem in menuItems)
+            foreach (var menuItem in MenuItems)
             {
-                menuItem.Draw(spriteBatch);
+                menuItem.Draw();
             }
 
-            foreach (var menuLabel in menuLabels)
+            foreach (var menuLabel in MenuLabels)
             {
-                menuLabel.Draw(spriteBatch);
+                menuLabel.Draw();
             }
         }
 
         protected void SetPositions()
         {
-            for (int i = 0; i < menuItems.Count; ++i)
+            for (int i = 0; i < MenuItems.Count; ++i)
             {
-                menuItems[i].ItemPosition = ShortCuts.ScreenCenter -
-                                            ShortCuts.GetFontCenter(fontName, menuItems[i].ItemName) +
-                                            (i - 2)*itemOffset;
+                MenuItems[i].ItemPosition = ShortCuts.ScreenCenter -
+                                            ShortCuts.GetFontCenter(FontName, MenuItems[i].ItemName) +
+                                            (i - 2)*ItemOffset;
             }
         }
 
         public virtual void NextMenuItem()
         {
-            for (int i = 0; i < menuItems.Count; ++i)
+            for (int i = 0; i < MenuItems.Count; ++i)
             {
-                if (menuItems[i].IsSelected)
+                if (MenuItems[i].IsSelected)
                 {
-                    menuItems[i].IsSelected = false;
-                    if (i == menuItems.Count - 1)
-                        menuItems[0].IsSelected = true;
+                    MenuItems[i].IsSelected = false;
+                    if (i == MenuItems.Count - 1)
+                        MenuItems[0].IsSelected = true;
                     else
-                        menuItems[i + 1].IsSelected = true;
+                        MenuItems[i + 1].IsSelected = true;
                     break;
                 }
             }
@@ -108,15 +114,15 @@ namespace BlackDragonEngine.Menus
 
         public virtual void PreviousMenuItem()
         {
-            for (int i = 0; i < menuItems.Count; ++i)
+            for (int i = 0; i < MenuItems.Count; ++i)
             {
-                if (menuItems[i].IsSelected)
+                if (MenuItems[i].IsSelected)
                 {
-                    menuItems[i].IsSelected = false;
+                    MenuItems[i].IsSelected = false;
                     if (i == 0)
-                        menuItems[menuItems.Count - 1].IsSelected = true;
+                        MenuItems[MenuItems.Count - 1].IsSelected = true;
                     else
-                        menuItems[i - 1].IsSelected = true;
+                        MenuItems[i - 1].IsSelected = true;
                     break;
                 }
             }
@@ -124,14 +130,14 @@ namespace BlackDragonEngine.Menus
 
         public virtual void ResolveMouseSelection()
         {
-            foreach (var menuItem in menuItems)
+            foreach (var menuItem in MenuItems)
             {
                 if (
                     ShortCuts.MouseIntersectsRectangle(ShortCuts.GetFontRectangle(menuItem.ItemPosition,
-                                                                                  fontName,
+                                                                                  FontName,
                                                                                   menuItem.ItemName)))
                 {
-                    foreach (var item in menuItems)
+                    foreach (var item in MenuItems)
                         item.IsSelected = false;
                     menuItem.IsSelected = true;
                     break;
@@ -142,7 +148,7 @@ namespace BlackDragonEngine.Menus
         protected void GetSelectedItem(out string selectedItem)
         {
             selectedItem = "";
-            foreach (var menuItem in menuItems)
+            foreach (var menuItem in MenuItems)
             {
                 if (menuItem.IsSelected)
                 {

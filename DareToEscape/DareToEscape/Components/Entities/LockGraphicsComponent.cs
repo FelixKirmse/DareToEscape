@@ -19,7 +19,7 @@ namespace DareToEscape.Components.Entities
 
         public LockGraphicsComponent()
         {
-            texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/lock");
+            Texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/lock");
             _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
         }
 
@@ -50,12 +50,12 @@ namespace DareToEscape.Components.Entities
             }
         }
 
-        public override void Draw(GameObject obj, SpriteBatch spriteBatch)
+        public override void Draw(GameObject obj)
         {
             if (_enabled)
             {
-                spriteBatch.Draw(
-                    texture,
+                SpriteBatch.Draw(
+                    Texture,
                     obj.ScreenPosition,
                     null,
                     _drawColor,
@@ -63,7 +63,7 @@ namespace DareToEscape.Components.Entities
                     Vector2.Zero,
                     1f,
                     SpriteEffects.None,
-                    drawDepth);
+                    DrawDepth);
             }
         }
 

@@ -20,10 +20,10 @@ namespace DareToEscape.Menus
 
         public IngameMenu()
         {
-            menuItems.Add(new MenuItem(Resume, fontName, true, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(RestartCheck, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(RestartLevel, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
-            menuItems.Add(new MenuItem(Back, fontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
+            MenuItems.Add(new MenuItem(Resume, FontName, true, new Color(255, 0, 0), new Color(0, 255, 0)));
+            MenuItems.Add(new MenuItem(RestartCheck, FontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
+            MenuItems.Add(new MenuItem(RestartLevel, FontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
+            MenuItems.Add(new MenuItem(Back, FontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
 
             EnableMouseSelection = false;
             SetPositions();

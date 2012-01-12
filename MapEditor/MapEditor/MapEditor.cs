@@ -93,6 +93,7 @@ namespace MapEditor
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            VariableProvider.SpriteBatch = _spriteBatch;
             TileMap = new TileMap<Map<TileCode>, TileCode>(8, 8, 0, Content.Load<SpriteFont>(@"fonts/mono8"),
                                                            Content.Load<Texture2D>(@"textures/tilesheets/tilesheet"));
             AnimationDictionaryProvider.Content = Content;
@@ -264,11 +265,11 @@ namespace MapEditor
             GraphicsDevice.Viewport = _standardViewport;
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            TileMap.Draw(_spriteBatch);
-            EntityManager.Draw(_spriteBatch);
-            _bulletManager.Draw(_spriteBatch);
+            TileMap.Draw();
+            EntityManager.Draw();
+            _bulletManager.Draw();
             _spriteBatch.End();
-            DrawHelper.Draw(_spriteBatch);
+            DrawHelper.Draw();
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Viewport = _renderViewport;
             GraphicsDevice.Clear(Color.LightBlue);

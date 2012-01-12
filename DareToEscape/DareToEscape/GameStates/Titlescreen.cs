@@ -10,6 +10,11 @@ namespace DareToEscape.GameStates
     internal sealed class Titlescreen : IDrawableGameState, IUpdateableGameState
     {
         public static Texture2D TitleTexture { private get; set; }
+        private readonly SpriteBatch _spriteBatch;
+        public Titlescreen()
+        {
+            _spriteBatch = VariableProvider.SpriteBatch;
+        }
 
         #region IDrawableGameState Members
 
@@ -18,9 +23,9 @@ namespace DareToEscape.GameStates
             get { return UpdateCondition; }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
-            spriteBatch.Draw(
+            _spriteBatch.Draw(
                 TitleTexture,
                 Vector2.Zero,
                 Color.White);

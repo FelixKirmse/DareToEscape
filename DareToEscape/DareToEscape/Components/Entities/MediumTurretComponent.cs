@@ -11,7 +11,7 @@ namespace DareToEscape.Components.Entities
     {
         public MediumTurretComponent()
         {
-            texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/mediumturret");
+            Texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/mediumturret");
         }
 
         protected override IEnumerator<int> ShootBehavior(params float[] parameters)

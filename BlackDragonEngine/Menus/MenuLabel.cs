@@ -6,21 +6,23 @@ namespace BlackDragonEngine.Menus
 {
     public class MenuLabel
     {
-        private readonly SpriteFont font;
+        private readonly SpriteFont _font;
+        private readonly SpriteBatch _spriteBatch;
 
         public MenuLabel(string text, string fontName)
         {
+            _spriteBatch = VariableProvider.SpriteBatch;
             Text = text;
-            font = FontProvider.GetFont(fontName);
+            _font = FontProvider.GetFont(fontName);
         }
 
         public string Text { get; set; }
         public Vector2 Position { get; set; }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
-            spriteBatch.DrawString(
-                font,
+            _spriteBatch.DrawString(
+                _font,
                 Text,
                 ShortCuts.Vector2Point(Position),
                 Color.White,
