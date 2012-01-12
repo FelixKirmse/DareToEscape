@@ -11,26 +11,26 @@ namespace DareToEscape.Components.PlayerComponents
 
         public PlayerGraphicsComponent()
         {
-            currentAnimation = "Idle";
-            animations = AnimationDictionaryProvider.GetPlayerAnimations();
-            drawDepth = .85f;
+            CurrentAnimation = "Idle";
+            Animations = AnimationDictionaryProvider.GetPlayerAnimations();
+            DrawDepth = .85f;
             focused = false;
         }
 
         public override void Update(GameObject obj)
         {
-            if (receivedAnimation == "")
+            if (ReceivedAnimation == "")
             {
                 if (onGround)
-                    receivedAnimation = "Idle";
+                    ReceivedAnimation = "Idle";
             }
 
-            if (receivedAnimation != currentAnimation && receivedAnimation != "")
+            if (ReceivedAnimation != CurrentAnimation && ReceivedAnimation != "")
             {
-                PlayAnimation(receivedAnimation);
+                PlayAnimation(ReceivedAnimation);
             }
 
-            receivedAnimation = "";
+            ReceivedAnimation = "";
 
             base.Update(obj);
         }

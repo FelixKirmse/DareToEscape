@@ -63,28 +63,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="textures\animations\player\idle.png">
-      <Name>idle</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="textures\animations\player\jumpdown.png">
-      <Name>jumpdown</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="textures\animations\player\jumpup.png">
-      <Name>jumpup</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="textures\animations\player\walk.png">
-      <Name>walk</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="textures\tilesheets\tilesheet.png">
       <Name>tilesheet</Name>
       <Importer>TextureImporter</Importer>
@@ -284,6 +262,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="maps\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="textures\animations\player\playeranimations.png">
+      <Name>playeranimations</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 

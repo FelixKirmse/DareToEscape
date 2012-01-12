@@ -32,7 +32,7 @@ namespace BlackDragonEngine.Managers
                 implementedInterface = true;
             }
             if (!implementedInterface)
-                throw new Exception("Object " + state + " didn't implement any of the required interfaces");
+                throw new ArgumentException("Object " + state + " didn't implement any of the required interfaces");
         }
 
         public void Update()

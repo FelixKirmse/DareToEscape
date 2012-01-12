@@ -2,10 +2,6 @@ Content\fonts\mono14.xnb
 Content\fonts\Mono21.xnb
 Content\fonts\mono8.xnb
 Content\textures\titlescreen.xnb
-Content\textures\animations\player\idle.xnb
-Content\textures\animations\player\jumpdown.xnb
-Content\textures\animations\player\jumpup.xnb
-Content\textures\animations\player\walk.xnb
 Content\textures\tilesheets\tilesheet.xnb
 Content\textures\animations\entities\checkpoint\activated.xnb
 Content\textures\animations\entities\checkpoint\deactivated.xnb
@@ -20,6 +16,7 @@ Content\textures\entities\bullet.xnb
 Content\textures\entities\bosskiller.xnb
 Content\textures\entities\sign.xnb
 Content\textures\entities\bullets.xnb
+Content\textures\animations\player\playeranimations.xnb
 Content\textures\tilesheets\tilesheet.png
 Content\textures\editor\tiles\0.bmp
 Content\textures\editor\tiles\1.bmp

@@ -8,25 +8,25 @@ namespace DareToEscape.Components.Entities
 {
     internal class CheckPointGraphicsComponent : AnimatedGraphicsComponent
     {
-        private bool setRectangle = true;
+        private bool _setRectangle = true;
 
         public CheckPointGraphicsComponent()
         {
-            animations = AnimationDictionaryProvider.GetCheckPointAnimations();
-            currentAnimation = "Activated";
-            PlayAnimation(currentAnimation);
+            Animations = AnimationDictionaryProvider.GetCheckPointAnimations();
+            CurrentAnimation = "Activated";
+            PlayAnimation(CurrentAnimation);
         }
 
         public override void Update(GameObject obj)
         {
-            if (setRectangle)
+            if (_setRectangle)
             {
                 obj.CollisionRectangle = new Rectangle(0, 0, 16, 24);
-                setRectangle = false;
+                _setRectangle = false;
             }
 
             if (obj.CollisionRectangle.Intersects(VariableProvider.CurrentPlayer.CollisionRectangle))
-                currentAnimation = "Deactivated";
+                CurrentAnimation = "Deactivated";
             base.Update(obj);
         }
     }

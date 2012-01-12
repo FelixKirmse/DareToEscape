@@ -14,27 +14,27 @@ namespace BlackDragonEngine.Components
         /// <summary>
         ///   Dictionary containing all animations
         /// </summary>
-        protected Dictionary<string, AnimationStrip> animations;
+        protected Dictionary<string, AnimationStrip> Animations;
 
         /// <summary>
         ///   Represents the animation that is currently being played
         /// </summary>
-        protected string currentAnimation;
+        protected string CurrentAnimation;
 
         /// <summary>
         ///   Drawdepth of the sprite
         /// </summary>
-        protected new float drawDepth = .91f;
+        protected float DrawDepth = .91f;
 
         /// <summary>
         ///   Should the graphic be flipped?
         /// </summary>
-        protected bool flipped;
+        protected bool Flipped;
 
         /// <summary>
         ///   Represents the lates animation received by other components
         /// </summary>
-        protected string receivedAnimation;
+        protected string ReceivedAnimation;
 
         /// <summary>
         ///   Draws the entity
@@ -44,19 +44,19 @@ namespace BlackDragonEngine.Components
         public override void Draw(GameObject obj, SpriteBatch spriteBatch)
         {
             SpriteEffects effects = SpriteEffects.None;
-            if (flipped)
+            if (Flipped)
                 effects = SpriteEffects.FlipHorizontally;
 
             spriteBatch.Draw(
-                animations[currentAnimation].Texture,
+                Animations[CurrentAnimation].Texture,
                 obj.ScreenPosition,
-                animations[currentAnimation].FrameRectangle,
+                Animations[CurrentAnimation].FrameRectangle,
                 Color.White,
                 0,
                 Vector2.Zero,
                 1,
                 effects,
-                drawDepth);
+                DrawDepth);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace BlackDragonEngine.Components
         /// <param name = "obj">The entity to update (not being used)</param>
         public override void Update(GameObject obj)
         {
-            updateAnimation();
+            UpdateAnimation();
         }
 
         public override void Receive<T>(string message, T obj)
@@ -79,14 +79,14 @@ namespace BlackDragonEngine.Components
                     if (messageParts[2] == "FLIPPED")
                     {
                         if (obj is bool)
-                            flipped = (bool) (object) obj;
+                            Flipped = (bool) (object) obj;
                     }
                 }
 
                 if (messageParts[1] == "PLAYANIMATION")
                 {
                     if (obj is string)
-                        receivedAnimation = (string) (object) obj;
+                        ReceivedAnimation = (string) (object) obj;
                 }
 
                 if (messageParts[1] == "SEND")
@@ -94,7 +94,7 @@ namespace BlackDragonEngine.Components
                     if (messageParts[3] == "CURRENTANIMATION")
                     {
                         if (obj is GameObject)
-                            ((GameObject) (object) obj).Send(messageParts[2] + "_SET_CURRENTANIMATION", currentAnimation);
+                            ((GameObject) (object) obj).Send(messageParts[2] + "_SET_CURRENTANIMATION", CurrentAnimation);
                     }
                 }
             }
@@ -103,17 +103,17 @@ namespace BlackDragonEngine.Components
         /// <summary>
         ///   Updates the current Animation
         /// </summary>
-        protected void updateAnimation()
+        protected void UpdateAnimation()
         {
-            if (animations.ContainsKey(currentAnimation))
+            if (Animations.ContainsKey(CurrentAnimation))
             {
-                if (animations[currentAnimation].FinishedPlaying)
+                if (Animations[CurrentAnimation].FinishedPlaying)
                 {
-                    PlayAnimation(animations[currentAnimation].NextAnimation);
+                    PlayAnimation(Animations[CurrentAnimation].NextAnimation);
                 }
                 else
                 {
-                    animations[currentAnimation].Update();
+                    Animations[CurrentAnimation].Update();
                 }
             }
         }
@@ -124,10 +124,10 @@ namespace BlackDragonEngine.Components
         /// <param name = "name">The name of the new animation</param>
         protected void PlayAnimation(string name)
         {
-            if (name != null && animations.ContainsKey(name))
+            if (name != null && Animations.ContainsKey(name))
             {
-                currentAnimation = name;
-                animations[name].Play();
+                CurrentAnimation = name;
+                Animations[name].Play();
             }
         }
     }

@@ -7,9 +7,9 @@ namespace DareToEscape.Components.Entities
     {
         public ExitGraphicsComponent()
         {
-            animations = AnimationDictionaryProvider.GetExitAnimations();
-            currentAnimation = "Idle";
-            PlayAnimation(currentAnimation);
+            Animations = AnimationDictionaryProvider.GetExitAnimations();
+            CurrentAnimation = "Idle";
+            PlayAnimation(CurrentAnimation);
         }
     }
 }

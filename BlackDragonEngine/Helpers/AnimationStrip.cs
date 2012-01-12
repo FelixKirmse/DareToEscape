@@ -11,16 +11,16 @@ namespace BlackDragonEngine.Helpers
     {
         #region Declarations
 
-        private int currentFrame;
-        private bool finishedPlaying;
-        private float frameDelay = 0.05f;
-        private int frameHeight;
+        private int _currentFrame;
+        private bool _finishedPlaying;
+        private float _frameDelay = 0.05f;
+        private int _frameHeight;
+        private float _frameTimer;
+        private int _frameWidth;
 
-        private float frameTimer;
-        private int frameWidth;
-
-        private bool loopAnimation = true;
-        private Texture2D texture;
+        private bool _loopAnimation = true;
+        private Texture2D _texture;
+        private Rectangle _stripRect;
 
         #endregion
 
@@ -28,20 +28,20 @@ namespace BlackDragonEngine.Helpers
 
         public int FrameWidth
         {
-            get { return frameWidth; }
-            set { frameWidth = value; }
+            get { return _frameWidth; }
+            set { _frameWidth = value; }
         }
 
         public int FrameHeight
         {
-            get { return frameHeight; }
-            set { frameHeight = value; }
+            get { return _frameHeight; }
+            set { _frameHeight = value; }
         }
 
         public Texture2D Texture
         {
-            get { return texture; }
-            set { texture = value; }
+            get { return _texture; }
+            set { _texture = value; }
         }
 
         public string Name { get; set; }
@@ -50,29 +50,27 @@ namespace BlackDragonEngine.Helpers
 
         public bool LoopAnimation
         {
-            get { return loopAnimation; }
-            set { loopAnimation = value; }
+            get { return _loopAnimation; }
+            set { _loopAnimation = value; }
         }
 
         public bool FinishedPlaying
         {
-            get { return finishedPlaying; }
+            get { return _finishedPlaying; }
         }
 
-        public int FrameCount
-        {
-            get { return texture.Width/frameWidth; }
-        }
+        public int FrameCount { get; private set; }
+       
 
         public float FrameLength
         {
-            get { return frameDelay; }
-            set { frameDelay = value; }
+            get { return _frameDelay; }
+            set { _frameDelay = value; }
         }
 
         public Rectangle FrameRectangle
         {
-            get { return new Rectangle(currentFrame*frameWidth, 0, frameWidth, frameHeight); }
+            get { return new Rectangle(_currentFrame*_frameWidth, _stripRect.Y, _frameWidth, _frameHeight); }
         }
 
         #endregion
@@ -82,21 +80,34 @@ namespace BlackDragonEngine.Helpers
         public AnimationStrip(Texture2D texture, int frameWidth, string name, bool loop)
             : this(texture, frameWidth, name)
         {
-            loopAnimation = loop;
+            _loopAnimation = loop;
         }
 
         public AnimationStrip(Texture2D texture, int frameWidth, string name, bool loop, float frameDelay)
             : this(texture, frameWidth, name, loop)
         {
-            this.frameDelay = frameDelay;
+            _frameDelay = frameDelay;
         }
 
         public AnimationStrip(Texture2D texture, int frameWidth, string name)
         {
-            this.texture = texture;
-            this.frameWidth = frameWidth;
-            frameHeight = texture.Height;
+            _texture = texture;
+            _frameWidth = frameWidth;
+            _frameHeight = texture.Height;
             Name = name;
+            _stripRect = new Rectangle(0,0, texture.Width, texture.Height);
+        }
+
+        public AnimationStrip(Texture2D texture, Rectangle stripRect, int frameCount, string name, bool loop = true, float frameDelay = .05f)
+        {
+            _texture = texture;
+            _stripRect = stripRect;
+            FrameCount = frameCount;
+            _frameHeight = stripRect.Height;
+            _frameWidth = stripRect.Width/frameCount;
+            Name = name;
+            _loopAnimation = loop;
+            _frameDelay = frameDelay;
         }
 
         #endregion
@@ -105,30 +116,30 @@ namespace BlackDragonEngine.Helpers
 
         public void Play()
         {
-            currentFrame = 0;
-            finishedPlaying = false;
+            _currentFrame = 0;
+            _finishedPlaying = false;
         }
 
         public void Update()
         {
             float elapsed = ShortCuts.ElapsedSeconds;
-            frameTimer += elapsed;
-            if (frameTimer >= frameDelay)
+            _frameTimer += elapsed;
+            if (_frameTimer >= _frameDelay)
             {
-                ++currentFrame;
-                if (currentFrame >= FrameCount)
+                ++_currentFrame;
+                if (_currentFrame >= FrameCount)
                 {
-                    if (loopAnimation)
+                    if (_loopAnimation)
                     {
-                        currentFrame = 0;
+                        _currentFrame = 0;
                     }
                     else
                     {
-                        currentFrame = FrameCount - 1;
-                        finishedPlaying = true;
+                        _currentFrame = FrameCount;
+                        _finishedPlaying = true;
                     }
                 }
-                frameTimer = 0f;
+                _frameTimer = 0f;
             }
         }
 

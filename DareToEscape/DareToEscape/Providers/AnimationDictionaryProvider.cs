@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BlackDragonEngine.Helpers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -12,31 +13,30 @@ namespace DareToEscape.Providers
 
         public static Dictionary<string, AnimationStrip> GetPlayerAnimations()
         {
+            var playerSheet = Content.Load<Texture2D>(@"textures/animations/player/playeranimations");
             var animations = new Dictionary<string, AnimationStrip>
                                  {
                                      {
                                          "Idle",
                                          new AnimationStrip(
-                                         Content.Load<Texture2D>(@"textures/animations/player/idle"), 16, "Idle",
-                                         true)
+                                         playerSheet, new Rectangle(0, 0, 16, 24), 1, "Idle")
                                          },
                                      {
                                          "Walk",
                                          new AnimationStrip(
-                                         Content.Load<Texture2D>(@"textures/animations/player/walk"), 16, "Walk",
-                                         true, .05f)
+                                         playerSheet, new Rectangle(0, 24, 160, 24), 10, "Walk")
                                          },
                                      {
                                          "JumpUp",
                                          new AnimationStrip(
-                                         Content.Load<Texture2D>(@"textures/animations/player/jumpup"), 16,
-                                         "JumpUp", true)
+                                         playerSheet, new Rectangle(0, 48, 16, 24), 1,
+                                         "JumpUp")
                                          },
                                      {
                                          "JumpDown",
                                          new AnimationStrip(
-                                         Content.Load<Texture2D>(@"textures/animations/player/jumpdown"), 16,
-                                         "JumpDown", false, .3f)
+                                         playerSheet, new Rectangle(16, 48, 32, 24), 2,
+                                         "JumpDown", false)
                                          }
                                  };
             return animations;
