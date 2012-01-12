@@ -9,7 +9,7 @@ namespace DareToEscape.Components.PlayerComponents
 {
     internal class PlayerPhysicsComponent : PhysicsComponent
     {
-        private readonly Rectangle _collisionRectangle = new Rectangle(0, 0, 16, 22);
+        private readonly Rectangle _collisionRectangle = new Rectangle(0, 4, 16, 18);
         private readonly TileMap<Map<TileCode>, TileCode> _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
         private bool _focused;
         private float _gravity;

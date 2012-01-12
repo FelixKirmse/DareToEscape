@@ -40,7 +40,9 @@ namespace BlackDragonEngine.TileEngine
 
         #endregion
 
+// ReSharper disable StaticFieldInGenericType
         private static TileMap<TMap, TCodes> _instance;
+// ReSharper restore StaticFieldInGenericType
 
         public static TileMap<TMap, TCodes> GetInstance()
         {
@@ -378,7 +380,7 @@ namespace BlackDragonEngine.TileEngine
             int startY = GetCellByPixelY((int) Camera.Position.Y) - 1;
             int endY = GetCellByPixelY((int) Camera.Position.Y + Camera.ViewPortHeight);
 
-            foreach (Coords coords in Map.MapData.Keys)
+            foreach (var coords in Map.MapData.Keys)
             {
                 if (coords.X < startX || coords.X > endX || coords.Y < startY || coords.Y > endY) continue;
                 for (int z = 0; z < MapLayers; ++z)

@@ -1,19 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using BlackDragonEngine;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
+using BlackDragonEngine.Scripting;
 using BlackDragonEngine.TileEngine;
 using DareToEscape;
 using DareToEscape.Helpers;
+using DareToEscape.Managers;
 using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Linq;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
@@ -30,13 +33,15 @@ namespace MapEditor
         private readonly Viewport _renderViewport = new Viewport(0, 0, 640, 480);
         private readonly Viewport _standardViewport = new Viewport(0, 0, 320, 240);
         public TileMap<Map<TileCode>, TileCode> TileMap;
+        public bool Playing { get; set; }
+        private CoordList _coordList;
+        private Item _draggingItem;
+        private bool _draggingItemBool;
+        private Coords _lastCell;
         private GameObject _player;
         private RenderTarget2D _renderTarget;
         private SpriteBatch _spriteBatch;
-        private Coords _lastCell;
-        private CoordList _coordList;
-        private bool _draggingItemBool;
-        private Item _draggingItem;
+        private BulletManager _bulletManager; 
 
         public MapEditor()
         {
@@ -44,7 +49,7 @@ namespace MapEditor
             Content.RootDirectory = "Content";
             _editorForm = new Editor();
             _editorForm.Show();
-
+            _bulletManager = BulletManager.GetInstance();
             _drawSurface = _editorForm.PctSurface.Handle;
             _pictureBox = _editorForm.PctSurface;
             _parentForm = _editorForm;
@@ -57,6 +62,8 @@ namespace MapEditor
             PictureBoxSizeChanged(null, null);
             CurrentItem = Item.GetItemByTileId(0);
             VariableProvider.Game = this;
+            VariableProvider.ScriptEngine = new ScriptEngine(this);
+            Components.Add(VariableProvider.ScriptEngine);
         }
 
         internal Item CurrentItem { private get; set; }
@@ -78,8 +85,8 @@ namespace MapEditor
             if (_parentForm.WindowState == FormWindowState.Minimized) return;
             _graphics.PreferredBackBufferWidth = _pictureBox.Width;
             _graphics.PreferredBackBufferHeight = _pictureBox.Height;
-            Camera.ViewPortWidth = _pictureBox.Width;
-            Camera.ViewPortHeight = _pictureBox.Height;
+            Camera.ViewPortWidth = 320;
+            Camera.ViewPortHeight = 240;
             _graphics.ApplyChanges();
         }
 
@@ -90,6 +97,7 @@ namespace MapEditor
                                                            Content.Load<Texture2D>(@"textures/tilesheets/tilesheet"));
             AnimationDictionaryProvider.Content = Content;
             _player = Factory.CreatePlayer();
+            _player.Position = new Vector2(float.MaxValue, float.MaxValue);
             VariableProvider.CurrentPlayer = _player;
             EntityManager.SetPlayer();
             _renderTarget = new RenderTarget2D(GraphicsDevice, 320, 240, false,
@@ -97,6 +105,8 @@ namespace MapEditor
             GameInitializer.Initialize();
             _coordList = VariableProvider.CoordList;
             _lastCell = _coordList[int.MaxValue, int.MaxValue];
+            EngineState.GameState = EngineStates.Running;
+            BulletInformationProvider.LoadBulletData(Content);
         }
 
         protected override void Update(GameTime gameTime)
@@ -104,9 +114,31 @@ namespace MapEditor
             if (Form.ActiveForm != _parentForm) return;
             InputProvider.Update();
             VariableProvider.GameTime = gameTime;
+            if(Playing)
+            {
+                UpdateIngame();
+            }
+            else
+            {
+                UpdateEditor();
+            }
+            base.Update(gameTime);
+        }
+
+        private void UpdateIngame()
+        {
+            _bulletManager.Update();
+            EntityManager.Update();
+            CodeManager<TileCode>.CheckPlayerCodes(TileMap);
+        }
+
+        private void UpdateEditor()
+        {
             MouseState ms = InputProvider.MouseState;
+            EntityManager.ClearEntities();
+            GameVariableProvider.Bosses.Clear();
             CodeManager<TileCode>.CheckCodes<Map<TileCode>>();
-            if ((ms.X > 0) && (ms.Y > 0) && (ms.X < Camera.ViewPortWidth) && (ms.Y < Camera.ViewPortHeight))
+            if ((ms.X > 0) && (ms.Y > 0) && (ms.X < 640) && (ms.Y < 480))
             {
                 if ((ShortCuts.AreAnyKeysDown(new[] {Keys.LeftAlt, Keys.Space}) && InputMapper.LeftClick) ||
                     ms.MiddleButton == ButtonState.Pressed)
@@ -114,20 +146,19 @@ namespace MapEditor
                 else
                     HandleMouseActions(ms);
             }
-            base.Update(gameTime);
         }
 
         private void HandleMouseActions(MouseState ms)
         {
             Coords cell = TileMap.GetCellByPixel(Camera.ScreenToWorld(new Vector2(ms.X/2, ms.Y/2)));
-            if(!InputMapper.LeftClick)
+            if (!InputMapper.LeftClick)
             {
                 _lastCell = _coordList[int.MaxValue, int.MaxValue];
                 _draggingItemBool = false;
             }
-            if(ShortCuts.IsKeyDown(Keys.LeftControl) && InputMapper.LeftClick && cell != _lastCell)
+            if (ShortCuts.IsKeyDown(Keys.LeftControl) && InputMapper.LeftClick && cell != _lastCell)
             {
-                if(!_draggingItemBool)
+                if (!_draggingItemBool)
                 {
                     MapSquare? square = TileMap.GetMapSquareAtCell(cell);
                     List<TileCode> codes = TileMap.GetCellCodes(cell);
@@ -139,7 +170,7 @@ namespace MapEditor
                                         };
                     _draggingItemBool = true;
                 }
-               
+
                 TileMap.RemoveEverythingAtCell(_lastCell);
                 TileMap.RemoveEverythingAtCell(cell);
                 InsertItem(cell, _draggingItem);
@@ -167,9 +198,11 @@ namespace MapEditor
         private void InsertItem(Coords cell, Item item)
         {
             Item i = item;
-            MapSquare? square = i.TileID == null || i.AddToExisting ? TileMap.GetMapSquareAtCell(cell) : new MapSquare(i.TileID, i.Passable);
-            
-            if(i.IsTurret)
+            MapSquare? square = i.TileID == null || i.AddToExisting
+                                    ? TileMap.GetMapSquareAtCell(cell)
+                                    : new MapSquare(i.TileID, i.Passable);
+
+            if (i.IsTurret)
             {
                 string add = !TileMap.CellIsPassable(cell.Up)
                                  ? "UP"
@@ -178,7 +211,7 @@ namespace MapEditor
                                        : !TileMap.CellIsPassable(cell.Left)
                                              ? "LEFT"
                                              : !TileMap.CellIsPassable(cell.Right) ? "RIGHT" : "DOWN";
-                var tmp = i.Codes[0];
+                TileCode tmp = i.Codes[0];
                 tmp.Message += add;
                 i.Codes[0] = tmp;
             }
@@ -205,7 +238,7 @@ namespace MapEditor
                         }
                     }
                 }
-                if(codeToRemove.HasValue)
+                if (codeToRemove.HasValue)
                 {
                     codes = i.Codes.ToList();
                     TileMap.RemoveCodeFromCell(cellToRemoveFrom, codeToRemove.Value);
@@ -214,7 +247,7 @@ namespace MapEditor
             TileMap.SetEverythingAtCell(square, codes, cell);
 
             if (i.ExtraCells == null) return;
-            for(int j = 0; j < i.ExtraCells.Count; ++j)
+            for (int j = 0; j < i.ExtraCells.Count; ++j)
             {
                 InsertItem(cell + i.ExtraCells[j], i.ExtraItems[j]);
             }
@@ -232,9 +265,10 @@ namespace MapEditor
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
             TileMap.Draw(_spriteBatch);
-            _player.Draw(_spriteBatch);
             EntityManager.Draw(_spriteBatch);
+            _bulletManager.Draw(_spriteBatch);
             _spriteBatch.End();
+            DrawHelper.Draw(_spriteBatch);
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Viewport = _renderViewport;
             GraphicsDevice.Clear(Color.LightBlue);
@@ -251,6 +285,8 @@ namespace MapEditor
             {
                 TileMap.LoadMap(fs);
             }
+            EntityManager.ClearEntities();
+            _bulletManager.ClearAllBullets();
         }
 
         public void SaveMap(string fileName)

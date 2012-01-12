@@ -12,17 +12,17 @@ namespace DareToEscape.Providers
 {
     public static class BulletInformationProvider
     {
-        private static readonly Dictionary<int, Rectangle> bulletGraphicRectangles = new Dictionary<int, Rectangle>();
+        private static readonly Dictionary<int, Rectangle> BulletGraphicRectangles = new Dictionary<int, Rectangle>();
         public static Texture2D BulletSheet { get; private set; }
 
         public static Rectangle GetSourceRectangle(int id)
         {
-            return bulletGraphicRectangles[id];
+            return BulletGraphicRectangles[id];
         }
 
         public static BCircle GetBCircle(int id)
         {
-            Rectangle rect = bulletGraphicRectangles[id];
+            Rectangle rect = BulletGraphicRectangles[id];
             Vector2 center = rect.Center.ToVector2() - new Vector2(rect.X, rect.Y);
             float radius = rect.Width < rect.Height ? rect.Width*.33f : rect.Height*.33f;
             return new BCircle(center, radius);
@@ -62,7 +62,7 @@ namespace DareToEscape.Providers
                     if (!Int32.TryParse(splitLine[3], out height))
                         continue;
 
-                    bulletGraphicRectangles.Add(id, new Rectangle(x, y, width - x, height - y));
+                    BulletGraphicRectangles.Add(id, new Rectangle(x, y, width - x, height - y));
                 }
             }
         }

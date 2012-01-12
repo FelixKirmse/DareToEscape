@@ -34,7 +34,7 @@ namespace DareToEscape.Menus
             base.Update();
             if (InputMapper.StrictCancel)
             {
-                EngineStates.GameStates = EEngineStates.Running;
+                EngineState.GameState = EngineStates.Running;
                 GameStateManager.State = States.Ingame;
             }
         }
@@ -44,23 +44,23 @@ namespace DareToEscape.Menus
             switch (SelectedItem)
             {
                 case Resume:
-                    EngineStates.GameStates = EEngineStates.Running;
+                    EngineState.GameState = EngineStates.Running;
                     GameStateManager.State = States.Ingame;
                     break;
 
                 case RestartCheck:
-                    EngineStates.GameStates = EEngineStates.Running;
+                    EngineState.GameState = EngineStates.Running;
                     SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
                     GameStateManager.State = States.Ingame;
                     break;
 
                 case Back:
-                    EngineStates.GameStates = EEngineStates.Running;
+                    EngineState.GameState = EngineStates.Running;
                     DMenu.MenuState = MenuStates.Main;
                     break;
 
                 case RestartLevel:
-                    EngineStates.GameStates = EEngineStates.Running;
+                    EngineState.GameState = EngineStates.Running;
                     GameStateManager.State = States.Ingame;
                     LevelManager.ReloadLevel<Map<TileCode>, TileCode>();
                     SaveManager<SaveState>.Save();

@@ -9,18 +9,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DareToEscape.Managers
 {
-    internal sealed class BulletManager : IUpdateableGameState, IDrawableGameState
+    public sealed class BulletManager : IUpdateableGameState, IDrawableGameState
     {
         private static BulletManager _instance;
         private readonly List<Bullet> _bullets = new List<Bullet>(50000);
         private readonly List<int> _bulletsToDelete = new List<int>(1000);
-        private readonly int _processorCount;
-        private readonly Task[] _tasks;
 
         private BulletManager()
         {
-            _processorCount = VariableProvider.ProcessorCount;
-            _tasks = new Task[_processorCount];
         }
 
         #region IDrawableGameState Members
@@ -48,7 +44,7 @@ namespace DareToEscape.Managers
             get
             {
                 return GameStateManager.State == States.Ingame ||
-                       (GameStateManager.State == States.Editor && EngineStates.GameStates == EEngineStates.Running);
+                       (GameStateManager.State == States.Editor && EngineState.GameState == EngineStates.Running);
             }
         }
 
@@ -56,29 +52,13 @@ namespace DareToEscape.Managers
         {
             int bulletCount = _bullets.Count;
             if (bulletCount == 0) return true;
-            int bulletsToProcess = bulletCount/_processorCount;
 
-            for (int i = 0; i < _processorCount; ++i)
-            {
-                int x = i;
-                _tasks[i] = Task.Factory.StartNew(() =>
+            Parallel.For(0, bulletCount, j =>
                                                       {
-                                                          for (int j = bulletsToProcess*x;
-                                                               j < bulletsToProcess*x + bulletsToProcess;
-                                                               ++j)
-                                                          {
+                                                          
                                                               _bullets[j] = _bullets[j].Update(j, _bulletsToDelete);
-                                                          }
+                                                          
                                                       });
-            }
-
-            for (int i = bulletsToProcess*_processorCount; i < bulletCount; ++i)
-            {
-                _bullets[i] = _bullets[i].Update(i, _bulletsToDelete);
-            }
-
-
-            Task.WaitAll(_tasks);
 
             _bulletsToDelete.Sort((x, y) =>
                                       {
@@ -86,7 +66,7 @@ namespace DareToEscape.Managers
                                           if (x > y) return -1;
                                           return 0;
                                       });
-            foreach (int id in _bulletsToDelete)
+            foreach (var id in _bulletsToDelete)
             {
                 _bullets[id] = _bullets[_bullets.Count - 1];
                 _bullets.RemoveAt(_bullets.Count - 1);

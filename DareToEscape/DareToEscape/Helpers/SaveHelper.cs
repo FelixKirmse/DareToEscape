@@ -1,5 +1,4 @@
-﻿using BlackDragonEngine.Entities;
-using BlackDragonEngine.Managers;
+﻿using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
 using DareToEscape.Providers;
@@ -22,7 +21,7 @@ namespace DareToEscape.Helpers
                 new Vector2(SaveManager<SaveState>.CurrentSaveState.PlayerPosition.X,
                             SaveManager<SaveState>.CurrentSaveState.PlayerPosition.Y - 8);
             if (SaveManager<SaveState>.CurrentSaveState.BossDead)
-                foreach (GameObject boss in GameVariableProvider.Bosses)
+                foreach (var boss in GameVariableProvider.Bosses)
                     boss.Send("INACTIVE", "");
         }
     }

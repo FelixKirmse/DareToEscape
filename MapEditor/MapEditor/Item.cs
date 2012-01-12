@@ -88,7 +88,7 @@ namespace MapEditor
                     return new Item
                                {
                                    AddToExisting = true,
-                                   Codes = new List<TileCode> {new TileCode(TileCodes.Trigger, "Boss")}
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Trigger, "BOSS")}
                                };
                 default:
                     return new Item();

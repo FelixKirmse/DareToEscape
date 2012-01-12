@@ -72,7 +72,7 @@ namespace BlackDragonEngine.TileEngine
             {
                 return (rightCoords.X == leftCoords.X && rightCoords.Y == leftCoords.Y);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }

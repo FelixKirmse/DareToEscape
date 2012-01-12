@@ -35,6 +35,7 @@
             this.newFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,7 +51,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this._mapSelectorDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._focusTextbox = new System.Windows.Forms.TextBox();
+            this._playButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this._pctSurface)).BeginInit();
             this._menustrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._tileSheetBox)).BeginInit();
@@ -117,6 +119,14 @@
             this.renameToolStripMenuItem1.Size = new System.Drawing.Size(209, 22);
             this.renameToolStripMenuItem1.Text = "Rename";
             this.renameToolStripMenuItem1.Click += new System.EventHandler(this.RenameToolStripMenuItem1Click);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteToolStripMenuItemClick);
             // 
             // saveToolStripMenuItem
             // 
@@ -248,19 +258,29 @@
             this._mapSelectorDialog.Description = "Select the DareToEscapeContent folder!";
             this._mapSelectorDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
             // 
-            // deleteToolStripMenuItem
+            // _focusTextbox
             // 
-            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.deleteToolStripMenuItem.Text = "Delete";
-            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteToolStripMenuItemClick);
+            this._focusTextbox.Location = new System.Drawing.Point(1023, 474);
+            this._focusTextbox.Name = "_focusTextbox";
+            this._focusTextbox.Size = new System.Drawing.Size(10, 20);
+            this._focusTextbox.TabIndex = 10;
+            // 
+            // _playButton
+            // 
+            this._playButton.Location = new System.Drawing.Point(969, 531);
+            this._playButton.Name = "_playButton";
+            this._playButton.Size = new System.Drawing.Size(115, 23);
+            this._playButton.TabIndex = 11;
+            this._playButton.Text = "Play Game in Editor";
+            this._playButton.UseVisualStyleBackColor = true;
+            this._playButton.Click += new System.EventHandler(this.PlayButtonClick);
             // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1254, 986);
+            this.Controls.Add(this._playButton);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -271,6 +291,7 @@
             this.Controls.Add(this._treeView);
             this.Controls.Add(this._pctSurface);
             this.Controls.Add(this._menustrip);
+            this.Controls.Add(this._focusTextbox);
             this.MainMenuStrip = this._menustrip;
             this.Name = "Editor";
             this.Text = "Editor";
@@ -308,5 +329,7 @@
         private System.Windows.Forms.ToolStripMenuItem newFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+        private System.Windows.Forms.TextBox _focusTextbox;
+        private System.Windows.Forms.Button _playButton;
     }
 }

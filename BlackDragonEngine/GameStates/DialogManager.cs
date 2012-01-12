@@ -53,7 +53,7 @@ namespace BlackDragonEngine.GameStates
 
         public bool DrawCondition
         {
-            get { return EngineStates.DialogState == DialogueStates.Active; }
+            get { return EngineState.DialogState == DialogueStates.Active; }
         }
 
         #endregion
@@ -62,7 +62,7 @@ namespace BlackDragonEngine.GameStates
 
         public bool UpdateCondition
         {
-            get { return EngineStates.DialogState != DialogueStates.Inactive; }
+            get { return EngineState.DialogState != DialogueStates.Inactive; }
         }
 
         #endregion
@@ -148,7 +148,7 @@ namespace BlackDragonEngine.GameStates
                 _currentDialogue = _dialog[_currentDialogue].NextDialog;
                 if (_currentDialogue == "STOPDIALOG")
                 {
-                    EngineStates.DialogState = DialogueStates.Inactive;
+                    EngineState.DialogState = DialogueStates.Inactive;
                 }
                 else
                 {
@@ -170,7 +170,7 @@ namespace BlackDragonEngine.GameStates
             _currentChar = 0;
             _dialog = dialogue;
             _currentDialogue = startDialog;
-            EngineStates.DialogState = DialogueStates.Active;
+            EngineState.DialogState = DialogueStates.Active;
             _dialogState = DialogueStates.Talking;
         }
     }

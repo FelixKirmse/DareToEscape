@@ -104,6 +104,7 @@
     <Compile Include="Components\SoundComponent.cs" />
     <Compile Include="Components\WaypointComponent.cs" />
     <Compile Include="Dialogue\DialogScript.cs" />
+    <Compile Include="EngineStates.cs" />
     <Compile Include="Entities\GameObject.cs" />
     <Compile Include="Entities\IGameObject.cs" />
     <Compile Include="GameStates\IDrawableGameState.cs" />

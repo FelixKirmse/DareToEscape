@@ -28,7 +28,7 @@ namespace DareToEscape.GameStates
             {
                 return GameStateManager.State == States.Ingame ||
                        GameStateManager.State == States.Tutorial ||
-                       EngineStates.GameStates == EEngineStates.Paused || GameStateManager.PlayerDead;
+                       EngineState.GameState == EngineStates.Paused || GameStateManager.PlayerDead;
             }
         }
 
@@ -48,8 +48,8 @@ namespace DareToEscape.GameStates
             {
                 return (GameStateManager.State == States.Ingame ||
                         GameStateManager.State == States.Tutorial) &&
-                       EngineStates.GameStates == EEngineStates.Running && !GameStateManager.PlayerDead &&
-                       EngineStates.DialogState == DialogueStates.Inactive;
+                       EngineState.GameState == EngineStates.Running && !GameStateManager.PlayerDead &&
+                       EngineState.DialogState == DialogueStates.Inactive;
             }
         }
 
@@ -57,7 +57,7 @@ namespace DareToEscape.GameStates
         {
             if (InputMapper.StrictCancel)
             {
-                EngineStates.GameStates = EEngineStates.Paused;
+                EngineState.GameState = EngineStates.Paused;
                 Menu.MenuState = MenuStates.Ingame;
                 GameStateManager.State = States.Menu;
                 return false;

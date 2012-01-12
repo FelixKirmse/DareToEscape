@@ -3,7 +3,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
-using System.Linq;
+using BlackDragonEngine.Helpers;
+using DareToEscape.Managers;
 
 namespace MapEditor
 {
@@ -12,14 +13,15 @@ namespace MapEditor
         private const int ScaleFactor = 1;
         private const int TileSize = 8;
 
-        private string _mapPath; //Path to DareToEscapeContent
-
         private const string ConfigFile = "editorConfig.cfg";
 
         private string _currentMapName;
+        private bool _doNothing;
         private bool _drawMarker;
         private bool _firstTime = true;
+        private string _mapPath; //Path to DareToEscapeContent
         private Rectangle _marker;
+        private string _oldLabel;
 
         public Editor()
         {
@@ -36,9 +38,21 @@ namespace MapEditor
             LoadCodes();
         }
 
+        private int Tile
+        {
+            get { return ScaleFactor*TileSize; }
+        }
+
+        public MapEditor Game { private get; set; }
+
+        public PictureBox PctSurface
+        {
+            get { return _pctSurface; }
+        }
+
         private void LoadPath()
         {
-            if(File.Exists(Application.StartupPath + "/" + ConfigFile))
+            if (File.Exists(Application.StartupPath + "/" + ConfigFile))
             {
                 try
                 {
@@ -64,17 +78,17 @@ namespace MapEditor
         {
             _mapSelectorDialog.ShowDialog();
             _mapPath = _mapSelectorDialog.SelectedPath;
-            if(!Directory.Exists(_mapPath + "/maps"))
+            if (!Directory.Exists(_mapPath + "/maps"))
             {
                 SetNewMapPath();
                 return;
             }
-            using(var sw = new StreamWriter(Application.StartupPath + "/" + ConfigFile))
+            using (var sw = new StreamWriter(Application.StartupPath + "/" + ConfigFile))
             {
                 sw.WriteLine(_mapPath);
             }
         }
-        
+
         private void LoadEntities()
         {
             _entitiesList.Items.Add("Player");
@@ -88,18 +102,6 @@ namespace MapEditor
         private void LoadCodes()
         {
             _codesList.Items.Add("Bosstrigger");
-        }
-
-        private int Tile
-        {
-            get { return ScaleFactor*TileSize; }
-        }
-
-        public MapEditor Game { private get; set; }
-
-        public PictureBox PctSurface
-        {
-            get { return _pctSurface; }
         }
 
         private void PopulateTree(string dir, TreeNode node)
@@ -166,7 +168,7 @@ namespace MapEditor
                 _entitiesList.SelectedItems[0].Selected = false;
                 _codesList.SelectedItems[0].Selected = false;
             }
-            catch(Exception)
+            catch (Exception)
             {
             }
             finally
@@ -215,10 +217,7 @@ namespace MapEditor
                 _doNothing = false;
                 Game.CurrentItem = Item.GetItemByCodeId(_codesList.SelectedIndices[0]);
             }
-            
         }
-
-        private bool _doNothing;
 
         private void EntitiesListSelectedIndexChanged(object sender, EventArgs e)
         {
@@ -241,11 +240,9 @@ namespace MapEditor
             Game.SaveMap(_currentMapName);
         }
 
-        private string _oldLabel;
-
         private void TreeViewAfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            if(File.Exists(_mapPath + _oldLabel))
+            if (File.Exists(_mapPath + _oldLabel))
             {
                 File.Move(_mapPath + _oldLabel, _mapPath + e.Node.Parent.FullPath + "/" + e.Label);
                 _currentMapName = _mapPath + e.Node.Parent.FullPath + "/" + e.Label;
@@ -273,8 +270,10 @@ namespace MapEditor
 
         private void NewFileToolStripMenuItemClick(object sender, EventArgs e)
         {
-            var node = _treeView.SelectedNode.Text.Contains(".map") ? _treeView.SelectedNode.Parent : _treeView.SelectedNode;
-            var newNode = node.Nodes.Add("New Map.map");
+            TreeNode node = _treeView.SelectedNode.Text.Contains(".map")
+                                ? _treeView.SelectedNode.Parent
+                                : _treeView.SelectedNode;
+            TreeNode newNode = node.Nodes.Add("New Map.map");
             File.Create(_mapPath + node.FullPath + "/New Map.map");
             newNode.BeginEdit();
         }
@@ -282,8 +281,8 @@ namespace MapEditor
         private void NewFolderToolStripMenuItemClick(object sender, EventArgs e)
         {
             if (_treeView.SelectedNode.Text == "maps") return;
-            var node = _treeView.SelectedNode.Parent;
-            var newNode = node.Nodes.Add("New Folder");
+            TreeNode node = _treeView.SelectedNode.Parent;
+            TreeNode newNode = node.Nodes.Add("New Folder");
             Directory.CreateDirectory(_mapPath + node.FullPath + "/New Folder");
             newNode.BeginEdit();
         }
@@ -291,8 +290,8 @@ namespace MapEditor
         private void DeleteToolStripMenuItemClick(object sender, EventArgs e)
         {
             if (_treeView.SelectedNode.Text == "maps") return;
-            var node = _treeView.SelectedNode;
-            if(node.Text.Contains(".map"))
+            TreeNode node = _treeView.SelectedNode;
+            if (node.Text.Contains(".map"))
             {
                 File.Delete(_mapPath + node.FullPath);
             }
@@ -302,6 +301,28 @@ namespace MapEditor
             }
             node.Remove();
             _currentMapName = null;
+        }
+
+        private void PlayButtonClick(object sender, EventArgs e)
+        {
+            Game.Playing = !Game.Playing;
+            if (Game.Playing)
+            {
+                _focusTextbox.Focus();
+                _focusTextbox.LostFocus += RefocusInputBox;
+                Camera.UpdateWorldRectangle(Game.TileMap);
+            }
+            else
+            {
+                _focusTextbox.LostFocus -= RefocusInputBox;
+                BulletManager.GetInstance().ClearAllBullets();
+            }
+        }
+
+        private void RefocusInputBox(object sender, EventArgs e)
+        {
+            _focusTextbox.Focus();
+            _focusTextbox.Clear();
         }
     }
 }

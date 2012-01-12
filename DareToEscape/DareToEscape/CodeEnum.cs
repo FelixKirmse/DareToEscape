@@ -1,5 +1,8 @@
-﻿namespace DareToEscape
+﻿using System;
+
+namespace DareToEscape
 {
+    [Serializable]
     public struct TileCode
     {
         public TileCodes Code;

@@ -86,7 +86,6 @@ namespace DareToEscape.Managers
                                                      Vector2 collisionCenter,
                                                      int i, GameObject player)
         {
-            DialogManager dialogManager = DialogManager.GetInstance();
             switch (code.Code)
             {
                 case TileCodes.Transition:

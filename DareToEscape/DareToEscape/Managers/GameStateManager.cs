@@ -26,8 +26,8 @@ namespace DareToEscape.Managers
             FastDead = true;
             State = States.Titlescreen;
             Menu.MenuState = MenuStates.Main;
-            EngineStates.GameStates = EEngineStates.Running;
-            EngineStates.DialogState = DialogueStates.Inactive;
+            EngineState.GameState = EngineStates.Running;
+            EngineState.DialogState = DialogueStates.Inactive;
         }
 
         public static States State { get; set; }

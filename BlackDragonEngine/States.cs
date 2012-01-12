@@ -9,16 +9,9 @@
         Inactive
     }
 
-    public enum EEngineStates
-    {
-        Paused,
-        Running,
-        Loading
-    }
-
-    public static class EngineStates
+    public static class EngineState
     {
         public static DialogueStates DialogState { get; set; }
-        public static EEngineStates GameStates { get; set; }
+        public static EngineStates GameState { get; set; }
     }
 }

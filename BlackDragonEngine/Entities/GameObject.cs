@@ -131,7 +131,7 @@ namespace BlackDragonEngine.Entities
         /// </summary>
         public virtual void Update()
         {
-            foreach (IComponent component in components)
+            foreach (var component in components)
             {
                 component.Update(this);
             }
@@ -143,7 +143,7 @@ namespace BlackDragonEngine.Entities
         /// <param name = "spriteBatch"></param>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            foreach (IComponent component in components)
+            foreach (var component in components)
             {
                 if (component is GraphicsComponent)
                 {
@@ -174,7 +174,7 @@ namespace BlackDragonEngine.Entities
         /// <param name = "obj">An attachment</param>
         public void Send<T>(string Message, T obj)
         {
-            foreach (IComponent component in components)
+            foreach (var component in components)
             {
                 component.Receive(Message, obj);
             }

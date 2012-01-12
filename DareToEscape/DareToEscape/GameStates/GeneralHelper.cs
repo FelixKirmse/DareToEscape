@@ -20,7 +20,7 @@ namespace DareToEscape.GameStates
         {
             get
             {
-                return GameStateManager.PlayerDead && EngineStates.DialogState == DialogueStates.Inactive &&
+                return GameStateManager.PlayerDead && EngineState.DialogState == DialogueStates.Inactive &&
                        GameStateManager.State != States.Editor;
             }
         }
