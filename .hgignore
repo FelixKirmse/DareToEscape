@@ -1,0 +1,13 @@
+syntax: glob
+obj/
+bin/
+DareToEscape/DareToEscapeContent/audio/files/
+DareToEscape/DareToEscape/publish/
+_ReSharper
+_ReSharper.DareToEscape/
+DareToEscape/DareToEscape/Components/Entities/CheckPointGraphicsComponent (In Konflikt stehende Kopie von Nidhogg-Laptop 2011-11-03).cs
+DareToEscape/DareToEscape/Entities/BulletBehaviors/StarBarrage (In Konflikt stehende Kopie von Nidhogg-Laptop 2011-11-03).cs
+.vsp
+*.vsp
+*.psess
+*ReSharper*
