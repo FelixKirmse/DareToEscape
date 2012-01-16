@@ -131,8 +131,8 @@
     <Compile Include="Components\Entities\BossKillerComponent.cs" />
     <Compile Include="Components\Entities\CheckPointGraphicsComponent.cs" />
     <Compile Include="Components\Entities\ExitGraphicsComponent.cs" />
-    <Compile Include="Components\Entities\KeyGraphicsComponent.cs" />
-    <Compile Include="Components\Entities\LockGraphicsComponent.cs" />
+    <Compile Include="Components\Entities\KeyComponent.cs" />
+    <Compile Include="Components\Entities\LockComponent.cs" />
     <Compile Include="Components\Entities\MediumTurretComponent.cs" />
     <Compile Include="Components\Entities\SmallTurretComponent.cs" />
     <Compile Include="Components\Entities\TurretComponent.cs" />

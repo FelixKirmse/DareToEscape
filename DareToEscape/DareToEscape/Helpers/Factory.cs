@@ -38,13 +38,13 @@ namespace DareToEscape.Helpers
 
         public static GameObject CreateKey()
         {
-            var components = new List<IComponent> {new KeyGraphicsComponent()};
+            var components = new List<IComponent> {new KeyComponent()};
             return new GameObject(components);
         }
 
         public static GameObject CreateLock()
         {
-            var components = new List<IComponent> {new LockGraphicsComponent()};
+            var components = new List<IComponent> {new LockComponent()};
             return new GameObject(components);
         }
 

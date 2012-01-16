@@ -19,6 +19,68 @@ namespace MapEditor
         {
             switch (id)
             {
+                case 80:
+                    return new Item
+                               {
+                                   TileID = id,
+                                   Passable = true,
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Key, "YELLOW")}
+                               };
+
+                case 81:
+                    return new Item
+                               {
+                                   TileID = id,
+                                   Passable = true,
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Key, "RED")}
+                               };
+
+                case 82:
+                    return new Item
+                               {
+                                   TileID = id,
+                                   Passable = true,
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Key, "MAGENTA")}
+                               };
+                case 83:
+                    return new Item
+                               {
+                                   TileID = id,
+                                   Passable = true,
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Key, "CYAN")}
+                               };
+
+                case 96:
+                    return new Item
+                               {
+                                   TileID = id,
+                                   Passable = false,
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Key, "YELLOW")}
+                               };
+
+                case 97:
+                    return new Item
+                               {
+                                   TileID = id,
+                                   Passable = false,
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Key, "RED")}
+                               };
+
+                case 98:
+                    return new Item
+                               {
+                                   TileID = id,
+                                   Passable = false,
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Key, "MAGENTA")}
+                               };
+                case 99:
+                    return new Item
+                               {
+                                   TileID = id,
+                                   Passable = false,
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.Key, "CYAN")}
+                               };
+
                 default:
                     return new Item
                                {

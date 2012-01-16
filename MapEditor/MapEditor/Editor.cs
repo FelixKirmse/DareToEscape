@@ -159,6 +159,7 @@ namespace MapEditor
         {
             int tilesPerRow = _tileSheetBox.Image.Width/Tile;
             int tileIndex = (e.X/Tile) + ((e.Y/Tile)*tilesPerRow);
+            _tileIndexLabel.Text = string.Format("Selected Index: {0}", tileIndex);
             Game.CurrentItem = Item.GetItemByTileId(tileIndex);
             _marker = new Rectangle((tileIndex%tilesPerRow)*Tile, (tileIndex/tilesPerRow)*Tile, Tile, Tile);
             _drawMarker = true;

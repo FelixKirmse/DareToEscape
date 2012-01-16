@@ -53,6 +53,7 @@
             this._mapSelectorDialog = new System.Windows.Forms.FolderBrowserDialog();
             this._focusTextbox = new System.Windows.Forms.TextBox();
             this._playButton = new System.Windows.Forms.Button();
+            this._tileIndexLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this._pctSurface)).BeginInit();
             this._menustrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._tileSheetBox)).BeginInit();
@@ -276,11 +277,20 @@
             this._playButton.UseVisualStyleBackColor = true;
             this._playButton.Click += new System.EventHandler(this.PlayButtonClick);
             // 
+            // _tileIndexLabel
+            // 
+            this._tileIndexLabel.AutoSize = true;
+            this._tileIndexLabel.Location = new System.Drawing.Point(113, 369);
+            this._tileIndexLabel.Name = "_tileIndexLabel";
+            this._tileIndexLabel.Size = new System.Drawing.Size(0, 13);
+            this._tileIndexLabel.TabIndex = 12;
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1254, 986);
+            this.Controls.Add(this._tileIndexLabel);
             this.Controls.Add(this._playButton);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -332,5 +342,6 @@
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.TextBox _focusTextbox;
         private System.Windows.Forms.Button _playButton;
+        private System.Windows.Forms.Label _tileIndexLabel;
     }
 }
