@@ -11,11 +11,11 @@ namespace BlackDragonEngine.Helpers
 
         public const int CostStraight = 10;
         public const int CostDiagonal = 15;
-        private static readonly Dictionary<Vector2, NodeStatus> nodeStatus = new Dictionary<Vector2, NodeStatus>();
+        private static readonly Dictionary<Vector2, NodeStatus> NodeStati = new Dictionary<Vector2, NodeStatus>();
 
-        private static readonly List<PathNode<TMap, TCodes>> openList = new List<PathNode<TMap, TCodes>>();
+        private static readonly List<PathNode<TMap, TCodes>> OpenList = new List<PathNode<TMap, TCodes>>();
 
-        private static readonly Dictionary<Vector2, float> nodeCosts = new Dictionary<Vector2, float>();
+        private static readonly Dictionary<Vector2, float> NodeCosts = new Dictionary<Vector2, float>();
 
         private enum NodeStatus
         {
@@ -32,18 +32,18 @@ namespace BlackDragonEngine.Helpers
             int index = 0;
             float cost = node.TotalCost;
 
-            while ((openList.Count() > index) && (cost < openList[index].TotalCost))
+            while ((OpenList.Count() > index) && (cost < OpenList[index].TotalCost))
             {
                 ++index;
             }
-            openList.Insert(index, node);
-            nodeCosts[node.GridLocation] = node.TotalCost;
-            nodeStatus[node.GridLocation] = NodeStatus.Open;
+            OpenList.Insert(index, node);
+            NodeCosts[node.GridLocation] = node.TotalCost;
+            NodeStati[node.GridLocation] = NodeStatus.Open;
         }
 
         private static List<PathNode<TMap, TCodes>> FindAdjacentNodes(PathNode<TMap, TCodes> currentNode,
                                                                       PathNode<TMap, TCodes> endNode,
-                                                                      TileMap<TMap, TCodes> tileMap)
+                                                                      TileMap<TMap, TCodes> tileMap, bool ignoreWalls)
         {
             var adjacentNodes = new List<PathNode<TMap, TCodes>>();
 
@@ -55,7 +55,7 @@ namespace BlackDragonEngine.Helpers
             bool downLeft = true;
             bool downRight = true;
 
-            if ((X > 0) && (tileMap.CellIsPassable(X - 1, Y)))
+            if (ignoreWalls || tileMap.CellIsPassable(X - 1, Y))
             {
                 adjacentNodes.Add(new PathNode<TMap, TCodes>(currentNode, endNode, new Vector2(X - 1, Y),
                                                              CostStraight + currentNode.DirectCost, tileMap));
@@ -66,7 +66,7 @@ namespace BlackDragonEngine.Helpers
                 downLeft = false;
             }
 
-            if ((X < 49) && (tileMap.CellIsPassable(X + 1, Y)))
+            if (ignoreWalls || tileMap.CellIsPassable(X + 1, Y))
             {
                 adjacentNodes.Add(new PathNode<TMap, TCodes>(currentNode, endNode, new Vector2(X + 1, Y),
                                                              CostStraight + currentNode.DirectCost, tileMap));
@@ -77,7 +77,7 @@ namespace BlackDragonEngine.Helpers
                 downRight = false;
             }
 
-            if ((Y > 0) && (tileMap.CellIsPassable(X, Y - 1)))
+            if (ignoreWalls || tileMap.CellIsPassable(X, Y - 1))
             {
                 adjacentNodes.Add(new PathNode<TMap, TCodes>(currentNode, endNode, new Vector2(X, Y - 1),
                                                              CostStraight + currentNode.DirectCost, tileMap));
@@ -87,7 +87,7 @@ namespace BlackDragonEngine.Helpers
                 upLeft = false;
                 upRight = false;
             }
-            if ((Y < 49) && (tileMap.CellIsPassable(X, Y + 1)))
+            if (ignoreWalls || tileMap.CellIsPassable(X, Y + 1))
             {
                 adjacentNodes.Add(new PathNode<TMap, TCodes>(currentNode, endNode, new Vector2(X, Y + 1),
                                                              CostStraight + currentNode.DirectCost, tileMap));
@@ -98,22 +98,22 @@ namespace BlackDragonEngine.Helpers
                 downRight = false;
             }
 
-            if ((upLeft) && (tileMap.CellIsPassable(X - 1, Y - 1)))
+            if (upLeft && (ignoreWalls || tileMap.CellIsPassable(X - 1, Y - 1)))
             {
                 adjacentNodes.Add(new PathNode<TMap, TCodes>(currentNode, endNode, new Vector2(X - 1, Y - 1),
                                                              CostDiagonal + currentNode.DirectCost, tileMap));
             }
-            if ((upRight) && (tileMap.CellIsPassable(X + 1, Y - 1)))
+            if (upRight && (ignoreWalls || tileMap.CellIsPassable(X + 1, Y - 1)))
             {
                 adjacentNodes.Add(new PathNode<TMap, TCodes>(currentNode, endNode, new Vector2(X + 1, Y - 1),
                                                              CostDiagonal + currentNode.DirectCost, tileMap));
             }
-            if ((downLeft) && (tileMap.CellIsPassable(X - 1, Y + 1)))
+            if (downLeft && (ignoreWalls || tileMap.CellIsPassable(X - 1, Y + 1)))
             {
                 adjacentNodes.Add(new PathNode<TMap, TCodes>(currentNode, endNode, new Vector2(X - 1, Y + 1),
                                                              CostDiagonal + currentNode.DirectCost, tileMap));
             }
-            if ((downRight) && (tileMap.CellIsPassable(X + 1, Y + 1)))
+            if (downRight && (ignoreWalls || tileMap.CellIsPassable(X + 1, Y + 1)))
             {
                 adjacentNodes.Add(new PathNode<TMap, TCodes>(currentNode, endNode, new Vector2(X + 1, Y + 1),
                                                              CostDiagonal + currentNode.DirectCost, tileMap));
@@ -167,24 +167,24 @@ namespace BlackDragonEngine.Helpers
             return longPath;
         }
 
-        public static List<Vector2> FindPath(Vector2 startTile, Vector2 endTile, TileMap<TMap, TCodes> tileMap)
+        public static List<Vector2> FindPath(Vector2 startTile, Vector2 endTile, TileMap<TMap, TCodes> tileMap, bool ignoreWalls = false)
         {
-            if (!tileMap.CellIsPassable(endTile) || !tileMap.CellIsPassable(startTile))
+            if ((!tileMap.CellIsPassable(endTile) || !tileMap.CellIsPassable(startTile)) && !ignoreWalls)
             {
                 return null;
             }
-            openList.Clear();
-            nodeCosts.Clear();
-            nodeStatus.Clear();
+            OpenList.Clear();
+            NodeCosts.Clear();
+            NodeStati.Clear();
 
             var endNode = new PathNode<TMap, TCodes>(null, null, endTile, 0, tileMap);
             var startNode = new PathNode<TMap, TCodes>(null, endNode, startTile, 0, tileMap);
 
             AddNodeToOpenList(startNode);
 
-            while (openList.Count > 0)
+            while (OpenList.Count > 0)
             {
-                PathNode<TMap, TCodes> currentNode = openList[openList.Count - 1];
+                PathNode<TMap, TCodes> currentNode = OpenList[OpenList.Count - 1];
                 if (currentNode.IsEqualToNode(endNode))
                 {
                     var bestPath = new List<Vector2>();
@@ -196,20 +196,20 @@ namespace BlackDragonEngine.Helpers
                     return bestPath;
                 }
 
-                openList.Remove(currentNode);
-                nodeCosts.Remove(currentNode.GridLocation);
+                OpenList.Remove(currentNode);
+                NodeCosts.Remove(currentNode.GridLocation);
 
-                foreach (var possibleNode in FindAdjacentNodes(currentNode, endNode, tileMap))
+                foreach (var possibleNode in FindAdjacentNodes(currentNode, endNode, tileMap, ignoreWalls))
                 {
-                    if (nodeStatus.ContainsKey(possibleNode.GridLocation))
+                    if (NodeStati.ContainsKey(possibleNode.GridLocation))
                     {
-                        if (nodeStatus[possibleNode.GridLocation] == NodeStatus.Closed)
+                        if (NodeStati[possibleNode.GridLocation] == NodeStatus.Closed)
                         {
                             continue;
                         }
-                        if (nodeStatus[possibleNode.GridLocation] == NodeStatus.Open)
+                        if (NodeStati[possibleNode.GridLocation] == NodeStatus.Open)
                         {
-                            if (possibleNode.TotalCost >= nodeCosts[possibleNode.GridLocation])
+                            if (possibleNode.TotalCost >= NodeCosts[possibleNode.GridLocation])
                             {
                                 continue;
                             }
@@ -217,7 +217,7 @@ namespace BlackDragonEngine.Helpers
                     }
                     AddNodeToOpenList(possibleNode);
                 }
-                nodeStatus[currentNode.GridLocation] = NodeStatus.Closed;
+                NodeStati[currentNode.GridLocation] = NodeStatus.Closed;
             }
             return null;
         }

@@ -41,7 +41,7 @@ namespace MapEditor
         private GameObject _player;
         private RenderTarget2D _renderTarget;
         private SpriteBatch _spriteBatch;
-        private readonly BulletManager _bulletManager; 
+        private readonly BulletManager _bulletManager;
         
         public MapEditor()
         {
@@ -90,18 +90,6 @@ namespace MapEditor
             _graphics.ApplyChanges();
         }
 
-        internal void EnableGame()
-        {
-            TargetElapsedTime = TimeSpan.FromSeconds(1d/60d);
-            _graphics.SynchronizeWithVerticalRetrace = true;
-        }
-
-        internal void EnableEditor()
-        {
-            TargetElapsedTime = TimeSpan.FromSeconds(1d/120d);
-            _graphics.SynchronizeWithVerticalRetrace = false;
-        }
-
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -117,7 +105,6 @@ namespace MapEditor
                                                GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
             GameInitializer.Initialize();
             _coordList = VariableProvider.CoordList;
-            _lastCell = _coordList[int.MaxValue, int.MaxValue];
             EngineState.GameState = EngineStates.Running;
             BulletInformationProvider.LoadBulletData(Content);
         }
@@ -166,7 +153,7 @@ namespace MapEditor
             Coords cell = TileMap.GetCellByPixel(Camera.ScreenToWorld(new Vector2(ms.X/2, ms.Y/2)));
             if (!InputMapper.LeftClick)
             {
-                _lastCell = _coordList[int.MaxValue, int.MaxValue];
+                _lastCell = null;
                 _draggingItemBool = false;
             }
             if (ShortCuts.IsKeyDown(Keys.LeftControl) && InputMapper.LeftClick && cell != _lastCell)
@@ -184,7 +171,8 @@ namespace MapEditor
                     _draggingItemBool = true;
                 }
 
-                TileMap.RemoveEverythingAtCell(_lastCell);
+                if(_lastCell != null)
+                    TileMap.RemoveEverythingAtCell(_lastCell);
                 TileMap.RemoveEverythingAtCell(cell);
                 InsertItem(cell, _draggingItem);
                 _lastCell = cell;
@@ -192,11 +180,36 @@ namespace MapEditor
             }
             if (InputMapper.StrictLeftClick || ShortCuts.IsKeyDown(Keys.LeftShift) && InputMapper.LeftClick)
             {
-                InsertItem(cell);
+                if(_lastCell == null)
+                {
+                    InsertItem(cell);
+                    _lastCell = cell;
+                    return;
+                }
+                var path = PathFinder<Map<TileCode>, TileCode>.FindPath(_lastCell, cell, TileMap, true);
+                foreach (var thisCell in path)
+                {
+                    InsertItem(thisCell);
+                }
+                _lastCell = cell;
+                return;
             }
             if (InputMapper.StrictRightClick || ShortCuts.IsKeyDown(Keys.LeftShift) && InputMapper.RightClick)
             {
-                TileMap.RemoveEverythingAtCell(cell);
+                if (_lastCell == null)
+                {
+                    InsertItem(cell);
+                    _lastCell = cell;
+                    return;
+                }
+
+                var path = PathFinder<Map<TileCode>, TileCode>.FindPath(_lastCell, cell, TileMap, true);
+                foreach(var thisCell in path)
+                {
+                    InsertItem(thisCell);
+                }
+                _lastCell = cell;
+                return;
             }
         }
 
@@ -205,7 +218,7 @@ namespace MapEditor
             var currPos = new Vector2(ms.X, ms.Y);
             var lastPos = new Vector2(InputProvider.LastMouseState.X, InputProvider.LastMouseState.Y);
             Vector2 diff = currPos - lastPos;
-            Camera.ForcePosition -= diff;
+            Camera.ForcePosition -= diff / 2;
         }
 
         private void InsertItem(Coords cell, Item item)

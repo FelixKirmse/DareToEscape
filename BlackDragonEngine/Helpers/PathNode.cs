@@ -22,11 +22,7 @@ namespace BlackDragonEngine.Helpers
         public Vector2 GridLocation
         {
             get { return _gridLocation; }
-            set
-            {
-                _gridLocation = new Vector2(MathHelper.Clamp(value.X, 0f, _tileMap.MapWidth),
-                                            MathHelper.Clamp(value.Y, 0f, _tileMap.MapHeight));
-            }
+            set { _gridLocation = value; }
         }
 
         public int GridX

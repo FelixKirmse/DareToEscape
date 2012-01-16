@@ -56,31 +56,9 @@ namespace BlackDragonEngine.TileEngine
             get { return VariableProvider.CoordList[X + 1, Y + 1]; }
         }
 
-        public override bool Equals(object obj)
-        {
-            return obj is Coords && this == (Coords) obj;
-        }
-
         public override int GetHashCode()
         {
             return X ^ Y;
-        }
-
-        public static bool operator ==(Coords leftCoords, Coords rightCoords)
-        {
-            try
-            {
-                return (rightCoords.X == leftCoords.X && rightCoords.Y == leftCoords.Y);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        public static bool operator !=(Coords leftCoords, Coords rightCoords)
-        {
-            return !(leftCoords == rightCoords);
         }
 
         public static Coords operator /(Coords coords, int divisor)
