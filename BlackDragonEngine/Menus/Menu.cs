@@ -8,12 +8,12 @@ namespace BlackDragonEngine.Menus
 {
     public class Menu
     {
-        public bool EnableMouseSelection = true;
         protected const string FontName = "Mono8";
-        protected Vector2 ItemOffset = new Vector2(0, 16);
         protected readonly List<MenuItem> MenuItems = new List<MenuItem>();
         protected readonly List<MenuLabel> MenuLabels = new List<MenuLabel>();
         protected readonly SpriteBatch SpriteBatch;
+        public bool EnableMouseSelection = true;
+        protected Vector2 ItemOffset = new Vector2(0, 16);
 
         public Menu()
         {

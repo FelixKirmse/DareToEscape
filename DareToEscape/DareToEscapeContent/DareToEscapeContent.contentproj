@@ -150,6 +150,42 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
+    <None Include="maps\bosstest.map">
+      <Name>bosstest</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\fuck yeah.map">
+      <Name>fuck yeah</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\new testmap.map">
+      <Name>new testmap</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\sdasdasd.map">
+      <Name>sdasdasd</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\Maps 2\test1 - Kopie %282%29.map">
+      <Name>test1 - Kopie %282%29</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\Maps 2\test1 - Kopie %283%29.map">
+      <Name>test1 - Kopie %283%29</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\Maps 2\test1 - Kopie.map">
+      <Name>test1 - Kopie</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\Maps 2\test1.map">
+      <Name>test1</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\Maps 3\Fcuk yeah.map">
+      <Name>Fcuk yeah</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="textures\editor\tiles\0.bmp">
       <Name>0</Name>
       <Importer>TextureImporter</Importer>
@@ -260,9 +296,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="maps\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="textures\animations\player\playeranimations.png">
       <Name>playeranimations</Name>

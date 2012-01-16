@@ -11,14 +11,13 @@ namespace BlackDragonEngine.Managers
 {
     public class SaveManager<T>
     {
-        public T CurrentSaveState;
-
         public readonly string SaveFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) +
-                                                     @"\DareToEscape\saves\";
+                                              @"\DareToEscape\saves\";
 
         public readonly EventHelper SaveHelper = new EventHelper();
+        public T CurrentSaveState;
 
-        public  string CurrentSaveFile
+        public string CurrentSaveFile
         {
             get { return SaveFilePath + GetMD5Hash(VariableProvider.SaveSlot) + ".svf"; }
         }
@@ -33,8 +32,8 @@ namespace BlackDragonEngine.Managers
         {
             if (!Directory.Exists(SaveFilePath))
                 Directory.CreateDirectory(SaveFilePath);
-            using(var fs = new FileStream(SaveFilePath + GetMD5Hash(saveSlot) + ".svf", FileMode.Create))
-            using(var gzs = new GZipStream(fs, CompressionMode.Compress))
+            using (var fs = new FileStream(SaveFilePath + GetMD5Hash(saveSlot) + ".svf", FileMode.Create))
+            using (var gzs = new GZipStream(fs, CompressionMode.Compress))
             {
                 var xmls = new XmlSerializer(CurrentSaveState.GetType());
                 xmls.Serialize(gzs, CurrentSaveState);
@@ -43,11 +42,11 @@ namespace BlackDragonEngine.Managers
 
         public void Load(string saveSlot)
         {
-            using(var fs = new FileStream(SaveFilePath + GetMD5Hash(saveSlot) + ".svf", FileMode.Open))
-            using(var gzs = new GZipStream(fs, CompressionMode.Decompress))
+            using (var fs = new FileStream(SaveFilePath + GetMD5Hash(saveSlot) + ".svf", FileMode.Open))
+            using (var gzs = new GZipStream(fs, CompressionMode.Decompress))
             {
                 var xmls = new XmlSerializer(CurrentSaveState.GetType());
-                CurrentSaveState = (T)xmls.Deserialize(gzs);
+                CurrentSaveState = (T) xmls.Deserialize(gzs);
             }
             SaveHelper.LoadHelp();
         }

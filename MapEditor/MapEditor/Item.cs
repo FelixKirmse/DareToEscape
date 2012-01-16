@@ -23,7 +23,6 @@ namespace MapEditor
                     return new Item
                                {
                                    TileID = id,
-                                   Passable = true,
                                    Codes = new List<TileCode> {new TileCode(TileCodes.Key, "YELLOW")}
                                };
 
@@ -31,7 +30,6 @@ namespace MapEditor
                     return new Item
                                {
                                    TileID = id,
-                                   Passable = true,
                                    Codes = new List<TileCode> {new TileCode(TileCodes.Key, "RED")}
                                };
 
@@ -39,14 +37,12 @@ namespace MapEditor
                     return new Item
                                {
                                    TileID = id,
-                                   Passable = true,
                                    Codes = new List<TileCode> {new TileCode(TileCodes.Key, "MAGENTA")}
                                };
                 case 83:
                     return new Item
                                {
                                    TileID = id,
-                                   Passable = true,
                                    Codes = new List<TileCode> {new TileCode(TileCodes.Key, "CYAN")}
                                };
 
@@ -54,7 +50,6 @@ namespace MapEditor
                     return new Item
                                {
                                    TileID = id,
-                                   Passable = false,
                                    Codes = new List<TileCode> {new TileCode(TileCodes.Key, "YELLOW")}
                                };
 
@@ -62,7 +57,6 @@ namespace MapEditor
                     return new Item
                                {
                                    TileID = id,
-                                   Passable = false,
                                    Codes = new List<TileCode> {new TileCode(TileCodes.Key, "RED")}
                                };
 
@@ -70,14 +64,12 @@ namespace MapEditor
                     return new Item
                                {
                                    TileID = id,
-                                   Passable = false,
                                    Codes = new List<TileCode> {new TileCode(TileCodes.Key, "MAGENTA")}
                                };
                 case 99:
                     return new Item
                                {
                                    TileID = id,
-                                   Passable = false,
                                    Codes = new List<TileCode> {new TileCode(TileCodes.Key, "CYAN")}
                                };
 

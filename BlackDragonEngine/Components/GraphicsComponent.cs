@@ -8,8 +8,8 @@ namespace BlackDragonEngine.Components
     public class GraphicsComponent : IComponent
     {
         protected const float DrawDepth = .82f;
-        protected Texture2D Texture;
         protected SpriteBatch SpriteBatch;
+        protected Texture2D Texture;
 
         public GraphicsComponent()
         {
@@ -21,7 +21,7 @@ namespace BlackDragonEngine.Components
         /// </summary>
         /// <param name = "texture"></param>
         public GraphicsComponent(Texture2D texture)
-            :this()
+            : this()
         {
             Texture = texture;
         }

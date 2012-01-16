@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
 using BlackDragonEngine.Helpers;
+using DareToEscape;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
 using DareToEscape.Providers;
@@ -24,6 +26,7 @@ namespace MapEditor
         private string _mapPath; //Path to DareToEscapeContent
         private Rectangle _marker;
         private string _oldLabel;
+        public string TransitionString { get; set; }
 
         public Editor()
         {
@@ -104,6 +107,7 @@ namespace MapEditor
         private void LoadCodes()
         {
             _codesList.Items.Add("Bosstrigger");
+            _codesList.Items.Add("Transition");
         }
 
         private void PopulateTree(string dir, TreeNode node)
@@ -221,7 +225,26 @@ namespace MapEditor
             finally
             {
                 _doNothing = false;
-                Game.CurrentItem = Item.GetItemByCodeId(_codesList.SelectedIndices[0]);
+                if(_codesList.SelectedIndices[0] == 1)
+                {
+                    using(var transDial = new TransitionDialog(this))
+                    {
+                        transDial.ShowDialog(this);
+                        if(transDial.DialogResult == DialogResult.OK)
+                        {
+                            Game.CurrentItem = new Item
+                            {
+                                AddToExisting = true,
+                                Codes =
+                                    new List<TileCode> { new TileCode(TileCodes.Transition, TransitionString) }
+                            };
+                        }
+                    }
+                }
+                else
+                {
+                    Game.CurrentItem = Item.GetItemByCodeId(_codesList.SelectedIndices[0]);
+                }
             }
         }
 
@@ -317,6 +340,7 @@ namespace MapEditor
             Game.Playing = !Game.Playing;
             if (Game.Playing)
             {
+                Game.SaveMap(_currentMapName);
                 _focusTextbox.Focus();
                 _focusTextbox.LostFocus += RefocusInputBox;
                 Camera.UpdateWorldRectangle(Game.TileMap);
@@ -324,6 +348,7 @@ namespace MapEditor
             }
             else
             {
+                Game.LoadMap(_currentMapName);
                 _focusTextbox.LostFocus -= RefocusInputBox;
                 BulletManager.GetInstance().ClearAllBullets();
             }

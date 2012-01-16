@@ -19,7 +19,6 @@ namespace BlackDragonEngine.Helpers
         private int _frameWidth;
 
         private bool _loopAnimation = true;
-        private Texture2D _texture;
         private Rectangle _stripRect;
 
         #endregion
@@ -38,11 +37,7 @@ namespace BlackDragonEngine.Helpers
             set { _frameHeight = value; }
         }
 
-        public Texture2D Texture
-        {
-            get { return _texture; }
-            set { _texture = value; }
-        }
+        public Texture2D Texture { get; set; }
 
         public string Name { get; set; }
 
@@ -60,7 +55,7 @@ namespace BlackDragonEngine.Helpers
         }
 
         public int FrameCount { get; private set; }
-       
+
 
         public float FrameLength
         {
@@ -91,16 +86,17 @@ namespace BlackDragonEngine.Helpers
 
         public AnimationStrip(Texture2D texture, int frameWidth, string name)
         {
-            _texture = texture;
+            Texture = texture;
             _frameWidth = frameWidth;
             _frameHeight = texture.Height;
             Name = name;
-            _stripRect = new Rectangle(0,0, texture.Width, texture.Height);
+            _stripRect = new Rectangle(0, 0, texture.Width, texture.Height);
         }
 
-        public AnimationStrip(Texture2D texture, Rectangle stripRect, int frameCount, string name, bool loop = true, float frameDelay = .05f)
+        public AnimationStrip(Texture2D texture, Rectangle stripRect, int frameCount, string name, bool loop = true,
+                              float frameDelay = .05f)
         {
-            _texture = texture;
+            Texture = texture;
             _stripRect = stripRect;
             FrameCount = frameCount;
             _frameHeight = stripRect.Height;

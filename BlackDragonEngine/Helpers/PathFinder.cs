@@ -167,7 +167,8 @@ namespace BlackDragonEngine.Helpers
             return longPath;
         }
 
-        public static List<Vector2> FindPath(Vector2 startTile, Vector2 endTile, TileMap<TMap, TCodes> tileMap, bool ignoreWalls = false)
+        public static List<Vector2> FindPath(Vector2 startTile, Vector2 endTile, TileMap<TMap, TCodes> tileMap,
+                                             bool ignoreWalls = false)
         {
             if ((!tileMap.CellIsPassable(endTile) || !tileMap.CellIsPassable(startTile)) && !ignoreWalls)
             {

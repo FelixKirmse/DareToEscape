@@ -4,6 +4,7 @@ namespace BlackDragonEngine
     {
         Paused,
         Running,
-        Loading
+        Loading,
+        Editor
     }
 }

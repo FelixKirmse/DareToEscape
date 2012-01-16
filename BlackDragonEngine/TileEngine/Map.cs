@@ -18,8 +18,8 @@ namespace BlackDragonEngine.TileEngine
 
         #region IMap<TCodes> Members
 
-        public Dictionary<Coords, List<TCodes>> Codes { get; set; }
-        public Dictionary<Coords, MapSquare> MapData { get; set; }
+        public Dictionary<Coords, List<TCodes>> Codes { get; private set; }
+        public Dictionary<Coords, MapSquare> MapData { get; private set; }
 
         public int MapWidth
         {

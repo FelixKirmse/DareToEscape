@@ -6,9 +6,9 @@ namespace BlackDragonEngine.Menus
 {
     public class MenuItem
     {
+        protected readonly SpriteBatch SpriteBatch;
         private readonly SpriteFont _font;
         private Color _itemColor;
-        protected readonly SpriteBatch SpriteBatch;
 
         public MenuItem(string itemName, Vector2 itemPosition, bool isSelected, SpriteFont font)
         {

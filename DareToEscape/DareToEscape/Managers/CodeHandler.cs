@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BlackDragonEngine;
 using BlackDragonEngine.Components;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.GameStates;
@@ -89,6 +90,7 @@ namespace DareToEscape.Managers
             switch (code.Code)
             {
                 case TileCodes.Transition:
+                    if (EngineState.GameState == EngineStates.Editor) break;
                     Ingame.GetInstance().Activate();
                     LevelManager.LoadLevel<Map<TileCode>, TileCode>(code.Message);
                     GameVariableProvider.SaveManager.CurrentSaveState.Keys.Clear();

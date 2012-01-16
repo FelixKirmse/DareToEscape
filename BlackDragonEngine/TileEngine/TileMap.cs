@@ -26,13 +26,13 @@ namespace BlackDragonEngine.TileEngine
 
         private const int MapLayers = 1;
         private readonly CoordList _coordList;
+        private readonly SpriteBatch _spriteBatch;
         private readonly SpriteFont _spriteFont;
         private readonly int _tileOffset;
         private readonly Texture2D _tileSheet;
         private readonly Rectangle[] _tileSourceRects;
         private readonly int _tilesPerRow;
         private readonly Texture2D _whiteTexture;
-        private readonly SpriteBatch _spriteBatch;
 
         public TMap Map { get; internal set; }
         public int TileWidth { get; private set; }
@@ -388,9 +388,9 @@ namespace BlackDragonEngine.TileEngine
                 for (int z = 0; z < MapLayers; ++z)
                 {
                     _spriteBatch.Draw(_tileSheet, CellScreenRectangle(coords.X, coords.Y),
-                                     Map[coords] == null ? null : TileSourceRectangle(Map[coords].Value.LayerTiles[z]),
-                                     Color.White, 0.0f,
-                                     Vector2.Zero, SpriteEffects.None, 1f - (z*0.1f));
+                                      Map[coords] == null ? null : TileSourceRectangle(Map[coords].Value.LayerTiles[z]),
+                                      Color.White, 0.0f,
+                                      Vector2.Zero, SpriteEffects.None, 1f - (z*0.1f));
                 }
                 if (EditorMode)
                 {
@@ -403,11 +403,11 @@ namespace BlackDragonEngine.TileEngine
             {
                 Coords coords = cell.Key;
                 _spriteBatch.Draw(_whiteTexture, CellScreenRectangle(coords.X, coords.Y),
-                                 new Rectangle(0, 0, TileWidth, TileHeight), new Color(0, 0, 255, 80), 0f,
-                                 Vector2.Zero, SpriteEffects.None, 0.1f);
+                                  new Rectangle(0, 0, TileWidth, TileHeight), new Color(0, 0, 255, 80), 0f,
+                                  Vector2.Zero, SpriteEffects.None, 0.1f);
                 _spriteBatch.DrawString(_spriteFont, Map.Codes[coords].Count.ToString(),
-                                       Camera.WorldToScreen(new Vector2(coords.X*TileWidth, coords.Y*TileHeight)),
-                                       Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);
+                                        Camera.WorldToScreen(new Vector2(coords.X*TileWidth, coords.Y*TileHeight)),
+                                        Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);
             }
         }
 
@@ -415,8 +415,8 @@ namespace BlackDragonEngine.TileEngine
         {
             if (CellIsPassable(x, y)) return;
             _spriteBatch.Draw(_whiteTexture, CellScreenRectangle(x, y),
-                             new Rectangle(0, 0, TileWidth, TileHeight), new Color(255, 0, 0, 80), 0f, Vector2.Zero,
-                             SpriteEffects.None, 0.2f);
+                              new Rectangle(0, 0, TileWidth, TileHeight), new Color(255, 0, 0, 80), 0f, Vector2.Zero,
+                              SpriteEffects.None, 0.2f);
         }
 
 
@@ -432,8 +432,8 @@ namespace BlackDragonEngine.TileEngine
                 for (var celly = (int) startCell.Y; celly <= cellY; ++celly)
                 {
                     _spriteBatch.Draw(_whiteTexture, CellScreenRectangle(cellx, celly),
-                                     new Rectangle(0, 0, TileWidth, TileHeight), new Color(1, 1, 1, 80), 0f,
-                                     Vector2.Zero, SpriteEffects.None, 0f);
+                                      new Rectangle(0, 0, TileWidth, TileHeight), new Color(1, 1, 1, 80), 0f,
+                                      Vector2.Zero, SpriteEffects.None, 0f);
                 }
             }
         }

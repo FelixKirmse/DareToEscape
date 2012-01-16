@@ -29,6 +29,8 @@ namespace BlackDragonEngine.GameStates
 
         #region Properties
 
+        private readonly SpriteBatch _spriteBatch;
+
         private int TextLength
         {
             get { return _dialog[_currentDialogue].Text.Length; }
@@ -67,7 +69,6 @@ namespace BlackDragonEngine.GameStates
 
         #endregion
 
-        private SpriteBatch _spriteBatch;
         #endregion
 
         private DialogManager()

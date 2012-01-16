@@ -106,7 +106,7 @@ namespace MapEditor
                                                GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
             GameInitializer.Initialize();
             _coordList = VariableProvider.CoordList;
-            EngineState.GameState = EngineStates.Running;
+            EngineState.GameState = EngineStates.Editor;
             BulletInformationProvider.LoadBulletData(Content);
         }
 
