@@ -7,40 +7,40 @@ using System.Xml.Serialization;
 namespace BlackDragonEngine.Helpers
 {
     [XmlRoot("dictionary")]
-    public sealed class SerializableDictionary<TKey, TValue>
+    public sealed class SerializeableDictionary<TKey, TValue>
         : Dictionary<TKey, TValue>, IXmlSerializable
     {
-        public SerializableDictionary()
+        public SerializeableDictionary()
 
         {
         }
 
-        public SerializableDictionary(IDictionary<TKey, TValue> dictionary)
+        public SerializeableDictionary(IDictionary<TKey, TValue> dictionary)
             : base(dictionary)
         {
         }
 
-        public SerializableDictionary(IEqualityComparer<TKey> comparer)
+        public SerializeableDictionary(IEqualityComparer<TKey> comparer)
             : base(comparer)
         {
         }
 
-        public SerializableDictionary(int capacity)
+        public SerializeableDictionary(int capacity)
             : base(capacity)
         {
         }
 
-        public SerializableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer)
+        public SerializeableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer)
             : base(dictionary, comparer)
         {
         }
 
-        public SerializableDictionary(int capacity, IEqualityComparer<TKey> comparer)
+        public SerializeableDictionary(int capacity, IEqualityComparer<TKey> comparer)
             : base(capacity, comparer)
         {
         }
 
-        public SerializableDictionary(SerializationInfo info, StreamingContext context)
+        public SerializeableDictionary(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

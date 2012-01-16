@@ -91,8 +91,8 @@ namespace DareToEscape.Managers
                 case TileCodes.Transition:
                     Ingame.GetInstance().Activate();
                     LevelManager.LoadLevel<Map<TileCode>, TileCode>(code.Message);
-                    SaveManager<SaveState>.CurrentSaveState.Keys.Clear();
-                    SaveManager<SaveState>.CurrentSaveState.BossDead = false;
+                    GameVariableProvider.SaveManager.CurrentSaveState.Keys.Clear();
+                    GameVariableProvider.SaveManager.CurrentSaveState.BossDead = false;
                     break;
 
                 case TileCodes.Dialog:
@@ -103,7 +103,7 @@ namespace DareToEscape.Managers
                     break;
 
                 case TileCodes.Save:
-                    SaveManager<SaveState>.Save();
+                    GameVariableProvider.SaveManager.Save();
                     codes.Remove(new TileCode(TileCodes.Save));
                     --i;
                     break;

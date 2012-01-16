@@ -6,6 +6,7 @@ using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
+using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 using DMenu = DareToEscape.GameStates.Menu;
 
@@ -50,7 +51,7 @@ namespace DareToEscape.Menus
 
                 case RestartCheck:
                     EngineState.GameState = EngineStates.Running;
-                    SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
+                    GameVariableProvider.SaveManager.Load(VariableProvider.SaveSlot);
                     GameStateManager.State = States.Ingame;
                     break;
 
@@ -63,7 +64,7 @@ namespace DareToEscape.Menus
                     EngineState.GameState = EngineStates.Running;
                     GameStateManager.State = States.Ingame;
                     LevelManager.ReloadLevel<Map<TileCode>, TileCode>();
-                    SaveManager<SaveState>.Save();
+                    GameVariableProvider.SaveManager.Save();
                     break;
             }
         }

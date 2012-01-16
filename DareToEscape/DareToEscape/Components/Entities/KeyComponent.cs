@@ -4,6 +4,7 @@ using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
 using DareToEscape.Helpers;
+using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 
 namespace DareToEscape.Components.Entities
@@ -35,7 +36,7 @@ namespace DareToEscape.Components.Entities
                     Coords cell = _tileMap.GetCellByPixel(obj.Position);
                     _tileMap.RemoveEverythingAtCell(cell);
                     _enabled = false;
-                    SaveManager<SaveState>.CurrentSaveState.Keys.Add(_keystring);
+                    GameVariableProvider.SaveManager.CurrentSaveState.Keys.Add(_keystring);
                 }
             }
         }

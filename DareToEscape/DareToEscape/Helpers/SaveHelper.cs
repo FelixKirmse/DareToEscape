@@ -10,17 +10,17 @@ namespace DareToEscape.Helpers
     {
         public static void OnSave()
         {
-            SaveManager<SaveState>.CurrentSaveState.CurrentLevel = LevelManager.CurrentLevel;
-            SaveManager<SaveState>.CurrentSaveState.PlayerPosition = VariableProvider.CurrentPlayer.Position;
+            GameVariableProvider.SaveManager.CurrentSaveState.CurrentLevel = LevelManager.CurrentLevel;
+            GameVariableProvider.SaveManager.CurrentSaveState.PlayerPosition = VariableProvider.CurrentPlayer.Position;
         }
 
         public static void OnLoad()
         {
-            LevelManager.LoadLevel<Map<TileCode>, TileCode>(SaveManager<SaveState>.CurrentSaveState.CurrentLevel);
+            LevelManager.LoadLevel<Map<TileCode>, TileCode>(GameVariableProvider.SaveManager.CurrentSaveState.CurrentLevel);
             VariableProvider.CurrentPlayer.Position =
-                new Vector2(SaveManager<SaveState>.CurrentSaveState.PlayerPosition.X,
-                            SaveManager<SaveState>.CurrentSaveState.PlayerPosition.Y - 8);
-            if (SaveManager<SaveState>.CurrentSaveState.BossDead)
+                new Vector2(GameVariableProvider.SaveManager.CurrentSaveState.PlayerPosition.X,
+                            GameVariableProvider.SaveManager.CurrentSaveState.PlayerPosition.Y - 8);
+            if (GameVariableProvider.SaveManager.CurrentSaveState.BossDead)
                 foreach (var boss in GameVariableProvider.Bosses)
                     boss.Send("INACTIVE", "");
         }

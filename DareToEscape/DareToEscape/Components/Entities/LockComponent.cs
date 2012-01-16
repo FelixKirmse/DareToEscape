@@ -4,6 +4,7 @@ using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
 using DareToEscape.Helpers;
+using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 
 namespace DareToEscape.Components.Entities
@@ -30,7 +31,7 @@ namespace DareToEscape.Components.Entities
                     obj.CollisionRectangle = new Rectangle(-8, -8, 16, 16);
                 }
 
-                if (SaveManager<SaveState>.CurrentSaveState.Keys.Contains(_keystring))
+                if (GameVariableProvider.SaveManager.CurrentSaveState.Keys.Contains(_keystring))
                 {
                     if (obj.CollisionRectangle.Intersects(VariableProvider.CurrentPlayer.CollisionRectangle))
                     {

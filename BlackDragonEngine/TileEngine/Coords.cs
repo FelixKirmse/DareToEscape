@@ -10,6 +10,10 @@ namespace BlackDragonEngine.TileEngine
         public readonly int X;
         public readonly int Y;
 
+        public Coords()
+        {
+        }
+
         public Coords(int x, int y)
         {
             X = x;

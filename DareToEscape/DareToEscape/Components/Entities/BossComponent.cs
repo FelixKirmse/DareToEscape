@@ -6,6 +6,7 @@ using BlackDragonEngine.Scripting;
 using DareToEscape.Bullets;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
+using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -44,7 +45,7 @@ namespace DareToEscape.Components.Entities
                     SwitchPhase();
                 }
             }
-            if (_active || !SaveManager<SaveState>.CurrentSaveState.BossDead)
+            if (_active || !GameVariableProvider.SaveManager.CurrentSaveState.BossDead)
             {
                 base.Update(obj);
             }
@@ -52,7 +53,7 @@ namespace DareToEscape.Components.Entities
 
         public override void Draw(GameObject obj)
         {
-            if (_active || !SaveManager<SaveState>.CurrentSaveState.BossDead)
+            if (_active || !GameVariableProvider.SaveManager.CurrentSaveState.BossDead)
                 base.Draw(obj);
         }
 
@@ -75,8 +76,8 @@ namespace DareToEscape.Components.Entities
                 Shoot = true;
             if (message == "INACTIVE")
             {
-                SaveManager<SaveState>.CurrentSaveState.BossDead = true;
-                SaveManager<SaveState>.CurrentSaveState.Keys.Add("BOSS");
+                GameVariableProvider.SaveManager.CurrentSaveState.BossDead = true;
+                GameVariableProvider.SaveManager.CurrentSaveState.Keys.Add("BOSS");
                 _active = false;
             }
             base.Receive(message, obj);

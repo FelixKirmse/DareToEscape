@@ -64,6 +64,7 @@ namespace MapEditor
             VariableProvider.Game = this;
             VariableProvider.ScriptEngine = new ScriptEngine(this);
             Components.Add(VariableProvider.ScriptEngine);
+            GameVariableProvider.SaveManager = new SaveManager<SaveState>();
         }
 
         internal Item CurrentItem { private get; set; }
@@ -136,6 +137,7 @@ namespace MapEditor
         {
             MouseState ms = InputProvider.MouseState;
             EntityManager.ClearEntities();
+            VariableProvider.ScriptEngine.StopAllScripts();
             GameVariableProvider.Bosses.Clear();
             CodeManager<TileCode>.CheckCodes<Map<TileCode>>();
             if ((ms.X > 0) && (ms.Y > 0) && (ms.X < 640) && (ms.Y < 480))
@@ -198,7 +200,7 @@ namespace MapEditor
             {
                 if (_lastCell == null)
                 {
-                    InsertItem(cell);
+                    TileMap.RemoveEverythingAtCell(cell);
                     _lastCell = cell;
                     return;
                 }
@@ -206,7 +208,7 @@ namespace MapEditor
                 var path = PathFinder<Map<TileCode>, TileCode>.FindPath(_lastCell, cell, TileMap, true);
                 foreach(var thisCell in path)
                 {
-                    InsertItem(thisCell);
+                    TileMap.RemoveEverythingAtCell(thisCell);
                 }
                 _lastCell = cell;
                 return;

@@ -4,7 +4,9 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
 using BlackDragonEngine.Helpers;
+using DareToEscape.Helpers;
 using DareToEscape.Managers;
+using DareToEscape.Providers;
 
 namespace MapEditor
 {
@@ -318,6 +320,7 @@ namespace MapEditor
                 _focusTextbox.Focus();
                 _focusTextbox.LostFocus += RefocusInputBox;
                 Camera.UpdateWorldRectangle(Game.TileMap);
+                GameVariableProvider.SaveManager.CurrentSaveState = new SaveState();
             }
             else
             {

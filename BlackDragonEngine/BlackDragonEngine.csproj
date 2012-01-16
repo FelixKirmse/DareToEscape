@@ -120,7 +120,7 @@
     <Compile Include="Helpers\EventHelper.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\RotatedRectangle.cs" />
-    <Compile Include="Helpers\SerializableDictionary.cs" />
+    <Compile Include="Helpers\SerializeableDictionary.cs" />
     <Compile Include="Managers\AudioManager.cs" />
     <Compile Include="Managers\CodeManager.cs" />
     <Compile Include="GameStates\DialogManager.cs" />

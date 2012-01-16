@@ -6,6 +6,7 @@ using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
+using DareToEscape.Providers;
 
 namespace DareToEscape.GameStates
 {
@@ -32,10 +33,10 @@ namespace DareToEscape.GameStates
             _elapsedSeconds += ShortCuts.ElapsedSeconds;
             if (GameStateManager.FastDead || _elapsedSeconds >= TimeToAutoResume || InputMapper.StrictAction)
             {
-                if (SaveManager<SaveState>.CurrentSaveState.CurrentLevel != LevelManager.CurrentLevel)
+                if (GameVariableProvider.SaveManager.CurrentSaveState.CurrentLevel != LevelManager.CurrentLevel)
                     LevelManager.ReloadLevel<Map<TileCode>, TileCode>();
                 else
-                    SaveManager<SaveState>.Load(VariableProvider.SaveSlot);
+                    GameVariableProvider.SaveManager.Load(VariableProvider.SaveSlot);
                 GameStateManager.PlayerDead = false;
                 _elapsedSeconds = 0f;
             }

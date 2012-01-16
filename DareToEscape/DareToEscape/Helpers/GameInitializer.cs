@@ -6,6 +6,7 @@ using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
 using DareToEscape.Bullets.Behaviors;
 using DareToEscape.Managers;
+using DareToEscape.Providers;
 using Microsoft.Xna.Framework.Input;
 
 namespace DareToEscape.Helpers
@@ -26,10 +27,10 @@ namespace DareToEscape.Helpers
 
             VariableProvider.GenerateNewRandomSeed();
             VariableProvider.SaveSlot = "1";
-            SaveManager<SaveState>.CurrentSaveState = new SaveState();
+            GameVariableProvider.SaveManager.CurrentSaveState = new SaveState();
 
-            SaveManager<SaveState>.SaveHelper.OnSave += SaveHelper.OnSave;
-            SaveManager<SaveState>.SaveHelper.OnLoad += SaveHelper.OnLoad;
+            GameVariableProvider.SaveManager.SaveHelper.OnSave += SaveHelper.OnSave;
+            GameVariableProvider.SaveManager.SaveHelper.OnLoad += SaveHelper.OnLoad;
 
             DialogManager.DrawMugshot = false;
 

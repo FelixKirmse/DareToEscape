@@ -10,6 +10,7 @@ using BlackDragonEngine.Scripting;
 using BlackDragonEngine.TileEngine;
 using DareToEscape.Helpers;
 using DareToEscape.Managers;
+using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -65,6 +66,7 @@ namespace DareToEscape
             var engine = new ScriptEngine(this);
             Components.Add(engine);
             VariableProvider.ScriptEngine = engine;
+            GameVariableProvider.SaveManager = new SaveManager<SaveState>();
         }
 
         public ResolutionInformation ResInfo { private get; set; }

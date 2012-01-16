@@ -9,58 +9,58 @@ using BlackDragonEngine.Providers;
 
 namespace BlackDragonEngine.Managers
 {
-    public static class SaveManager<T>
+    public class SaveManager<T>
     {
-        public static T CurrentSaveState;
+        public T CurrentSaveState;
 
-        public static readonly string SaveFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) +
+        public readonly string SaveFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) +
                                                      @"\DareToEscape\saves\";
 
-        public static EventHelper SaveHelper = new EventHelper();
+        public readonly EventHelper SaveHelper = new EventHelper();
 
-        public static string CurrentSaveFile
+        public  string CurrentSaveFile
         {
             get { return SaveFilePath + GetMD5Hash(VariableProvider.SaveSlot) + ".svf"; }
         }
 
-        public static void Save()
+        public void Save()
         {
             SaveHelper.SaveHelp();
             Save(VariableProvider.SaveSlot);
         }
 
-        public static void Save(string saveSlot)
+        public void Save(string saveSlot)
         {
             if (!Directory.Exists(SaveFilePath))
                 Directory.CreateDirectory(SaveFilePath);
-            var fs = new FileStream(SaveFilePath + GetMD5Hash(saveSlot) + ".svf", FileMode.Create);
-            var gzs = new GZipStream(fs, CompressionMode.Compress);
-            var xmls = new XmlSerializer(CurrentSaveState.GetType());
-            xmls.Serialize(gzs, CurrentSaveState);
-            gzs.Close();
-            fs.Close();
+            using(var fs = new FileStream(SaveFilePath + GetMD5Hash(saveSlot) + ".svf", FileMode.Create))
+            using(var gzs = new GZipStream(fs, CompressionMode.Compress))
+            {
+                var xmls = new XmlSerializer(CurrentSaveState.GetType());
+                xmls.Serialize(gzs, CurrentSaveState);
+            }
         }
 
-        public static void Load(string saveSlot)
+        public void Load(string saveSlot)
         {
-            var fs = new FileStream(SaveFilePath + GetMD5Hash(saveSlot) + ".svf", FileMode.Open);
-            var gzs = new GZipStream(fs, CompressionMode.Decompress);
-            var xmls = new XmlSerializer(CurrentSaveState.GetType());
-            CurrentSaveState = (T) xmls.Deserialize(gzs);
-            gzs.Close();
-            fs.Close();
+            using(var fs = new FileStream(SaveFilePath + GetMD5Hash(saveSlot) + ".svf", FileMode.Open))
+            using(var gzs = new GZipStream(fs, CompressionMode.Decompress))
+            {
+                var xmls = new XmlSerializer(CurrentSaveState.GetType());
+                CurrentSaveState = (T)xmls.Deserialize(gzs);
+            }
             SaveHelper.LoadHelp();
         }
 
-        private static string GetMD5Hash(string TextToHash)
+        private string GetMD5Hash(string textToHash)
         {
-            if (string.IsNullOrEmpty(TextToHash))
+            if (string.IsNullOrEmpty(textToHash))
             {
                 return string.Empty;
             }
             var md5 = new MD5CryptoServiceProvider();
-            byte[] textToHash = Encoding.Default.GetBytes(TextToHash);
-            byte[] result = md5.ComputeHash(textToHash);
+            byte[] bytes = Encoding.Default.GetBytes(textToHash);
+            byte[] result = md5.ComputeHash(bytes);
 
             return BitConverter.ToString(result);
         }
