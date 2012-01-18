@@ -26,7 +26,6 @@ namespace MapEditor
         private string _mapPath; //Path to DareToEscapeContent
         private Rectangle _marker;
         private string _oldLabel;
-        public string TransitionString { get; set; }
 
         public Editor()
         {
@@ -42,6 +41,8 @@ namespace MapEditor
             LoadEntities();
             LoadCodes();
         }
+
+        public string TransitionString { get; set; }
 
         private int Tile
         {
@@ -219,25 +220,26 @@ namespace MapEditor
             {
                 _entitiesList.SelectedItems[0].Selected = false;
             }
-            catch(Exception)
+            catch (Exception)
             {
             }
             finally
             {
                 _doNothing = false;
-                if(_codesList.SelectedIndices[0] == 1)
+                if (_codesList.SelectedIndices[0] == 1)
                 {
-                    using(var transDial = new TransitionDialog(this))
+                    using (var transDial = new TransitionDialog(this))
                     {
                         transDial.ShowDialog(this);
-                        if(transDial.DialogResult == DialogResult.OK)
+                        if (transDial.DialogResult == DialogResult.OK)
                         {
                             Game.CurrentItem = new Item
-                            {
-                                AddToExisting = true,
-                                Codes =
-                                    new List<TileCode> { new TileCode(TileCodes.Transition, TransitionString) }
-                            };
+                                                   {
+                                                       AddToExisting = true,
+                                                       Codes =
+                                                           new List<TileCode>
+                                                               {new TileCode(TileCodes.Transition, TransitionString)}
+                                                   };
                         }
                     }
                 }

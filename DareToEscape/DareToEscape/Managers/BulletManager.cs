@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using BlackDragonEngine;
 using BlackDragonEngine.GameStates;
 using BlackDragonEngine.Helpers;
-using BlackDragonEngine.Providers;
 using DareToEscape.Bullets;
 
 namespace DareToEscape.Managers

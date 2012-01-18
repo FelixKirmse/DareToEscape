@@ -24,6 +24,7 @@ namespace MapEditor
 {
     public sealed class MapEditor : Game
     {
+        private readonly BulletManager _bulletManager;
         private readonly IntPtr _drawSurface;
         private readonly Editor _editorForm;
         private readonly Control _gameControl;
@@ -33,7 +34,6 @@ namespace MapEditor
         private readonly Viewport _renderViewport = new Viewport(0, 0, 640, 480);
         private readonly Viewport _standardViewport = new Viewport(0, 0, 320, 240);
         public TileMap<Map<TileCode>, TileCode> TileMap;
-        public bool Playing { get; set; }
         private CoordList _coordList;
         private Item _draggingItem;
         private bool _draggingItemBool;
@@ -41,8 +41,7 @@ namespace MapEditor
         private GameObject _player;
         private RenderTarget2D _renderTarget;
         private SpriteBatch _spriteBatch;
-        private readonly BulletManager _bulletManager;
-        
+
         public MapEditor()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -66,6 +65,8 @@ namespace MapEditor
             Components.Add(VariableProvider.ScriptEngine);
             GameVariableProvider.SaveManager = new SaveManager<SaveState>();
         }
+
+        public bool Playing { get; set; }
 
         internal Item CurrentItem { private get; set; }
 
@@ -115,7 +116,7 @@ namespace MapEditor
             if (Form.ActiveForm != _parentForm) return;
             InputProvider.Update();
             VariableProvider.GameTime = gameTime;
-            if(Playing)
+            if (Playing)
             {
                 UpdateIngame();
             }
@@ -152,7 +153,17 @@ namespace MapEditor
 
         private void HandleMouseActions(MouseState ms)
         {
-            Coords cell = TileMap.GetCellByPixel(Camera.ScreenToWorld(new Vector2(ms.X/2, ms.Y/2)));
+            Coords cell = TileMap.GetCellByPixel(Camera.ScreenToWorld(_coordList[ms.X/2, ms.Y/2]));
+            _editorForm._positionLabel.Text = string.Format(
+                @"DebugInfo:
+    Coords GetCellByPixel: ({0}|{1})
+    Coords AltGetCellByPixel: ({2}|{3})
+    WorldPixelCoords: ({4}|{5})
+    ScreenPixelCoords: ({6}|{7})",
+                cell.X, cell.Y, Camera.ScreenToWorld(new Vector2(ms.X/2)).X/TileMap.TileWidth,
+                Camera.ScreenToWorld(new Vector2(ms.Y/2)).Y/TileMap.TileHeight,
+                Camera.ScreenToWorld(new Vector2(ms.X/2, ms.Y/2)).X, Camera.ScreenToWorld(new Vector2(ms.X/2, ms.Y/2)).Y,
+                ms.X/2, ms.Y/2);
             if (!InputMapper.LeftClick)
             {
                 _lastCell = null;
@@ -173,7 +184,7 @@ namespace MapEditor
                     _draggingItemBool = true;
                 }
 
-                if(_lastCell != null)
+                if (_lastCell != null)
                     TileMap.RemoveEverythingAtCell(_lastCell);
                 TileMap.RemoveEverythingAtCell(cell);
                 InsertItem(cell, _draggingItem);
@@ -182,13 +193,13 @@ namespace MapEditor
             }
             if (InputMapper.StrictLeftClick || ShortCuts.IsKeyDown(Keys.LeftShift) && InputMapper.LeftClick)
             {
-                if(_lastCell == null)
+                if (_lastCell == null)
                 {
                     InsertItem(cell);
                     _lastCell = cell;
                     return;
                 }
-                var path = PathFinder<Map<TileCode>, TileCode>.FindPath(_lastCell, cell, TileMap, true);
+                List<Vector2> path = PathFinder<Map<TileCode>, TileCode>.FindPath(_lastCell, cell, TileMap, true);
                 foreach (var thisCell in path)
                 {
                     InsertItem(thisCell);
@@ -205,8 +216,8 @@ namespace MapEditor
                     return;
                 }
 
-                var path = PathFinder<Map<TileCode>, TileCode>.FindPath(_lastCell, cell, TileMap, true);
-                foreach(var thisCell in path)
+                List<Vector2> path = PathFinder<Map<TileCode>, TileCode>.FindPath(_lastCell, cell, TileMap, true);
+                foreach (var thisCell in path)
                 {
                     TileMap.RemoveEverythingAtCell(thisCell);
                 }
@@ -220,13 +231,13 @@ namespace MapEditor
             var currPos = new Vector2(ms.X, ms.Y);
             var lastPos = new Vector2(InputProvider.LastMouseState.X, InputProvider.LastMouseState.Y);
             Vector2 diff = currPos - lastPos;
-            Camera.ForcePosition -= diff / 2;
+            Camera.ForcePosition -= diff/2;
         }
 
         private void InsertItem(Coords cell, Item item)
         {
             Item i = item;
-            if(i.Codes != null)
+            if (i.Codes != null)
                 i.Codes = item.Codes.ToList();
             MapSquare? square = i.TileID == null || i.AddToExisting
                                     ? TileMap.GetMapSquareAtCell(cell)

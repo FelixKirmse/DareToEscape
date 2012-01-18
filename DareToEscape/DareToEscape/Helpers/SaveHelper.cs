@@ -16,7 +16,8 @@ namespace DareToEscape.Helpers
 
         public static void OnLoad()
         {
-            LevelManager.LoadLevel<Map<TileCode>, TileCode>(GameVariableProvider.SaveManager.CurrentSaveState.CurrentLevel);
+            LevelManager.LoadLevel<Map<TileCode>, TileCode>(
+                GameVariableProvider.SaveManager.CurrentSaveState.CurrentLevel);
             VariableProvider.CurrentPlayer.Position =
                 new Vector2(GameVariableProvider.SaveManager.CurrentSaveState.PlayerPosition.X,
                             GameVariableProvider.SaveManager.CurrentSaveState.PlayerPosition.Y - 8);

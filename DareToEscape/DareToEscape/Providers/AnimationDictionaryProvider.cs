@@ -19,24 +19,24 @@ namespace DareToEscape.Providers
                                      {
                                          "Idle",
                                          new AnimationStrip(
-                                         playerSheet, new Rectangle(0, 0, 16, 24), 1, "Idle")
+                                         playerSheet, new Rectangle(0, 0, 24, 24), 1, "Idle")
                                          },
                                      {
                                          "Walk",
                                          new AnimationStrip(
-                                         playerSheet, new Rectangle(0, 24, 160, 24), 10, "Walk")
+                                         playerSheet, new Rectangle(0, 24, 120, 48), 24, 24, "Walk")
                                          },
                                      {
                                          "JumpUp",
                                          new AnimationStrip(
-                                         playerSheet, new Rectangle(0, 48, 16, 24), 1,
+                                         playerSheet, new Rectangle(24, 0, 24, 24), 1,
                                          "JumpUp")
                                          },
                                      {
                                          "JumpDown",
                                          new AnimationStrip(
-                                         playerSheet, new Rectangle(16, 48, 32, 24), 2,
-                                         "JumpDown", false)
+                                         playerSheet, new Rectangle(48, 0, 48, 24), 2,
+                                         "JumpDown", false, .15f)
                                          }
                                  };
             return animations;

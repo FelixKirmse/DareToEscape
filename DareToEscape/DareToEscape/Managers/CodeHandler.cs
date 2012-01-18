@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using BlackDragonEngine;
 using BlackDragonEngine.Components;
 using BlackDragonEngine.Entities;
-using BlackDragonEngine.GameStates;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.TileEngine;
@@ -110,12 +109,20 @@ namespace DareToEscape.Managers
                     --i;
                     break;
 
-                case TileCodes.WalkLeft:
-                    player.Send("PHYSICS_SET_NORIGHT", true);
+                case TileCodes.PushLeft:
+                    player.Send("PHYSICS_PUSHLEFT", true);
                     break;
 
-                case TileCodes.WalkRight:
-                    player.Send("PHYSICS_SET_NOLEFT", true);
+                case TileCodes.PushRight:
+                    player.Send("PHYSICS_PUSHRIGHT", true);
+                    break;
+
+                case TileCodes.PushUp:
+                    player.Send("PHYSICS_PUSHUP", true);
+                    break;
+
+                case TileCodes.PushDown:
+                    player.Send("PHYSICS_PUSHDOWN", true);
                     break;
 
                 case TileCodes.Deadly:

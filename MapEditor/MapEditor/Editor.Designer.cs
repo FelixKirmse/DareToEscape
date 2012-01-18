@@ -54,6 +54,7 @@
             this._focusTextbox = new System.Windows.Forms.TextBox();
             this._playButton = new System.Windows.Forms.Button();
             this._tileIndexLabel = new System.Windows.Forms.Label();
+            this._positionLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this._pctSurface)).BeginInit();
             this._menustrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._tileSheetBox)).BeginInit();
@@ -285,11 +286,21 @@
             this._tileIndexLabel.Size = new System.Drawing.Size(0, 13);
             this._tileIndexLabel.TabIndex = 12;
             // 
+            // _positionLabel
+            // 
+            this._positionLabel.AutoSize = true;
+            this._positionLabel.Location = new System.Drawing.Point(968, 566);
+            this._positionLabel.Name = "_positionLabel";
+            this._positionLabel.Size = new System.Drawing.Size(35, 13);
+            this._positionLabel.TabIndex = 13;
+            this._positionLabel.Text = "label5";
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1254, 986);
+            this.Controls.Add(this._positionLabel);
             this.Controls.Add(this._tileIndexLabel);
             this.Controls.Add(this._playButton);
             this.Controls.Add(this.label4);
@@ -343,5 +354,6 @@
         private System.Windows.Forms.TextBox _focusTextbox;
         private System.Windows.Forms.Button _playButton;
         private System.Windows.Forms.Label _tileIndexLabel;
+        public System.Windows.Forms.Label _positionLabel;
     }
 }

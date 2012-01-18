@@ -6,22 +6,22 @@ namespace DareToEscape.Components.PlayerComponents
 {
     internal class PlayerGraphicsComponent : AnimatedGraphicsComponent
     {
-        private bool focused;
-        private bool onGround;
+        private bool _focused;
+        private bool _onGround;
 
         public PlayerGraphicsComponent()
         {
             CurrentAnimation = "Idle";
             Animations = AnimationDictionaryProvider.GetPlayerAnimations();
             DrawDepth = .85f;
-            focused = false;
+            _focused = false;
         }
 
         public override void Update(GameObject obj)
         {
             if (ReceivedAnimation == "")
             {
-                if (onGround)
+                if (_onGround)
                     ReceivedAnimation = "Idle";
             }
 
@@ -46,13 +46,13 @@ namespace DareToEscape.Components.PlayerComponents
                     if (messageParts[2] == "ONGROUND")
                     {
                         if (obj is bool)
-                            onGround = (bool) (object) obj;
+                            _onGround = (bool) (object) obj;
                     }
 
                     if (messageParts[2] == "FOCUSED")
                     {
                         if (obj is bool)
-                            focused = (bool) (object) obj;
+                            _focused = (bool) (object) obj;
                     }
                 }
             }

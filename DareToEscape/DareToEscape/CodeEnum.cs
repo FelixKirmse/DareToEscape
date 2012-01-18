@@ -40,9 +40,11 @@ namespace DareToEscape
         Water,
         MainMenu,
         Save,
-        WalkLeft,
-        WalkRight,
+        PushLeft,
+        PushRight,
         Deadly,
-        Trigger
+        Trigger,
+        PushUp,
+        PushDown
     }
 }

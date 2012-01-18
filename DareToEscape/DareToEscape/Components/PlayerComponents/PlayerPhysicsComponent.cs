@@ -9,17 +9,18 @@ namespace DareToEscape.Components.PlayerComponents
 {
     internal class PlayerPhysicsComponent : PhysicsComponent
     {
-        private readonly Rectangle _collisionRectangle = new Rectangle(0, 4, 16, 18);
+        private readonly Rectangle _collisionRectangle = new Rectangle(7, 5, 10, 18);
         private readonly TileMap<Map<TileCode>, TileCode> _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
         private bool _focused;
         private float _gravity;
         private float _horiz;
         private bool _inWater;
         private bool _jumpThroughCheck;
-
-        private bool _noLeft;
-        private bool _noRight;
         private bool _onGround;
+        private bool _pushDown;
+        private bool _pushLeft;
+        private bool _pushRight;
+        private bool _pushUp;
         private bool _setRectangle = true;
 
         public override void Update(GameObject obj)
@@ -35,13 +36,6 @@ namespace DareToEscape.Components.PlayerComponents
             if (_horiz != 0)
             {
                 obj.Send("GRAPHICS_SET_ONGROUND", _onGround);
-                if ((_horiz > 0 && _noRight) || (_horiz < 0 && _noLeft))
-                {
-                    _noRight = false;
-                    _noLeft = false;
-                    obj.Send("GRAPHICS_PLAYANIMATION", "Idle");
-                    return;
-                }
                 for (int i = 0; i < Math.Abs(_horiz); ++i)
                 {
                     if (_inWater || _focused)
@@ -179,18 +173,60 @@ namespace DareToEscape.Components.PlayerComponents
 
             if (messageParts[0] == "PHYSICS")
             {
+                switch (messageParts[1])
+                {
+                    case "PUSHLEFT":
+                        _pushLeft = true;
+                        break;
+
+                    case "PUSHRIGHT":
+                        _pushRight = true;
+                        break;
+
+                    case "PUSHUP":
+                        _pushUp = true;
+                        break;
+
+                    case "PUSHDOWN":
+                        _pushDown = true;
+                        break;
+                }
                 if (messageParts[1] == "SET")
                 {
                     switch (messageParts[2])
                     {
                         case "GRAVITY":
                             if (obj is float)
+                            {
                                 _gravity = (float) (object) obj;
+                                if (_pushDown)
+                                {
+                                    _gravity = 10;
+                                    _pushDown = false;
+                                }
+                                if (_pushUp)
+                                {
+                                    _gravity = -10;
+                                    _pushUp = false;
+                                }
+                            }
                             break;
 
                         case "HORIZ":
                             if (obj is float)
+                            {
                                 _horiz = (float) (object) obj;
+                                if (_pushLeft)
+                                {
+                                    _horiz = -3;
+                                    _pushLeft = false;
+                                }
+                                if (_pushRight)
+                                {
+                                    _horiz = 3;
+                                    _pushRight = false;
+                                }
+                            }
                             break;
 
                         case "ONGROUND":
@@ -206,16 +242,6 @@ namespace DareToEscape.Components.PlayerComponents
                         case "INWATER":
                             if (obj is bool)
                                 _inWater = (bool) (object) obj;
-                            break;
-
-                        case "NORIGHT":
-                            if (obj is bool)
-                                _noRight = (bool) (object) obj;
-                            break;
-
-                        case "NOLEFT":
-                            if (obj is bool)
-                                _noLeft = (bool) (object) obj;
                             break;
 
                         case "FOCUSED":

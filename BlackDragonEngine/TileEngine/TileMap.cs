@@ -93,7 +93,7 @@ namespace BlackDragonEngine.TileEngine
         private Rectangle? TileSourceRectangle(int? tileIndex)
         {
             if (tileIndex == null)
-                return null;
+                return _tileSourceRects[0];
             return _tileSourceRects[(int) tileIndex];
         }
 
@@ -101,21 +101,35 @@ namespace BlackDragonEngine.TileEngine
 
         #region Information about Map Cells
 
-        public int GetCellByPixelX(int pixelX)
+        public int GetCellByPixelX(float pixelX)
         {
-            int cell = pixelX/TileWidth;
-            return pixelX < 0 ? cell - 1 : cell;
+            float cell = pixelX/TileWidth;
+            if (cell < 0)
+            {
+                if (cell < (int) cell)
+                {
+                    return (int) cell - 1;
+                }
+            }
+            return (int) cell;
         }
 
-        public int GetCellByPixelY(int pixelY)
+        public int GetCellByPixelY(float pixelY)
         {
-            int cell = pixelY/TileWidth;
-            return pixelY < 0 ? cell - 1 : cell;
+            float cell = pixelY/TileWidth;
+            if (cell < 0)
+            {
+                if (cell < (int) cell)
+                {
+                    return (int) cell - 1;
+                }
+            }
+            return (int) cell;
         }
 
-        public Coords GetCellByPixel(Vector2 pixelLocation)
+        public Coords GetCellByPixel(Coords pixelLocation)
         {
-            return _coordList[GetCellByPixelX((int) pixelLocation.X), GetCellByPixelY((int) pixelLocation.Y)];
+            return _coordList[GetCellByPixelX(pixelLocation.X), GetCellByPixelY(pixelLocation.Y)];
         }
 
         private Vector2 GetCellCenter(int cellX, int cellY)

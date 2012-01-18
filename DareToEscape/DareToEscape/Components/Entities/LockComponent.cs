@@ -1,9 +1,7 @@
 ﻿using BlackDragonEngine.Components;
 using BlackDragonEngine.Entities;
-using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
-using DareToEscape.Helpers;
 using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 
@@ -21,29 +19,24 @@ namespace DareToEscape.Components.Entities
             _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
         }
 
-        public  void Update(GameObject obj)
+        #region IComponent Members
+
+        public void Update(GameObject obj)
         {
             if (_enabled)
             {
                 if (_setRectangle)
                 {
                     _setRectangle = false;
-                    obj.CollisionRectangle = new Rectangle(-8, -8, 16, 16);
+                    obj.CollisionRectangle = new Rectangle(-2, -2, 12, 12);
                 }
 
-                if (GameVariableProvider.SaveManager.CurrentSaveState.Keys.Contains(_keystring))
+                if (obj.CollisionRectangle.Intersects(VariableProvider.CurrentPlayer.CollisionRectangle) &&
+                    GameVariableProvider.SaveManager.CurrentSaveState.Keys.Contains(_keystring))
                 {
-                    if (obj.CollisionRectangle.Intersects(VariableProvider.CurrentPlayer.CollisionRectangle))
-                    {
-                        _enabled = false;
-                        Coords cell = _tileMap.GetCellByPixel(obj.Position);
-                        _tileMap.RemoveEverythingAtCell(cell);
-                    }
-                }
-                else
-                {
+                    _enabled = false;
                     Coords cell = _tileMap.GetCellByPixel(obj.Position);
-                    _tileMap.SetPassabilityAtCell(cell, false);
+                    _tileMap.RemoveEverythingAtCell(cell);
                 }
             }
         }
@@ -58,5 +51,7 @@ namespace DareToEscape.Components.Entities
                 }
             }
         }
+
+        #endregion
     }
 }

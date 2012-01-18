@@ -34,10 +34,8 @@ namespace DareToEscape.Providers
             using (var sr = new StreamReader(Application.StartupPath + @"/Content/data/shotdata.txt"))
             {
                 string currentLine;
-                int counter = 0;
                 while ((currentLine = sr.ReadLine()) != null)
                 {
-                    ++counter;
                     int id;
                     int x, y, width, height;
 

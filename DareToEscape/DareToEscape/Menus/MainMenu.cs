@@ -5,7 +5,6 @@ using BlackDragonEngine.Menus;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
 using DareToEscape.GameStates;
-using DareToEscape.Helpers;
 using DareToEscape.Managers;
 using DareToEscape.Providers;
 using Microsoft.Xna.Framework;

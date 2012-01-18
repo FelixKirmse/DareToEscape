@@ -1,10 +1,12 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace MapEditor
 {
     public partial class TransitionDialog : Form
     {
         private readonly Editor _editor;
+
         public TransitionDialog(Editor editor)
         {
             _editor = editor;
@@ -13,13 +15,13 @@ namespace MapEditor
 
         private void MapNameInputBoxKeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
-                OkButtonClick(null,null);
+                OkButtonClick(null, null);
             }
         }
 
-        private void OkButtonClick(object sender, System.EventArgs e)
+        private void OkButtonClick(object sender, EventArgs e)
         {
             _editor.TransitionString = _mapNameInputBox.Text;
             DialogResult = DialogResult.OK;

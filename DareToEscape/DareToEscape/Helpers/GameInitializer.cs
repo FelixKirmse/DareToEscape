@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using BlackDragonEngine.GameStates;
 using BlackDragonEngine.Helpers;
-using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
 using DareToEscape.Bullets.Behaviors;
 using DareToEscape.Managers;

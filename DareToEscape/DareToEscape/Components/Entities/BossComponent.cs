@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using BlackDragonEngine.Entities;
-using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.Scripting;
 using DareToEscape.Bullets;
-using DareToEscape.Helpers;
 using DareToEscape.Managers;
 using DareToEscape.Providers;
 using Microsoft.Xna.Framework;

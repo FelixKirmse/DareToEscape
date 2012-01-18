@@ -1,9 +1,7 @@
 ﻿using BlackDragonEngine.Components;
 using BlackDragonEngine.Entities;
-using BlackDragonEngine.Managers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
-using DareToEscape.Helpers;
 using DareToEscape.Providers;
 using Microsoft.Xna.Framework;
 
@@ -11,15 +9,17 @@ namespace DareToEscape.Components.Entities
 {
     internal class KeyComponent : IComponent
     {
+        private readonly TileMap<Map<TileCode>, TileCode> _tileMap;
         private bool _enabled = true;
         private string _keystring;
         private bool _setRectangle = true;
-        private TileMap<Map<TileCode>, TileCode> _tileMap;
 
         public KeyComponent()
         {
             _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
         }
+
+        #region IComponent Members
 
         public void Update(GameObject obj)
         {
@@ -51,5 +51,7 @@ namespace DareToEscape.Components.Entities
                 }
             }
         }
+
+        #endregion
     }
 }

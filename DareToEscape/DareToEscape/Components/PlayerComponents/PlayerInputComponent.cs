@@ -6,46 +6,46 @@ namespace DareToEscape.Components.PlayerComponents
 {
     internal class PlayerInputComponent : InputComponent
     {
-        private float gravity;
-        private int jumpCount;
-        private bool onGround;
+        private float _gravity;
+        private int _jumpCount;
+        private bool _onGround;
 
         public override void Update(GameObject obj)
         {
-            if (!InputMapper.Jump && gravity < 0)
+            if (!InputMapper.Jump && _gravity < 0)
             {
-                gravity += .45f;
+                _gravity += .45f;
             }
 
-            if (gravity < 10)
-                gravity += 0.5f;
+            if (_gravity < 10)
+                _gravity += 0.5f;
 
-            if (InputMapper.StrictJump && jumpCount == 1 && gravity > -5)
+            if (InputMapper.StrictJump && _jumpCount == 1 && _gravity > -5)
             {
-                gravity = -8;
-                jumpCount = 2;
+                _gravity = -8;
+                _jumpCount = 2;
             }
-            obj.Send("PHYSICS_SET_GRAVITY", gravity);
+            obj.Send("PHYSICS_SET_GRAVITY", _gravity);
             obj.Send("PHYSICS_RUN_GRAVITYLOOP", obj);
 
-            if (InputMapper.StrictJump && onGround)
+            if (InputMapper.StrictJump && _onGround)
             {
-                gravity = -10;
-                jumpCount = 1;
-                onGround = false;
+                _gravity = -10;
+                _jumpCount = 1;
+                _onGround = false;
                 obj.Send("PHYSICS_SET_ONGROUND", false);
             }
 
-            if (gravity > 0 && jumpCount != 2)
+            if (_gravity > 0 && _jumpCount != 2)
             {
-                jumpCount = 1;
+                _jumpCount = 1;
             }
 
 
             if (InputMapper.Left)
             {
                 obj.Send<float>("PHYSICS_SET_HORIZ", -2);
-                if (onGround)
+                if (_onGround)
                 {
                     obj.Send("GRAPHICS_PLAYANIMATION", "Walk");
                 }
@@ -54,7 +54,7 @@ namespace DareToEscape.Components.PlayerComponents
             else if (InputMapper.Right)
             {
                 obj.Send<float>("PHYSICS_SET_HORIZ", 2);
-                if (onGround)
+                if (_onGround)
                 {
                     obj.Send("GRAPHICS_PLAYANIMATION", "Walk");
                 }
@@ -63,7 +63,7 @@ namespace DareToEscape.Components.PlayerComponents
             else
             {
                 obj.Send<float>("PHYSICS_SET_HORIZ", 0);
-                if (onGround)
+                if (_onGround)
                 {
                     obj.Send("GRAPHICS_PLAYANIMATION", "Idle");
                 }
@@ -85,17 +85,17 @@ namespace DareToEscape.Components.PlayerComponents
                     {
                         case "GRAVITY":
                             if (obj is float)
-                                gravity = (float) (object) obj;
+                                _gravity = (float) (object) obj;
                             break;
 
                         case "ONGROUND":
                             if (obj is bool)
-                                onGround = (bool) (object) obj;
+                                _onGround = (bool) (object) obj;
                             break;
 
                         case "JUMPCOUNT":
                             if (obj is int)
-                                jumpCount = (int) (object) obj;
+                                _jumpCount = (int) (object) obj;
                             break;
                     }
                 }

@@ -11,14 +11,15 @@ namespace BlackDragonEngine.Helpers
     {
         #region Declarations
 
+        private readonly int _framesPerRow;
         private int _currentFrame;
         private bool _finishedPlaying;
-        private float _frameDelay = 0.05f;
+        private float _frameDelay;
         private int _frameHeight;
         private float _frameTimer;
         private int _frameWidth;
 
-        private bool _loopAnimation = true;
+        private bool _loopAnimation;
         private Rectangle _stripRect;
 
         #endregion
@@ -65,7 +66,12 @@ namespace BlackDragonEngine.Helpers
 
         public Rectangle FrameRectangle
         {
-            get { return new Rectangle(_currentFrame*_frameWidth, _stripRect.Y, _frameWidth, _frameHeight); }
+            get
+            {
+                return new Rectangle((_currentFrame%_framesPerRow)*_frameWidth + _stripRect.X,
+                                     (_currentFrame/_framesPerRow)*_frameHeight + _stripRect.Y, _frameWidth,
+                                     _frameHeight);
+            }
         }
 
         #endregion
@@ -89,6 +95,8 @@ namespace BlackDragonEngine.Helpers
             Texture = texture;
             _frameWidth = frameWidth;
             _frameHeight = texture.Height;
+            _framesPerRow = texture.Width/frameWidth;
+            FrameCount = _framesPerRow;
             Name = name;
             _stripRect = new Rectangle(0, 0, texture.Width, texture.Height);
         }
@@ -101,9 +109,24 @@ namespace BlackDragonEngine.Helpers
             FrameCount = frameCount;
             _frameHeight = stripRect.Height;
             _frameWidth = stripRect.Width/frameCount;
+            _framesPerRow = frameCount;
             Name = name;
             _loopAnimation = loop;
             _frameDelay = frameDelay;
+        }
+
+        public AnimationStrip(Texture2D texture, Rectangle stripRect, int frameWidth, int frameHeight, string name,
+                              bool loop = true, float frameDelay = .05f)
+        {
+            Texture = texture;
+            _stripRect = stripRect;
+            _frameWidth = frameWidth;
+            _frameHeight = frameHeight;
+            Name = name;
+            _loopAnimation = loop;
+            _frameDelay = frameDelay;
+            _framesPerRow = _stripRect.Width/frameWidth;
+            FrameCount = _framesPerRow*(_stripRect.Height/frameHeight);
         }
 
         #endregion
@@ -131,7 +154,7 @@ namespace BlackDragonEngine.Helpers
                     }
                     else
                     {
-                        _currentFrame = FrameCount;
+                        _currentFrame = FrameCount - 1;
                         _finishedPlaying = true;
                     }
                 }
