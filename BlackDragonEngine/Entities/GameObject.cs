@@ -12,6 +12,11 @@ namespace BlackDragonEngine.Entities
     public class GameObject : IGameObject
     {
         /// <summary>
+        ///   The list of components this object uses
+        /// </summary>
+        protected readonly List<IComponent> components = new List<IComponent>();
+
+        /// <summary>
         ///   Velocity of the Object [DEPRECATED]
         /// </summary>
         public Vector2 Velocity;
@@ -25,11 +30,6 @@ namespace BlackDragonEngine.Entities
         ///   The collision rectangle of the object in local coordinates
         /// </summary>
         protected Rectangle collisionRectangle;
-
-        /// <summary>
-        ///   The list of components this object uses
-        /// </summary>
-        protected List<IComponent> components = new List<IComponent>();
 
         /// <summary>
         ///   The current position of the Object
@@ -55,8 +55,7 @@ namespace BlackDragonEngine.Entities
         /// <param name = "component"></param>
         public GameObject(IComponent component)
         {
-            components = new List<IComponent>();
-            components.Add(component);
+            components = new List<IComponent> {component};
         }
 
         /// <summary>
@@ -125,6 +124,11 @@ namespace BlackDragonEngine.Entities
 
         #region IGameObject Members
 
+        public List<IComponent> Components
+        {
+            get { return components; }
+        }
+
         /// <summary>
         ///   Updates all the components
         /// </summary>
@@ -168,13 +172,13 @@ namespace BlackDragonEngine.Entities
         ///   Used to send messages to all components
         /// </summary>
         /// <typeparam name = "T"></typeparam>
-        /// <param name = "Message">The message</param>
+        /// <param name = "message">The message</param>
         /// <param name = "obj">An attachment</param>
-        public void Send<T>(string Message, T obj)
+        public void Send<T>(string message, T obj)
         {
             foreach (var component in components)
             {
-                component.Receive(Message, obj);
+                component.Receive(message, obj);
             }
         }
     }

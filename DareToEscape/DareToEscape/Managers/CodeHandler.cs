@@ -6,6 +6,7 @@ using BlackDragonEngine.Entities;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Managers;
 using BlackDragonEngine.TileEngine;
+using DareToEscape.Components.Entities;
 using DareToEscape.GameStates;
 using DareToEscape.Helpers;
 using DareToEscape.Providers;
@@ -133,6 +134,14 @@ namespace DareToEscape.Managers
                     if (code.Message == "BOSS")
                         foreach (var boss in GameVariableProvider.Bosses)
                             boss.Send<string>("SHOOT", null);
+                    break;
+
+                case TileCodes.CameraFocusTrigger:
+                    string[] parts = code.Message.Split('_');
+                    string pointName = parts[0];
+                    int frameCount;
+                    int.TryParse(parts[1], out frameCount);
+                    EntityManager.AddEntity(new GameObject(CameraMoveComponent.GetInstance(pointName, frameCount)));
                     break;
             }
             return i;

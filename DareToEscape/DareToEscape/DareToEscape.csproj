@@ -129,6 +129,7 @@
     <Compile Include="Components\Entities\Boss1Component.cs" />
     <Compile Include="Components\Entities\BossComponent.cs" />
     <Compile Include="Components\Entities\BossKillerComponent.cs" />
+    <Compile Include="Components\Entities\CameraMoveComponent.cs" />
     <Compile Include="Components\Entities\CheckPointGraphicsComponent.cs" />
     <Compile Include="Components\Entities\ExitGraphicsComponent.cs" />
     <Compile Include="Components\Entities\KeyComponent.cs" />

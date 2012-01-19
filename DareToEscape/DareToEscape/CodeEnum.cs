@@ -23,6 +23,11 @@ namespace DareToEscape
         {
             return !(a == b);
         }
+
+        public override string ToString()
+        {
+            return string.Format("\n        Code: {0} \n        Message: {1}", Code, Message);
+        }
     }
 
     public enum TileCodes
@@ -45,6 +50,8 @@ namespace DareToEscape
         Deadly,
         Trigger,
         PushUp,
-        PushDown
+        PushDown,
+        CameraFocusPoint,
+        CameraFocusTrigger
     }
 }

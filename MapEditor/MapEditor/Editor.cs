@@ -42,8 +42,6 @@ namespace MapEditor
             LoadCodes();
         }
 
-        public string TransitionString { get; set; }
-
         private int Tile
         {
             get { return ScaleFactor*TileSize; }
@@ -109,6 +107,8 @@ namespace MapEditor
         {
             _codesList.Items.Add("Bosstrigger");
             _codesList.Items.Add("Transition");
+            _codesList.Items.Add("Camera Focus Point");
+            _codesList.Items.Add("Camera Focus Trigger");
         }
 
         private void PopulateTree(string dir, TreeNode node)
@@ -226,27 +226,62 @@ namespace MapEditor
             finally
             {
                 _doNothing = false;
-                if (_codesList.SelectedIndices[0] == 1)
+            }
+            using (var msgDial = new MessageDialog())
+            {
+                switch (_codesList.SelectedIndices[0])
                 {
-                    using (var transDial = new TransitionDialog(this))
-                    {
-                        transDial.ShowDialog(this);
-                        if (transDial.DialogResult == DialogResult.OK)
-                        {
-                            Game.CurrentItem = new Item
-                                                   {
-                                                       AddToExisting = true,
-                                                       Codes =
-                                                           new List<TileCode>
-                                                               {new TileCode(TileCodes.Transition, TransitionString)}
-                                                   };
-                        }
-                    }
+                    case 1:
+                        msgDial.Text = "Transition";
+                        msgDial.DescriptionLabel.Text =
+                            "Input the map name without file extension and starting from the maps/ directory:";
+                        msgDial.OnOk += m => Game.CurrentItem = new Item
+                                                                    {
+                                                                        AddToExisting = true,
+                                                                        Codes =
+                                                                            new List<TileCode>
+                                                                                {
+                                                                                    new TileCode(
+                                                                                        TileCodes.Transition, m)
+                                                                                }
+                                                                    };
+                        break;
+                    case 2:
+                        msgDial.Text = "Camera Focus Point";
+                        msgDial.DescriptionLabel.Text = "Name of this point:";
+                        msgDial.OnOk += m => Game.CurrentItem = new Item
+                                                                    {
+                                                                        AddToExisting = true,
+                                                                        Codes = new List<TileCode>
+                                                                                    {
+                                                                                        new TileCode(
+                                                                                            TileCodes.CameraFocusPoint,
+                                                                                            m)
+                                                                                    }
+                                                                    };
+                        break;
+
+                    case 3:
+                        msgDial.Text = "Camera Focus Trigger";
+                        msgDial.DescriptionLabel.Text =
+                            "Name of this trigger, followed by '_', followed by how many frames it should take to reach this point.";
+                        msgDial.OnOk += m => Game.CurrentItem = new Item
+                                                                    {
+                                                                        AddToExisting = true,
+                                                                        Codes =
+                                                                            new List<TileCode>
+                                                                                {
+                                                                                    new TileCode(
+                                                                                        TileCodes.CameraFocusTrigger, m)
+                                                                                }
+                                                                    };
+                        break;
+
+                    default:
+                        Game.CurrentItem = Item.GetItemByCodeId(_codesList.SelectedIndices[0]);
+                        return;
                 }
-                else
-                {
-                    Game.CurrentItem = Item.GetItemByCodeId(_codesList.SelectedIndices[0]);
-                }
+                msgDial.ShowDialog(this);
             }
         }
 

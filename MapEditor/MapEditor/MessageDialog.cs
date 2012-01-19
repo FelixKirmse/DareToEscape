@@ -3,15 +3,16 @@ using System.Windows.Forms;
 
 namespace MapEditor
 {
-    public partial class TransitionDialog : Form
-    {
-        private readonly Editor _editor;
+    public delegate void OkEvent(string message);
 
-        public TransitionDialog(Editor editor)
+    public partial class MessageDialog : Form
+    {
+        public MessageDialog()
         {
-            _editor = editor;
             InitializeComponent();
         }
+
+        public event OkEvent OnOk;
 
         private void MapNameInputBoxKeyDown(object sender, KeyEventArgs e)
         {
@@ -23,7 +24,8 @@ namespace MapEditor
 
         private void OkButtonClick(object sender, EventArgs e)
         {
-            _editor.TransitionString = _mapNameInputBox.Text;
+            if (OnOk != null)
+                OnOk(_messageInputBox.Text);
             DialogResult = DialogResult.OK;
         }
     }

@@ -157,13 +157,14 @@ namespace MapEditor
             _editorForm._positionLabel.Text = string.Format(
                 @"DebugInfo:
     Coords GetCellByPixel: ({0}|{1})
-    Coords AltGetCellByPixel: ({2}|{3})
+    Coords Precise: ({2}|{3})
     WorldPixelCoords: ({4}|{5})
-    ScreenPixelCoords: ({6}|{7})",
+    ScreenPixelCoords: ({6}|{7})
+    TileCode: {8}",
                 cell.X, cell.Y, Camera.ScreenToWorld(new Vector2(ms.X/2)).X/TileMap.TileWidth,
                 Camera.ScreenToWorld(new Vector2(ms.Y/2)).Y/TileMap.TileHeight,
                 Camera.ScreenToWorld(new Vector2(ms.X/2, ms.Y/2)).X, Camera.ScreenToWorld(new Vector2(ms.X/2, ms.Y/2)).Y,
-                ms.X/2, ms.Y/2);
+                ms.X/2, ms.Y/2, TileMap.Map.Codes.ContainsKey(cell) ? TileMap.Map.Codes[cell][0].ToString() : "null");
             if (!InputMapper.LeftClick)
             {
                 _lastCell = null;

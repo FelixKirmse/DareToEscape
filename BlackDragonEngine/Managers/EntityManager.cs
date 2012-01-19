@@ -30,7 +30,8 @@ namespace BlackDragonEngine.Managers
 
         public static void AddEntity(GameObject entity)
         {
-            Entities.Add(entity);
+            if (!Entities.Contains(entity))
+                Entities.Add(entity);
         }
 
         public static void ClearEntities()
