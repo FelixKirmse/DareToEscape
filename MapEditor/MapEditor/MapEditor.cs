@@ -24,6 +24,8 @@ namespace MapEditor
 {
     public sealed class MapEditor : Game
     {
+        public const uint InteractiveLayer = 1;
+        private const uint Layers = 3;
         private readonly BulletManager _bulletManager;
         private readonly IntPtr _drawSurface;
         private readonly Editor _editorForm;
@@ -64,7 +66,13 @@ namespace MapEditor
             VariableProvider.ScriptEngine = new ScriptEngine(this);
             Components.Add(VariableProvider.ScriptEngine);
             GameVariableProvider.SaveManager = new SaveManager<SaveState>();
+            Layer = InteractiveLayer;
+            DrawAll = true;
         }
+
+        public bool DrawAll { get; set; }
+
+        public uint Layer { get; set; }
 
         public bool Playing { get; set; }
 
@@ -97,7 +105,8 @@ namespace MapEditor
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             VariableProvider.SpriteBatch = _spriteBatch;
             TileMap = new TileMap<Map<TileCode>, TileCode>(8, 8, 0, Content.Load<SpriteFont>(@"fonts/mono8"),
-                                                           Content.Load<Texture2D>(@"textures/tilesheets/tilesheet"));
+                                                           Content.Load<Texture2D>(@"textures/tilesheets/tilesheet"),
+                                                           Layers);
             AnimationDictionaryProvider.Content = Content;
             _player = Factory.CreatePlayer();
             _player.Position = new Vector2(float.MaxValue, float.MaxValue);
@@ -240,9 +249,27 @@ namespace MapEditor
             Item i = item;
             if (i.Codes != null)
                 i.Codes = item.Codes.ToList();
-            MapSquare? square = i.TileID == null || i.AddToExisting
-                                    ? TileMap.GetMapSquareAtCell(cell)
-                                    : new MapSquare(i.TileID, i.Passable);
+
+            MapSquare? square = null;
+            if (i.TileID.HasValue)
+            {
+                MapSquare? existingSquare = TileMap.GetMapSquareAtCell(cell);
+                if (existingSquare.HasValue)
+                {
+                    square = existingSquare;
+                    square.Value.LayerTiles[Layer] = i.TileID;
+                    if (Layer == InteractiveLayer)
+                    {
+                        MapSquare temp = square.Value;
+                        temp.Passable = i.Passable.GetValueOrDefault();
+                        square = temp;
+                    }
+                }
+                else
+                {
+                    square = new MapSquare(i.TileID.Value, i.Passable, Layer);
+                }
+            }
 
             if (i.IsTurret)
             {
@@ -306,7 +333,10 @@ namespace MapEditor
             GraphicsDevice.Viewport = _standardViewport;
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            TileMap.Draw();
+            if (DrawAll)
+                TileMap.Draw();
+            else
+                TileMap.Draw(Layer);
             EntityManager.Draw();
             _bulletManager.Draw();
             _spriteBatch.End();

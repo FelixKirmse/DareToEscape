@@ -24,7 +24,6 @@ namespace BlackDragonEngine.TileEngine
     {
         #region Declarations
 
-        private const int MapLayers = 1;
         private readonly CoordList _coordList;
         private readonly SpriteBatch _spriteBatch;
         private readonly SpriteFont _spriteFont;
@@ -54,12 +53,14 @@ namespace BlackDragonEngine.TileEngine
 
         #region Constructor
 
-        public TileMap(int tileWidth, int tileHeight, int tileOffset, SpriteFont spriteFont, Texture2D tileTexture)
+        public TileMap(int tileWidth, int tileHeight, int tileOffset, SpriteFont spriteFont, Texture2D tileTexture,
+                       uint layers = 1)
         {
             if (_instance != null)
                 throw new Exception(
                     "An Instance of this class was already created elsewhere, use GetInstance to get it!");
 
+            MapSquare.Layers = layers;
             _spriteBatch = VariableProvider.SpriteBatch;
             _tileSheet = tileTexture;
             _spriteFont = spriteFont;
@@ -335,7 +336,7 @@ namespace BlackDragonEngine.TileEngine
             SetPassabilityAtCell(new Vector2(coords.X, coords.Y), passable);
         }
 
-        public void SetTileAtCell(int tileX, int tileY, int layer, int tileIndex)
+        public void SetTileAtCell(int tileX, int tileY, uint layer, int tileIndex)
         {
             MapSquare square = GetMapSquareAtCell(tileX, tileY).GetValueOrDefault();
             if (square.InValidSquare)
@@ -388,6 +389,41 @@ namespace BlackDragonEngine.TileEngine
 
         #region Drawing
 
+        public void Draw(uint layer)
+        {
+            int startX = GetCellByPixelX((int) Camera.Position.X) - 1;
+            int endX = GetCellByPixelX((int) Camera.Position.X + Camera.ViewPortWidth);
+
+            int startY = GetCellByPixelY((int) Camera.Position.Y) - 1;
+            int endY = GetCellByPixelY((int) Camera.Position.Y + Camera.ViewPortHeight);
+
+            foreach (var coords in Map.MapData.Keys)
+            {
+                if (coords.X < startX || coords.X > endX || coords.Y < startY || coords.Y > endY) continue;
+                _spriteBatch.Draw(_tileSheet, CellScreenRectangle(coords.X, coords.Y),
+                                  Map[coords] == null ? null : TileSourceRectangle(Map[coords].Value.LayerTiles[layer]),
+                                  Color.White, 0.0f,
+                                  Vector2.Zero, SpriteEffects.None, 1f - (layer*0.1f));
+
+                if (EditorMode)
+                {
+                    DrawEditModeItems(coords.X, coords.Y);
+                }
+            }
+            if (!EditorMode) return;
+
+            foreach (var cell in Map.Codes)
+            {
+                Coords coords = cell.Key;
+                _spriteBatch.Draw(_whiteTexture, CellScreenRectangle(coords.X, coords.Y),
+                                  new Rectangle(0, 0, TileWidth, TileHeight), new Color(0, 0, 255, 80), 0f,
+                                  Vector2.Zero, SpriteEffects.None, 0.1f);
+                _spriteBatch.DrawString(_spriteFont, Map.Codes[coords].Count.ToString(),
+                                        Camera.WorldToScreen(new Vector2(coords.X*TileWidth, coords.Y*TileHeight)),
+                                        Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, .09f);
+            }
+        }
+
         public void Draw()
         {
             int startX = GetCellByPixelX((int) Camera.Position.X) - 1;
@@ -399,7 +435,7 @@ namespace BlackDragonEngine.TileEngine
             foreach (var coords in Map.MapData.Keys)
             {
                 if (coords.X < startX || coords.X > endX || coords.Y < startY || coords.Y > endY) continue;
-                for (int z = 0; z < MapLayers; ++z)
+                for (int z = 0; z < MapSquare.Layers; ++z)
                 {
                     _spriteBatch.Draw(_tileSheet, CellScreenRectangle(coords.X, coords.Y),
                                       Map[coords] == null ? null : TileSourceRectangle(Map[coords].Value.LayerTiles[z]),

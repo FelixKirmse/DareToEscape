@@ -55,9 +55,14 @@
             this._playButton = new System.Windows.Forms.Button();
             this._tileIndexLabel = new System.Windows.Forms.Label();
             this._positionLabel = new System.Windows.Forms.Label();
+            this._layerGroupBox = new System.Windows.Forms.GroupBox();
+            this._drawAllCheckBox = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this._layerSelect = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this._pctSurface)).BeginInit();
             this._menustrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._tileSheetBox)).BeginInit();
+            this._layerGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // _pctSurface
@@ -164,8 +169,6 @@
             // 
             // _treeView
             // 
-            this._treeView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this._treeView.LabelEdit = true;
             this._treeView.Location = new System.Drawing.Point(12, 54);
             this._treeView.Name = "_treeView";
@@ -289,17 +292,64 @@
             // _positionLabel
             // 
             this._positionLabel.AutoSize = true;
-            this._positionLabel.Location = new System.Drawing.Point(968, 566);
+            this._positionLabel.Location = new System.Drawing.Point(966, 665);
             this._positionLabel.Name = "_positionLabel";
-            this._positionLabel.Size = new System.Drawing.Size(35, 13);
+            this._positionLabel.Size = new System.Drawing.Size(0, 13);
             this._positionLabel.TabIndex = 13;
-            this._positionLabel.Text = "label5";
+            // 
+            // _layerGroupBox
+            // 
+            this._layerGroupBox.Controls.Add(this._drawAllCheckBox);
+            this._layerGroupBox.Controls.Add(this.label5);
+            this._layerGroupBox.Controls.Add(this._layerSelect);
+            this._layerGroupBox.Location = new System.Drawing.Point(972, 560);
+            this._layerGroupBox.Name = "_layerGroupBox";
+            this._layerGroupBox.Size = new System.Drawing.Size(270, 71);
+            this._layerGroupBox.TabIndex = 14;
+            this._layerGroupBox.TabStop = false;
+            this._layerGroupBox.Text = "LayerControl";
+            // 
+            // checkBox1
+            // 
+            this._drawAllCheckBox.AutoSize = true;
+            this._drawAllCheckBox.Checked = true;
+            this._drawAllCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this._drawAllCheckBox.Location = new System.Drawing.Point(9, 49);
+            this._drawAllCheckBox.Name = "_drawAllCheckBox";
+            this._drawAllCheckBox.Size = new System.Drawing.Size(98, 17);
+            this._drawAllCheckBox.TabIndex = 2;
+            this._drawAllCheckBox.Text = "Draw all Layers";
+            this._drawAllCheckBox.UseVisualStyleBackColor = true;
+            this._drawAllCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox1CheckedChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 22);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(62, 13);
+            this.label5.TabIndex = 1;
+            this.label5.Text = "WorkLayer:";
+            // 
+            // _layerSelect
+            // 
+            this._layerSelect.FormattingEnabled = true;
+            this._layerSelect.Items.AddRange(new object[] {
+            "Background",
+            "Interactive",
+            "Foreground"});
+            this._layerSelect.Location = new System.Drawing.Point(74, 19);
+            this._layerSelect.Name = "_layerSelect";
+            this._layerSelect.Size = new System.Drawing.Size(120, 21);
+            this._layerSelect.TabIndex = 0;
+            this._layerSelect.SelectedIndexChanged += new System.EventHandler(this.LayerSelectSelectedIndexChanged);
             // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1254, 986);
+            this.Controls.Add(this._layerGroupBox);
             this.Controls.Add(this._positionLabel);
             this.Controls.Add(this._tileIndexLabel);
             this.Controls.Add(this._playButton);
@@ -315,6 +365,9 @@
             this.Controls.Add(this._menustrip);
             this.Controls.Add(this._focusTextbox);
             this.MainMenuStrip = this._menustrip;
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(1270, 1024);
+            this.MinimumSize = new System.Drawing.Size(1270, 858);
             this.Name = "Editor";
             this.Text = "Editor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditorFormClosing);
@@ -322,6 +375,8 @@
             this._menustrip.ResumeLayout(false);
             this._menustrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this._tileSheetBox)).EndInit();
+            this._layerGroupBox.ResumeLayout(false);
+            this._layerGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -355,5 +410,9 @@
         private System.Windows.Forms.Button _playButton;
         private System.Windows.Forms.Label _tileIndexLabel;
         public System.Windows.Forms.Label _positionLabel;
+        private System.Windows.Forms.GroupBox _layerGroupBox;
+        private System.Windows.Forms.CheckBox _drawAllCheckBox;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox _layerSelect;
     }
 }

@@ -5,6 +5,8 @@ namespace BlackDragonEngine.TileEngine
     [Serializable]
     public struct MapSquare
     {
+        public static uint Layers { get; set; }
+
         #region Declarations
 
         public bool InValidSquare;
@@ -15,19 +17,20 @@ namespace BlackDragonEngine.TileEngine
 
         #region Constructor
 
-        public MapSquare(int layer, int? tile)
+        public MapSquare(uint layer, int? tile)
         {
-            LayerTiles = new int?[1];
+            LayerTiles = new int?[Layers];
             LayerTiles[layer] = tile;
             Passable = true;
             InValidSquare = false;
         }
 
-        public MapSquare(int? tile, bool? passable)
-            : this(0, tile)
+        public MapSquare(int? tile, bool? passable, uint layer = 0)
+            : this(layer, tile)
         {
             Passable = passable ?? true;
         }
+
 
         public MapSquare(bool invalid)
             : this()

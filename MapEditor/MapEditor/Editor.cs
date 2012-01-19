@@ -23,6 +23,7 @@ namespace MapEditor
         private bool _doNothing;
         private bool _drawMarker;
         private bool _firstTime = true;
+        private bool _firstTime2 = true;
         private string _mapPath; //Path to DareToEscapeContent
         private Rectangle _marker;
         private string _oldLabel;
@@ -40,6 +41,7 @@ namespace MapEditor
             tickTimer.Start();
             LoadEntities();
             LoadCodes();
+            _layerSelect.SelectedIndex = (int) MapEditor.InteractiveLayer;
         }
 
         private int Tile
@@ -395,6 +397,21 @@ namespace MapEditor
         {
             _focusTextbox.Focus();
             _focusTextbox.Clear();
+        }
+
+        private void LayerSelectSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_firstTime2)
+            {
+                _firstTime2 = false;
+                return;
+            }
+            Game.Layer = (uint) _layerSelect.SelectedIndex;
+        }
+
+        private void CheckBox1CheckedChanged(object sender, EventArgs e)
+        {
+            Game.DrawAll = _drawAllCheckBox.Checked;
         }
     }
 }
