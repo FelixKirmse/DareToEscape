@@ -11,7 +11,9 @@ namespace DareToEscape.Providers
 {
     public static class BulletInformationProvider
     {
-        private static readonly Dictionary<int, AnimationStripStruct> BulletAnimationStrips = new Dictionary<int, AnimationStripStruct>();
+        private static readonly Dictionary<int, AnimationStripStruct> BulletAnimationStrips =
+            new Dictionary<int, AnimationStripStruct>();
+
         public static Texture2D BulletSheet { get; private set; }
 
         public static AnimationStripStruct GetAnimationStrip(int id)
@@ -68,7 +70,10 @@ namespace DareToEscape.Providers
                             continue;
                     }
 
-                    BulletAnimationStrips.Add(id, new AnimationStripStruct(BulletSheet, new Rectangle(x, y, width - x, height - y), frameCount, null));
+                    BulletAnimationStrips.Add(id,
+                                              new AnimationStripStruct(BulletSheet,
+                                                                       new Rectangle(x, y, width - x, height - y),
+                                                                       frameCount, null));
                 }
             }
         }

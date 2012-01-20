@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Xml.Serialization;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
 using Microsoft.Xna.Framework;
@@ -400,13 +399,14 @@ namespace BlackDragonEngine.TileEngine
             foreach (var coords in Map.MapData.Keys)
             {
                 if (coords.X < startX || coords.X > endX || coords.Y < startY || coords.Y > endY) continue;
-                var mapSquare = Map[coords];
+                MapSquare? mapSquare = Map[coords];
                 Rectangle? sourceRect;
-                if (mapSquare != null && layer < mapSquare.Value.LayerTiles.Length && (sourceRect = TileSourceRectangle(mapSquare.Value.LayerTiles[layer])) != null)
+                if (mapSquare != null && layer < mapSquare.Value.LayerTiles.Length &&
+                    (sourceRect = TileSourceRectangle(mapSquare.Value.LayerTiles[layer])) != null)
                     _spriteBatch.Draw(_tileSheet, CellScreenRectangle(coords.X, coords.Y),
-                                        sourceRect,
-                                        Color.White, 0.0f,
-                                        Vector2.Zero, SpriteEffects.None, 1f - (layer * 0.1f));
+                                      sourceRect,
+                                      Color.White, 0.0f,
+                                      Vector2.Zero, SpriteEffects.None, 1f - (layer*0.1f));
 
                 if (EditorMode)
                 {
@@ -440,13 +440,14 @@ namespace BlackDragonEngine.TileEngine
                 if (coords.X < startX || coords.X > endX || coords.Y < startY || coords.Y > endY) continue;
                 for (int z = 0; z < MapSquare.Layers; ++z)
                 {
-                    var mapSquare = Map[coords];
+                    MapSquare? mapSquare = Map[coords];
                     Rectangle? sourceRect;
-                    if (mapSquare != null && z < mapSquare.Value.LayerTiles.Length && (sourceRect = TileSourceRectangle(mapSquare.Value.LayerTiles[z])) != null)
+                    if (mapSquare != null && z < mapSquare.Value.LayerTiles.Length &&
+                        (sourceRect = TileSourceRectangle(mapSquare.Value.LayerTiles[z])) != null)
                         _spriteBatch.Draw(_tileSheet, CellScreenRectangle(coords.X, coords.Y),
-                                            sourceRect,
-                                            Color.White, 0.0f,
-                                            Vector2.Zero, SpriteEffects.None, 1f - (z * 0.1f));
+                                          sourceRect,
+                                          Color.White, 0.0f,
+                                          Vector2.Zero, SpriteEffects.None, 1f - (z*0.1f));
                 }
                 if (EditorMode)
                 {

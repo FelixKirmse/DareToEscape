@@ -17,7 +17,6 @@ namespace DareToEscape.Bullets
         #region Fields
 
         private readonly BlendState _blendState;
-        private AnimationStripStruct _animations;
         private readonly TileMap<Map<TileCode>, TileCode> _tileMap;
         public float Acceleration;
         public bool AutomaticCollision;
@@ -29,6 +28,7 @@ namespace DareToEscape.Bullets
         public float SpeedLimit;
         public float TurnSpeed;
         public float Velocity;
+        private AnimationStripStruct _animations;
         private BCircle _collisionCircle;
         private float _directionInDegrees;
         private Vector2 _directionVector;

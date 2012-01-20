@@ -96,6 +96,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioEngine\AudioEngine.cs" />
     <Compile Include="Components\AnimatedGraphicsComponent.cs" />
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="Components\GraphicsComponent.cs" />
@@ -122,7 +123,6 @@
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\RotatedRectangle.cs" />
     <Compile Include="Helpers\SerializeableDictionary.cs" />
-    <Compile Include="Managers\AudioManager.cs" />
     <Compile Include="Managers\CodeManager.cs" />
     <Compile Include="GameStates\DialogManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />

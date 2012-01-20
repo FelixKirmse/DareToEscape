@@ -154,40 +154,16 @@
       <Name>bosstest</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="maps\fuck yeah.map">
-      <Name>fuck yeah</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="maps\Level1.map">
       <Name>Level1</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="maps\new testmap.map">
-      <Name>new testmap</Name>
+    <None Include="maps\Level2.map">
+      <Name>Level2</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="maps\sdasdasd.map">
-      <Name>sdasdasd</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="maps\Maps 2\test1 - Kopie %282%29.map">
-      <Name>test1 - Kopie %282%29</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="maps\Maps 2\test1 - Kopie %283%29.map">
-      <Name>test1 - Kopie %283%29</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="maps\Maps 2\test1 - Kopie.map">
-      <Name>test1 - Kopie</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="maps\Maps 2\test1.map">
-      <Name>test1</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="maps\Maps 3\Fcuk yeah.map">
-      <Name>Fcuk yeah</Name>
+    <None Include="maps\New LayerTest.map">
+      <Name>New LayerTest</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="textures\editor\tiles\0.bmp">

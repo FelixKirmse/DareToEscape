@@ -102,8 +102,9 @@ namespace BlackDragonEngine.Helpers
             _stripRect = new Rectangle(0, 0, texture.Width, texture.Height);
         }
 
-        public AnimationStripStruct(Texture2D texture, Rectangle stripRect, int frameCount, string name, bool loop = true,
-                              float frameDelay = .05f)
+        public AnimationStripStruct(Texture2D texture, Rectangle stripRect, int frameCount, string name,
+                                    bool loop = true,
+                                    float frameDelay = .05f)
             : this()
         {
             Texture = texture;
@@ -118,8 +119,8 @@ namespace BlackDragonEngine.Helpers
         }
 
         public AnimationStripStruct(Texture2D texture, Rectangle stripRect, int frameWidth, int frameHeight, string name,
-                              bool loop = true, float frameDelay = .05f)
-            :this()
+                                    bool loop = true, float frameDelay = .05f)
+            : this()
         {
             Texture = texture;
             _stripRect = stripRect;
@@ -131,9 +132,11 @@ namespace BlackDragonEngine.Helpers
             _framesPerRow = _stripRect.Width/frameWidth;
             FrameCount = _framesPerRow*(_stripRect.Height/frameHeight);
         }
+
         #endregion
 
         #region Public Methods
+
         public void Play()
         {
             _currentFrame = 0;
