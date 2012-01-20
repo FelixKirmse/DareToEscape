@@ -94,7 +94,7 @@ namespace BlackDragonEngine.TileEngine
         private Rectangle? TileSourceRectangle(int? tileIndex)
         {
             if (tileIndex == null)
-                return _tileSourceRects[0];
+                return null;
             return _tileSourceRects[(int) tileIndex];
         }
 
@@ -401,9 +401,10 @@ namespace BlackDragonEngine.TileEngine
             {
                 if (coords.X < startX || coords.X > endX || coords.Y < startY || coords.Y > endY) continue;
                 var mapSquare = Map[coords];
-                if (mapSquare != null && layer < mapSquare.Value.LayerTiles.Length)
+                Rectangle? sourceRect;
+                if (mapSquare != null && layer < mapSquare.Value.LayerTiles.Length && (sourceRect = TileSourceRectangle(mapSquare.Value.LayerTiles[layer])) != null)
                     _spriteBatch.Draw(_tileSheet, CellScreenRectangle(coords.X, coords.Y),
-                                        TileSourceRectangle(mapSquare.Value.LayerTiles[layer]),
+                                        sourceRect,
                                         Color.White, 0.0f,
                                         Vector2.Zero, SpriteEffects.None, 1f - (layer * 0.1f));
 
@@ -440,9 +441,10 @@ namespace BlackDragonEngine.TileEngine
                 for (int z = 0; z < MapSquare.Layers; ++z)
                 {
                     var mapSquare = Map[coords];
-                    if (mapSquare != null && z < mapSquare.Value.LayerTiles.Length)
+                    Rectangle? sourceRect;
+                    if (mapSquare != null && z < mapSquare.Value.LayerTiles.Length && (sourceRect = TileSourceRectangle(mapSquare.Value.LayerTiles[z])) != null)
                         _spriteBatch.Draw(_tileSheet, CellScreenRectangle(coords.X, coords.Y),
-                                            TileSourceRectangle(mapSquare.Value.LayerTiles[z]),
+                                            sourceRect,
                                             Color.White, 0.0f,
                                             Vector2.Zero, SpriteEffects.None, 1f - (z * 0.1f));
                 }

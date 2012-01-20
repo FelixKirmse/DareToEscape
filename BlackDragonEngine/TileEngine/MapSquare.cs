@@ -31,13 +31,6 @@ namespace BlackDragonEngine.TileEngine
             Passable = passable ?? true;
         }
 
-
-        public MapSquare(bool invalid)
-            : this()
-        {
-            InValidSquare = invalid;
-        }
-
         #endregion
     }
 }
