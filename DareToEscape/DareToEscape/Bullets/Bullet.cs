@@ -17,7 +17,7 @@ namespace DareToEscape.Bullets
         #region Fields
 
         private readonly BlendState _blendState;
-        private readonly Texture2D _texture;
+        private AnimationStripStruct _animations;
         private readonly TileMap<Map<TileCode>, TileCode> _tileMap;
         public float Acceleration;
         public bool AutomaticCollision;
@@ -35,7 +35,6 @@ namespace DareToEscape.Bullets
         private float _lastDirection;
         private Vector2 _lastPosition;
         private float _rotation;
-        private Rectangle _sourceRect;
 
         #endregion
 
@@ -115,13 +114,12 @@ namespace DareToEscape.Bullets
             : this()
         {
             _collisionCircle = BulletInformationProvider.GetBCircle(id);
-            _texture = BulletInformationProvider.BulletSheet;
+            _animations = BulletInformationProvider.GetAnimationStrip(id);
             Behavior = ReusableBehaviors.StandardBehavior;
             Velocity = 1f;
             SpeedLimit = 1f;
             AutomaticCollision = true;
             KillTime = -1;
-            _sourceRect = BulletInformationProvider.GetSourceRectangle(id);
             _blendState = BlendState.AlphaBlend;
             _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
         }
@@ -169,6 +167,7 @@ namespace DareToEscape.Bullets
             }
             if (SpawnDelay != 0) return this;
 
+            _animations.Update();
             Behavior.Update(ref this);
 
             if (AutomaticCollision)
@@ -189,7 +188,7 @@ namespace DareToEscape.Bullets
                 return this;
                 //VariableProvider.CurrentPlayer.Send<string>("KILL", null);
             }
-
+            _directionVector.Normalize();
             _lastDirection = Direction;
             _lastPosition = Position;
             _rotation = MathHelper.ToRadians(_directionInDegrees + 90f);
@@ -198,13 +197,14 @@ namespace DareToEscape.Bullets
 
         public void Draw()
         {
+            Rectangle rect = _animations.FrameRectangle;
             DrawHelper.AddNewJob(_blendState,
-                                 _texture,
+                                 _animations.Texture,
                                  Camera.WorldToScreen(Position + BCircleLocalCenter),
-                                 _sourceRect,
+                                 rect,
                                  Color.White,
                                  Velocity < 0 ? _rotation += MathHelper.Pi : _rotation,
-                                 new Vector2((float) _sourceRect.Width/2, (float) _sourceRect.Height/2),
+                                 new Vector2((float) rect.Width/2, (float) rect.Height/2),
                                  1f,
                                  SpriteEffects.None,
                                  0);

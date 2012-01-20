@@ -5,9 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 namespace BlackDragonEngine.Helpers
 {
     /// <summary>
-    ///   Class that helps handling Animations
+    ///   Struct that helps handling Animations, equivalent to AnimationStrip, but a struct
     /// </summary>
-    public sealed class AnimationStrip
+    public struct AnimationStripStruct
     {
         #region Declarations
 
@@ -78,19 +78,20 @@ namespace BlackDragonEngine.Helpers
 
         #region Constructor
 
-        public AnimationStrip(Texture2D texture, int frameWidth, string name, bool loop)
+        public AnimationStripStruct(Texture2D texture, int frameWidth, string name, bool loop)
             : this(texture, frameWidth, name)
         {
             _loopAnimation = loop;
         }
 
-        public AnimationStrip(Texture2D texture, int frameWidth, string name, bool loop, float frameDelay)
+        public AnimationStripStruct(Texture2D texture, int frameWidth, string name, bool loop, float frameDelay)
             : this(texture, frameWidth, name, loop)
         {
             _frameDelay = frameDelay;
         }
 
-        public AnimationStrip(Texture2D texture, int frameWidth, string name)
+        public AnimationStripStruct(Texture2D texture, int frameWidth, string name)
+            : this()
         {
             Texture = texture;
             _frameWidth = frameWidth;
@@ -101,8 +102,9 @@ namespace BlackDragonEngine.Helpers
             _stripRect = new Rectangle(0, 0, texture.Width, texture.Height);
         }
 
-        public AnimationStrip(Texture2D texture, Rectangle stripRect, int frameCount, string name, bool loop = true,
+        public AnimationStripStruct(Texture2D texture, Rectangle stripRect, int frameCount, string name, bool loop = true,
                               float frameDelay = .05f)
+            : this()
         {
             Texture = texture;
             _stripRect = stripRect;
@@ -115,8 +117,9 @@ namespace BlackDragonEngine.Helpers
             _frameDelay = frameDelay;
         }
 
-        public AnimationStrip(Texture2D texture, Rectangle stripRect, int frameWidth, int frameHeight, string name,
+        public AnimationStripStruct(Texture2D texture, Rectangle stripRect, int frameWidth, int frameHeight, string name,
                               bool loop = true, float frameDelay = .05f)
+            :this()
         {
             Texture = texture;
             _stripRect = stripRect;

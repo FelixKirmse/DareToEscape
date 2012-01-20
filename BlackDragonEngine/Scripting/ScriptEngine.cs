@@ -47,7 +47,7 @@ namespace BlackDragonEngine.Scripting
 
         public override void Update(GameTime gameTime)
         {
-            if (EngineState.GameState == EngineStates.Running)
+            if (EngineState.GameState == EngineStates.Running || EngineState.GameState == EngineStates.Editor)
             {
                 for (int i = 0; i < _scripts.Count; ++i)
                 {

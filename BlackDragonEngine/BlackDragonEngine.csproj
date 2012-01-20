@@ -109,6 +109,7 @@
     <Compile Include="Entities\IGameObject.cs" />
     <Compile Include="GameStates\IDrawableGameState.cs" />
     <Compile Include="GameStates\IUpdateableGameState.cs" />
+    <Compile Include="Helpers\AnimationStripStruct.cs" />
     <Compile Include="Helpers\BCircle.cs" />
     <Compile Include="Helpers\Comparer.cs" />
     <Compile Include="Helpers\DrawHelper.cs" />

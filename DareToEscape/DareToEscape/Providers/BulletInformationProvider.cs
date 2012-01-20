@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using BlackDragonEngine.Helpers;
 using Microsoft.Xna.Framework;
@@ -12,17 +11,17 @@ namespace DareToEscape.Providers
 {
     public static class BulletInformationProvider
     {
-        private static readonly Dictionary<int, Rectangle> BulletGraphicRectangles = new Dictionary<int, Rectangle>();
+        private static readonly Dictionary<int, AnimationStripStruct> BulletAnimationStrips = new Dictionary<int, AnimationStripStruct>();
         public static Texture2D BulletSheet { get; private set; }
 
-        public static Rectangle GetSourceRectangle(int id)
+        public static AnimationStripStruct GetAnimationStrip(int id)
         {
-            return BulletGraphicRectangles[id];
+            return BulletAnimationStrips[id];
         }
 
         public static BCircle GetBCircle(int id)
         {
-            Rectangle rect = BulletGraphicRectangles[id];
+            Rectangle rect = BulletAnimationStrips[id].FrameRectangle;
             Vector2 center = rect.Center.ToVector2() - new Vector2(rect.X, rect.Y);
             float radius = rect.Width < rect.Height ? rect.Width*.33f : rect.Height*.33f;
             return new BCircle(center, radius);
@@ -48,8 +47,12 @@ namespace DareToEscape.Providers
                     if (!Int32.TryParse(splitLine[0], out id))
                         continue;
 
-                    splitLine = splitLine[1].Split(',');
-                    if (splitLine.Count() != 4)
+                    splitLine = splitLine[1].Contains("animation:")
+                                    ? splitLine[1].Split(':')[1].Split(',')
+                                    : splitLine[1].Split(',');
+
+                    int frameCount = 1;
+                    if (splitLine.Length != 4)
                         continue;
                     if (!Int32.TryParse(splitLine[0], out x))
                         continue;
@@ -59,8 +62,13 @@ namespace DareToEscape.Providers
                         continue;
                     if (!Int32.TryParse(splitLine[3], out height))
                         continue;
+                    if (splitLine.Length == 5)
+                    {
+                        if (!Int32.TryParse(splitLine[4], out frameCount))
+                            continue;
+                    }
 
-                    BulletGraphicRectangles.Add(id, new Rectangle(x, y, width - x, height - y));
+                    BulletAnimationStrips.Add(id, new AnimationStripStruct(BulletSheet, new Rectangle(x, y, width - x, height - y), frameCount, null));
                 }
             }
         }
