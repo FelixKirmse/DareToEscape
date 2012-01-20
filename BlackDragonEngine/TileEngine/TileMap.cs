@@ -400,10 +400,12 @@ namespace BlackDragonEngine.TileEngine
             foreach (var coords in Map.MapData.Keys)
             {
                 if (coords.X < startX || coords.X > endX || coords.Y < startY || coords.Y > endY) continue;
-                _spriteBatch.Draw(_tileSheet, CellScreenRectangle(coords.X, coords.Y),
-                                  Map[coords] == null ? null : TileSourceRectangle(Map[coords].Value.LayerTiles[layer]),
-                                  Color.White, 0.0f,
-                                  Vector2.Zero, SpriteEffects.None, 1f - (layer*0.1f));
+                var mapSquare = Map[coords];
+                if (mapSquare != null && layer < mapSquare.Value.LayerTiles.Length)
+                    _spriteBatch.Draw(_tileSheet, CellScreenRectangle(coords.X, coords.Y),
+                                        TileSourceRectangle(mapSquare.Value.LayerTiles[layer]),
+                                        Color.White, 0.0f,
+                                        Vector2.Zero, SpriteEffects.None, 1f - (layer * 0.1f));
 
                 if (EditorMode)
                 {
@@ -437,10 +439,12 @@ namespace BlackDragonEngine.TileEngine
                 if (coords.X < startX || coords.X > endX || coords.Y < startY || coords.Y > endY) continue;
                 for (int z = 0; z < MapSquare.Layers; ++z)
                 {
-                    _spriteBatch.Draw(_tileSheet, CellScreenRectangle(coords.X, coords.Y),
-                                      Map[coords] == null ? null : TileSourceRectangle(Map[coords].Value.LayerTiles[z]),
-                                      Color.White, 0.0f,
-                                      Vector2.Zero, SpriteEffects.None, 1f - (z*0.1f));
+                    var mapSquare = Map[coords];
+                    if (mapSquare != null && z < mapSquare.Value.LayerTiles.Length)
+                        _spriteBatch.Draw(_tileSheet, CellScreenRectangle(coords.X, coords.Y),
+                                            TileSourceRectangle(mapSquare.Value.LayerTiles[z]),
+                                            Color.White, 0.0f,
+                                            Vector2.Zero, SpriteEffects.None, 1f - (z * 0.1f));
                 }
                 if (EditorMode)
                 {
@@ -492,21 +496,11 @@ namespace BlackDragonEngine.TileEngine
 
         #region Loading and Saving
 
-        private const bool SerializeToXml = false;
-
         public void SaveMap(FileStream fileStream)
         {
             var gzs = new GZipStream(fileStream, CompressionMode.Compress);
-            if (SerializeToXml)
-            {
-                var xmlser = new XmlSerializer(Map.GetType());
-                xmlser.Serialize(gzs, Map);
-            }
-            else
-            {
-                var bFormatter = new BinaryFormatter();
-                bFormatter.Serialize(gzs, Map);
-            }
+            var bFormatter = new BinaryFormatter();
+            bFormatter.Serialize(gzs, Map);
             gzs.Close();
             fileStream.Close();
         }
@@ -516,16 +510,8 @@ namespace BlackDragonEngine.TileEngine
             try
             {
                 var gzs = new GZipStream(fileStream, CompressionMode.Decompress);
-                if (SerializeToXml)
-                {
-                    var xmlSer = new XmlSerializer(Map.GetType());
-                    Map = (TMap) xmlSer.Deserialize(gzs);
-                }
-                else
-                {
-                    var bFormatter = new BinaryFormatter();
-                    Map = (TMap) bFormatter.Deserialize(gzs);
-                }
+                var bFormatter = new BinaryFormatter();
+                Map = (TMap) bFormatter.Deserialize(gzs);
                 gzs.Close();
             }
             catch
