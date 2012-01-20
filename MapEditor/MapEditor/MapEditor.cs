@@ -24,6 +24,8 @@ namespace MapEditor
 {
     public sealed class MapEditor : Game
     {
+        #region Fields
+
         public const uint InteractiveLayer = 1;
         private const uint Layers = 3;
         private readonly BulletManager _bulletManager;
@@ -43,7 +45,10 @@ namespace MapEditor
         private GameObject _player;
         private RenderTarget2D _renderTarget;
         private SpriteBatch _spriteBatch;
-        public bool MapLoaded { get; set; }
+
+        #endregion
+
+        #region Constructor
 
         public MapEditor()
         {
@@ -72,6 +77,12 @@ namespace MapEditor
             MapLoaded = false;
         }
 
+        #endregion
+
+        #region Properties
+
+        public bool MapLoaded { get; set; }
+
         public bool DrawAll { get; set; }
 
         public uint Layer { get; set; }
@@ -79,6 +90,10 @@ namespace MapEditor
         public bool Playing { get; set; }
 
         internal Item CurrentItem { private get; set; }
+
+        #endregion
+
+        #region Event Handlers
 
         private void GraphicsPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
         {
@@ -102,6 +117,10 @@ namespace MapEditor
             _graphics.ApplyChanges();
         }
 
+        #endregion
+
+        #region LoadContent
+
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -122,6 +141,10 @@ namespace MapEditor
             BulletInformationProvider.LoadBulletData(Content);
             FontProvider.AddFont("Mono8", Content.Load<SpriteFont>("fonts/mono8"));
         }
+
+        #endregion
+
+        #region Update-Functions
 
         protected override void Update(GameTime gameTime)
         {
@@ -162,6 +185,10 @@ namespace MapEditor
                     HandleMouseActions(ms);
             }
         }
+
+        #endregion
+
+        #region Mouse Actions
 
         private void HandleMouseActions(MouseState ms)
         {
@@ -247,6 +274,10 @@ namespace MapEditor
             Camera.ForcePosition -= diff/2;
         }
 
+        #endregion
+
+        #region Inserting Items
+
         private void InsertItem(Coords cell, Item item)
         {
             Item i = item;
@@ -325,10 +356,15 @@ namespace MapEditor
             }
         }
 
+
         private void InsertItem(Coords cell)
         {
             InsertItem(cell, CurrentItem);
         }
+
+        #endregion
+
+        #region Drawing
 
         protected override void Draw(GameTime gameTime)
         {
@@ -336,9 +372,11 @@ namespace MapEditor
             GraphicsDevice.Viewport = _standardViewport;
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            if(!MapLoaded)
+            if (!MapLoaded)
             {
-                _spriteBatch.DrawString(FontProvider.GetFont("Mono8"), "Please load a map.", ShortCuts.ScreenCenter - ShortCuts.GetFontCenter("Mono8", "Please load a map."), Color.Green);
+                _spriteBatch.DrawString(FontProvider.GetFont("Mono8"), "Please load a map.",
+                                        ShortCuts.ScreenCenter - ShortCuts.GetFontCenter("Mono8", "Please load a map."),
+                                        Color.Green);
             }
             else if (DrawAll)
                 TileMap.Draw();
@@ -358,6 +396,10 @@ namespace MapEditor
             base.Draw(gameTime);
         }
 
+        #endregion
+
+        #region Map Loading and Saving
+
         public void LoadMap(string fileName)
         {
             using (var fs = new FileStream(fileName, FileMode.Open))
@@ -375,5 +417,7 @@ namespace MapEditor
                 TileMap.SaveMap(fs);
             }
         }
+
+        #endregion
     }
 }
