@@ -196,6 +196,7 @@ namespace MapEditor
         private void TreeViewAfterSelect(object sender, TreeViewEventArgs e)
         {
             if (!e.Node.Text.Contains(".map")) return;
+            Game.MapLoaded = true;
             if (!_firstTime)
             {
                 Game.SaveMap(_currentMapName);
@@ -376,6 +377,7 @@ namespace MapEditor
 
         private void PlayButtonClick(object sender, EventArgs e)
         {
+            if (!Game.MapLoaded) return;
             Game.Playing = !Game.Playing;
             if (Game.Playing)
             {

@@ -43,6 +43,7 @@ namespace MapEditor
         private GameObject _player;
         private RenderTarget2D _renderTarget;
         private SpriteBatch _spriteBatch;
+        public bool MapLoaded { get; set; }
 
         public MapEditor()
         {
@@ -68,6 +69,7 @@ namespace MapEditor
             GameVariableProvider.SaveManager = new SaveManager<SaveState>();
             Layer = InteractiveLayer;
             DrawAll = true;
+            MapLoaded = false;
         }
 
         public bool DrawAll { get; set; }
@@ -118,11 +120,12 @@ namespace MapEditor
             _coordList = VariableProvider.CoordList;
             EngineState.GameState = EngineStates.Editor;
             BulletInformationProvider.LoadBulletData(Content);
+            FontProvider.AddFont("Mono8", Content.Load<SpriteFont>("fonts/mono8"));
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (Form.ActiveForm != _parentForm) return;
+            if (Form.ActiveForm != _parentForm || !MapLoaded) return;
             InputProvider.Update();
             VariableProvider.GameTime = gameTime;
             if (Playing)
@@ -333,7 +336,11 @@ namespace MapEditor
             GraphicsDevice.Viewport = _standardViewport;
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            if (DrawAll)
+            if(!MapLoaded)
+            {
+                _spriteBatch.DrawString(FontProvider.GetFont("Mono8"), "Please load a map.", ShortCuts.ScreenCenter - ShortCuts.GetFontCenter("Mono8", "Please load a map."), Color.Green);
+            }
+            else if (DrawAll)
                 TileMap.Draw();
             else
                 TileMap.Draw(Layer);
