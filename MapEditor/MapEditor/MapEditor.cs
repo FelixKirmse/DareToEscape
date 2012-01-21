@@ -171,6 +171,7 @@ namespace MapEditor
 
         private void UpdateEditor()
         {
+            _player.Send("DISABLED", false);
             MouseState ms = InputProvider.MouseState;
             EntityManager.ClearEntities();
             VariableProvider.ScriptEngine.StopAllScripts();
@@ -204,7 +205,7 @@ namespace MapEditor
                 Camera.ScreenToWorld(new Vector2(ms.Y/2)).Y/TileMap.TileHeight,
                 Camera.ScreenToWorld(new Vector2(ms.X/2, ms.Y/2)).X, Camera.ScreenToWorld(new Vector2(ms.X/2, ms.Y/2)).Y,
                 ms.X/2, ms.Y/2, TileMap.Map.Codes.ContainsKey(cell) ? TileMap.Map.Codes[cell][0].ToString() : "null");
-            if (!InputMapper.LeftClick)
+            if (!InputMapper.LeftClick && !InputMapper.RightClick)
             {
                 _lastCell = null;
                 _draggingItemBool = false;
@@ -291,7 +292,15 @@ namespace MapEditor
                 if (existingSquare.HasValue)
                 {
                     square = existingSquare;
-                    square.Value.LayerTiles[Layer] = i.TileID;
+                    try
+                    {
+                        square.Value.LayerTiles[Layer] = i.TileID;
+                    }
+                    catch (Exception)
+                    {
+                        return;
+                    }
+                   
                     if (Layer == InteractiveLayer)
                     {
                         MapSquare temp = square.Value;

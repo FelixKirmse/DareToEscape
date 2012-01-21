@@ -36,7 +36,7 @@ namespace DareToEscape.Components.PlayerComponents
             }
 
             if (message == "DISABLE")
-                _disabled = true;
+                _disabled = (bool) (object) obj;
         }
 
         #endregion
