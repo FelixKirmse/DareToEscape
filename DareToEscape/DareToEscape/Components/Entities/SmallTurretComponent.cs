@@ -20,7 +20,7 @@ namespace DareToEscape.Components.Entities
                 newBullet.Shoot(newBullet.DirectionAngleToPlayer, 2f);
                 yield return 10;
             }
-            yield return 120;
+            yield return 1;
         }
     }
 }

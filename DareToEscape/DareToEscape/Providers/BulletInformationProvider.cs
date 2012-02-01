@@ -11,71 +11,143 @@ namespace DareToEscape.Providers
 {
     public static class BulletInformationProvider
     {
-        private static readonly Dictionary<int, AnimationStripStruct> BulletAnimationStrips =
-            new Dictionary<int, AnimationStripStruct>();
+        private const string DataPath = @"\Content\data\bullets";
+        private const string ImagePath = @"textures\spritesheets\bullets\";
 
-        public static Texture2D BulletSheet { get; private set; }
+        private static readonly List<AnimationStripStruct[]> BulletAnimationStrips = new List<AnimationStripStruct[]>();
+        private static readonly List<BCircle> BulletBCircles = new List<BCircle>();
 
-        public static AnimationStripStruct GetAnimationStrip(int id)
+
+        public static AnimationStripStruct[] GetAnimationStrip(int id)
         {
-            return BulletAnimationStrips[id];
+            try
+            {
+                return (AnimationStripStruct[]) BulletAnimationStrips[id].Clone();
+            }
+            catch (Exception)
+            {
+                return (AnimationStripStruct[]) BulletAnimationStrips[0].Clone();
+            }
         }
 
         public static BCircle GetBCircle(int id)
         {
-            Rectangle rect = BulletAnimationStrips[id].FrameRectangle;
-            Vector2 center = rect.Center.ToVector2() - new Vector2(rect.X, rect.Y);
-            float radius = rect.Width < rect.Height ? rect.Width*.33f : rect.Height*.33f;
-            return new BCircle(center, radius);
+            try
+            {
+                return BulletBCircles[id];
+            }
+            catch (Exception)
+            {
+                return BulletBCircles[0];
+            }
         }
 
         public static void LoadBulletData(ContentManager content)
         {
-            BulletSheet = content.Load<Texture2D>(@"textures/entities/bullets");
-            using (var sr = new StreamReader(Application.StartupPath + @"/Content/data/shotdata.txt"))
+            string startupPath = Application.StartupPath;
+            foreach (var file in Directory.GetFiles(startupPath + DataPath))
             {
-                string currentLine;
-                while ((currentLine = sr.ReadLine()) != null)
+                var fileInfo = new FileInfo(file);
+                if (fileInfo.Extension != ".txt") continue;
+                string[] tmp = fileInfo.FullName.Split('\\');
+                string sheetName = tmp[tmp.Length - 1].Split('.')[0];
+                Texture2D texture;
+                try
                 {
-                    int id;
-                    int x, y, width, height;
+                    texture = content.Load<Texture2D>(ImagePath + sheetName);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
 
-                    if (String.IsNullOrWhiteSpace(currentLine))
+                using (var sr = new StreamReader(fileInfo.FullName))
+                {
+                    string currentLine = sr.ReadLine();
+                    int cellWidth, cellHeight;
+                    if (currentLine == null) continue;
+                    tmp = currentLine.Split(':');
+                    if (!(Int32.TryParse(tmp[1].Split(',')[0], out cellWidth)) || !(Int32.TryParse(tmp[1].Split(',')[1], out cellHeight)))
                         continue;
-                    if (currentLine[0] == '/')
-                        continue;
-                    string[] splitLine = currentLine.Split(';');
 
-                    if (!Int32.TryParse(splitLine[0], out id))
-                        continue;
+                    int cellsPerRow = texture.Width/cellWidth;
 
-                    splitLine = splitLine[1].Contains("animation:")
-                                    ? splitLine[1].Split(':')[1].Split(',')
-                                    : splitLine[1].Split(',');
-
-                    int frameCount = 1;
-                    if (splitLine.Length != 4)
-                        continue;
-                    if (!Int32.TryParse(splitLine[0], out x))
-                        continue;
-                    if (!Int32.TryParse(splitLine[1], out y))
-                        continue;
-                    if (!Int32.TryParse(splitLine[2], out width))
-                        continue;
-                    if (!Int32.TryParse(splitLine[3], out height))
-                        continue;
-                    if (splitLine.Length == 5)
+                    while ((currentLine = sr.ReadLine()) != null)
                     {
-                        if (!Int32.TryParse(splitLine[4], out frameCount))
-                            continue;
+                        ImportLine(cellHeight, cellWidth, cellsPerRow, texture, currentLine);
                     }
-
-                    BulletAnimationStrips.Add(id,
-                                              new AnimationStripStruct(BulletSheet,
-                                                                       new Rectangle(x, y, width - x, height - y),
-                                                                       frameCount, null));
                 }
             }
+        }
+
+        private static void ImportLine(int cellHeight, int cellWidth, int cellsPerRow, Texture2D texture,
+                                       string currentLine)
+        {
+            int cellNumber;
+
+            if (String.IsNullOrWhiteSpace(currentLine) || currentLine[0] == '/')
+                return;
+
+            string[] splitLine = currentLine.Split(';');
+            if (!int.TryParse(splitLine[0], out cellNumber))
+                return;
+            float radius = 0;
+            AnimationStripStruct[] animations = splitLine.Length == 2
+                                                    ? GetStaticAnimation(splitLine, cellNumber, cellsPerRow, cellWidth,
+                                                                         cellHeight, texture, out radius)
+                                                    : splitLine.Length == 5
+                                                          ? GetAnimations(splitLine, cellNumber, cellsPerRow, cellWidth,
+                                                                          cellHeight, texture, out radius)
+                                                          : null;
+            if (animations == null) return;
+            BulletAnimationStrips.Add(animations);
+            BulletBCircles.Add(new BCircle(cellWidth/2f, cellHeight/2f, radius));
+        }
+
+        private static AnimationStripStruct[] GetStaticAnimation(string[] splitLine, int cellNumber, int cellsPerRow,
+                                                                 int cellWidth, int cellHeight, Texture2D texture,
+                                                                 out float radius)
+        {
+            if (!float.TryParse(splitLine[1], out radius))
+                return null;
+            var animations = new AnimationStripStruct[1];
+            animations[0] = GetAnimationStripStruct(cellNumber, cellsPerRow, cellWidth, cellHeight, texture);
+            return animations;
+        }
+
+        private static AnimationStripStruct[] GetAnimations(string[] splitLine, int cellNumber, int cellsPerRow,
+                                                            int cellWidth, int cellHeight, Texture2D texture,
+                                                            out float radius)
+        {
+            if (!float.TryParse(splitLine[4], out radius))
+                return null;
+            var animations = new AnimationStripStruct[3];
+            int createCount, loopCount, deathCount;
+            if (!int.TryParse(splitLine[1].Split(':')[1], out createCount))
+                return null;
+            animations[0] = GetAnimationStripStruct(cellNumber, cellsPerRow, cellWidth, cellHeight, texture, "Create",
+                                                    createCount);
+            if (!int.TryParse(splitLine[2].Split(':')[1], out loopCount))
+                return null;
+            animations[1] = GetAnimationStripStruct(cellNumber, cellsPerRow, cellWidth, cellHeight, texture, "Loop",
+                                                    loopCount, createCount);
+            if (!int.TryParse(splitLine[3].Split(':')[1], out deathCount))
+                return null;
+            animations[2] = GetAnimationStripStruct(cellNumber, cellsPerRow, cellWidth, cellHeight, texture, "Death",
+                                                    deathCount, createCount + loopCount);
+            return animations;
+        }
+
+        private static AnimationStripStruct GetAnimationStripStruct(int cellNumber, int cellsPerRow, int cellWidth,
+                                                                    int cellHeight, Texture2D texture,
+                                                                    string name = null, int frameCount = 1,
+                                                                    int cellMod = 0)
+        {
+            int frameX = ((cellNumber + cellMod)%cellsPerRow)*cellWidth;
+            int frameY = ((cellNumber + cellMod)/cellsPerRow)*cellHeight;
+            return new AnimationStripStruct(texture,
+                                            new Rectangle(frameX, frameY, cellWidth*frameCount,
+                                                          cellHeight*frameCount), frameCount, name);
         }
     }
 }

@@ -35,13 +35,14 @@ namespace MapEditor
             _mapPath += "/";
             _treeView.Nodes.Add("maps");
             PopulateTree(_mapPath + "maps/", _treeView.Nodes[0]);
-            Image image = Image.FromFile(Application.StartupPath + @"/Content/textures/tilesheets/tilesheet.png");
+            Image image = Image.FromFile(Application.StartupPath + @"/Content/textures/spritesheets/tilesheet.png");
             _tileSheetBox.Image = ResizeImage(image, image.Width*ScaleFactor, image.Height*ScaleFactor);
             _marker = new Rectangle(0, 0, Tile, Tile);
             tickTimer.Start();
             LoadEntities();
             LoadCodes();
             _layerSelect.SelectedIndex = (int) MapEditor.InteractiveLayer;
+            _tileSheetBox.BackColor = Color.Black;
         }
 
         private int Tile

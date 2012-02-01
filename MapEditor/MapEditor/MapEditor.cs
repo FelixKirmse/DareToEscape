@@ -126,7 +126,7 @@ namespace MapEditor
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             VariableProvider.SpriteBatch = _spriteBatch;
             TileMap = new TileMap<Map<TileCode>, TileCode>(8, 8, 0, Content.Load<SpriteFont>(@"fonts/mono8"),
-                                                           Content.Load<Texture2D>(@"textures/tilesheets/tilesheet"),
+                                                           Content.Load<Texture2D>(@"textures/spritesheets/tilesheet"),
                                                            Layers);
             AnimationDictionaryProvider.Content = Content;
             _player = Factory.CreatePlayer();
@@ -171,7 +171,7 @@ namespace MapEditor
 
         private void UpdateEditor()
         {
-            _player.Send("DISABLED", false);
+            _player.Send("DISABLE", false);
             MouseState ms = InputProvider.MouseState;
             EntityManager.ClearEntities();
             VariableProvider.ScriptEngine.StopAllScripts();
@@ -300,7 +300,7 @@ namespace MapEditor
                     {
                         return;
                     }
-                   
+
                     if (Layer == InteractiveLayer)
                     {
                         MapSquare temp = square.Value;

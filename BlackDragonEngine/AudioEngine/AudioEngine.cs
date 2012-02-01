@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Audio;
 
 namespace BlackDragonEngine.AudioEngine
@@ -6,13 +7,15 @@ namespace BlackDragonEngine.AudioEngine
     public sealed class AudioEngine
     {
         private static AudioEngine _instance;
-        private readonly List<SoundEffectInstance> _loopingEffects;
+        private readonly Dictionary<string, SoundEffectInstance> _music;
+        private readonly Dictionary<string, SoundEffectInstance> _loopingEffects;
         private readonly Dictionary<string, SoundEffect> _sounds;
 
         private AudioEngine()
         {
             _sounds = new Dictionary<string, SoundEffect>();
-            _loopingEffects = new List<SoundEffectInstance>();
+            _loopingEffects = new Dictionary<string, SoundEffectInstance>();
+            _music = new Dictionary<string, SoundEffectInstance>();
         }
 
         public static AudioEngine GetInstance()
@@ -25,20 +28,58 @@ namespace BlackDragonEngine.AudioEngine
             _sounds.Add(name, sound);
         }
 
-        public void Play(string name, bool loop = false)
+        public void AddMusic(string name, SoundEffect music)
+        {
+            _music.Add(name, music.CreateInstance());
+        }
+
+        public void PlaySound(string name, bool loop = false)
         {
             SoundEffect sound;
             if (!_sounds.TryGetValue(name, out sound)) return;
             sound.Play();
             if (!loop) return;
-            _loopingEffects.Add(sound.CreateInstance());
+            try
+            {
+                _loopingEffects.Add(name, sound.CreateInstance());
+            }
+            catch
+            {
+            }
+        }
+
+        public void PlayMusic(string name, bool loop = false)
+        {
+            SoundEffectInstance music;
+            if (!_music.TryGetValue(name, out music)) return;
+            music.Play();
+            if (!loop) return;
+            try
+            {
+                _loopingEffects.Add(name, music);
+            }
+            catch
+            {
+            }
+            
         }
 
         public void StopAllLoops()
         {
             foreach (var effect in _loopingEffects)
             {
-                effect.Stop();
+                effect.Value.Stop();
+            }
+        }
+
+        public void StopLoop(string name)
+        {
+            foreach(var effect in _loopingEffects)
+            {
+                if(effect.Key == name)
+                {
+                    effect.Value.Stop();
+                }
             }
         }
 
@@ -46,7 +87,7 @@ namespace BlackDragonEngine.AudioEngine
         {
             foreach (var soundEffect in _loopingEffects)
             {
-                soundEffect.Play();
+                soundEffect.Value.Play();
             }
         }
     }

@@ -169,10 +169,12 @@
             // 
             // _treeView
             // 
+            this._treeView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this._treeView.LabelEdit = true;
             this._treeView.Location = new System.Drawing.Point(12, 54);
             this._treeView.Name = "_treeView";
-            this._treeView.Size = new System.Drawing.Size(334, 311);
+            this._treeView.Size = new System.Drawing.Size(334, 380);
             this._treeView.TabIndex = 2;
             this._treeView.BeforeLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.TreeViewBeforeLabelEdit);
             this._treeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.TreeViewAfterLabelEdit);
@@ -180,15 +182,16 @@
             // 
             // _tileSheetBox
             // 
-            this._tileSheetBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this._tileSheetBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._tileSheetBox.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this._tileSheetBox.Location = new System.Drawing.Point(12, 388);
             this._tileSheetBox.Name = "_tileSheetBox";
-            this._tileSheetBox.Size = new System.Drawing.Size(334, 586);
+            this._tileSheetBox.Size = new System.Drawing.Size(334, 563);
             this._tileSheetBox.TabIndex = 3;
             this._tileSheetBox.TabStop = false;
             this._tileSheetBox.Paint += new System.Windows.Forms.PaintEventHandler(this.TileSheetBoxPaint);
-            this._tileSheetBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TileSheetBoxMouseClick);
+            this._tileSheetBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TileSheetBoxMouseClick);
             // 
             // tickTimer
             // 
@@ -203,11 +206,12 @@
             // 
             // _entitiesList
             // 
-            this._entitiesList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this._entitiesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this._entitiesList.Location = new System.Drawing.Point(352, 54);
             this._entitiesList.Name = "_entitiesList";
-            this._entitiesList.Size = new System.Drawing.Size(243, 920);
+            this._entitiesList.Size = new System.Drawing.Size(243, 897);
             this._entitiesList.TabIndex = 4;
             this._entitiesList.UseCompatibleStateImageBehavior = false;
             this._entitiesList.View = System.Windows.Forms.View.SmallIcon;
@@ -215,9 +219,11 @@
             // 
             // _codesList
             // 
+            this._codesList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this._codesList.Location = new System.Drawing.Point(602, 531);
             this._codesList.Name = "_codesList";
-            this._codesList.Size = new System.Drawing.Size(360, 443);
+            this._codesList.Size = new System.Drawing.Size(360, 420);
             this._codesList.TabIndex = 5;
             this._codesList.UseCompatibleStateImageBehavior = false;
             this._codesList.View = System.Windows.Forms.View.List;
@@ -309,7 +315,7 @@
             this._layerGroupBox.TabStop = false;
             this._layerGroupBox.Text = "LayerControl";
             // 
-            // checkBox1
+            // _drawAllCheckBox
             // 
             this._drawAllCheckBox.AutoSize = true;
             this._drawAllCheckBox.Checked = true;
@@ -348,7 +354,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1254, 986);
+            this.ClientSize = new System.Drawing.Size(1254, 956);
             this.Controls.Add(this._layerGroupBox);
             this.Controls.Add(this._positionLabel);
             this.Controls.Add(this._tileIndexLabel);

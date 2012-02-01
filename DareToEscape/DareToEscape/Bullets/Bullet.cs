@@ -28,7 +28,7 @@ namespace DareToEscape.Bullets
         public float SpeedLimit;
         public float TurnSpeed;
         public float Velocity;
-        private AnimationStripStruct _animations;
+        private AnimationStripStruct[] _animations;
         private BCircle _collisionCircle;
         private float _directionInDegrees;
         private Vector2 _directionVector;
@@ -167,7 +167,7 @@ namespace DareToEscape.Bullets
             }
             if (SpawnDelay != 0) return this;
 
-            _animations.Update();
+            _animations[0].Update();
             Behavior.Update(ref this);
 
             if (AutomaticCollision)
@@ -197,9 +197,9 @@ namespace DareToEscape.Bullets
 
         public void Draw()
         {
-            Rectangle rect = _animations.FrameRectangle;
+            Rectangle rect = _animations[0].FrameRectangle;
             DrawHelper.AddNewJob(_blendState,
-                                 _animations.Texture,
+                                 _animations[0].Texture,
                                  Camera.WorldToScreen(Position + BCircleLocalCenter),
                                  rect,
                                  Color.White,

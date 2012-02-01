@@ -11,3 +11,6 @@ DareToEscape/DareToEscape/Entities/BulletBehaviors/StarBarrage (In Konflikt steh
 *.vsp
 *.psess
 *ReSharper*
+*In Konflikt*
+*.rar
+*.zip
