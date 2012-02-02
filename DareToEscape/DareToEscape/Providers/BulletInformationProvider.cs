@@ -149,12 +149,12 @@ namespace DareToEscape.Providers
                 return null;
             animations.Add(Create,
                            GetAnimationStripStruct(cellNumber, cellsPerRow, cellWidth, cellHeight, texture, Create,
-                                                   createCount, 0, false, "Loop"));
+                                                   createCount, 0, false, .0625f, "Loop"));
             if (!int.TryParse(splitLine[2].Split(':')[1], out loopCount))
                 return null;
             animations.Add(Loop,
                            GetAnimationStripStruct(cellNumber, cellsPerRow, cellWidth, cellHeight, texture, Loop,
-                                                   loopCount, createCount, true));
+                                                   loopCount, createCount, true, .025f));
             if (!int.TryParse(splitLine[3].Split(':')[1], out deathCount))
                 return null;
             animations.Add(Death,
@@ -166,7 +166,7 @@ namespace DareToEscape.Providers
         private static AnimationStripStruct GetAnimationStripStruct(int cellNumber, int cellsPerRow, int cellWidth,
                                                                     int cellHeight, Texture2D texture,
                                                                     string name = null, int frameCount = 1,
-                                                                    int cellMod = 0,bool loop = false, string nextAnimation = null)
+                                                                    int cellMod = 0,bool loop = false, float frameDelay = .05f, string nextAnimation = null)
         {
             int frameX = ((cellNumber + cellMod)%cellsPerRow)*cellWidth;
             int frameY = ((cellNumber + cellMod)/cellsPerRow)*cellHeight;

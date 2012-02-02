@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
@@ -14,6 +15,36 @@ namespace DareToEscape.Bullets
 {
     public struct Bullet
     {
+        private static ulong _currentID;
+        private static readonly ConcurrentStack<ulong> UsableIDs = new ConcurrentStack<ulong>();
+        private static readonly ConcurrentDictionary<ulong, Dictionary<string, AnimationStripStruct>> Dictionaries = new ConcurrentDictionary<ulong, Dictionary<string, AnimationStripStruct>>();
+
+        private static ulong GetID()
+        {
+            ulong id;
+            if (!UsableIDs.TryPop(out id))
+            {
+                ++_currentID;
+                return _currentID;
+            }
+            return id;
+        }
+
+        private static Dictionary<string, AnimationStripStruct> GetDictionary(ulong id)
+        {
+            if (Dictionaries.ContainsKey(id))
+                return Dictionaries[id];
+            var dict = new Dictionary<string, AnimationStripStruct>();
+            Dictionaries.TryAdd(id, dict);
+            return dict;
+        }
+
+        private static void SetInactive(ulong id)
+        {
+            Dictionaries[id].Clear();
+            UsableIDs.Push(id);
+        }
+
         #region Constants
 
         private const string Create = "Create";
@@ -43,10 +74,10 @@ namespace DareToEscape.Bullets
         private Vector2 _directionVector;
         private float _lastDirection;
         private Vector2 _lastPosition;
-        private float _rotation;
-        private bool _staticAnimation;
+        private readonly bool _staticAnimation;
         private string _currentAnimation;
         private bool _dieing;
+        private readonly ulong _id;
 
         #endregion
 
@@ -126,9 +157,10 @@ namespace DareToEscape.Bullets
             : this()
         {
             _collisionCircle = BulletInformationProvider.GetBCircle(id);
-            _animations = DictionaryPool.GetDictionary();
+            _id = GetID();
+            _animations = GetDictionary(_id);
             //Not using foreach here in order to avoid unnecessary Heap allocations
-            id = VariableProvider.RandomSeed.Next(0, 65);
+            id = VariableProvider.RandomSeed.Next(0, 21);
             var tmp = BulletInformationProvider.GetAnimationStrip(id);
             if(tmp.Count == 1)
             {
@@ -185,14 +217,14 @@ namespace DareToEscape.Bullets
             {
                 if(_staticAnimation)
                 {
-                    DictionaryPool.SetInactive(_animations);
+                    SetInactive(_id);
                     bulletsToDelete.Add(id);
                     return this;
                 }
                 UpdateAnimation();
                 if(_animations[_currentAnimation].FinishedPlaying)
                 {
-                    DictionaryPool.SetInactive(_animations);
+                    SetInactive(_id);
                     bulletsToDelete.Add(id);
                 }
                 return this;
@@ -235,7 +267,6 @@ namespace DareToEscape.Bullets
             _directionVector.Normalize();
             _lastDirection = Direction;
             _lastPosition = Position;
-            _rotation = MathHelper.ToRadians(_directionInDegrees + 90f);
             return this;
         }
 
@@ -248,7 +279,7 @@ namespace DareToEscape.Bullets
                                  Camera.WorldToScreen(Position + BCircleLocalCenter),
                                  rect,
                                  Color.White,
-                                 Velocity < 0 ? _rotation += MathHelper.Pi : _rotation,
+                                 0f,
                                  new Vector2((float) rect.Width/2, (float) rect.Height/2),
                                  1f,
                                  SpriteEffects.None,
