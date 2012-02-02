@@ -210,6 +210,7 @@ namespace MapEditor
 
         private void CodesListSelectedIndexChanged(object sender, EventArgs e)
         {
+            if (_codesList.SelectedIndices.Count == 0) return;
             if (_doNothing) return;
             _drawMarker = false;
             _doNothing = true;
@@ -276,6 +277,7 @@ namespace MapEditor
 
         private void EntitiesListSelectedIndexChanged(object sender, EventArgs e)
         {
+            if (_entitiesList.SelectedIndices.Count == 0) return;
             if (_doNothing) return;
             _drawMarker = false;
             _doNothing = true;
