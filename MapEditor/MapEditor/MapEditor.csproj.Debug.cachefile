@@ -14,8 +14,8 @@ Content\textures\entities\lock.xnb
 Content\textures\entities\bullet.xnb
 Content\textures\entities\bosskiller.xnb
 Content\textures\entities\sign.xnb
-Content\textures\spritesheets\tilesheet.xnb
 Content\textures\animations\player\playeranimations.xnb
+Content\textures\spritesheets\tilesheet.xnb
 Content\textures\spritesheets\bullets\animated_bullets.xnb
 Content\textures\spritesheets\bullets\static_bullets.xnb
 Content\textures\spritesheets\tilesheet.png

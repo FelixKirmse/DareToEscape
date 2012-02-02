@@ -24,7 +24,10 @@ namespace DareToEscape.Bullets
             ulong id;
             if (!UsableIDs.TryPop(out id))
             {
-                ++_currentID;
+                lock(UsableIDs)
+                {
+                    ++_currentID;
+                }
                 return _currentID;
             }
             return id;
@@ -41,7 +44,10 @@ namespace DareToEscape.Bullets
 
         private static void SetInactive(ulong id)
         {
-            Dictionaries[id].Clear();
+            lock(Dictionaries)
+            {
+                Dictionaries[id].Clear();
+            }
             UsableIDs.Push(id);
         }
 
