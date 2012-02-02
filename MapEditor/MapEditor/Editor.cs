@@ -174,18 +174,11 @@ namespace MapEditor
             _marker = new Rectangle((tileIndex%tilesPerRow)*Tile, (tileIndex/tilesPerRow)*Tile, Tile, Tile);
             _drawMarker = true;
             _doNothing = true;
-            try
-            {
+            if(_entitiesList.SelectedItems.Count == 1)
                 _entitiesList.SelectedItems[0].Selected = false;
+            if(_codesList.SelectedItems.Count == 1)
                 _codesList.SelectedItems[0].Selected = false;
-            }
-            catch (Exception)
-            {
-            }
-            finally
-            {
-                _doNothing = false;
-            }
+            _doNothing = false;
         }
 
         private void TickTimerTick(object sender, EventArgs e)
@@ -220,15 +213,8 @@ namespace MapEditor
             if (_doNothing) return;
             _drawMarker = false;
             _doNothing = true;
-            try
-            {
+            if(_entitiesList.SelectedItems.Count == 1)
                 _entitiesList.SelectedItems[0].Selected = false;
-            }
-            catch (Exception)
-            {
-                _doNothing = false;
-                return;
-            }
             _doNothing = false;
             using (var msgDial = new MessageDialog())
             {
@@ -293,15 +279,8 @@ namespace MapEditor
             if (_doNothing) return;
             _drawMarker = false;
             _doNothing = true;
-            try
-            {
+            if(_codesList.SelectedItems.Count == 1)
                 _codesList.SelectedItems[0].Selected = false;
-            }
-            catch (Exception)
-            {
-                _doNothing = false;
-                return;
-            }
             _doNothing = false;
             Game.CurrentItem = Item.GetItemByEntityId(_entitiesList.SelectedIndices[0]);
         }
