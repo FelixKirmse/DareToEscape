@@ -99,9 +99,8 @@ namespace DareToEscape
             GraphicsDevice.Viewport = new Viewport(0, 0, ResolutionWidth, ResolutionHeight);
             VariableProvider.CoordList = new CoordList();
             VariableProvider.Game = this;
-            VariableProvider.WhiteTexture = new Texture2D(VariableProvider.Game.GraphicsDevice, 1, 1);
-            Color[] data = {Color.White};
-            VariableProvider.WhiteTexture.SetData(data);
+            VariableProvider.WhiteTexture = new Texture2D(GraphicsDevice, 1, 1);
+            VariableProvider.WhiteTexture.SetData(new[] {Color.White});
             GameInitializer.Initialize();
 
 

@@ -226,11 +226,10 @@ namespace MapEditor
             }
             catch (Exception)
             {
-            }
-            finally
-            {
                 _doNothing = false;
+                return;
             }
+            _doNothing = false;
             using (var msgDial = new MessageDialog())
             {
                 switch (_codesList.SelectedIndices[0])
@@ -300,12 +299,11 @@ namespace MapEditor
             }
             catch (Exception)
             {
-            }
-            finally
-            {
                 _doNothing = false;
-                Game.CurrentItem = Item.GetItemByEntityId(_entitiesList.SelectedIndices[0]);
+                return;
             }
+            _doNothing = false;
+            Game.CurrentItem = Item.GetItemByEntityId(_entitiesList.SelectedIndices[0]);
         }
 
         private void SaveToolStripMenuItemClick(object sender, EventArgs e)
