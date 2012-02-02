@@ -14,6 +14,15 @@ namespace DareToEscape.Bullets
 {
     public struct Bullet
     {
+        #region Constants
+
+        private const string Create = "Create";
+        private const string Loop = "Loop";
+        private const string Death = "Death";
+        private const string Static = "Static";
+
+        #endregion
+
         #region Fields
 
         private readonly BlendState _blendState;
@@ -28,13 +37,16 @@ namespace DareToEscape.Bullets
         public float SpeedLimit;
         public float TurnSpeed;
         public float Velocity;
-        private AnimationStripStruct[] _animations;
+        private Dictionary<string, AnimationStripStruct> _animations;
         private BCircle _collisionCircle;
         private float _directionInDegrees;
         private Vector2 _directionVector;
         private float _lastDirection;
         private Vector2 _lastPosition;
         private float _rotation;
+        private bool _staticAnimation;
+        private string _currentAnimation;
+        private bool _dieing;
 
         #endregion
 
@@ -114,7 +126,23 @@ namespace DareToEscape.Bullets
             : this()
         {
             _collisionCircle = BulletInformationProvider.GetBCircle(id);
-            _animations = BulletInformationProvider.GetAnimationStrip(id);
+            _animations = DictionaryPool.GetDictionary();
+            //Not using foreach here in order to avoid unnecessary Heap allocations
+            id = VariableProvider.RandomSeed.Next(0, 65);
+            var tmp = BulletInformationProvider.GetAnimationStrip(id);
+            if(tmp.Count == 1)
+            {
+                _animations.Add(Static, tmp[Static]);
+                _currentAnimation = Static;
+                _staticAnimation = true;
+            }
+            else
+            {
+                _animations.Add(Create, tmp[Create]);
+                _animations.Add(Loop, tmp[Loop]);
+                _animations.Add(Death, tmp[Death]);
+                _currentAnimation = Create;
+            }
             Behavior = ReusableBehaviors.StandardBehavior;
             Velocity = 1f;
             SpeedLimit = 1f;
@@ -153,10 +181,25 @@ namespace DareToEscape.Bullets
 
         public Bullet Update(int id, List<int> bulletsToDelete)
         {
+            if(_dieing)
+            {
+                if(_staticAnimation)
+                {
+                    DictionaryPool.SetInactive(_animations);
+                    bulletsToDelete.Add(id);
+                    return this;
+                }
+                UpdateAnimation();
+                if(_animations[_currentAnimation].FinishedPlaying)
+                {
+                    DictionaryPool.SetInactive(_animations);
+                    bulletsToDelete.Add(id);
+                }
+                return this;
+            }
             --KillTime;
             if (KillTime == 0)
             {
-                bulletsToDelete.Add(id);
                 Clear();
                 return this;
             }
@@ -167,7 +210,10 @@ namespace DareToEscape.Bullets
             }
             if (SpawnDelay != 0) return this;
 
-            _animations[0].Update();
+            if(!_staticAnimation)
+            {
+                UpdateAnimation();
+            }
             Behavior.Update(ref this);
 
             if (AutomaticCollision)
@@ -175,7 +221,6 @@ namespace DareToEscape.Bullets
                 if (!_tileMap.CellIsPassableByPixel(CircleCollisionCenter) ||
                     !Camera.WorldRectangle.Contains((int) Position.X, (int) Position.Y))
                 {
-                    bulletsToDelete.Add(id);
                     Clear();
                     return this;
                 }
@@ -183,7 +228,6 @@ namespace DareToEscape.Bullets
 
             if (CollisionCircle.Intersects(((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircle))
             {
-                bulletsToDelete.Add(id);
                 Clear();
                 return this;
                 //VariableProvider.CurrentPlayer.Send<string>("KILL", null);
@@ -197,9 +241,10 @@ namespace DareToEscape.Bullets
 
         public void Draw()
         {
-            Rectangle rect = _animations[0].FrameRectangle;
+            var animation = _animations[_currentAnimation];
+            Rectangle rect = animation.FrameRectangle;
             DrawHelper.AddNewJob(_blendState,
-                                 _animations[0].Texture,
+                                 animation.Texture,
                                  Camera.WorldToScreen(Position + BCircleLocalCenter),
                                  rect,
                                  Color.White,
@@ -210,16 +255,28 @@ namespace DareToEscape.Bullets
                                  0);
         }
 
-        public void SetNewSpeedRules(float newSpeed, float speedLimit)
+        private void UpdateAnimation()
         {
-            Velocity = newSpeed;
-            LaunchSpeed = newSpeed;
-            SpeedLimit = speedLimit;
+            var animation = _animations[_currentAnimation];
+            animation.Update();
+            if (animation.FinishedPlaying && animation.NextAnimation != null)
+            {
+                _currentAnimation = animation.NextAnimation;
+                animation = _animations[_currentAnimation];
+                animation.Play();
+            }
+            _animations[_currentAnimation] = animation;
         }
 
-        public void Clear()
+        private void Clear()
         {
             Behavior.FreeRessources();
+            _dieing = true;
+            if (_staticAnimation) return;
+            var animation = _animations[_currentAnimation];
+            animation.NextAnimation = Death;
+            animation.LoopAnimation = false;
+            _animations[_currentAnimation] = animation;
         }
 
         public void SetParameters(Parameters p)

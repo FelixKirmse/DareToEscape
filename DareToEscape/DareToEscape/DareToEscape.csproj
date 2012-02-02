@@ -124,6 +124,7 @@
     <Compile Include="Bullets\Behaviors\ReusableBehaviors.cs" />
     <Compile Include="Bullets\Behaviors\StandardBehavior.cs" />
     <Compile Include="Bullets\Bullet.cs" />
+    <Compile Include="Bullets\DictionaryPool.cs" />
     <Compile Include="Bullets\Patterns.cs" />
     <Compile Include="CodeEnum.cs" />
     <Compile Include="Components\Entities\Boss1Component.cs" />

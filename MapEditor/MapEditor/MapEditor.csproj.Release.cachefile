@@ -2,11 +2,6 @@ Content\fonts\mono14.xnb
 Content\fonts\Mono21.xnb
 Content\fonts\mono8.xnb
 Content\textures\titlescreen.xnb
-Content\textures\animations\player\idle.xnb
-Content\textures\animations\player\jumpdown.xnb
-Content\textures\animations\player\jumpup.xnb
-Content\textures\animations\player\walk.xnb
-Content\textures\tilesheets\tilesheet.xnb
 Content\textures\animations\entities\checkpoint\activated.xnb
 Content\textures\animations\entities\checkpoint\deactivated.xnb
 Content\textures\animations\entities\exit\idle.xnb
@@ -19,8 +14,15 @@ Content\textures\entities\lock.xnb
 Content\textures\entities\bullet.xnb
 Content\textures\entities\bosskiller.xnb
 Content\textures\entities\sign.xnb
-Content\textures\entities\bullets.xnb
-Content\textures\tilesheets\tilesheet.png
+Content\textures\spritesheets\tilesheet.xnb
+Content\textures\animations\player\playeranimations.xnb
+Content\textures\spritesheets\bullets\animated_bullets.xnb
+Content\textures\spritesheets\bullets\static_bullets.xnb
+Content\textures\spritesheets\tilesheet.png
+Content\maps\bosstest.map
+Content\maps\Level1.map
+Content\maps\Level2.map
+Content\maps\New LayerTest.map
 Content\textures\editor\tiles\0.bmp
 Content\textures\editor\tiles\1.bmp
 Content\textures\editor\tiles\2.bmp
@@ -36,4 +38,5 @@ Content\textures\editor\entities\lock_blue.bmp
 Content\textures\editor\entities\lock_green.bmp
 Content\textures\editor\entities\lock_red.bmp
 Content\textures\editor\entities\lock_yellow.bmp
-Content\data\shotdata.txt
+Content\data\bullets\animated_bullets.txt
+Content\data\bullets\static_bullets.txt
