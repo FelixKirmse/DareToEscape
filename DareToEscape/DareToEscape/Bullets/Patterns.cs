@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
 using DareToEscape.Bullets.Behaviors;
@@ -303,6 +304,7 @@ namespace DareToEscape.Bullets
 
         public void ButterflyCircleShot(int modifier)
         {
+            
             float angle = 0;
             for (float i = 0; i < 10; ++i)
             {

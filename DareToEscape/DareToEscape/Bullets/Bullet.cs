@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
@@ -161,13 +162,13 @@ namespace DareToEscape.Bullets
 
         private Bullet(int id)
             : this()
-        {
-            _collisionCircle = BulletInformationProvider.GetBCircle(id);
+        {            
+            _collisionCircle = BulletInformationProvider.GetBCircle(id);            
             _id = GetID();
             _animations = GetDictionary(_id);
             //Not using foreach here in order to avoid unnecessary Heap allocations
-            id = VariableProvider.RandomSeed.Next(0, 21);
-            var tmp = BulletInformationProvider.GetAnimationStrip(id);
+            id = VariableProvider.RandomSeed.Next(0, 21);            
+            var tmp = BulletInformationProvider.GetAnimationStrip(id);            
             if(tmp.Count == 1)
             {
                 _animations.Add(Static, tmp[Static]);
@@ -186,8 +187,8 @@ namespace DareToEscape.Bullets
             SpeedLimit = 1f;
             AutomaticCollision = true;
             KillTime = -1;
-            _blendState = BlendState.AlphaBlend;
-            _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
+            _blendState = BlendState.AlphaBlend;            
+            _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();            
         }
 
 

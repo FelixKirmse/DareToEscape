@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
@@ -28,26 +29,12 @@ namespace DareToEscape.Providers
 
         public static Dictionary<string, AnimationStripStruct> GetAnimationStrip(int id)
         {
-            try
-            {
-                return BulletAnimationStrips[id];
-            }
-            catch (Exception)
-            {
-                return BulletAnimationStrips[0];
-            }
+            return id >= BulletAnimationStrips.Count ? BulletAnimationStrips[0] : BulletAnimationStrips[id];
         }
 
         public static BCircle GetBCircle(int id)
         {
-            try
-            {
-                return BulletBCircles[id];
-            }
-            catch (Exception)
-            {
-                return BulletBCircles[0];
-            }
+            return id >= BulletBCircles.Count ? BulletBCircles[0] : BulletBCircles[id];
         }
 
         public static void LoadBulletData(ContentManager content)
