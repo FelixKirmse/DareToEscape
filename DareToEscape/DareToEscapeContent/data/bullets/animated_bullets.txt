@@ -1,0 +1,25 @@
+#CELL SIZE: 16,16
+0;create:4;loop:4;death:3;0.5
+16;create:4;loop:4;death:3;0.5
+32;create:4;loop:4;death:3;0.5
+48;create:4;loop:4;death:3;0.5
+//
+64;create:4;loop:3;death:4;0.5
+80;create:4;loop:3;death:4;0.5
+96;create:4;loop:3;death:4;0.5
+112;create:4;loop:3;death:4;0.5
+//
+128;create:4;loop:6;death:4;1
+144;create:4;loop:6;death:4;1
+160;create:4;loop:6;death:4;1
+176;create:4;loop:3;death:4;1
+//
+192;create:5;loop:4;death:5;1.5
+208;create:5;loop:4;death:5;1.5
+224;create:5;loop:4;death:5;1.5
+240;create:5;loop:4;death:5;1.5
+//
+256;create:5;loop:4;death:5;2
+272;create:5;loop:4;death:5;2
+288;create:5;loop:4;death:5;2
+304;create:5;loop:4;death:5;2
