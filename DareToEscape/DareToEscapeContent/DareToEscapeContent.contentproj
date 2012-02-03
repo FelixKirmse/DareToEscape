@@ -279,11 +279,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="textures\spritesheets\bullets\static_bullets.png">
-      <Name>static_bullets</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\bullets\animated_bullets.txt">

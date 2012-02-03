@@ -21,20 +21,20 @@ namespace DareToEscape.Providers
         private const string Death = "Death";
         private const string Static = "Static";
 
-        private static readonly List<Dictionary<string, AnimationStripStruct>> BulletAnimationStrips =
-            new List<Dictionary<string, AnimationStripStruct>>();
+        private static readonly Dictionary<int, Dictionary<string, AnimationStripStruct>> BulletAnimationStrips =
+            new Dictionary<int, Dictionary<string, AnimationStripStruct>>(200);
 
-        private static readonly List<BCircle> BulletBCircles = new List<BCircle>();
+        private static readonly Dictionary<int, BCircle> BulletBCircles = new Dictionary<int, BCircle>(200);
 
 
         public static Dictionary<string, AnimationStripStruct> GetAnimationStrip(int id)
         {
-            return id >= BulletAnimationStrips.Count ? BulletAnimationStrips[0] : BulletAnimationStrips[id];
+            return BulletAnimationStrips.ContainsKey(id) ? BulletAnimationStrips[id] : BulletAnimationStrips[0];
         }
 
         public static BCircle GetBCircle(int id)
         {
-            return id >= BulletBCircles.Count ? BulletBCircles[0] : BulletBCircles[id];
+            return BulletBCircles.ContainsKey(id) ? BulletBCircles[id] : BulletBCircles[0];
         }
 
         public static void LoadBulletData(ContentManager content)
@@ -80,46 +80,24 @@ namespace DareToEscape.Providers
                                        string currentLine)
         {
             int cellNumber;
+            int id;
 
             if (String.IsNullOrWhiteSpace(currentLine) || currentLine[0] == '/')
                 return;
 
             string[] splitLine = currentLine.Split(';');
-            if (!int.TryParse(splitLine[0], out cellNumber))
+            if (!int.TryParse(splitLine[0], out id))
                 return;
-            float radius = 0;
-            Dictionary<string, AnimationStripStruct> animations = splitLine.Length == 2
-                                                                      ? GetStaticAnimation(splitLine, cellNumber,
-                                                                                           cellsPerRow, cellWidth,
-                                                                                           cellHeight, texture,
-                                                                                           out radius)
-                                                                      : splitLine.Length == 5
-                                                                            ? GetAnimations(splitLine, cellNumber,
-                                                                                            cellsPerRow, cellWidth,
-                                                                                            cellHeight, texture,
-                                                                                            out radius)
-                                                                            : null;
+            if (!int.TryParse(splitLine[1], out cellNumber))
+                return;
+            float radius;
+            Dictionary<string, AnimationStripStruct> animations = GetAnimations(splitLine, cellNumber, cellsPerRow,
+                                                                                cellWidth, cellHeight, texture,
+                                                                                out radius);
+                                                                            
             if (animations == null) return;
-            BulletAnimationStrips.Add(animations);
-            BulletBCircles.Add(new BCircle(cellWidth/2f, cellHeight/2f, radius));
-        }
-
-        private static Dictionary<string, AnimationStripStruct> GetStaticAnimation(string[] splitLine, int cellNumber,
-                                                                                   int cellsPerRow,
-                                                                                   int cellWidth, int cellHeight,
-                                                                                   Texture2D texture,
-                                                                                   out float radius)
-        {
-            if (!float.TryParse(splitLine[1], NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out radius))
-                return null;
-            var animations = new Dictionary<string, AnimationStripStruct>
-                                 {
-                                     {
-                                         Static,
-                                         GetAnimationStripStruct(cellNumber, cellsPerRow, cellWidth, cellHeight, texture)
-                                         }
-                                 };
-            return animations;
+            BulletAnimationStrips.Add(id, animations);
+            BulletBCircles.Add(id, new BCircle(cellWidth/2f, cellHeight/2f, radius));
         }
 
         private static Dictionary<string, AnimationStripStruct> GetAnimations(string[] splitLine, int cellNumber,
@@ -128,21 +106,21 @@ namespace DareToEscape.Providers
                                                                               Texture2D texture,
                                                                               out float radius)
         {
-            if (!float.TryParse(splitLine[4], NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out radius))
+            if (!float.TryParse(splitLine[5], NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out radius))
                 return null;
             var animations = new Dictionary<string, AnimationStripStruct>();
             int createCount, loopCount, deathCount;
-            if (!int.TryParse(splitLine[1].Split(':')[1], out createCount))
+            if (!int.TryParse(splitLine[2].Split(':')[1], out createCount))
                 return null;
             animations.Add(Create,
                            GetAnimationStripStruct(cellNumber, cellsPerRow, cellWidth, cellHeight, texture, Create,
                                                    createCount, 0, false, .0625f, "Loop"));
-            if (!int.TryParse(splitLine[2].Split(':')[1], out loopCount))
+            if (!int.TryParse(splitLine[3].Split(':')[1], out loopCount))
                 return null;
             animations.Add(Loop,
                            GetAnimationStripStruct(cellNumber, cellsPerRow, cellWidth, cellHeight, texture, Loop,
                                                    loopCount, createCount, true, .025f));
-            if (!int.TryParse(splitLine[3].Split(':')[1], out deathCount))
+            if (!int.TryParse(splitLine[4].Split(':')[1], out deathCount))
                 return null;
             animations.Add(Death,
                            GetAnimationStripStruct(cellNumber, cellsPerRow, cellWidth, cellHeight, texture, Death,
