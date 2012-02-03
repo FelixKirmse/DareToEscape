@@ -80,6 +80,13 @@ namespace DareToEscape.Managers
                 case TileCodes.Water:
                     player.Send("PHYSICS_SET_INWATER", true);
                     break;
+
+                case TileCodes.LeftSlope:
+                    player.Send("PHYSICS_SET_LEFTSLOPE", true);
+                    break;
+                case TileCodes.RightSlope:
+                    player.Send("PHYSICS_SET_RIGHTSLOPE", true);
+                    break;
             }
         }
 

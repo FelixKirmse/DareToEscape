@@ -52,6 +52,8 @@ namespace DareToEscape
         PushUp,
         PushDown,
         CameraFocusPoint,
-        CameraFocusTrigger
+        CameraFocusTrigger,
+        LeftSlope,
+        RightSlope
     }
 }

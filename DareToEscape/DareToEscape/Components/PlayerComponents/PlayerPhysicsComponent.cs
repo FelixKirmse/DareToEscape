@@ -9,6 +9,7 @@ namespace DareToEscape.Components.PlayerComponents
 {
     internal class PlayerPhysicsComponent : PhysicsComponent
     {
+        private const int CellSize = 8;
         private readonly Rectangle _collisionRectangle = new Rectangle(7, 5, 10, 18);
         private readonly TileMap<Map<TileCode>, TileCode> _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
         private bool _focused;
@@ -22,6 +23,8 @@ namespace DareToEscape.Components.PlayerComponents
         private bool _pushRight;
         private bool _pushUp;
         private bool _setRectangle = true;
+        private bool _leftSlope;
+        private bool _rightSlope;
 
         public override void Update(GameObject obj)
         {
@@ -73,6 +76,18 @@ namespace DareToEscape.Components.PlayerComponents
                         _horiz = 0;
                         break;
                     }
+                }
+
+                if(_leftSlope || _rightSlope)
+                {
+                    Rectangle collisionRectangle = obj.GetCustomCollisionRectangle(wantedPosition);
+                    Rectangle cellRect =
+                        _tileMap.CellWorldRectangle(
+                            _tileMap.GetCellByPixel(new Vector2(collisionRectangle.Center.X, collisionRectangle.Bottom)));
+                    wantedPosition.Y = _leftSlope
+                                           ? (wantedPosition.X%CellSize) + cellRect.Y
+                                           : (-1*(wantedPosition.X%CellSize) - CellSize) + cellRect.Y;
+
                 }
                 obj.Position = wantedPosition;
             }
@@ -195,6 +210,18 @@ namespace DareToEscape.Components.PlayerComponents
                 {
                     switch (messageParts[2])
                     {
+                        case "LEFTSLOPE":
+                            if(obj is bool)
+                            {
+                                _leftSlope = (bool) (object) obj;
+                            }
+                            break;
+                        case "RIGHTSLOPE":
+                            if(obj is bool)
+                            {
+                                _rightSlope = (bool) (object) obj;
+                            }
+                            break;
                         case "GRAVITY":
                             if (obj is float)
                             {
