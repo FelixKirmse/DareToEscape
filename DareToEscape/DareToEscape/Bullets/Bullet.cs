@@ -75,13 +75,12 @@ namespace DareToEscape.Bullets
         public float SpeedLimit;
         public float TurnSpeed;
         public float Velocity;
-        private Dictionary<string, AnimationStripStruct> _animations;
+        private readonly Dictionary<string, AnimationStripStruct> _animations;
         private BCircle _collisionCircle;
         private float _directionInDegrees;
         private Vector2 _directionVector;
         private float _lastDirection;
         private Vector2 _lastPosition;
-        private readonly bool _staticAnimation;
         private string _currentAnimation;
         private bool _dieing;
         private readonly ulong _id;
@@ -166,22 +165,14 @@ namespace DareToEscape.Bullets
             _collisionCircle = BulletInformationProvider.GetBCircle(id);            
             _id = GetID();
             _animations = GetDictionary(_id);
-            //Not using foreach here in order to avoid unnecessary Heap allocations
+           
             id = VariableProvider.RandomSeed.Next(0, 21);            
-            var tmp = BulletInformationProvider.GetAnimationStrip(id);            
-            if(tmp.Count == 1)
-            {
-                _animations.Add(Static, tmp[Static]);
-                _currentAnimation = Static;
-                _staticAnimation = true;
-            }
-            else
-            {
-                _animations.Add(Create, tmp[Create]);
-                _animations.Add(Loop, tmp[Loop]);
-                _animations.Add(Death, tmp[Death]);
-                _currentAnimation = Create;
-            }
+            var tmp = BulletInformationProvider.GetAnimationStrip(id);
+            //Not using foreach here in order to avoid unnecessary Heap allocations
+            _animations.Add(Create, tmp[Create]);
+            _animations.Add(Loop, tmp[Loop]);
+            _animations.Add(Death, tmp[Death]);
+            _currentAnimation = Create;
             Behavior = ReusableBehaviors.StandardBehavior;
             Velocity = 1f;
             SpeedLimit = 1f;
@@ -222,12 +213,6 @@ namespace DareToEscape.Bullets
         {
             if(_dieing)
             {
-                if(_staticAnimation)
-                {
-                    SetInactive(_id);
-                    bulletsToDelete.Add(id);
-                    return this;
-                }
                 UpdateAnimation();
                 if(_animations[_currentAnimation].FinishedPlaying)
                 {
@@ -249,10 +234,7 @@ namespace DareToEscape.Bullets
             }
             if (SpawnDelay != 0) return this;
 
-            if(!_staticAnimation)
-            {
-                UpdateAnimation();
-            }
+            UpdateAnimation();
             Behavior.Update(ref this);
 
             if (AutomaticCollision)
@@ -310,7 +292,6 @@ namespace DareToEscape.Bullets
         {
             Behavior.FreeRessources();
             _dieing = true;
-            if (_staticAnimation) return;
             var animation = _animations[_currentAnimation];
             animation.NextAnimation = Death;
             animation.LoopAnimation = false;

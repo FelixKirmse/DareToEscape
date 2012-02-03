@@ -17,7 +17,6 @@ Content\textures\entities\sign.xnb
 Content\textures\animations\player\playeranimations.xnb
 Content\textures\spritesheets\tilesheet.xnb
 Content\textures\spritesheets\bullets\animated_bullets.xnb
-Content\textures\spritesheets\bullets\static_bullets.xnb
 Content\textures\spritesheets\tilesheet.png
 Content\maps\bosstest.map
 Content\maps\Level1.map
