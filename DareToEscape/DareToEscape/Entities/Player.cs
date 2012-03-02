@@ -79,7 +79,7 @@ namespace DareToEscape.Entities
             if (Velocity.Y > 0)
             {
                 int slopeTileCoordX, slopeTileCoordY;
-                int slopeCheckPointX = rect.X + (rect.Width >> 1) + (int) Velocity.X;
+                int slopeCheckPointX = rect.Center.X + (Velocity.X > 0 ? 2 : Velocity.X < 0 ? -2: 0) + (int) Velocity.X;
                 if (SlopeCollision(slopeCheckPointX, rect.Bottom, out slopeTileCoordX, out slopeTileCoordY))
                 {
                     Position.X += Velocity.X;
@@ -214,8 +214,8 @@ namespace DareToEscape.Entities
                     Send("GRAPHICS_PLAYANIMATION", "JumpDown");
                 }
             }
-            _lastSlopeX = _tileMap.GetCellByPixelX(Position.X + (collisionRectangle.Width >> 1));
-            _lastSlopeY = _tileMap.GetCellByPixelY(Position.Y + collisionRectangle.Height);
+            _lastSlopeX = _tileMap.GetCellByPixelX(CollisionRectangle.Center.X);
+            _lastSlopeY = _tileMap.GetCellByPixelY(CollisionRectangle.Y + collisionRectangle.Height);
         }
 
         private bool VerticalCollision(bool movingRight, out int tileCoordX)
