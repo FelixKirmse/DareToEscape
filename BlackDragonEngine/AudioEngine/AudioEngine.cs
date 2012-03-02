@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Audio;
 
 namespace BlackDragonEngine.AudioEngine
@@ -7,8 +6,8 @@ namespace BlackDragonEngine.AudioEngine
     public sealed class AudioEngine
     {
         private static AudioEngine _instance;
-        private readonly Dictionary<string, SoundEffectInstance> _music;
         private readonly Dictionary<string, SoundEffectInstance> _loopingEffects;
+        private readonly Dictionary<string, SoundEffectInstance> _music;
         private readonly Dictionary<string, SoundEffect> _sounds;
 
         private AudioEngine()
@@ -61,7 +60,6 @@ namespace BlackDragonEngine.AudioEngine
             catch
             {
             }
-            
         }
 
         public void StopAllLoops()
@@ -74,9 +72,9 @@ namespace BlackDragonEngine.AudioEngine
 
         public void StopLoop(string name)
         {
-            foreach(var effect in _loopingEffects)
+            foreach (var effect in _loopingEffects)
             {
-                if(effect.Key == name)
+                if (effect.Key == name)
                 {
                     effect.Value.Stop();
                 }

@@ -12,13 +12,10 @@ using Microsoft.Xna.Framework.Input;
 namespace BlackDragonEngine.TileEngine
 {
     /// <summary>
-    ///   The heart of the TileEngine, manages a Map object.
-    ///   This class implements a Pseudo-Singleton pattern.
-    ///   The first instance has to be created via the public constructor. 
-    ///   However, all instances you need afterwards have to be fetched via the static GetInstance() method.
+    ///   The heart of the TileEngine, manages a Map object. This class implements a Pseudo-Singleton pattern. The first instance has to be created via the public constructor. However, all instances you need afterwards have to be fetched via the static GetInstance() method.
     /// </summary>
-    /// <typeparam name = "TMap">Type of the Map Object</typeparam>
-    /// <typeparam name = "TCodes">Type of the Codes in the Map Object</typeparam>
+    /// <typeparam name="TMap"> Type of the Map Object </typeparam>
+    /// <typeparam name="TCodes"> Type of the Codes in the Map Object </typeparam>
     public class TileMap<TMap, TCodes> where TMap : IMap<TCodes>, new()
     {
         #region Declarations
@@ -117,14 +114,7 @@ namespace BlackDragonEngine.TileEngine
         public int GetCellByPixelY(float pixelY)
         {
             float cell = pixelY/TileWidth;
-            if (cell < 0)
-            {
-                if (cell < (int) cell)
-                {
-                    return (int) cell - 1;
-                }
-            }
-            return (int) cell;
+            return cell < 0 && cell < (int) cell ? (int) cell - 1 : (int) cell;
         }
 
         public Coords GetCellByPixel(Coords pixelLocation)

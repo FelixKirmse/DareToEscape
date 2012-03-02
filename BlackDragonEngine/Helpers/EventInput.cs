@@ -6,8 +6,7 @@ using Microsoft.Xna.Framework.Input;
 namespace BlackDragonEngine.Helpers
 {
     /// <summary>
-    ///   CREDITS INFINIMINER
-    ///   http://code.google.com/p/infiniminer/
+    ///   CREDITS INFINIMINER http://code.google.com/p/infiniminer/
     /// </summary>
     public sealed class CharacterEventArgs : EventArgs
     {
@@ -124,7 +123,7 @@ namespace BlackDragonEngine.Helpers
         /// <summary>
         ///   Initialize the TextInput with the given GameWindow.
         /// </summary>
-        /// <param name = "window">The XNA window to which text input should be linked.</param>
+        /// <param name="window"> The XNA window to which text input should be linked. </param>
         public static void Initialize(GameWindow window)
         {
             if (initialized)

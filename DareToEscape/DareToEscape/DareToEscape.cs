@@ -53,9 +53,9 @@ namespace DareToEscape
             Task.WaitAll(task);
             Graphics = new GraphicsDeviceManager(this)
                            {
-                               PreferredBackBufferWidth = 
+                               PreferredBackBufferWidth =
                                    ResInfo.FullScreen ? ResolutionWidth : ResInfo.Resolution.Width,
-                               PreferredBackBufferHeight = 
+                               PreferredBackBufferHeight =
                                    ResInfo.FullScreen ? ResolutionHeight : ResInfo.Resolution.Height,
                                PreferMultiSampling = false
                            };

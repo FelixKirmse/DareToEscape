@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.Providers;
 using BlackDragonEngine.TileEngine;
@@ -18,14 +17,16 @@ namespace DareToEscape.Bullets
     {
         private static ulong _currentID;
         private static readonly ConcurrentStack<ulong> UsableIDs = new ConcurrentStack<ulong>();
-        private static readonly ConcurrentDictionary<ulong, Dictionary<string, AnimationStripStruct>> Dictionaries = new ConcurrentDictionary<ulong, Dictionary<string, AnimationStripStruct>>();
+
+        private static readonly ConcurrentDictionary<ulong, Dictionary<string, AnimationStripStruct>> Dictionaries =
+            new ConcurrentDictionary<ulong, Dictionary<string, AnimationStripStruct>>();
 
         private static ulong GetID()
         {
             ulong id;
             if (!UsableIDs.TryPop(out id))
             {
-                lock(UsableIDs)
+                lock (UsableIDs)
                 {
                     ++_currentID;
                 }
@@ -45,11 +46,137 @@ namespace DareToEscape.Bullets
 
         private static void SetInactive(ulong id)
         {
-            lock(Dictionaries)
+            lock (Dictionaries)
             {
                 Dictionaries[id].Clear();
             }
             UsableIDs.Push(id);
+        }
+
+        public Bullet Update(int id, List<int> bulletsToDelete)
+        {
+            if (_dieing)
+            {
+                UpdateAnimation();
+                if (_animations[_currentAnimation].FinishedPlaying)
+                {
+                    SetInactive(_id);
+                    bulletsToDelete.Add(id);
+                }
+                return this;
+            }
+            --KillTime;
+            if (KillTime == 0)
+            {
+                Clear();
+                return this;
+            }
+
+            if (SpawnDelay > 0)
+            {
+                --SpawnDelay;
+            }
+            if (SpawnDelay != 0) return this;
+
+            UpdateAnimation();
+            Behavior.Update(ref this);
+
+            if (AutomaticCollision)
+            {
+                if (!_tileMap.CellIsPassableByPixel(CircleCollisionCenter) ||
+                    !Camera.WorldRectangle.Contains((int) Position.X, (int) Position.Y))
+                {
+                    Clear();
+                    return this;
+                }
+            }
+
+            if (CollisionCircle.Intersects(((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircle))
+            {
+                Clear();
+                return this;
+                //VariableProvider.CurrentPlayer.Send<string>("KILL", null);
+            }
+            _directionVector.Normalize();
+            _lastDirection = Direction;
+            _lastPosition = Position;
+            return this;
+        }
+
+        public void Draw()
+        {
+            AnimationStripStruct animation = _animations[_currentAnimation];
+            Rectangle rect = animation.FrameRectangle;
+            DrawHelper.AddNewJob(_blendState,
+                                 animation.Texture,
+                                 Camera.WorldToScreen(Position + BCircleLocalCenter),
+                                 rect,
+                                 Color.White,
+                                 0f,
+                                 new Vector2((float) rect.Width/2, (float) rect.Height/2),
+                                 1f,
+                                 SpriteEffects.None,
+                                 0);
+        }
+
+        private void UpdateAnimation()
+        {
+            AnimationStripStruct animation = _animations[_currentAnimation];
+            animation.Update();
+            if (animation.FinishedPlaying && animation.NextAnimation != null)
+            {
+                _currentAnimation = animation.NextAnimation;
+                animation = _animations[_currentAnimation];
+                animation.Play();
+            }
+            _animations[_currentAnimation] = animation;
+        }
+
+        private void Clear()
+        {
+            Behavior.FreeRessources();
+            _dieing = true;
+            AnimationStripStruct animation = _animations[_currentAnimation];
+            animation.NextAnimation = Death;
+            animation.LoopAnimation = false;
+            _animations[_currentAnimation] = animation;
+        }
+
+        public void SetParameters(Parameters p)
+        {
+            SetParameters(p.NewSpeed, p.NewAngle, p.NewTurnSpeed, p.NewAcceleration, p.NewSpeedLimit);
+        }
+
+        public void SetParameters(float? newSpeed, float? angle, float turnSpeed, float acceleration, float speedLimit)
+        {
+            if (newSpeed != null)
+            {
+                Velocity = (float) newSpeed;
+                LaunchSpeed = (float) newSpeed;
+            }
+            if (angle != null)
+            {
+                Direction = (float) angle;
+            }
+
+            TurnSpeed = turnSpeed;
+            Acceleration = acceleration;
+            SpeedLimit = speedLimit;
+        }
+
+        public void Shoot(float direction, float startingSpeed)
+        {
+            LaunchSpeed = startingSpeed;
+            Velocity = startingSpeed;
+            Direction = direction;
+            BulletManager.GetInstance().AddBullet(this);
+        }
+
+        public override string ToString()
+        {
+            //return "Position: " + Position +" BaseSpeed: " + BaseSpeed + " LaunchSpeed: " + LaunchSpeed + " Acceleration: " + Acceleration +
+            //     " SpeedLimit: " + SpeedLimit + " TurnSpeed: " + TurnSpeed;
+            return ((ParameterQueue) Behavior).ID.ToString();
         }
 
         #region Constants
@@ -63,7 +190,9 @@ namespace DareToEscape.Bullets
 
         #region Fields
 
+        private readonly Dictionary<string, AnimationStripStruct> _animations;
         private readonly BlendState _blendState;
+        private readonly ulong _id;
         private readonly TileMap<Map<TileCode>, TileCode> _tileMap;
         public float Acceleration;
         public bool AutomaticCollision;
@@ -75,15 +204,13 @@ namespace DareToEscape.Bullets
         public float SpeedLimit;
         public float TurnSpeed;
         public float Velocity;
-        private readonly Dictionary<string, AnimationStripStruct> _animations;
         private BCircle _collisionCircle;
+        private string _currentAnimation;
+        private bool _dieing;
         private float _directionInDegrees;
         private Vector2 _directionVector;
         private float _lastDirection;
         private Vector2 _lastPosition;
-        private string _currentAnimation;
-        private bool _dieing;
-        private readonly ulong _id;
 
         #endregion
 
@@ -161,13 +288,13 @@ namespace DareToEscape.Bullets
 
         private Bullet(int id)
             : this()
-        {            
-            _collisionCircle = BulletInformationProvider.GetBCircle(id);            
+        {
+            _collisionCircle = BulletInformationProvider.GetBCircle(id);
             _id = GetID();
             _animations = GetDictionary(_id);
-           
-            id = VariableProvider.RandomSeed.Next(0, 21);            
-            var tmp = BulletInformationProvider.GetAnimationStrip(id);
+
+            id = VariableProvider.RandomSeed.Next(0, 21);
+            Dictionary<string, AnimationStripStruct> tmp = BulletInformationProvider.GetAnimationStrip(id);
             //Not using foreach here in order to avoid unnecessary Heap allocations
             _animations.Add(Create, tmp[Create]);
             _animations.Add(Loop, tmp[Loop]);
@@ -178,8 +305,8 @@ namespace DareToEscape.Bullets
             SpeedLimit = 1f;
             AutomaticCollision = true;
             KillTime = -1;
-            _blendState = BlendState.AlphaBlend;            
-            _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();            
+            _blendState = BlendState.AlphaBlend;
+            _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
         }
 
 
@@ -208,131 +335,5 @@ namespace DareToEscape.Bullets
         }
 
         #endregion
-
-        public Bullet Update(int id, List<int> bulletsToDelete)
-        {
-            if(_dieing)
-            {
-                UpdateAnimation();
-                if(_animations[_currentAnimation].FinishedPlaying)
-                {
-                    SetInactive(_id);
-                    bulletsToDelete.Add(id);
-                }
-                return this;
-            }
-            --KillTime;
-            if (KillTime == 0)
-            {
-                Clear();
-                return this;
-            }
-
-            if (SpawnDelay > 0)
-            {
-                --SpawnDelay;
-            }
-            if (SpawnDelay != 0) return this;
-
-            UpdateAnimation();
-            Behavior.Update(ref this);
-
-            if (AutomaticCollision)
-            {
-                if (!_tileMap.CellIsPassableByPixel(CircleCollisionCenter) ||
-                    !Camera.WorldRectangle.Contains((int) Position.X, (int) Position.Y))
-                {
-                    Clear();
-                    return this;
-                }
-            }
-
-            if (CollisionCircle.Intersects(((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircle))
-            {
-                Clear();
-                return this;
-                //VariableProvider.CurrentPlayer.Send<string>("KILL", null);
-            }
-            _directionVector.Normalize();
-            _lastDirection = Direction;
-            _lastPosition = Position;
-            return this;
-        }
-
-        public void Draw()
-        {
-            var animation = _animations[_currentAnimation];
-            Rectangle rect = animation.FrameRectangle;
-            DrawHelper.AddNewJob(_blendState,
-                                 animation.Texture,
-                                 Camera.WorldToScreen(Position + BCircleLocalCenter),
-                                 rect,
-                                 Color.White,
-                                 0f,
-                                 new Vector2((float) rect.Width/2, (float) rect.Height/2),
-                                 1f,
-                                 SpriteEffects.None,
-                                 0);
-        }
-
-        private void UpdateAnimation()
-        {
-            var animation = _animations[_currentAnimation];
-            animation.Update();
-            if (animation.FinishedPlaying && animation.NextAnimation != null)
-            {
-                _currentAnimation = animation.NextAnimation;
-                animation = _animations[_currentAnimation];
-                animation.Play();
-            }
-            _animations[_currentAnimation] = animation;
-        }
-
-        private void Clear()
-        {
-            Behavior.FreeRessources();
-            _dieing = true;
-            var animation = _animations[_currentAnimation];
-            animation.NextAnimation = Death;
-            animation.LoopAnimation = false;
-            _animations[_currentAnimation] = animation;
-        }
-
-        public void SetParameters(Parameters p)
-        {
-            SetParameters(p.NewSpeed, p.NewAngle, p.NewTurnSpeed, p.NewAcceleration, p.NewSpeedLimit);
-        }
-
-        public void SetParameters(float? newSpeed, float? angle, float turnSpeed, float acceleration, float speedLimit)
-        {
-            if (newSpeed != null)
-            {
-                Velocity = (float) newSpeed;
-                LaunchSpeed = (float) newSpeed;
-            }
-            if (angle != null)
-            {
-                Direction = (float) angle;
-            }
-
-            TurnSpeed = turnSpeed;
-            Acceleration = acceleration;
-            SpeedLimit = speedLimit;
-        }
-
-        public void Shoot(float direction, float startingSpeed)
-        {
-            LaunchSpeed = startingSpeed;
-            Velocity = startingSpeed;
-            Direction = direction;
-            BulletManager.GetInstance().AddBullet(this);
-        }
-
-        public override string ToString()
-        {
-            //return "Position: " + Position +" BaseSpeed: " + BaseSpeed + " LaunchSpeed: " + LaunchSpeed + " Acceleration: " + Acceleration +
-            //     " SpeedLimit: " + SpeedLimit + " TurnSpeed: " + TurnSpeed;
-            return ((ParameterQueue) Behavior).ID.ToString();
-        }
     }
 }

@@ -72,7 +72,7 @@ namespace BlackDragonEngine.Components
         /// <summary>
         ///   Updates the given object
         /// </summary>
-        /// <param name = "obj">The object to update</param>
+        /// <param name="obj"> The object to update </param>
         public override void Update(GameObject obj)
         {
             if (SetRectangle)
@@ -96,8 +96,8 @@ namespace BlackDragonEngine.Components
         /// <summary>
         ///   The routine that runs when the ObjectState is idle
         /// </summary>
-        /// <param name = "collisionCenter">The objects collisioncenter</param>
-        /// <param name = "obj">The object to update</param>
+        /// <param name="collisionCenter"> The objects collisioncenter </param>
+        /// <param name="obj"> The object to update </param>
         protected virtual void IDLEUpdate(Vector2 collisionCenter, GameObject obj)
         {
             do
@@ -116,8 +116,8 @@ namespace BlackDragonEngine.Components
         /// <summary>
         ///   Changes the direction to head to
         /// </summary>
-        /// <param name = "collisionCenter">The objects collisioncenter</param>
-        /// <param name = "obj">The object to update</param>
+        /// <param name="collisionCenter"> The objects collisioncenter </param>
+        /// <param name="obj"> The object to update </param>
         protected void ChangeDirection(Vector2 collisionCenter, GameObject obj)
         {
             Direction = _tileMap.GetCellCenter(CurrentGoal) - collisionCenter;
@@ -129,8 +129,8 @@ namespace BlackDragonEngine.Components
         /// <summary>
         ///   The routine that runs when the ObjectState is walking
         /// </summary>
-        /// <param name = "collisionCenter">The objects collisioncenter</param>
-        /// <param name = "obj">The object to update</param>
+        /// <param name="collisionCenter"> The objects collisioncenter </param>
+        /// <param name="obj"> The object to update </param>
         protected virtual void WalkingUpdate(Vector2 collisionCenter, GameObject obj)
         {
             obj.Position += Speed*Direction;
@@ -151,7 +151,7 @@ namespace BlackDragonEngine.Components
         /// <summary>
         ///   Returns the next waypoint to generate a path for
         /// </summary>
-        /// <returns>Waypoint to generate a path for</returns>
+        /// <returns> Waypoint to generate a path for </returns>
         protected virtual Vector2 GetNextWaypoint()
         {
             if (WaypointIndex == waypoints.Count - 1)
@@ -166,7 +166,7 @@ namespace BlackDragonEngine.Components
         /// <summary>
         ///   Determines the animation based on the direction
         /// </summary>
-        /// <param name = "obj">The object to update</param>
+        /// <param name="obj"> The object to update </param>
         protected virtual void DetermineAnimation(GameObject obj)
         {
             string animation = Direction.Y > 0 ? "WalkDown" : "WalkUp";

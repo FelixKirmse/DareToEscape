@@ -138,8 +138,6 @@
     <Compile Include="Components\Entities\SmallTurretComponent.cs" />
     <Compile Include="Components\Entities\TurretComponent.cs" />
     <Compile Include="Components\PlayerComponents\PlayerGraphicsComponent.cs" />
-    <Compile Include="Components\PlayerComponents\PlayerInputComponent.cs" />
-    <Compile Include="Components\PlayerComponents\PlayerPhysicsComponent.cs" />
     <Compile Include="Components\PlayerComponents\PlayerSoundComponent.cs" />
     <Compile Include="Components\PlayerComponents\PlayerGeneralComponent.cs" />
     <Compile Include="Dialog\Tutorial\TutorialDialog.cs" />

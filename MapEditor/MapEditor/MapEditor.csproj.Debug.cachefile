@@ -2,6 +2,7 @@ Content\fonts\mono14.xnb
 Content\fonts\Mono21.xnb
 Content\fonts\mono8.xnb
 Content\textures\titlescreen.xnb
+Content\textures\spritesheets\tilesheet.xnb
 Content\textures\animations\entities\checkpoint\activated.xnb
 Content\textures\animations\entities\checkpoint\deactivated.xnb
 Content\textures\animations\entities\exit\idle.xnb
@@ -15,7 +16,6 @@ Content\textures\entities\bullet.xnb
 Content\textures\entities\bosskiller.xnb
 Content\textures\entities\sign.xnb
 Content\textures\animations\player\playeranimations.xnb
-Content\textures\spritesheets\tilesheet.xnb
 Content\textures\spritesheets\bullets\animated_bullets.xnb
 Content\textures\spritesheets\tilesheet.png
 Content\maps\bosstest.map

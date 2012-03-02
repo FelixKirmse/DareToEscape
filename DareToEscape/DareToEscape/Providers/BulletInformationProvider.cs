@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
@@ -94,7 +93,7 @@ namespace DareToEscape.Providers
             Dictionary<string, AnimationStripStruct> animations = GetAnimations(splitLine, cellNumber, cellsPerRow,
                                                                                 cellWidth, cellHeight, texture,
                                                                                 out radius);
-                                                                            
+
             if (animations == null) return;
             BulletAnimationStrips.Add(id, animations);
             BulletBCircles.Add(id, new BCircle(cellWidth/2f, cellHeight/2f, radius));
@@ -131,7 +130,8 @@ namespace DareToEscape.Providers
         private static AnimationStripStruct GetAnimationStripStruct(int cellNumber, int cellsPerRow, int cellWidth,
                                                                     int cellHeight, Texture2D texture,
                                                                     string name = null, int frameCount = 1,
-                                                                    int cellMod = 0,bool loop = false, float frameDelay = .05f, string nextAnimation = null)
+                                                                    int cellMod = 0, bool loop = false,
+                                                                    float frameDelay = .05f, string nextAnimation = null)
         {
             int frameX = ((cellNumber + cellMod)%cellsPerRow)*cellWidth;
             int frameY = ((cellNumber + cellMod)/cellsPerRow)*cellHeight;

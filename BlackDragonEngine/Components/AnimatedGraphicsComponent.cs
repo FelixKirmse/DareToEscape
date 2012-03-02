@@ -24,7 +24,7 @@ namespace BlackDragonEngine.Components
         /// <summary>
         ///   Drawdepth of the sprite
         /// </summary>
-        protected float DrawDepth = .91f;
+        protected new float DrawDepth = .91f;
 
         /// <summary>
         ///   Should the graphic be flipped?
@@ -39,7 +39,7 @@ namespace BlackDragonEngine.Components
         /// <summary>
         ///   Draws the entity
         /// </summary>
-        /// <param name = "obj">The entity to draw</param>
+        /// <param name="obj"> The entity to draw </param>
         public override void Draw(GameObject obj)
         {
             SpriteEffects effects = SpriteEffects.None;
@@ -61,7 +61,7 @@ namespace BlackDragonEngine.Components
         /// <summary>
         ///   Updates the animation
         /// </summary>
-        /// <param name = "obj">The entity to update (not being used)</param>
+        /// <param name="obj"> The entity to update (not being used) </param>
         public override void Update(GameObject obj)
         {
             UpdateAnimation();
@@ -120,7 +120,7 @@ namespace BlackDragonEngine.Components
         /// <summary>
         ///   Plays a new animation
         /// </summary>
-        /// <param name = "name">The name of the new animation</param>
+        /// <param name="name"> The name of the new animation </param>
         protected void PlayAnimation(string name)
         {
             if (name != null && Animations.ContainsKey(name))

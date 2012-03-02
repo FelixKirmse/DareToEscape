@@ -17,6 +17,11 @@ namespace BlackDragonEngine.Entities
         protected readonly List<IComponent> components = new List<IComponent>();
 
         /// <summary>
+        ///   Gets or sets the position of the object
+        /// </summary>
+        public Vector2 Position;
+
+        /// <summary>
         ///   Velocity of the Object [DEPRECATED]
         /// </summary>
         public Vector2 Velocity;
@@ -43,7 +48,7 @@ namespace BlackDragonEngine.Entities
         /// <summary>
         ///   Returns an Instance of a GameObject with the components specified in the parameter
         /// </summary>
-        /// <param name = "components">The components the object should use</param>
+        /// <param name="components"> The components the object should use </param>
         public GameObject(List<IComponent> components)
         {
             this.components = components;
@@ -52,19 +57,10 @@ namespace BlackDragonEngine.Entities
         /// <summary>
         ///   Returns an Instance of a GameObject with the component specified
         /// </summary>
-        /// <param name = "component"></param>
+        /// <param name="component"> </param>
         public GameObject(IComponent component)
         {
             components = new List<IComponent> {component};
-        }
-
-        /// <summary>
-        ///   Gets or sets the position of the object
-        /// </summary>
-        public Vector2 Position
-        {
-            get { return position; }
-            set { position = value; }
         }
 
         /// <summary>
@@ -159,8 +155,8 @@ namespace BlackDragonEngine.Entities
         /// <summary>
         ///   [DEPRECATED] Returns a custom collision rectangle based on a position
         /// </summary>
-        /// <param name = "customPosition"></param>
-        /// <returns></returns>
+        /// <param name="customPosition"> </param>
+        /// <returns> </returns>
         public Rectangle GetCustomCollisionRectangle(Vector2 customPosition)
         {
             return new Rectangle((int) customPosition.X + collisionRectangle.X,
@@ -171,9 +167,9 @@ namespace BlackDragonEngine.Entities
         /// <summary>
         ///   Used to send messages to all components
         /// </summary>
-        /// <typeparam name = "T"></typeparam>
-        /// <param name = "message">The message</param>
-        /// <param name = "obj">An attachment</param>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="message"> The message </param>
+        /// <param name="obj"> An attachment </param>
         public void Send<T>(string message, T obj)
         {
             foreach (var component in components)

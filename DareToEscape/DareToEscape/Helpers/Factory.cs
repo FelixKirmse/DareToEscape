@@ -16,8 +16,6 @@ namespace DareToEscape.Helpers
             var components = new List<IComponent>
                                  {
                                      new PlayerGraphicsComponent(),
-                                     new PlayerInputComponent(),
-                                     new PlayerPhysicsComponent(),
                                      new PlayerSoundComponent(),
                                      new PlayerGeneralComponent()
                                  };

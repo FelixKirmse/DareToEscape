@@ -24,11 +24,11 @@ namespace BlackDragonEngine.Helpers
         /// <summary>
         ///   Rotation in Degrees!
         /// </summary>
-        /// <param name = "x"></param>
-        /// <param name = "y"></param>
-        /// <param name = "width"></param>
-        /// <param name = "height"></param>
-        /// <param name = "rotation">Degrees, motherfucker!</param>
+        /// <param name="x"> </param>
+        /// <param name="y"> </param>
+        /// <param name="width"> </param>
+        /// <param name="height"> </param>
+        /// <param name="rotation"> Degrees, motherfucker! </param>
         public RotatedRectangle(int x, int y, int width, int height, float rotation)
             : this(new Rectangle(x, y, width, height), MathHelper.ToRadians(rotation))
         {
@@ -62,8 +62,8 @@ namespace BlackDragonEngine.Helpers
         /// <summary>
         ///   Used for changing the X and Y position of the RotatedRectangle
         /// </summary>
-        /// <param name = "theXPositionAdjustment"></param>
-        /// <param name = "theYPositionAdjustment"></param>
+        /// <param name="theXPositionAdjustment"> </param>
+        /// <param name="theYPositionAdjustment"> </param>
         public void ChangePosition(int theXPositionAdjustment, int theYPositionAdjustment)
         {
             CollisionRectangle.X += theXPositionAdjustment;
@@ -71,11 +71,10 @@ namespace BlackDragonEngine.Helpers
         }
 
         /// <summary>
-        ///   This intersects method can be used to check a standard XNA framework Rectangle
-        ///   object and see if it collides with a Rotated Rectangle object
+        ///   This intersects method can be used to check a standard XNA framework Rectangle object and see if it collides with a Rotated Rectangle object
         /// </summary>
-        /// <param name = "theRectangle"></param>
-        /// <returns></returns>
+        /// <param name="theRectangle"> </param>
+        /// <returns> </returns>
         public bool Intersects(Rectangle theRectangle)
         {
             return Intersects(new RotatedRectangle(theRectangle, 0.0f));
@@ -84,8 +83,8 @@ namespace BlackDragonEngine.Helpers
         /// <summary>
         ///   Check to see if two Rotated Rectangls have collided
         /// </summary>
-        /// <param name = "theRectangle"></param>
-        /// <returns></returns>
+        /// <param name="theRectangle"> </param>
+        /// <returns> </returns>
         public bool Intersects(RotatedRectangle theRectangle)
         {
             //Calculate the Axis we will use to determine if a collision has occurred
@@ -114,12 +113,11 @@ namespace BlackDragonEngine.Helpers
         }
 
         /// <summary>
-        ///   Determines if a collision has occurred on an Axis of one of the
-        ///   planes parallel to the Rectangle
+        ///   Determines if a collision has occurred on an Axis of one of the planes parallel to the Rectangle
         /// </summary>
-        /// <param name = "theRectangle"></param>
-        /// <param name = "aAxis"></param>
-        /// <returns></returns>
+        /// <param name="theRectangle"> </param>
+        /// <param name="aAxis"> </param>
+        /// <returns> </returns>
         private bool IsAxisCollision(RotatedRectangle theRectangle, Vector2 aAxis)
         {
             //Project the corners of the Rectangle we are checking on to the Axis and
@@ -159,12 +157,11 @@ namespace BlackDragonEngine.Helpers
         }
 
         /// <summary>
-        ///   Generates a scalar value that can be used to compare where corners of 
-        ///   a rectangle have been projected onto a particular axis.
+        ///   Generates a scalar value that can be used to compare where corners of a rectangle have been projected onto a particular axis.
         /// </summary>
-        /// <param name = "theRectangleCorner"></param>
-        /// <param name = "theAxis"></param>
-        /// <returns></returns>
+        /// <param name="theRectangleCorner"> </param>
+        /// <param name="theAxis"> </param>
+        /// <returns> </returns>
         private int GenerateScalar(Vector2 theRectangleCorner, Vector2 theAxis)
         {
             //Using the formula for Vector projection. Take the corner being passed in
@@ -181,13 +178,12 @@ namespace BlackDragonEngine.Helpers
         }
 
         /// <summary>
-        ///   Rotate a point from a given location and adjust using the Origin we
-        ///   are rotating around
+        ///   Rotate a point from a given location and adjust using the Origin we are rotating around
         /// </summary>
-        /// <param name = "thePoint"></param>
-        /// <param name = "theOrigin"></param>
-        /// <param name = "theRotation"></param>
-        /// <returns></returns>
+        /// <param name="thePoint"> </param>
+        /// <param name="theOrigin"> </param>
+        /// <param name="theRotation"> </param>
+        /// <returns> </returns>
         private Vector2 RotatePoint(Vector2 thePoint, Vector2 theOrigin, float theRotation)
         {
             var aTranslatedPoint = new Vector2();

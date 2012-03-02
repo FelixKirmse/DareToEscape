@@ -132,6 +132,20 @@ namespace MapEditor
                                    Codes = new List<TileCode> {new TileCode(TileCodes.Lock, "CYAN")},
                                    Passable = false
                                };
+                case 112:
+                    return new Item
+                               {
+                                   TileID = id,
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.LeftSlope)},
+                                   Passable = true
+                               };
+                case 113:
+                    return new Item
+                               {
+                                   TileID = id,
+                                   Codes = new List<TileCode> {new TileCode(TileCodes.RightSlope)},
+                                   Passable = true
+                               };
 
                 default:
                     return new Item

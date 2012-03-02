@@ -174,9 +174,9 @@ namespace MapEditor
             _marker = new Rectangle((tileIndex%tilesPerRow)*Tile, (tileIndex/tilesPerRow)*Tile, Tile, Tile);
             _drawMarker = true;
             _doNothing = true;
-            if(_entitiesList.SelectedItems.Count == 1)
+            if (_entitiesList.SelectedItems.Count == 1)
                 _entitiesList.SelectedItems[0].Selected = false;
-            if(_codesList.SelectedItems.Count == 1)
+            if (_codesList.SelectedItems.Count == 1)
                 _codesList.SelectedItems[0].Selected = false;
             _doNothing = false;
         }
@@ -214,7 +214,7 @@ namespace MapEditor
             if (_doNothing) return;
             _drawMarker = false;
             _doNothing = true;
-            if(_entitiesList.SelectedItems.Count == 1)
+            if (_entitiesList.SelectedItems.Count == 1)
                 _entitiesList.SelectedItems[0].Selected = false;
             _doNothing = false;
             using (var msgDial = new MessageDialog())
@@ -281,7 +281,7 @@ namespace MapEditor
             if (_doNothing) return;
             _drawMarker = false;
             _doNothing = true;
-            if(_codesList.SelectedItems.Count == 1)
+            if (_codesList.SelectedItems.Count == 1)
                 _codesList.SelectedItems[0].Selected = false;
             _doNothing = false;
             Game.CurrentItem = Item.GetItemByEntityId(_entitiesList.SelectedIndices[0]);
