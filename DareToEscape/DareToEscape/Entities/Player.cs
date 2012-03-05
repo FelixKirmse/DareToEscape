@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BlackDragonEngine.Components;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.Helpers;
@@ -73,13 +74,22 @@ namespace DareToEscape.Entities
             base.Update();
         }
 
+        public override void Draw()
+        {
+            VariableProvider.SpriteBatch.DrawString(FontProvider.GetFont("Mono8"), string.Format("ScannerPos: {0}\nYPosition: {1}\nTileAtScanner: {2}\nYDiff: {3}", CollisionRectangle.Center, Position.Y, _tileMap.GetCellByPixel(new Vector2(CollisionRectangle.Center.X, CollisionRectangle.Bottom)), Position.Y - _lastPosition.Y), Vector2.Zero, Color.White);
+            System.Diagnostics.Debug.WriteLine(string.Format("ScannerPos: {0}\nYPosition: {1}\nTileAtScanner: {2}\nYDiff: {3}", CollisionRectangle.Center, Position.Y, _tileMap.GetCellByPixel(new Vector2(CollisionRectangle.Center.X, CollisionRectangle.Bottom)), Position.Y - _lastPosition.Y));
+            base.Draw();
+        }
+
+        private Vector2 _lastPosition;
         private void CollisionChecks()
         {
+            _lastPosition = Position;
             Rectangle rect = CollisionRectangle;
             if (Velocity.Y > 0)
             {
                 int slopeTileCoordX, slopeTileCoordY;
-                int slopeCheckPointX = rect.Center.X + (Velocity.X > 0 ? 2 : Velocity.X < 0 ? -2: 0) + (int) Velocity.X;
+                int slopeCheckPointX = rect.Center.X + (int) Velocity.X;
                 if (SlopeCollision(slopeCheckPointX, rect.Bottom, out slopeTileCoordX, out slopeTileCoordY))
                 {
                     Position.X += Velocity.X;
