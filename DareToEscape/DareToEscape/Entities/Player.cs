@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BlackDragonEngine.Components;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.Helpers;
@@ -66,7 +65,7 @@ namespace DareToEscape.Entities
             if (InputMapper.StrictJump && _jumpCount < MaxJumpCount)
             {
                 ++_jumpCount;
-                Velocity.Y = JumpForce/_jumpCount;
+                Velocity.Y = JumpForce;
                 Velocity.Y = Velocity.Y < MinGravity ? MinGravity : Velocity.Y;
             }
 
@@ -74,17 +73,8 @@ namespace DareToEscape.Entities
             base.Update();
         }
 
-        public override void Draw()
-        {
-            VariableProvider.SpriteBatch.DrawString(FontProvider.GetFont("Mono8"), string.Format("ScannerPos: {0}\nYPosition: {1}\nTileAtScanner: {2}\nYDiff: {3}", CollisionRectangle.Center, Position.Y, _tileMap.GetCellByPixel(new Vector2(CollisionRectangle.Center.X, CollisionRectangle.Bottom)), Position.Y - _lastPosition.Y), Vector2.Zero, Color.White);
-            System.Diagnostics.Debug.WriteLine(string.Format("ScannerPos: {0}\nYPosition: {1}\nTileAtScanner: {2}\nYDiff: {3}", CollisionRectangle.Center, Position.Y, _tileMap.GetCellByPixel(new Vector2(CollisionRectangle.Center.X, CollisionRectangle.Bottom)), Position.Y - _lastPosition.Y));
-            base.Draw();
-        }
-
-        private Vector2 _lastPosition;
         private void CollisionChecks()
         {
-            _lastPosition = Position;
             Rectangle rect = CollisionRectangle;
             if (Velocity.Y > 0)
             {
@@ -124,13 +114,13 @@ namespace DareToEscape.Entities
                     if (moveType == 1)
                     {
                         Position.Y = (slopeTileCoordY*_tileMap.TileHeight - rect.Height - 1) - collisionRectangle.Y;
-                        slopeCheckPointY = (int) Position.Y + rect.Height;
+                        slopeCheckPointY = CollisionRectangle.Y + rect.Height;
                     }
                     else
                     {
                         Position.Y = ((slopeTileCoordY + 1)*_tileMap.TileHeight - rect.Height - 1) -
                                      collisionRectangle.Y;
-                        slopeCheckPointY = (int) Position.Y + rect.Height + _tileMap.TileHeight;
+                        slopeCheckPointY = CollisionRectangle.Y + rect.Height + _tileMap.TileHeight;
                     }
                     if (SlopeCollision(slopeCheckPointX, slopeCheckPointY, out slopeTileCoordX, out slopeTileCoordY))
                     {
@@ -230,8 +220,8 @@ namespace DareToEscape.Entities
 
         private bool VerticalCollision(bool movingRight, out int tileCoordX)
         {
-            int offset = movingRight ? collisionRectangle.Width : 0;
-            offset += (int) Velocity.X;
+            float offset = movingRight ? collisionRectangle.Width : 0;
+            offset += Velocity.X;
             Rectangle rect = CollisionRectangle;
             int tileYPixels = rect.Y - (rect.Y%_tileMap.TileHeight);
             tileCoordX = _tileMap.GetCellByPixelX(rect.X + offset);
@@ -248,8 +238,8 @@ namespace DareToEscape.Entities
 
         private bool HorizontalCollision(bool movingDown, out int tileCoordY)
         {
-            int offset = movingDown ? collisionRectangle.Height : 0;
-            offset += (int) Velocity.Y;
+            float offset = movingDown ? collisionRectangle.Height : 0;
+            offset += Velocity.Y;
             Rectangle rect = CollisionRectangle;
             int tileXPixels = rect.X - (rect.X%_tileMap.TileWidth);
             tileCoordY = _tileMap.GetCellByPixelY(rect.Y + offset);

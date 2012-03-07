@@ -36,11 +36,6 @@ namespace BlackDragonEngine.Entities
         /// </summary>
         protected Rectangle collisionRectangle;
 
-        /// <summary>
-        ///   The current position of the Object
-        /// </summary>
-        protected Vector2 position;
-
         public GameObject()
         {
         }
@@ -81,7 +76,7 @@ namespace BlackDragonEngine.Entities
         /// </summary>
         public BCircle CollisionCircle
         {
-            get { return new BCircle(position + collisionCircle.Position, collisionCircle.Radius); }
+            get { return new BCircle(Position + collisionCircle.Position, collisionCircle.Radius); }
             set { collisionCircle = value; }
         }
 
@@ -107,7 +102,7 @@ namespace BlackDragonEngine.Entities
         /// </summary>
         public Vector2 CircleCollisionCenter
         {
-            get { return position + collisionCircle.Position; }
+            get { return Position + collisionCircle.Position; }
         }
 
         /// <summary>
