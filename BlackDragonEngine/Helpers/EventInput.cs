@@ -148,18 +148,15 @@ namespace BlackDragonEngine.Helpers
                     break;
 
                 case WM_KEYDOWN:
-                    if (KeyDown != null)
-                        KeyDown(null, new KeyEventArgs((Keys) wParam));
+                    KeyDown?.Invoke(null, new KeyEventArgs((Keys)wParam));
                     break;
 
                 case WM_KEYUP:
-                    if (KeyUp != null)
-                        KeyUp(null, new KeyEventArgs((Keys) wParam));
+                    KeyUp?.Invoke(null, new KeyEventArgs((Keys)wParam));
                     break;
 
                 case WM_CHAR:
-                    if (CharEntered != null)
-                        CharEntered(null, new CharacterEventArgs((char) wParam, lParam.ToInt32()));
+                    CharEntered?.Invoke(null, new CharacterEventArgs((char)wParam, lParam.ToInt32()));
                     break;
 
                 case WM_IME_SETCONTEXT:

@@ -1,0 +1,26 @@
+#CELL SIZE: 16,16
+//Format is bulletId;startingcell;create:framecount;loop:framecount;death:framecount;radius (with leading zero!)
+0;0;create:4;loop:4;death:3;0.5
+1;16;create:4;loop:4;death:3;0.5
+2;32;create:4;loop:4;death:3;0.5
+3;48;create:4;loop:4;death:3;0.5
+//
+4;64;create:4;loop:3;death:4;0.5
+5;80;create:4;loop:3;death:4;0.5
+6;96;create:4;loop:3;death:4;0.5
+7;112;create:4;loop:3;death:4;0.5
+//
+8;128;create:4;loop:6;death:4;1
+9;144;create:4;loop:6;death:4;1
+10;160;create:4;loop:6;death:4;1
+11;176;create:4;loop:3;death:4;1
+//
+12;192;create:5;loop:4;death:5;1.5
+13;208;create:5;loop:4;death:5;1.5
+14;224;create:5;loop:4;death:5;1.5
+15;240;create:5;loop:4;death:5;1.5
+//
+16;256;create:5;loop:4;death:5;2
+17;272;create:5;loop:4;death:5;2
+18;288;create:5;loop:4;death:5;2
+19;304;create:5;loop:4;death:5;2

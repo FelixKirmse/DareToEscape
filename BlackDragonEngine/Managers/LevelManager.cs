@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using System.Windows.Forms;
+using System;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.TileEngine;
 
@@ -17,11 +17,9 @@ namespace BlackDragonEngine.Managers
         {
             TileMap<TMap, TCodes> tileMap = TileMap<TMap, TCodes>.GetInstance();
             CurrentLevel = levelName;
-            tileMap.LoadMap(new FileStream(Application.StartupPath + @"\Content\maps\" + levelName + ".map",
-                                           FileMode.Open));
+            tileMap.LoadMap(new FileStream($"{AppDomain.CurrentDomain.BaseDirectory}/Content/maps/{levelName}.map", FileMode.Open));
             Camera.UpdateWorldRectangle(tileMap);
-            if (OnLevelLoad != null)
-                OnLevelLoad();
+            OnLevelLoad?.Invoke();
         }
 
         public static void ReloadLevel<TMap, TCodes>() where TMap : IMap<TCodes>, new()
