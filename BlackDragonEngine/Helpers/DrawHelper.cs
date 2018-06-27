@@ -20,11 +20,11 @@ namespace BlackDragonEngine.Helpers
         }
 
         public static void AddNewJob(BlendState blendState, Texture2D texture, Vector2 position,
-                                     Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin,
-                                     float scale, SpriteEffects effects, float drawdepth)
+            Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin,
+            float scale, SpriteEffects effects, float drawdepth)
         {
             AddNewJob(new DrawOptions(blendState, texture, position, sourceRectangle, color, rotation, origin, scale,
-                                      effects, drawdepth));
+                effects, drawdepth));
         }
 
         public static void AddNewJob(Texture2D texture, Vector2 position, float drawDepth)
@@ -34,31 +34,33 @@ namespace BlackDragonEngine.Helpers
 
         public static void Draw()
         {
-            SpriteBatch spriteBatch = VariableProvider.SpriteBatch;
-            int alphaJobCount = AlphaBlendStateBatch.Count;
-            int addJobCount = AddBlendStateBatch.Count;
+            var spriteBatch = VariableProvider.SpriteBatch;
+            var alphaJobCount = AlphaBlendStateBatch.Count;
+            var addJobCount = AddBlendStateBatch.Count;
 
             if (alphaJobCount > 0)
             {
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-                for (int i = 0; i < alphaJobCount; ++i)
+                for (var i = 0; i < alphaJobCount; ++i)
                 {
-                    DrawOptions o = AlphaBlendStateBatch.Dequeue();
+                    var o = AlphaBlendStateBatch.Dequeue();
                     spriteBatch.Draw(o.Texture, o.Position, o.SourceRectangle, o.Color, o.Rotation, o.Origin, o.Scale,
-                                     o.Effects, o.DrawDepth);
+                        o.Effects, o.DrawDepth);
                 }
+
                 spriteBatch.End();
             }
 
             if (addJobCount > 0)
             {
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, null, null);
-                for (int i = 0; i < addJobCount; ++i)
+                for (var i = 0; i < addJobCount; ++i)
                 {
-                    DrawOptions o = AddBlendStateBatch.Dequeue();
+                    var o = AddBlendStateBatch.Dequeue();
                     spriteBatch.Draw(o.Texture, o.Position, o.SourceRectangle, o.Color, o.Rotation, o.Origin, o.Scale,
-                                     o.Effects, o.DrawDepth);
+                        o.Effects, o.DrawDepth);
                 }
+
                 spriteBatch.End();
             }
         }
@@ -79,8 +81,8 @@ namespace BlackDragonEngine.Helpers
         public Texture2D Texture;
 
         public DrawOptions(BlendState blendState, Texture2D texture, Vector2 position, Rectangle? sourceRectangle,
-                           Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects,
-                           float drawdepth)
+            Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects,
+            float drawdepth)
         {
             BlendState = blendState;
             Texture = texture;

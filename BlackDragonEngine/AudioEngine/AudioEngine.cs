@@ -64,29 +64,19 @@ namespace BlackDragonEngine.AudioEngine
 
         public void StopAllLoops()
         {
-            foreach (var effect in _loopingEffects)
-            {
-                effect.Value.Stop();
-            }
+            foreach (var effect in _loopingEffects) effect.Value.Stop();
         }
 
         public void StopLoop(string name)
         {
             foreach (var effect in _loopingEffects)
-            {
                 if (effect.Key == name)
-                {
                     effect.Value.Stop();
-                }
-            }
         }
 
         public void EnsureLoops()
         {
-            foreach (var soundEffect in _loopingEffects)
-            {
-                soundEffect.Value.Play();
-            }
+            foreach (var soundEffect in _loopingEffects) soundEffect.Value.Play();
         }
     }
 }

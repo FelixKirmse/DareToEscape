@@ -29,42 +29,42 @@ namespace DareToEscape
 
         public DareToEscape()
         {
-            Task task = Task.Factory.StartNew(() =>
-                                                  {
-                                                      if (!Keyboard.GetState().IsKeyDown(Keys.LeftControl))
-                                                      {
-                                                          if (File.Exists(ResolutionChooser.Settings))
-                                                          {
-                                                              var fs = new FileStream(ResolutionChooser.Settings,
-                                                                                      FileMode.Open);
-                                                              var xmls =
-                                                                  new XmlSerializer(typeof (ResolutionInformation));
-                                                              ResInfo = (ResolutionInformation) xmls.Deserialize(fs);
-                                                              fs.Close();
-                                                              return;
-                                                          }
-                                                      }
-                                                      else
-                                                      {
-                                                          File.Delete(ResolutionChooser.Settings);
-                                                      }
-                                                      Application.Run(new ResolutionChooser(this));
-                                                  });
+            var task = Task.Factory.StartNew(() =>
+            {
+                if (!Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+                {
+                    if (File.Exists(ResolutionChooser.Settings))
+                    {
+                        var fs = new FileStream(ResolutionChooser.Settings,
+                            FileMode.Open);
+                        var xmls =
+                            new XmlSerializer(typeof(ResolutionInformation));
+                        ResInfo = (ResolutionInformation) xmls.Deserialize(fs);
+                        fs.Close();
+                        return;
+                    }
+                }
+                else
+                {
+                    File.Delete(ResolutionChooser.Settings);
+                }
+
+                Application.Run(new ResolutionChooser(this));
+            });
             Task.WaitAll(task);
             Graphics = new GraphicsDeviceManager(this)
-                           {
-                               PreferredBackBufferWidth =
-                                   ResInfo.FullScreen ? ResolutionWidth : ResInfo.Resolution.Width,
-                               PreferredBackBufferHeight =
-                                   ResInfo.FullScreen ? ResolutionHeight : ResInfo.Resolution.Height,
-                               PreferMultiSampling = false
-                           };
+            {
+                PreferredBackBufferWidth =
+                    ResInfo.FullScreen ? ResolutionWidth : ResInfo.Resolution.Width,
+                PreferredBackBufferHeight =
+                    ResInfo.FullScreen ? ResolutionHeight : ResInfo.Resolution.Height,
+                PreferMultiSampling = false
+            };
             _scaleMatrix = ResInfo.Matrix;
             Content.RootDirectory = "Content";
             //IsFixedTimeStep = false;
             //Graphics.SynchronizeWithVerticalRetrace = false;
-            var engine = new ScriptEngine(this);
-            Components.Add(engine);
+            var engine = new ScriptEngine();
             VariableProvider.ScriptEngine = engine;
             GameVariableProvider.SaveManager = new SaveManager<SaveState>();
         }
@@ -86,7 +86,7 @@ namespace DareToEscape
 
         private void FullScreenResolutionHack(object sender, PreparingDeviceSettingsEventArgs e)
         {
-            PresentationParameters pp = e.GraphicsDeviceInformation.PresentationParameters;
+            var pp = e.GraphicsDeviceInformation.PresentationParameters;
             pp.BackBufferWidth = ResInfo.Resolution.Width;
             pp.BackBufferHeight = ResInfo.Resolution.Height;
         }
@@ -98,7 +98,10 @@ namespace DareToEscape
             Camera.ViewPortHeight = ResolutionHeight;
             GraphicsDevice.Viewport = new Viewport(0, 0, ResolutionWidth, ResolutionHeight);
             VariableProvider.CoordList = new CoordList();
-            VariableProvider.Game = this;
+            VariableProvider.GraphicsDevice = GraphicsDevice;
+            VariableProvider.ClientBounds = Window.ClientBounds;
+            VariableProvider.Content = Content;
+            VariableProvider.Exit = Exit;
             VariableProvider.WhiteTexture = new Texture2D(GraphicsDevice, 1, 1);
             VariableProvider.WhiteTexture.SetData(new[] {Color.White});
             GameInitializer.Initialize();
@@ -109,7 +112,7 @@ namespace DareToEscape
             ContentLoader.LoadContent(Content);
             _stateManager = new GameStateManager();
             _renderTarget = new RenderTarget2D(GraphicsDevice, ResolutionWidth, ResolutionHeight, false,
-                                               GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+                GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
         }
 
         protected override void OnDeactivated(object sender, EventArgs args)
@@ -123,9 +126,11 @@ namespace DareToEscape
             if (IsActive)
             {
                 VariableProvider.GameTime = gameTime;
+                VariableProvider.ScriptEngine.Update(gameTime);
                 InputProvider.Update();
                 _stateManager.Update();
             }
+
             base.Update(gameTime);
         }
 
@@ -140,6 +145,7 @@ namespace DareToEscape
             {
                 GraphicsDevice.Viewport = ResInfo.Viewport;
             }
+
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             _stateManager.Draw();
@@ -152,9 +158,10 @@ namespace DareToEscape
                 GraphicsDevice.Viewport = ResInfo.Viewport;
                 _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
                 _spriteBatch.Draw(_renderTarget,
-                                  new Rectangle(0, 0, ResInfo.Resolution.Width, ResInfo.Resolution.Height), Color.White);
+                    new Rectangle(0, 0, ResInfo.Resolution.Width, ResInfo.Resolution.Height), Color.White);
                 _spriteBatch.End();
             }
+
             base.Draw(gameTime);
         }
 

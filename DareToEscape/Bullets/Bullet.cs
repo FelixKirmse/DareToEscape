@@ -30,8 +30,10 @@ namespace DareToEscape.Bullets
                 {
                     ++_currentID;
                 }
+
                 return _currentID;
             }
+
             return id;
         }
 
@@ -50,6 +52,7 @@ namespace DareToEscape.Bullets
             {
                 Dictionaries[id].Clear();
             }
+
             UsableIDs.Push(id);
         }
 
@@ -63,8 +66,10 @@ namespace DareToEscape.Bullets
                     SetInactive(_id);
                     bulletsToDelete.Add(id);
                 }
+
                 return this;
             }
+
             --KillTime;
             if (KillTime == 0)
             {
@@ -72,24 +77,19 @@ namespace DareToEscape.Bullets
                 return this;
             }
 
-            if (SpawnDelay > 0)
-            {
-                --SpawnDelay;
-            }
+            if (SpawnDelay > 0) --SpawnDelay;
             if (SpawnDelay != 0) return this;
 
             UpdateAnimation();
             Behavior.Update(ref this);
 
             if (AutomaticCollision)
-            {
                 if (!_tileMap.CellIsPassableByPixel(CircleCollisionCenter) ||
                     !Camera.WorldRectangle.Contains((int) Position.X, (int) Position.Y))
                 {
                     Clear();
                     return this;
                 }
-            }
 
             if (CollisionCircle.Intersects(((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircle))
             {
@@ -97,6 +97,7 @@ namespace DareToEscape.Bullets
                 return this;
                 //VariableProvider.CurrentPlayer.Send<string>("KILL", null);
             }
+
             _directionVector.Normalize();
             _lastDirection = Direction;
             _lastPosition = Position;
@@ -105,23 +106,23 @@ namespace DareToEscape.Bullets
 
         public void Draw()
         {
-            AnimationStripStruct animation = _animations[_currentAnimation];
-            Rectangle rect = animation.FrameRectangle;
+            var animation = _animations[_currentAnimation];
+            var rect = animation.FrameRectangle;
             DrawHelper.AddNewJob(_blendState,
-                                 animation.Texture,
-                                 Camera.WorldToScreen(Position + BCircleLocalCenter),
-                                 rect,
-                                 Color.White,
-                                 0f,
-                                 new Vector2((float) rect.Width/2, (float) rect.Height/2),
-                                 1f,
-                                 SpriteEffects.None,
-                                 0);
+                animation.Texture,
+                Camera.WorldToScreen(Position + BCircleLocalCenter),
+                rect,
+                Color.White,
+                0f,
+                new Vector2((float) rect.Width / 2, (float) rect.Height / 2),
+                1f,
+                SpriteEffects.None,
+                0);
         }
 
         private void UpdateAnimation()
         {
-            AnimationStripStruct animation = _animations[_currentAnimation];
+            var animation = _animations[_currentAnimation];
             animation.Update();
             if (animation.FinishedPlaying && animation.NextAnimation != null)
             {
@@ -129,6 +130,7 @@ namespace DareToEscape.Bullets
                 animation = _animations[_currentAnimation];
                 animation.Play();
             }
+
             _animations[_currentAnimation] = animation;
         }
 
@@ -136,7 +138,7 @@ namespace DareToEscape.Bullets
         {
             Behavior.FreeRessources();
             _dieing = true;
-            AnimationStripStruct animation = _animations[_currentAnimation];
+            var animation = _animations[_currentAnimation];
             animation.NextAnimation = Death;
             animation.LoopAnimation = false;
             _animations[_currentAnimation] = animation;
@@ -154,10 +156,8 @@ namespace DareToEscape.Bullets
                 Velocity = (float) newSpeed;
                 LaunchSpeed = (float) newSpeed;
             }
-            if (angle != null)
-            {
-                Direction = (float) angle;
-            }
+
+            if (angle != null) Direction = (float) angle;
 
             TurnSpeed = turnSpeed;
             Acceleration = acceleration;
@@ -204,7 +204,7 @@ namespace DareToEscape.Bullets
         public float SpeedLimit;
         public float TurnSpeed;
         public float Velocity;
-        private BCircle _collisionCircle;
+        private readonly BCircle _collisionCircle;
         private string _currentAnimation;
         private bool _dieing;
         private float _directionInDegrees;
@@ -216,28 +216,19 @@ namespace DareToEscape.Bullets
 
         #region Properties
 
-        private BCircle CollisionCircle
-        {
-            get { return new BCircle(Position + _collisionCircle.Position, _collisionCircle.Radius); }
-        }
+        private BCircle CollisionCircle => new BCircle(Position + _collisionCircle.Position, _collisionCircle.Radius);
 
-        private Vector2 BCircleLocalCenter
-        {
-            get { return _collisionCircle.Position; }
-        }
+        private Vector2 BCircleLocalCenter => _collisionCircle.Position;
 
-        public Vector2 CircleCollisionCenter
-        {
-            get { return Position + _collisionCircle.Position; }
-        }
+        public Vector2 CircleCollisionCenter => Position + _collisionCircle.Position;
 
         public float Direction
         {
-            get { return _directionInDegrees; }
+            get => _directionInDegrees;
             set
             {
                 if (!ChangedDirection) return;
-                float radian = MathHelper.ToRadians(value);
+                var radian = MathHelper.ToRadians(value);
                 _directionVector.X = (float) Math.Cos(radian);
                 _directionVector.Y = (float) Math.Sin(radian);
                 _directionInDegrees = value;
@@ -249,8 +240,8 @@ namespace DareToEscape.Bullets
         {
             get
             {
-                Vector2 direction = ((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter -
-                                    CircleCollisionCenter;
+                var direction = ((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter -
+                                CircleCollisionCenter;
                 var angle = (float) Math.Atan2(direction.Y, direction.X);
                 return new Vector2((float) Math.Cos(angle), (float) Math.Sin(angle));
             }
@@ -260,27 +251,18 @@ namespace DareToEscape.Bullets
         {
             get
             {
-                Vector2 direction = ((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter -
-                                    CircleCollisionCenter;
+                var direction = ((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter -
+                                CircleCollisionCenter;
                 var radians = (float) Math.Atan2(direction.Y, direction.X);
                 return MathHelper.ToDegrees(radians);
             }
         }
 
-        public Vector2 DirectionVector
-        {
-            get { return _directionVector; }
-        }
+        public Vector2 DirectionVector => _directionVector;
 
-        private bool ChangedDirection
-        {
-            get { return Direction == _lastDirection; }
-        }
+        private bool ChangedDirection => Direction == _lastDirection;
 
-        public bool ChangedPosition
-        {
-            get { return Position == _lastPosition; }
-        }
+        public bool ChangedPosition => Position == _lastPosition;
 
         #endregion
 
@@ -294,7 +276,7 @@ namespace DareToEscape.Bullets
             _animations = GetDictionary(_id);
 
             id = VariableProvider.RandomSeed.Next(0, 21);
-            Dictionary<string, AnimationStripStruct> tmp = BulletInformationProvider.GetAnimationStrip(id);
+            var tmp = BulletInformationProvider.GetAnimationStrip(id);
             //Not using foreach here in order to avoid unnecessary Heap allocations
             _animations.Add(Create, tmp[Create]);
             _animations.Add(Loop, tmp[Loop]);

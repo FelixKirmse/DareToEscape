@@ -14,17 +14,14 @@ namespace DareToEscape.Components.Entities
 
         public BossKillerComponent()
         {
-            Texture = VariableProvider.Game.Content.Load<Texture2D>("textures/entities/bosskiller");
+            Texture = VariableProvider.Content.Load<Texture2D>("textures/entities/bosskiller");
         }
 
         public override void Update(GameObject obj)
         {
             if (enabled)
             {
-                if (setRectangle)
-                {
-                    obj.CollisionRectangle = new Rectangle(6, 5, 39, 39);
-                }
+                if (setRectangle) obj.CollisionRectangle = new Rectangle(6, 5, 39, 39);
 
                 if (VariableProvider.CurrentPlayer.CollisionRectangle.Intersects(obj.CollisionRectangle))
                 {

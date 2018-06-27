@@ -13,21 +13,21 @@ namespace DareToEscape.Components.Entities
     internal abstract class BossComponent : TurretComponent
     {
         protected readonly Patterns Patterns;
-        protected int Phase;
-        protected bool Shoot;
         private bool _active = true;
         private double _timeTracker;
+        protected int Phase;
+        protected bool Shoot;
 
         protected BossComponent()
         {
-            Texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/boss1");
+            Texture = VariableProvider.Content.Load<Texture2D>(@"textures/entities/boss1");
             Patterns = new Patterns(this);
         }
 
         protected int PhaseTimer
         {
-            get { return (int) _timeTracker; }
-            set { _timeTracker = value; }
+            get => (int) _timeTracker;
+            set => _timeTracker = value;
         }
 
         public override void Update(GameObject obj)
@@ -43,10 +43,8 @@ namespace DareToEscape.Components.Entities
                     SwitchPhase();
                 }
             }
-            if (_active || !GameVariableProvider.SaveManager.CurrentSaveState.BossDead)
-            {
-                base.Update(obj);
-            }
+
+            if (_active || !GameVariableProvider.SaveManager.CurrentSaveState.BossDead) base.Update(obj);
         }
 
         public override void Draw(GameObject obj)
@@ -78,6 +76,7 @@ namespace DareToEscape.Components.Entities
                 GameVariableProvider.SaveManager.CurrentSaveState.Keys.Add("BOSS");
                 _active = false;
             }
+
             base.Receive(message, obj);
         }
 

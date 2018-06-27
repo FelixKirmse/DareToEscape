@@ -18,18 +18,12 @@ namespace BlackDragonEngine.TileEngine
 
         #region IMap<TCodes> Members
 
-        public Dictionary<Coords, List<TCodes>> Codes { get; private set; }
-        public Dictionary<Coords, MapSquare> MapData { get; private set; }
+        public Dictionary<Coords, List<TCodes>> Codes { get; }
+        public Dictionary<Coords, MapSquare> MapData { get; }
 
-        public int MapWidth
-        {
-            get { return HighestX - LowestX; }
-        }
+        public int MapWidth => HighestX - LowestX;
 
-        public int MapHeight
-        {
-            get { return HighestY - LowestY; }
-        }
+        public int MapHeight => HighestY - LowestY;
 
         public int LowestX
         {
@@ -53,14 +47,14 @@ namespace BlackDragonEngine.TileEngine
 
         public MapSquare? this[int x, int y]
         {
-            get { return this[VariableProvider.CoordList[x, y]]; }
+            get => this[VariableProvider.CoordList[x, y]];
 
-            set { this[VariableProvider.CoordList[x, y]] = value; }
+            set => this[VariableProvider.CoordList[x, y]] = value;
         }
 
         public MapSquare? this[Coords coords]
         {
-            get { return MapData.ContainsKey(coords) ? MapData[coords] : (MapSquare?) null; }
+            get => MapData.ContainsKey(coords) ? MapData[coords] : (MapSquare?) null;
 
             set
             {
@@ -71,6 +65,7 @@ namespace BlackDragonEngine.TileEngine
                         MapData.Remove(coords);
                         return;
                     }
+
                     MapData[coords] = value.Value;
                 }
                 else

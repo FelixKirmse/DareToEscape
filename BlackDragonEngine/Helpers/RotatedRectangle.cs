@@ -18,11 +18,11 @@ namespace BlackDragonEngine.Helpers
 
             //Calculate the Rectangles origin. We assume the center of the Rectangle will
             //be the point that we will be rotating around and we use that for the origin
-            Origin = new Vector2(theRectangle.Width/2, theRectangle.Height/2);
+            Origin = new Vector2(theRectangle.Width / 2, theRectangle.Height / 2);
         }
 
         /// <summary>
-        ///   Rotation in Degrees!
+        ///     Rotation in Degrees!
         /// </summary>
         /// <param name="x"> </param>
         /// <param name="y"> </param>
@@ -34,33 +34,18 @@ namespace BlackDragonEngine.Helpers
         {
         }
 
-        public int X
-        {
-            get { return CollisionRectangle.X; }
-        }
+        public int X => CollisionRectangle.X;
 
-        public int Y
-        {
-            get { return CollisionRectangle.Y; }
-        }
+        public int Y => CollisionRectangle.Y;
 
-        public int Width
-        {
-            get { return CollisionRectangle.Width; }
-        }
+        public int Width => CollisionRectangle.Width;
 
-        public int Height
-        {
-            get { return CollisionRectangle.Height; }
-        }
+        public int Height => CollisionRectangle.Height;
 
-        public Rectangle AdjustedPosition
-        {
-            get { return new Rectangle(X + (Width/2), Y + (Height/2), Width, Height); }
-        }
+        public Rectangle AdjustedPosition => new Rectangle(X + Width / 2, Y + Height / 2, Width, Height);
 
         /// <summary>
-        ///   Used for changing the X and Y position of the RotatedRectangle
+        ///     Used for changing the X and Y position of the RotatedRectangle
         /// </summary>
         /// <param name="theXPositionAdjustment"> </param>
         /// <param name="theYPositionAdjustment"> </param>
@@ -71,7 +56,8 @@ namespace BlackDragonEngine.Helpers
         }
 
         /// <summary>
-        ///   This intersects method can be used to check a standard XNA framework Rectangle object and see if it collides with a Rotated Rectangle object
+        ///     This intersects method can be used to check a standard XNA framework Rectangle object and see if it collides with a
+        ///     Rotated Rectangle object
         /// </summary>
         /// <param name="theRectangle"> </param>
         /// <returns> </returns>
@@ -81,7 +67,7 @@ namespace BlackDragonEngine.Helpers
         }
 
         /// <summary>
-        ///   Check to see if two Rotated Rectangls have collided
+        ///     Check to see if two Rotated Rectangls have collided
         /// </summary>
         /// <param name="theRectangle"> </param>
         /// <returns> </returns>
@@ -102,18 +88,14 @@ namespace BlackDragonEngine.Helpers
             //a collision DOES occur on ALL of the Axis, then there is a collision occurring
             //between the rotated rectangles. We know this to be true by the Seperating Axis Theorem
             foreach (var aAxis in aRectangleAxis)
-            {
                 if (!IsAxisCollision(theRectangle, aAxis))
-                {
                     return false;
-                }
-            }
 
             return true;
         }
 
         /// <summary>
-        ///   Determines if a collision has occurred on an Axis of one of the planes parallel to the Rectangle
+        ///     Determines if a collision has occurred on an Axis of one of the planes parallel to the Rectangle
         /// </summary>
         /// <param name="theRectangle"> </param>
         /// <param name="aAxis"> </param>
@@ -137,27 +119,23 @@ namespace BlackDragonEngine.Helpers
             aRectangleBScalars.Add(GenerateScalar(LowerRightCorner(), aAxis));
 
             //Get the Maximum and Minium Scalar values for each of the Rectangles
-            int aRectangleAMinimum = aRectangleAScalars.Min();
-            int aRectangleAMaximum = aRectangleAScalars.Max();
-            int aRectangleBMinimum = aRectangleBScalars.Min();
-            int aRectangleBMaximum = aRectangleBScalars.Max();
+            var aRectangleAMinimum = aRectangleAScalars.Min();
+            var aRectangleAMaximum = aRectangleAScalars.Max();
+            var aRectangleBMinimum = aRectangleBScalars.Min();
+            var aRectangleBMaximum = aRectangleBScalars.Max();
 
             //If we have overlaps between the Rectangles (i.e. Min of B is less than Max of A)
             //then we are detecting a collision between the rectangles on this Axis
             if (aRectangleBMinimum <= aRectangleAMaximum && aRectangleBMaximum >= aRectangleAMaximum)
-            {
                 return true;
-            }
-            else if (aRectangleAMinimum <= aRectangleBMaximum && aRectangleAMaximum >= aRectangleBMaximum)
-            {
-                return true;
-            }
+            if (aRectangleAMinimum <= aRectangleBMaximum && aRectangleAMaximum >= aRectangleBMaximum) return true;
 
             return false;
         }
 
         /// <summary>
-        ///   Generates a scalar value that can be used to compare where corners of a rectangle have been projected onto a particular axis.
+        ///     Generates a scalar value that can be used to compare where corners of a rectangle have been projected onto a
+        ///     particular axis.
         /// </summary>
         /// <param name="theRectangleCorner"> </param>
         /// <param name="theAxis"> </param>
@@ -166,19 +144,19 @@ namespace BlackDragonEngine.Helpers
         {
             //Using the formula for Vector projection. Take the corner being passed in
             //and project it onto the given Axis
-            float aNumerator = (theRectangleCorner.X*theAxis.X) + (theRectangleCorner.Y*theAxis.Y);
-            float aDenominator = (theAxis.X*theAxis.X) + (theAxis.Y*theAxis.Y);
-            float aDivisionResult = aNumerator/aDenominator;
-            var aCornerProjected = new Vector2(aDivisionResult*theAxis.X, aDivisionResult*theAxis.Y);
+            var aNumerator = theRectangleCorner.X * theAxis.X + theRectangleCorner.Y * theAxis.Y;
+            var aDenominator = theAxis.X * theAxis.X + theAxis.Y * theAxis.Y;
+            var aDivisionResult = aNumerator / aDenominator;
+            var aCornerProjected = new Vector2(aDivisionResult * theAxis.X, aDivisionResult * theAxis.Y);
 
             //Now that we have our projected Vector, calculate a scalar of that projection
             //that can be used to more easily do comparisons
-            float aScalar = (theAxis.X*aCornerProjected.X) + (theAxis.Y*aCornerProjected.Y);
+            var aScalar = theAxis.X * aCornerProjected.X + theAxis.Y * aCornerProjected.Y;
             return (int) aScalar;
         }
 
         /// <summary>
-        ///   Rotate a point from a given location and adjust using the Origin we are rotating around
+        ///     Rotate a point from a given location and adjust using the Origin we are rotating around
         /// </summary>
         /// <param name="thePoint"> </param>
         /// <param name="theOrigin"> </param>
@@ -187,10 +165,10 @@ namespace BlackDragonEngine.Helpers
         private Vector2 RotatePoint(Vector2 thePoint, Vector2 theOrigin, float theRotation)
         {
             var aTranslatedPoint = new Vector2();
-            aTranslatedPoint.X = (float) (theOrigin.X + (thePoint.X - theOrigin.X)*Math.Cos(theRotation)
-                                          - (thePoint.Y - theOrigin.Y)*Math.Sin(theRotation));
-            aTranslatedPoint.Y = (float) (theOrigin.Y + (thePoint.Y - theOrigin.Y)*Math.Cos(theRotation)
-                                          + (thePoint.X - theOrigin.X)*Math.Sin(theRotation));
+            aTranslatedPoint.X = (float) (theOrigin.X + (thePoint.X - theOrigin.X) * Math.Cos(theRotation)
+                                          - (thePoint.Y - theOrigin.Y) * Math.Sin(theRotation));
+            aTranslatedPoint.Y = (float) (theOrigin.Y + (thePoint.Y - theOrigin.Y) * Math.Cos(theRotation)
+                                                      + (thePoint.X - theOrigin.X) * Math.Sin(theRotation));
             return aTranslatedPoint;
         }
 

@@ -35,32 +35,26 @@ namespace MapEditor
             _mapPath += "/";
             _treeView.Nodes.Add("maps");
             PopulateTree(_mapPath + "maps/", _treeView.Nodes[0]);
-            Image image = Image.FromFile(Application.StartupPath + @"/Content/textures/spritesheets/tilesheet.png");
-            _tileSheetBox.Image = ResizeImage(image, image.Width*ScaleFactor, image.Height*ScaleFactor);
+            var image = Image.FromFile(Application.StartupPath + @"/Content/textures/spritesheets/tilesheet.png");
+            _tileSheetBox.Image = ResizeImage(image, image.Width * ScaleFactor, image.Height * ScaleFactor);
             _marker = new Rectangle(0, 0, Tile, Tile);
             tickTimer.Start();
             LoadEntities();
             LoadCodes();
-            _layerSelect.SelectedIndex = (int) MapEditor.InteractiveLayer;
+            _layerSelect.SelectedIndex = (int) GameControl.InteractiveLayer;
             _tileSheetBox.BackColor = Color.Black;
         }
 
-        private int Tile
-        {
-            get { return ScaleFactor*TileSize; }
-        }
+        private int Tile => ScaleFactor * TileSize;
 
-        public MapEditor Game { private get; set; }
-
-        public PictureBox PctSurface
+        private GameControl Game
         {
-            get { return _pctSurface; }
+            get { return mapEditor1; }
         }
 
         private void LoadPath()
         {
             if (File.Exists(Application.StartupPath + "/" + ConfigFile))
-            {
                 try
                 {
                     using (var sr = new StreamReader(Application.StartupPath + "/" + ConfigFile))
@@ -74,11 +68,8 @@ namespace MapEditor
                 {
                     SetNewMapPath();
                 }
-            }
             else
-            {
                 SetNewMapPath();
-            }
         }
 
         private void SetNewMapPath()
@@ -90,6 +81,7 @@ namespace MapEditor
                 SetNewMapPath();
                 return;
             }
+
             using (var sw = new StreamWriter(Application.StartupPath + "/" + ConfigFile))
             {
                 sw.WriteLine(_mapPath);
@@ -123,6 +115,7 @@ namespace MapEditor
                 PopulateTree(d.FullName, t);
                 node.Nodes.Add(t);
             }
+
             foreach (var f in directory.GetFiles())
             {
                 if (f.Extension != ".map") continue;
@@ -135,13 +128,14 @@ namespace MapEditor
         {
             var result = new Bitmap(width, height);
 
-            using (Graphics graphics = Graphics.FromImage(result))
+            using (var graphics = Graphics.FromImage(result))
             {
                 graphics.CompositingQuality = CompositingQuality.AssumeLinear;
                 graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
                 graphics.SmoothingMode = SmoothingMode.None;
                 graphics.DrawImage(image, 0, 0, result.Width, result.Height);
             }
+
             return result;
         }
 
@@ -166,11 +160,11 @@ namespace MapEditor
 
         private void TileSheetBoxMouseClick(object sender, MouseEventArgs e)
         {
-            int tilesPerRow = _tileSheetBox.Image.Width/Tile;
-            int tileIndex = (e.X/Tile) + ((e.Y/Tile)*tilesPerRow);
+            var tilesPerRow = _tileSheetBox.Image.Width / Tile;
+            var tileIndex = e.X / Tile + e.Y / Tile * tilesPerRow;
             _tileIndexLabel.Text = string.Format("Selected Index: {0}", tileIndex);
             Game.CurrentItem = Item.GetItemByTileId(tileIndex);
-            _marker = new Rectangle((tileIndex%tilesPerRow)*Tile, (tileIndex/tilesPerRow)*Tile, Tile, Tile);
+            _marker = new Rectangle(tileIndex % tilesPerRow * Tile, tileIndex / tilesPerRow * Tile, Tile, Tile);
             _drawMarker = true;
             _doNothing = true;
             if (_entitiesList.SelectedItems.Count == 1)
@@ -182,7 +176,6 @@ namespace MapEditor
 
         private void TickTimerTick(object sender, EventArgs e)
         {
-            Game.Tick();
             _tileSheetBox.Refresh();
         }
 
@@ -191,13 +184,9 @@ namespace MapEditor
             if (!e.Node.Text.Contains(".map")) return;
             Game.MapLoaded = true;
             if (!_firstTime)
-            {
                 Game.SaveMap(_currentMapName);
-            }
             else
-            {
                 _firstTime = false;
-            }
             Game.LoadMap(_mapPath + e.Node.FullPath);
             _currentMapName = _mapPath + e.Node.FullPath;
         }
@@ -225,29 +214,29 @@ namespace MapEditor
                         msgDial.DescriptionLabel.Text =
                             "Input the map name without file extension and starting from the maps/ directory:";
                         msgDial.OnOk += m => Game.CurrentItem = new Item
-                                                                    {
-                                                                        AddToExisting = true,
-                                                                        Codes =
-                                                                            new List<TileCode>
-                                                                                {
-                                                                                    new TileCode(
-                                                                                        TileCodes.Transition, m)
-                                                                                }
-                                                                    };
+                        {
+                            AddToExisting = true,
+                            Codes =
+                                new List<TileCode>
+                                {
+                                    new TileCode(
+                                        TileCodes.Transition, m)
+                                }
+                        };
                         break;
                     case 2:
                         msgDial.Text = "Camera Focus Point";
                         msgDial.DescriptionLabel.Text = "Name of this point:";
                         msgDial.OnOk += m => Game.CurrentItem = new Item
-                                                                    {
-                                                                        AddToExisting = true,
-                                                                        Codes = new List<TileCode>
-                                                                                    {
-                                                                                        new TileCode(
-                                                                                            TileCodes.CameraFocusPoint,
-                                                                                            m)
-                                                                                    }
-                                                                    };
+                        {
+                            AddToExisting = true,
+                            Codes = new List<TileCode>
+                            {
+                                new TileCode(
+                                    TileCodes.CameraFocusPoint,
+                                    m)
+                            }
+                        };
                         break;
 
                     case 3:
@@ -255,21 +244,22 @@ namespace MapEditor
                         msgDial.DescriptionLabel.Text =
                             "Name of this trigger, followed by '_', followed by how many frames it should take to reach this point.";
                         msgDial.OnOk += m => Game.CurrentItem = new Item
-                                                                    {
-                                                                        AddToExisting = true,
-                                                                        Codes =
-                                                                            new List<TileCode>
-                                                                                {
-                                                                                    new TileCode(
-                                                                                        TileCodes.CameraFocusTrigger, m)
-                                                                                }
-                                                                    };
+                        {
+                            AddToExisting = true,
+                            Codes =
+                                new List<TileCode>
+                                {
+                                    new TileCode(
+                                        TileCodes.CameraFocusTrigger, m)
+                                }
+                        };
                         break;
 
                     default:
                         Game.CurrentItem = Item.GetItemByCodeId(_codesList.SelectedIndices[0]);
                         return;
                 }
+
                 msgDial.ShowDialog(this);
             }
         }
@@ -311,6 +301,7 @@ namespace MapEditor
                 e.CancelEdit = true;
                 return;
             }
+
             _oldLabel = e.Node.FullPath;
         }
 
@@ -321,10 +312,10 @@ namespace MapEditor
 
         private void NewFileToolStripMenuItemClick(object sender, EventArgs e)
         {
-            TreeNode node = _treeView.SelectedNode.Text.Contains(".map")
-                                ? _treeView.SelectedNode.Parent
-                                : _treeView.SelectedNode;
-            TreeNode newNode = node.Nodes.Add("New Map.map");
+            var node = _treeView.SelectedNode.Text.Contains(".map")
+                ? _treeView.SelectedNode.Parent
+                : _treeView.SelectedNode;
+            var newNode = node.Nodes.Add("New Map.map");
             File.Create(_mapPath + node.FullPath + "/New Map.map");
             newNode.BeginEdit();
         }
@@ -332,8 +323,8 @@ namespace MapEditor
         private void NewFolderToolStripMenuItemClick(object sender, EventArgs e)
         {
             if (_treeView.SelectedNode.Text == "maps") return;
-            TreeNode node = _treeView.SelectedNode.Parent;
-            TreeNode newNode = node.Nodes.Add("New Folder");
+            var node = _treeView.SelectedNode.Parent;
+            var newNode = node.Nodes.Add("New Folder");
             Directory.CreateDirectory(_mapPath + node.FullPath + "/New Folder");
             newNode.BeginEdit();
         }
@@ -341,15 +332,11 @@ namespace MapEditor
         private void DeleteToolStripMenuItemClick(object sender, EventArgs e)
         {
             if (_treeView.SelectedNode.Text == "maps") return;
-            TreeNode node = _treeView.SelectedNode;
+            var node = _treeView.SelectedNode;
             if (node.Text.Contains(".map"))
-            {
                 File.Delete(_mapPath + node.FullPath);
-            }
             else
-            {
                 Directory.Delete(_mapPath + node.FullPath, true);
-            }
             node.Remove();
             _currentMapName = null;
         }
@@ -387,6 +374,7 @@ namespace MapEditor
                 _firstTime2 = false;
                 return;
             }
+
             Game.Layer = (uint) _layerSelect.SelectedIndex;
         }
 

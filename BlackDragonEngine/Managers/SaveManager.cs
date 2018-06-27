@@ -17,10 +17,7 @@ namespace BlackDragonEngine.Managers
         public readonly EventHelper SaveHelper = new EventHelper();
         public T CurrentSaveState;
 
-        public string CurrentSaveFile
-        {
-            get { return SaveFilePath + GetMD5Hash(VariableProvider.SaveSlot) + ".svf"; }
-        }
+        public string CurrentSaveFile => SaveFilePath + GetMD5Hash(VariableProvider.SaveSlot) + ".svf";
 
         public void Save()
         {
@@ -48,18 +45,16 @@ namespace BlackDragonEngine.Managers
                 var xmls = new XmlSerializer(CurrentSaveState.GetType());
                 CurrentSaveState = (T) xmls.Deserialize(gzs);
             }
+
             SaveHelper.LoadHelp();
         }
 
         private string GetMD5Hash(string textToHash)
         {
-            if (string.IsNullOrEmpty(textToHash))
-            {
-                return string.Empty;
-            }
+            if (string.IsNullOrEmpty(textToHash)) return string.Empty;
             var md5 = new MD5CryptoServiceProvider();
-            byte[] bytes = Encoding.Default.GetBytes(textToHash);
-            byte[] result = md5.ComputeHash(bytes);
+            var bytes = Encoding.Default.GetBytes(textToHash);
+            var result = md5.ComputeHash(bytes);
 
             return BitConverter.ToString(result);
         }

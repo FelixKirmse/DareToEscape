@@ -16,14 +16,9 @@ namespace DareToEscape.GameStates
 
         #region IUpdateableGameState Members
 
-        public bool UpdateCondition
-        {
-            get
-            {
-                return GameStateManager.PlayerDead && EngineState.DialogState == DialogueStates.Inactive &&
-                       GameStateManager.State != States.Editor;
-            }
-        }
+        public bool UpdateCondition => GameStateManager.PlayerDead &&
+                                       EngineState.DialogState == DialogueStates.Inactive &&
+                                       GameStateManager.State != States.Editor;
 
         public bool Update()
         {
@@ -39,6 +34,7 @@ namespace DareToEscape.GameStates
                 GameStateManager.PlayerDead = false;
                 _elapsedSeconds = 0f;
             }
+
             return true;
         }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Management;
+﻿using System.Management;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -7,36 +6,21 @@ namespace BlackDragonEngine.Providers
 {
     public static class ShortCuts
     {
-        public static int GameWindowWidth
-        {
-            get { return VariableProvider.Game.GraphicsDevice.Viewport.Width; }
-        }
+        public static int GameWindowWidth => VariableProvider.GraphicsDevice.Viewport.Width;
 
-        public static int GameWindowHeight
-        {
-            get { return VariableProvider.Game.GraphicsDevice.Viewport.Height; }
-        }
+        public static int GameWindowHeight => VariableProvider.GraphicsDevice.Viewport.Height;
 
-        public static Vector2 ScreenCenter
-        {
-            get { return new Vector2(GameWindowWidth/2, GameWindowHeight/2); }
-        }
+        public static Vector2 ScreenCenter => new Vector2(GameWindowWidth / 2, GameWindowHeight / 2);
 
-        public static float ElapsedMilliseconds
-        {
-            get { return (float) VariableProvider.GameTime.ElapsedGameTime.TotalMilliseconds; }
-        }
+        public static float ElapsedMilliseconds => (float) VariableProvider.GameTime.ElapsedGameTime.TotalMilliseconds;
 
-        public static float ElapsedSeconds
-        {
-            get { return (float) VariableProvider.GameTime.ElapsedGameTime.TotalSeconds; }
-        }
+        public static float ElapsedSeconds => (float) VariableProvider.GameTime.ElapsedGameTime.TotalSeconds;
 
         public static Vector2 GetFontCenter(string fontName, string String)
         {
             return new Vector2(
-                FontProvider.GetFont(fontName).MeasureString(String).X/2,
-                FontProvider.GetFont(fontName).MeasureString(String).Y/2);
+                FontProvider.GetFont(fontName).MeasureString(String).X / 2,
+                FontProvider.GetFont(fontName).MeasureString(String).Y / 2);
         }
 
         public static bool IsKeyDown(Keys key)
@@ -46,7 +30,7 @@ namespace BlackDragonEngine.Providers
 
         public static bool KeyPressedNowButNotLastFrame(Keys key)
         {
-            return (IsKeyDown(key) && InputProvider.LastKeyState.IsKeyUp(key));
+            return IsKeyDown(key) && InputProvider.LastKeyState.IsKeyUp(key);
         }
 
         public static Rectangle GetFontRectangle(Vector2 position, string fontName, string String)
@@ -61,10 +45,10 @@ namespace BlackDragonEngine.Providers
         public static bool MouseIntersectsRectangle(Rectangle rectangle)
         {
             return rectangle.Intersects(new Rectangle(
-                                            InputProvider.MouseState.X,
-                                            InputProvider.MouseState.Y,
-                                            1,
-                                            1));
+                InputProvider.MouseState.X,
+                InputProvider.MouseState.Y,
+                1,
+                1));
         }
 
         public static bool LeftMouseClicked()
@@ -74,7 +58,7 @@ namespace BlackDragonEngine.Providers
 
         public static bool LeftButtonClickedNowButNotLastFrame()
         {
-            return (LeftMouseClicked() && (InputProvider.LastMouseState.LeftButton == ButtonState.Released));
+            return LeftMouseClicked() && InputProvider.LastMouseState.LeftButton == ButtonState.Released;
         }
 
         public static bool RightMouseClicked()
@@ -84,16 +68,14 @@ namespace BlackDragonEngine.Providers
 
         public static bool RightButtonClickedButNotLastFrame()
         {
-            return (RightMouseClicked() && (InputProvider.LastMouseState.RightButton == ButtonState.Released));
+            return RightMouseClicked() && InputProvider.LastMouseState.RightButton == ButtonState.Released;
         }
 
         public static bool AreAnyKeysDown(Keys[] keys)
         {
             foreach (var key in keys)
-            {
                 if (IsKeyDown(key))
                     return true;
-            }
             return false;
         }
 
@@ -103,10 +85,8 @@ namespace BlackDragonEngine.Providers
                 return AreAnyKeysDown(keys);
 
             foreach (var key in keys)
-            {
                 if (KeyPressedNowButNotLastFrame(key))
                     return true;
-            }
             return false;
         }
 
@@ -142,17 +122,17 @@ namespace BlackDragonEngine.Providers
 
             var searcher = new ManagementObjectSearcher(scope, q);
 
-            ManagementObjectCollection results = searcher.Get();
-            UInt32 maxHResolution = 0;
-            UInt32 maxVResolution = 0;
+            var results = searcher.Get();
+            uint maxHResolution = 0;
+            uint maxVResolution = 0;
 
             foreach (var item in results)
             {
-                if ((UInt32) item["HorizontalResolution"] > maxHResolution)
-                    maxHResolution = (UInt32) item["HorizontalResolution"];
+                if ((uint) item["HorizontalResolution"] > maxHResolution)
+                    maxHResolution = (uint) item["HorizontalResolution"];
 
-                if ((UInt32) item["VerticalResolution"] > maxVResolution)
-                    maxVResolution = (UInt32) item["VerticalResolution"];
+                if ((uint) item["VerticalResolution"] > maxVResolution)
+                    maxVResolution = (uint) item["VerticalResolution"];
             }
 
             return new Point((int) maxHResolution, (int) maxVResolution);

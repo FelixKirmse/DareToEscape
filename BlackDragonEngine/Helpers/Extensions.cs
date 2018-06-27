@@ -15,7 +15,7 @@ namespace BlackDragonEngine.Helpers
             if (max < min)
                 throw new ArgumentOutOfRangeException("max cannot be less than min");
 
-            return (float) rand.NextDouble()*(max - min) + min;
+            return (float) rand.NextDouble() * (max - min) + min;
         }
 
         public static Vector2 ToVector2(this Point p)

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this._pctSurface = new System.Windows.Forms.PictureBox();
             this._menustrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,20 +58,11 @@
             this._drawAllCheckBox = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this._layerSelect = new System.Windows.Forms.ComboBox();
-            ((System.ComponentModel.ISupportInitialize)(this._pctSurface)).BeginInit();
+            this.mapEditor1 = new MapEditor.GameControl();
             this._menustrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._tileSheetBox)).BeginInit();
             this._layerGroupBox.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // _pctSurface
-            // 
-            this._pctSurface.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._pctSurface.Location = new System.Drawing.Point(602, 27);
-            this._pctSurface.Name = "_pctSurface";
-            this._pctSurface.Size = new System.Drawing.Size(640, 480);
-            this._pctSurface.TabIndex = 0;
-            this._pctSurface.TabStop = false;
             // 
             // _menustrip
             // 
@@ -350,11 +340,24 @@
             this._layerSelect.TabIndex = 0;
             this._layerSelect.SelectedIndexChanged += new System.EventHandler(this.LayerSelectSelectedIndexChanged);
             // 
+            // mapEditor1
+            // 
+            this.mapEditor1.DrawAll = false;
+            this.mapEditor1.Layer = ((uint)(0u));
+            this.mapEditor1.Location = new System.Drawing.Point(601, 29);
+            this.mapEditor1.MapLoaded = false;
+            this.mapEditor1.Name = "mapEditor1";
+            this.mapEditor1.Playing = false;
+            this.mapEditor1.Size = new System.Drawing.Size(640, 480);
+            this.mapEditor1.TabIndex = 15;
+            this.mapEditor1.Text = "mapEditor1";
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1254, 956);
+            this.Controls.Add(this.mapEditor1);
             this.Controls.Add(this._layerGroupBox);
             this.Controls.Add(this._positionLabel);
             this.Controls.Add(this._tileIndexLabel);
@@ -367,7 +370,6 @@
             this.Controls.Add(this._entitiesList);
             this.Controls.Add(this._tileSheetBox);
             this.Controls.Add(this._treeView);
-            this.Controls.Add(this._pctSurface);
             this.Controls.Add(this._menustrip);
             this.Controls.Add(this._focusTextbox);
             this.MainMenuStrip = this._menustrip;
@@ -377,7 +379,6 @@
             this.Name = "Editor";
             this.Text = "Editor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditorFormClosing);
-            ((System.ComponentModel.ISupportInitialize)(this._pctSurface)).EndInit();
             this._menustrip.ResumeLayout(false);
             this._menustrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this._tileSheetBox)).EndInit();
@@ -390,7 +391,6 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox _pctSurface;
         private System.Windows.Forms.MenuStrip _menustrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
@@ -420,5 +420,6 @@
         private System.Windows.Forms.CheckBox _drawAllCheckBox;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox _layerSelect;
+        private GameControl mapEditor1;
     }
 }

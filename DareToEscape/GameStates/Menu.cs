@@ -20,10 +20,7 @@ namespace DareToEscape.GameStates
 
         #region IDrawableGameState Members
 
-        public bool DrawCondition
-        {
-            get { return GameStateManager.State == States.Menu; }
-        }
+        public bool DrawCondition => GameStateManager.State == States.Menu;
 
         public void Draw()
         {
@@ -43,14 +40,9 @@ namespace DareToEscape.GameStates
 
         #region IUpdateableGameState Members
 
-        public bool UpdateCondition
-        {
-            get
-            {
-                return GameStateManager.State == States.Menu &&
-                       EngineState.DialogState == DialogueStates.Inactive && !GameStateManager.PlayerDead;
-            }
-        }
+        public bool UpdateCondition => GameStateManager.State == States.Menu &&
+                                       EngineState.DialogState == DialogueStates.Inactive &&
+                                       !GameStateManager.PlayerDead;
 
         public bool Update()
         {
@@ -64,6 +56,7 @@ namespace DareToEscape.GameStates
                     _ingameMenu.Update();
                     break;
             }
+
             return true;
         }
 

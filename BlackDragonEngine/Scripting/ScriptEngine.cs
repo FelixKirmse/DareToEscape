@@ -5,14 +5,9 @@ namespace BlackDragonEngine.Scripting
 {
     public delegate IEnumerator<int> Script(params float[] parameters);
 
-    public sealed class ScriptEngine : GameComponent
+    public sealed class ScriptEngine
     {
         private readonly List<ScriptState> _scripts = new List<ScriptState>();
-
-        public ScriptEngine(Game game)
-            : base(game)
-        {
-        }
 
         public void ExecuteScript(Script script)
         {
@@ -23,10 +18,7 @@ namespace BlackDragonEngine.Scripting
         private void ExecuteScript(ScriptState scriptState)
         {
             scriptState.Execute();
-            if (!scriptState.IsComplete)
-            {
-                _scripts.Add(scriptState);
-            }
+            if (!scriptState.IsComplete) _scripts.Add(scriptState);
         }
 
         public void ExecuteScript(Script script, params float[] parameters)
@@ -45,14 +37,11 @@ namespace BlackDragonEngine.Scripting
             _scripts.Clear();
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             if (EngineState.GameState == EngineStates.Running || EngineState.GameState == EngineStates.Editor)
             {
-                for (int i = 0; i < _scripts.Count; ++i)
-                {
-                    _scripts[i].Execute();
-                }
+                for (var i = 0; i < _scripts.Count; ++i) _scripts[i].Execute();
                 _scripts.RemoveAll(s => s.IsComplete);
             }
         }
@@ -79,10 +68,7 @@ namespace BlackDragonEngine.Scripting
 
             public Script Script { get; private set; }
 
-            public bool IsComplete
-            {
-                get { return Script == null; }
-            }
+            public bool IsComplete => Script == null;
 
             public void Execute()
             {

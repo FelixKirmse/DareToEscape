@@ -16,10 +16,7 @@ namespace MapEditor
 
         private void MapNameInputBoxKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                OkButtonClick(null, null);
-            }
+            if (e.KeyCode == Keys.Enter) OkButtonClick(null, null);
         }
 
         private void OkButtonClick(object sender, EventArgs e)

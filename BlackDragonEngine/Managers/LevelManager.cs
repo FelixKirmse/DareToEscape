@@ -1,5 +1,5 @@
-﻿using System.IO;
-using System;
+﻿using System;
+using System.IO;
 using BlackDragonEngine.Helpers;
 using BlackDragonEngine.TileEngine;
 
@@ -15,9 +15,10 @@ namespace BlackDragonEngine.Managers
 
         public static void LoadLevel<TMap, TCodes>(string levelName) where TMap : IMap<TCodes>, new()
         {
-            TileMap<TMap, TCodes> tileMap = TileMap<TMap, TCodes>.GetInstance();
+            var tileMap = TileMap<TMap, TCodes>.GetInstance();
             CurrentLevel = levelName;
-            tileMap.LoadMap(new FileStream($"{AppDomain.CurrentDomain.BaseDirectory}/Content/maps/{levelName}.map", FileMode.Open));
+            tileMap.LoadMap(new FileStream($"{AppDomain.CurrentDomain.BaseDirectory}/Content/maps/{levelName}.map",
+                FileMode.Open));
             Camera.UpdateWorldRectangle(tileMap);
             OnLevelLoad?.Invoke();
         }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using BlackDragonEngine.Entities;
 using BlackDragonEngine.Providers;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace BlackDragonEngine.Managers
 {
@@ -18,8 +17,8 @@ namespace BlackDragonEngine.Managers
 
         public static void Draw()
         {
-            SpriteBatch spriteBatch = VariableProvider.SpriteBatch;
-            Entities.ForEach((e => e.Draw()));
+            var spriteBatch = VariableProvider.SpriteBatch;
+            Entities.ForEach(e => e.Draw());
             _player.Draw();
         }
 

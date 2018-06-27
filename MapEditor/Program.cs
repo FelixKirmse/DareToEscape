@@ -1,19 +1,19 @@
 using System;
+using System.Windows.Forms;
 
 namespace MapEditor
 {
     internal static class Program
     {
         /// <summary>
-        ///   The main entry point for the application.
+        ///     The main entry point for the application.
         /// </summary>
         [STAThread]
-        private static void Main(string[] args)
+        private static void Main()
         {
-            using (var game = new MapEditor())
-            {
-                game.Run();
-            }
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Editor());
         }
     }
 }

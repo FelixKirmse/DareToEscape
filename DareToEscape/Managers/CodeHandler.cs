@@ -36,33 +36,33 @@ namespace DareToEscape.Managers
                     break;
 
                 case TileCodes.Checkpoint:
-                    GameObject checkPoint = Factory.CreateCheckPoint();
+                    var checkPoint = Factory.CreateCheckPoint();
                     checkPoint.Position = location;
                     EntityManager.AddEntity(checkPoint);
                     break;
 
                 case TileCodes.Exit:
-                    GameObject exit = Factory.CreateExit();
+                    var exit = Factory.CreateExit();
                     exit.Position = location;
                     EntityManager.AddEntity(exit);
                     break;
 
                 case TileCodes.Key:
-                    GameObject key = Factory.CreateKey();
+                    var key = Factory.CreateKey();
                     key.Position = location;
                     EntityManager.AddEntity(key);
                     key.Send("KEYSTRING", code.Message);
                     break;
 
                 case TileCodes.Lock:
-                    GameObject Lock = Factory.CreateLock();
+                    var Lock = Factory.CreateLock();
                     Lock.Position = location;
                     EntityManager.AddEntity(Lock);
                     Lock.Send("KEYSTRING", code.Message);
                     break;
 
                 case TileCodes.Dialog:
-                    GameObject sign = Factory.CreateSign();
+                    var sign = Factory.CreateSign();
                     sign.Position = location;
                     EntityManager.AddEntity(sign);
                     break;
@@ -91,8 +91,8 @@ namespace DareToEscape.Managers
         }
 
         private static int OnCodeInPlayerCenterCheck(TileCode code, List<TileCode> codes,
-                                                     Vector2 collisionCenter,
-                                                     int i, GameObject player)
+            Vector2 collisionCenter,
+            int i, GameObject player)
         {
             switch (code.Code)
             {
@@ -105,10 +105,7 @@ namespace DareToEscape.Managers
                     break;
 
                 case TileCodes.Dialog:
-                    if (InputMapper.StrictAction)
-                    {
-                        DialogHelper.PlayDialog(code.Message);
-                    }
+                    if (InputMapper.StrictAction) DialogHelper.PlayDialog(code.Message);
                     break;
 
                 case TileCodes.Save:
@@ -144,32 +141,30 @@ namespace DareToEscape.Managers
                     break;
 
                 case TileCodes.CameraFocusTrigger:
-                    string[] parts = code.Message.Split('_');
-                    string pointName = parts[0];
+                    var parts = code.Message.Split('_');
+                    var pointName = parts[0];
                     int frameCount;
                     int.TryParse(parts[1], out frameCount);
                     EntityManager.AddEntity(new GameObject(CameraMoveComponent.GetInstance(pointName, frameCount)));
                     break;
             }
+
             return i;
         }
 
 
         private static void Spawn(TileCode code, Vector2 position)
         {
-            string[] codearray = code.Message.Split('_');
+            var codearray = code.Message.Split('_');
             var components = new List<IComponent>
-                                 {
-                                     (IComponent)
-                                     Activator.CreateInstance(
-                                         Type.GetType("DareToEscape.Components.Entities." + codearray[0] + "Component"))
-                                 };
+            {
+                (IComponent)
+                Activator.CreateInstance(
+                    Type.GetType("DareToEscape.Components.Entities." + codearray[0] + "Component"))
+            };
             var turret = new GameObject(components) {Position = position};
             turret.Send("SET_" + codearray[1], turret);
-            if (codearray[0].Contains("Boss"))
-            {
-                GameVariableProvider.Bosses.Add(turret);
-            }
+            if (codearray[0].Contains("Boss")) GameVariableProvider.Bosses.Add(turret);
             EntityManager.AddEntity(turret);
         }
     }

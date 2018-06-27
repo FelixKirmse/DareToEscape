@@ -17,7 +17,7 @@ namespace BlackDragonEngine.Components
         }
 
         /// <summary>
-        ///   Directly sets the texture, useful for Entity that only have a GraphicsComponent
+        ///     Directly sets the texture, useful for Entity that only have a GraphicsComponent
         /// </summary>
         /// <param name="texture"> </param>
         public GraphicsComponent(Texture2D texture)
@@ -25,18 +25,6 @@ namespace BlackDragonEngine.Components
         {
             Texture = texture;
         }
-
-        #region IComponent Members
-
-        public virtual void Update(GameObject obj)
-        {
-        }
-
-        public virtual void Receive<T>(string message, T obj)
-        {
-        }
-
-        #endregion
 
         public virtual void Draw(GameObject obj)
         {
@@ -51,5 +39,17 @@ namespace BlackDragonEngine.Components
                 SpriteEffects.None,
                 DrawDepth);
         }
+
+        #region IComponent Members
+
+        public virtual void Update(GameObject obj)
+        {
+        }
+
+        public virtual void Receive<T>(string message, T obj)
+        {
+        }
+
+        #endregion
     }
 }

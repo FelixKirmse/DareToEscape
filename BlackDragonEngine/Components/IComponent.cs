@@ -5,7 +5,7 @@ namespace BlackDragonEngine.Components
     public interface IComponent
     {
         /// <summary>
-        ///   Handles messages from other components
+        ///     Handles messages from other components
         /// </summary>
         /// <typeparam name="T"> Type of the object thats being sent </typeparam>
         /// <param name="message"> The message that was received </param>

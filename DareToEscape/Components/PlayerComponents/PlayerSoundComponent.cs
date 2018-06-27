@@ -11,7 +11,7 @@ namespace DareToEscape.Components.PlayerComponents
 
         public override void Receive<T>(string message, T desiredPosition)
         {
-            string[] messageParts = message.Split('_');
+            var messageParts = message.Split('_');
 
             if (messageParts[0] == "SOUND")
             {

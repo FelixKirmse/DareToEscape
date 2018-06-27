@@ -20,7 +20,7 @@ namespace BlackDragonEngine.Helpers
 
         public bool Intersects(BCircle otherCircle)
         {
-            float radiiSum = Radius*Radius + otherCircle.Radius*otherCircle.Radius;
+            var radiiSum = Radius * Radius + otherCircle.Radius * otherCircle.Radius;
             float distance;
             Vector2.DistanceSquared(ref Position, ref otherCircle.Position, out distance);
             return radiiSum >= distance;

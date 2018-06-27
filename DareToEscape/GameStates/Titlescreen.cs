@@ -20,10 +20,7 @@ namespace DareToEscape.GameStates
 
         #region IDrawableGameState Members
 
-        public bool DrawCondition
-        {
-            get { return UpdateCondition; }
-        }
+        public bool DrawCondition => UpdateCondition;
 
         public void Draw()
         {
@@ -37,10 +34,7 @@ namespace DareToEscape.GameStates
 
         #region IUpdateableGameState Members
 
-        public bool UpdateCondition
-        {
-            get { return GameStateManager.State == States.Titlescreen; }
-        }
+        public bool UpdateCondition => GameStateManager.State == States.Titlescreen;
 
         public bool Update()
         {

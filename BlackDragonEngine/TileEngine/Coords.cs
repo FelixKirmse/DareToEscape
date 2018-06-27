@@ -20,45 +20,21 @@ namespace BlackDragonEngine.TileEngine
             Y = y;
         }
 
-        public Coords Left
-        {
-            get { return VariableProvider.CoordList[X - 1, Y]; }
-        }
+        public Coords Left => VariableProvider.CoordList[X - 1, Y];
 
-        public Coords Right
-        {
-            get { return VariableProvider.CoordList[X + 1, Y]; }
-        }
+        public Coords Right => VariableProvider.CoordList[X + 1, Y];
 
-        public Coords Up
-        {
-            get { return VariableProvider.CoordList[X, Y - 1]; }
-        }
+        public Coords Up => VariableProvider.CoordList[X, Y - 1];
 
-        public Coords Down
-        {
-            get { return VariableProvider.CoordList[X, Y + 1]; }
-        }
+        public Coords Down => VariableProvider.CoordList[X, Y + 1];
 
-        public Coords UpLeft
-        {
-            get { return VariableProvider.CoordList[X - 1, Y - 1]; }
-        }
+        public Coords UpLeft => VariableProvider.CoordList[X - 1, Y - 1];
 
-        public Coords UpRight
-        {
-            get { return VariableProvider.CoordList[X + 1, Y - 1]; }
-        }
+        public Coords UpRight => VariableProvider.CoordList[X + 1, Y - 1];
 
-        public Coords DownLeft
-        {
-            get { return VariableProvider.CoordList[X - 1, Y + 1]; }
-        }
+        public Coords DownLeft => VariableProvider.CoordList[X - 1, Y + 1];
 
-        public Coords DownRight
-        {
-            get { return VariableProvider.CoordList[X + 1, Y + 1]; }
-        }
+        public Coords DownRight => VariableProvider.CoordList[X + 1, Y + 1];
 
         public override int GetHashCode()
         {
@@ -67,7 +43,7 @@ namespace BlackDragonEngine.TileEngine
 
         public static Coords operator /(Coords coords, int divisor)
         {
-            return VariableProvider.CoordList[coords.X/divisor, coords.Y/divisor];
+            return VariableProvider.CoordList[coords.X / divisor, coords.Y / divisor];
         }
 
         public static Coords operator +(Coords leftCoords, Coords rightCoords)
@@ -77,7 +53,7 @@ namespace BlackDragonEngine.TileEngine
 
         public static Coords operator *(Coords coords, int multiplicator)
         {
-            return VariableProvider.CoordList[coords.X*multiplicator, coords.Y*multiplicator];
+            return VariableProvider.CoordList[coords.X * multiplicator, coords.Y * multiplicator];
         }
 
         public static implicit operator Vector2(Coords c)

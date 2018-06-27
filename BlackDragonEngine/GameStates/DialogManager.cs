@@ -9,68 +9,6 @@ namespace BlackDragonEngine.GameStates
 {
     public sealed class DialogManager : IUpdateableGameState, IDrawableGameState
     {
-        #region Declarations
-
-        private static Dictionary<string, DialogScript> _dialog;
-        public static bool DrawMugshot = true;
-        private static DialogManager _instance;
-        private readonly SpriteFont _font;
-
-        private readonly Vector2 _mugShotPosition = new Vector2(600, 500);
-        private readonly Vector2 _textPosition = new Vector2(100, 500);
-
-        private int _currentChar;
-        private string _currentDialogue;
-
-        private DialogueStates _dialogState;
-        private string _displayText = "";
-
-        #endregion
-
-        #region Properties
-
-        private readonly SpriteBatch _spriteBatch;
-
-        private int TextLength
-        {
-            get { return _dialog[_currentDialogue].Text.Length; }
-        }
-
-        private char NextChar
-        {
-            get { return _dialog[_currentDialogue].Text[_currentChar++]; }
-        }
-
-        private Texture2D CurrentMugShot
-        {
-            get { return _dialog[_currentDialogue].MugShot; }
-        }
-
-        private string CurrentName
-        {
-            get { return _dialog[_currentDialogue].SpeakerName; }
-        }
-
-        #region IDrawableGameState Members
-
-        public bool DrawCondition
-        {
-            get { return EngineState.DialogState == DialogueStates.Active; }
-        }
-
-        #endregion
-
-        #region IUpdateableGameState Members
-
-        public bool UpdateCondition
-        {
-            get { return EngineState.DialogState != DialogueStates.Inactive; }
-        }
-
-        #endregion
-
-        #endregion
-
         private DialogManager()
         {
             _spriteBatch = VariableProvider.SpriteBatch;
@@ -136,13 +74,9 @@ namespace BlackDragonEngine.GameStates
             if (_dialogState == DialogueStates.Talking)
             {
                 if (_currentChar < TextLength)
-                {
                     _displayText += NextChar;
-                }
                 else
-                {
                     _dialogState = DialogueStates.Pause;
-                }
             }
             else if (InputMapper.StrictAction)
             {
@@ -150,14 +84,11 @@ namespace BlackDragonEngine.GameStates
                 _currentChar = 0;
                 _currentDialogue = _dialog[_currentDialogue].NextDialog;
                 if (_currentDialogue == "STOPDIALOG")
-                {
                     EngineState.DialogState = DialogueStates.Inactive;
-                }
                 else
-                {
                     _dialogState = DialogueStates.Talking;
-                }
             }
+
             return true;
         }
 
@@ -176,5 +107,49 @@ namespace BlackDragonEngine.GameStates
             EngineState.DialogState = DialogueStates.Active;
             _dialogState = DialogueStates.Talking;
         }
+
+        #region Declarations
+
+        private static Dictionary<string, DialogScript> _dialog;
+        public static bool DrawMugshot = true;
+        private static DialogManager _instance;
+        private readonly SpriteFont _font;
+
+        private readonly Vector2 _mugShotPosition = new Vector2(600, 500);
+        private readonly Vector2 _textPosition = new Vector2(100, 500);
+
+        private int _currentChar;
+        private string _currentDialogue;
+
+        private DialogueStates _dialogState;
+        private string _displayText = "";
+
+        #endregion
+
+        #region Properties
+
+        private readonly SpriteBatch _spriteBatch;
+
+        private int TextLength => _dialog[_currentDialogue].Text.Length;
+
+        private char NextChar => _dialog[_currentDialogue].Text[_currentChar++];
+
+        private Texture2D CurrentMugShot => _dialog[_currentDialogue].MugShot;
+
+        private string CurrentName => _dialog[_currentDialogue].SpeakerName;
+
+        #region IDrawableGameState Members
+
+        public bool DrawCondition => EngineState.DialogState == DialogueStates.Active;
+
+        #endregion
+
+        #region IUpdateableGameState Members
+
+        public bool UpdateCondition => EngineState.DialogState != DialogueStates.Inactive;
+
+        #endregion
+
+        #endregion
     }
 }

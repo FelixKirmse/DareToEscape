@@ -33,7 +33,7 @@ namespace DareToEscape.Components.Entities
 
                 if (obj.CollisionRectangle.Intersects(VariableProvider.CurrentPlayer.CollisionRectangle))
                 {
-                    Coords cell = _tileMap.GetCellByPixel(obj.Position);
+                    var cell = _tileMap.GetCellByPixel(obj.Position);
                     _tileMap.RemoveEverythingAtCell(cell);
                     _enabled = false;
                     GameVariableProvider.SaveManager.CurrentSaveState.Keys.Add(_keystring);
@@ -44,12 +44,8 @@ namespace DareToEscape.Components.Entities
         public void Receive<T>(string message, T obj)
         {
             if (message == "KEYSTRING")
-            {
                 if (obj is string)
-                {
                     _keystring = (string) (object) obj;
-                }
-            }
         }
 
         #endregion

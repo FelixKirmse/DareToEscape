@@ -13,14 +13,14 @@ namespace BlackDragonEngine.Providers
         public static MouseState LastMouseState { get; private set; }
         public static GamePadState LastPadState { get; private set; }
 
-        public static void Update()
+        public static void Update(GameWindow window = null)
         {
             LastKeyState = KeyState;
             LastMouseState = MouseState;
             LastPadState = PadState;
 
             KeyState = Keyboard.GetState();
-            MouseState = Mouse.GetState();
+            MouseState = window == null ? Mouse.GetState() : Mouse.GetState(window);
             PadState = GamePad.GetState(PlayerIndex.One);
         }
     }

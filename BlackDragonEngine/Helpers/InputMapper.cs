@@ -18,99 +18,45 @@ namespace BlackDragonEngine.Helpers
 
         #region Normal Actionchecks
 
-        public static bool Up
-        {
-            get { return ShortCuts.AreAnyKeysDown(UpKeys) || ShortCuts.LeftStickUp(); }
-        }
+        public static bool Up => ShortCuts.AreAnyKeysDown(UpKeys) || ShortCuts.LeftStickUp();
 
-        public static bool Down
-        {
-            get { return ShortCuts.AreAnyKeysDown(DownKeys) || ShortCuts.LeftStickDown(); }
-        }
+        public static bool Down => ShortCuts.AreAnyKeysDown(DownKeys) || ShortCuts.LeftStickDown();
 
-        public static bool Left
-        {
-            get { return ShortCuts.AreAnyKeysDown(LeftKeys) || ShortCuts.LeftStickLeft(); }
-        }
+        public static bool Left => ShortCuts.AreAnyKeysDown(LeftKeys) || ShortCuts.LeftStickLeft();
 
-        public static bool Right
-        {
-            get { return ShortCuts.AreAnyKeysDown(RightKeys) || ShortCuts.LeftStickRight(); }
-        }
+        public static bool Right => ShortCuts.AreAnyKeysDown(RightKeys) || ShortCuts.LeftStickRight();
 
-        public static bool Jump
-        {
-            get { return ShortCuts.AreAnyKeysDown(JumpKeys); }
-        }
+        public static bool Jump => ShortCuts.AreAnyKeysDown(JumpKeys);
 
-        public static bool Action
-        {
-            get { return ShortCuts.AreAnyKeysDown(ActionKeys); }
-        }
+        public static bool Action => ShortCuts.AreAnyKeysDown(ActionKeys);
 
-        public static bool Cancel
-        {
-            get { return ShortCuts.AreAnyKeysDown(CancelKeys); }
-        }
+        public static bool Cancel => ShortCuts.AreAnyKeysDown(CancelKeys);
 
-        public static bool LeftClick
-        {
-            get { return ShortCuts.LeftMouseClicked(); }
-        }
+        public static bool LeftClick => ShortCuts.LeftMouseClicked();
 
-        public static bool RightClick
-        {
-            get { return ShortCuts.RightMouseClicked(); }
-        }
+        public static bool RightClick => ShortCuts.RightMouseClicked();
 
         #endregion
 
         #region Strict Actionchecks
 
-        public static bool StrictUp
-        {
-            get { return ShortCuts.AreAnyKeysDown(UpKeys, true) || ShortCuts.LeftStickUp(); }
-        }
+        public static bool StrictUp => ShortCuts.AreAnyKeysDown(UpKeys, true) || ShortCuts.LeftStickUp();
 
-        public static bool StrictDown
-        {
-            get { return ShortCuts.AreAnyKeysDown(DownKeys, true) || ShortCuts.LeftStickDown(); }
-        }
+        public static bool StrictDown => ShortCuts.AreAnyKeysDown(DownKeys, true) || ShortCuts.LeftStickDown();
 
-        public static bool StrictLeft
-        {
-            get { return ShortCuts.AreAnyKeysDown(LeftKeys, true) || ShortCuts.LeftStickLeft(); }
-        }
+        public static bool StrictLeft => ShortCuts.AreAnyKeysDown(LeftKeys, true) || ShortCuts.LeftStickLeft();
 
-        public static bool StrictRight
-        {
-            get { return ShortCuts.AreAnyKeysDown(RightKeys, true) || ShortCuts.LeftStickRight(); }
-        }
+        public static bool StrictRight => ShortCuts.AreAnyKeysDown(RightKeys, true) || ShortCuts.LeftStickRight();
 
-        public static bool StrictJump
-        {
-            get { return ShortCuts.AreAnyKeysDown(JumpKeys, true); }
-        }
+        public static bool StrictJump => ShortCuts.AreAnyKeysDown(JumpKeys, true);
 
-        public static bool StrictAction
-        {
-            get { return ShortCuts.AreAnyKeysDown(ActionKeys, true); }
-        }
+        public static bool StrictAction => ShortCuts.AreAnyKeysDown(ActionKeys, true);
 
-        public static bool StrictCancel
-        {
-            get { return ShortCuts.AreAnyKeysDown(CancelKeys, true); }
-        }
+        public static bool StrictCancel => ShortCuts.AreAnyKeysDown(CancelKeys, true);
 
-        public static bool StrictLeftClick
-        {
-            get { return ShortCuts.LeftButtonClickedNowButNotLastFrame(); }
-        }
+        public static bool StrictLeftClick => ShortCuts.LeftButtonClickedNowButNotLastFrame();
 
-        public static bool StrictRightClick
-        {
-            get { return ShortCuts.RightButtonClickedButNotLastFrame(); }
-        }
+        public static bool StrictRightClick => ShortCuts.RightButtonClickedButNotLastFrame();
 
         #endregion
 
@@ -123,13 +69,13 @@ namespace BlackDragonEngine.Helpers
 
         public static bool TriggeredAction(string name)
         {
-            Keys[] keys = CustomActions[name].ToArray();
+            var keys = CustomActions[name].ToArray();
             return ShortCuts.AreAnyKeysDown(keys);
         }
 
         public static bool TriggeredStrictAction(string name)
         {
-            Keys[] keys = CustomActions[name].ToArray();
+            var keys = CustomActions[name].ToArray();
             return ShortCuts.AreAnyKeysDown(keys, true);
         }
 

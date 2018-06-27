@@ -35,7 +35,7 @@ namespace DareToEscape.Components.Entities
                     GameVariableProvider.SaveManager.CurrentSaveState.Keys.Contains(_keystring))
                 {
                     _enabled = false;
-                    Coords cell = _tileMap.GetCellByPixel(obj.Position);
+                    var cell = _tileMap.GetCellByPixel(obj.Position);
                     _tileMap.RemoveEverythingAtCell(cell);
                 }
             }
@@ -44,12 +44,8 @@ namespace DareToEscape.Components.Entities
         public void Receive<T>(string message, T obj)
         {
             if (message == "KEYSTRING")
-            {
                 if (obj is string)
-                {
                     _keystring = (string) (object) obj;
-                }
-            }
         }
 
         #endregion

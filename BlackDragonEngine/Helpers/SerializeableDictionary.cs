@@ -54,9 +54,9 @@ namespace BlackDragonEngine.Helpers
 
         public void ReadXml(XmlReader reader)
         {
-            var keySerializer = new XmlSerializer(typeof (TKey));
-            var valueSerializer = new XmlSerializer(typeof (TValue));
-            bool wasEmpty = reader.IsEmptyElement;
+            var keySerializer = new XmlSerializer(typeof(TKey));
+            var valueSerializer = new XmlSerializer(typeof(TValue));
+            var wasEmpty = reader.IsEmptyElement;
             reader.Read();
             if (wasEmpty)
                 return;
@@ -74,13 +74,14 @@ namespace BlackDragonEngine.Helpers
                 reader.ReadEndElement();
                 reader.MoveToContent();
             }
+
             reader.ReadEndElement();
         }
 
         public void WriteXml(XmlWriter writer)
         {
-            var keySerializer = new XmlSerializer(typeof (TKey));
-            var valueSerializer = new XmlSerializer(typeof (TValue));
+            var keySerializer = new XmlSerializer(typeof(TKey));
+            var valueSerializer = new XmlSerializer(typeof(TValue));
 
             foreach (var key in Keys)
             {
@@ -89,7 +90,7 @@ namespace BlackDragonEngine.Helpers
                 keySerializer.Serialize(writer, key);
                 writer.WriteEndElement();
                 writer.WriteStartElement("value");
-                TValue value = this[key];
+                var value = this[key];
                 valueSerializer.Serialize(writer, value);
                 writer.WriteEndElement();
                 writer.WriteEndElement();

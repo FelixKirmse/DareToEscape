@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace BlackDragonEngine.Helpers
 {
     /// <summary>
-    ///   Struct that helps handling Animations, equivalent to AnimationStrip, but a struct
+    ///     Struct that helps handling Animations, equivalent to AnimationStrip, but a struct
     /// </summary>
     public struct AnimationStripStruct
     {
@@ -13,30 +13,17 @@ namespace BlackDragonEngine.Helpers
 
         private readonly int _framesPerRow;
         private int _currentFrame;
-        private bool _finishedPlaying;
-        private float _frameDelay;
-        private int _frameHeight;
         private float _frameTimer;
-        private int _frameWidth;
 
-        private bool _loopAnimation;
-        private Rectangle _stripRect;
+        private readonly Rectangle _stripRect;
 
         #endregion
 
         #region Properties
 
-        public int FrameWidth
-        {
-            get { return _frameWidth; }
-            set { _frameWidth = value; }
-        }
+        public int FrameWidth { get; set; }
 
-        public int FrameHeight
-        {
-            get { return _frameHeight; }
-            set { _frameHeight = value; }
-        }
+        public int FrameHeight { get; set; }
 
         public Texture2D Texture { get; set; }
 
@@ -44,35 +31,18 @@ namespace BlackDragonEngine.Helpers
 
         public string NextAnimation { get; set; }
 
-        public bool LoopAnimation
-        {
-            get { return _loopAnimation; }
-            set { _loopAnimation = value; }
-        }
+        public bool LoopAnimation { get; set; }
 
-        public bool FinishedPlaying
-        {
-            get { return _finishedPlaying; }
-        }
+        public bool FinishedPlaying { get; private set; }
 
-        public int FrameCount { get; private set; }
+        public int FrameCount { get; }
 
 
-        public float FrameLength
-        {
-            get { return _frameDelay; }
-            set { _frameDelay = value; }
-        }
+        public float FrameLength { get; set; }
 
-        public Rectangle FrameRectangle
-        {
-            get
-            {
-                return new Rectangle((_currentFrame%_framesPerRow)*_frameWidth + _stripRect.X,
-                                     (_currentFrame/_framesPerRow)*_frameHeight + _stripRect.Y, _frameWidth,
-                                     _frameHeight);
-            }
-        }
+        public Rectangle FrameRectangle => new Rectangle(_currentFrame % _framesPerRow * FrameWidth + _stripRect.X,
+            _currentFrame / _framesPerRow * FrameHeight + _stripRect.Y, FrameWidth,
+            FrameHeight);
 
         #endregion
 
@@ -81,56 +51,57 @@ namespace BlackDragonEngine.Helpers
         public AnimationStripStruct(Texture2D texture, int frameWidth, string name, bool loop)
             : this(texture, frameWidth, name)
         {
-            _loopAnimation = loop;
+            LoopAnimation = loop;
         }
 
         public AnimationStripStruct(Texture2D texture, int frameWidth, string name, bool loop, float frameDelay)
             : this(texture, frameWidth, name, loop)
         {
-            _frameDelay = frameDelay;
+            FrameLength = frameDelay;
         }
 
         public AnimationStripStruct(Texture2D texture, int frameWidth, string name)
             : this()
         {
             Texture = texture;
-            _frameWidth = frameWidth;
-            _frameHeight = texture.Height;
-            _framesPerRow = texture.Width/frameWidth;
+            FrameWidth = frameWidth;
+            FrameHeight = texture.Height;
+            _framesPerRow = texture.Width / frameWidth;
             FrameCount = _framesPerRow;
             Name = name;
             _stripRect = new Rectangle(0, 0, texture.Width, texture.Height);
         }
 
         public AnimationStripStruct(Texture2D texture, Rectangle stripRect, int frameCount, string name,
-                                    bool loop = true,
-                                    float frameDelay = .05f)
+            bool loop = true,
+            float frameDelay = .05f)
             : this()
         {
             Texture = texture;
             _stripRect = stripRect;
             FrameCount = frameCount;
-            _frameHeight = stripRect.Height;
-            _frameWidth = stripRect.Width/frameCount;
+            FrameHeight = stripRect.Height;
+            FrameWidth = stripRect.Width / frameCount;
             _framesPerRow = frameCount;
             Name = name;
-            _loopAnimation = loop;
-            _frameDelay = frameDelay;
+            LoopAnimation = loop;
+            FrameLength = frameDelay;
         }
 
-        public AnimationStripStruct(Texture2D texture, Rectangle stripRect, int frameWidth, int frameHeight, string name,
-                                    bool loop = true, float frameDelay = .05f)
+        public AnimationStripStruct(Texture2D texture, Rectangle stripRect, int frameWidth, int frameHeight,
+            string name,
+            bool loop = true, float frameDelay = .05f)
             : this()
         {
             Texture = texture;
             _stripRect = stripRect;
-            _frameWidth = frameWidth;
-            _frameHeight = frameHeight;
+            FrameWidth = frameWidth;
+            FrameHeight = frameHeight;
             Name = name;
-            _loopAnimation = loop;
-            _frameDelay = frameDelay;
-            _framesPerRow = _stripRect.Width/frameWidth;
-            FrameCount = _framesPerRow*(_stripRect.Height/frameHeight);
+            LoopAnimation = loop;
+            FrameLength = frameDelay;
+            _framesPerRow = _stripRect.Width / frameWidth;
+            FrameCount = _framesPerRow * (_stripRect.Height / frameHeight);
         }
 
         #endregion
@@ -140,28 +111,29 @@ namespace BlackDragonEngine.Helpers
         public void Play()
         {
             _currentFrame = 0;
-            _finishedPlaying = false;
+            FinishedPlaying = false;
         }
 
         public void Update()
         {
-            float elapsed = ShortCuts.ElapsedSeconds;
+            var elapsed = ShortCuts.ElapsedSeconds;
             _frameTimer += elapsed;
-            if (_frameTimer >= _frameDelay)
+            if (_frameTimer >= FrameLength)
             {
                 ++_currentFrame;
                 if (_currentFrame >= FrameCount)
                 {
-                    if (_loopAnimation)
+                    if (LoopAnimation)
                     {
                         _currentFrame = 0;
                     }
                     else
                     {
                         _currentFrame = FrameCount - 1;
-                        _finishedPlaying = true;
+                        FinishedPlaying = true;
                     }
                 }
+
                 _frameTimer = 0f;
             }
         }

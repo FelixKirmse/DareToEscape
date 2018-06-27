@@ -14,11 +14,11 @@ namespace DareToEscape.Helpers
         public static GameObject CreatePlayer()
         {
             var components = new List<IComponent>
-                                 {
-                                     new PlayerGraphicsComponent(),
-                                     new PlayerSoundComponent(),
-                                     new PlayerGeneralComponent()
-                                 };
+            {
+                new PlayerGraphicsComponent(),
+                new PlayerSoundComponent(),
+                new PlayerGeneralComponent()
+            };
             return new Player(components);
         }
 
@@ -73,10 +73,10 @@ namespace DareToEscape.Helpers
         public static GameObject CreateSign()
         {
             var components = new List<IComponent>
-                                 {
-                                     new GraphicsComponent(
-                                         VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/sign"))
-                                 };
+            {
+                new GraphicsComponent(
+                    VariableProvider.Content.Load<Texture2D>(@"textures/entities/sign"))
+            };
             return new GameObject(components);
         }
     }

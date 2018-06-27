@@ -14,7 +14,6 @@ namespace DareToEscape.Components.Entities
         public override void Update(GameObject obj)
         {
             if (Shoot)
-            {
                 switch (Phase)
                 {
                     case 2:
@@ -39,7 +38,6 @@ namespace DareToEscape.Components.Entities
                         ++_frame3;
                         break;
                 }
-            }
             base.Update(obj);
         }
 
@@ -87,11 +85,13 @@ namespace DareToEscape.Components.Entities
                         Patterns.Phase4Frame2120Shot(_angle);
                         _frame2 = 115;
                     }
+
                     if (_frame3 == 200)
                     {
                         Patterns.Phase4Frame3200Shot();
                         _frame3 = 50;
                     }
+
                     break;
 
                 case 5:
@@ -135,15 +135,15 @@ namespace DareToEscape.Components.Entities
             {
                 case 1:
                 case 3:
-                    PhaseTimer = 20*60;
+                    PhaseTimer = 20 * 60;
                     break;
 
                 case 5:
                 case 7:
-                    PhaseTimer = 15*60;
+                    PhaseTimer = 15 * 60;
                     break;
                 default:
-                    PhaseTimer = 30*60;
+                    PhaseTimer = 30 * 60;
                     break;
             }
         }

@@ -13,14 +13,8 @@ namespace BlackDragonEngine.TileEngine
             {
                 lock (_coords)
                 {
-                    if (!_coords.ContainsKey(x))
-                    {
-                        _coords.Add(x, new Dictionary<int, Coords>());
-                    }
-                    if (!_coords[x].ContainsKey(y))
-                    {
-                        _coords[x].Add(y, new Coords(x, y));
-                    }
+                    if (!_coords.ContainsKey(x)) _coords.Add(x, new Dictionary<int, Coords>());
+                    if (!_coords[x].ContainsKey(y)) _coords[x].Add(y, new Coords(x, y));
                     return _coords[x][y];
                 }
             }

@@ -42,15 +42,15 @@ namespace DareToEscape.Helpers
         public ResolutionChooser(DareToEscape parent)
         {
             _parent = parent;
-            DisplayMode cdm = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
-            _aspectRatio = (float) cdm.Width/cdm.Height;
+            var cdm = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
+            _aspectRatio = (float) cdm.Width / cdm.Height;
             InitializeComponent();
             _resolutionComboBox.SelectedIndex = 0;
         }
 
         private void ResolutionComboBoxSelectedIndexChanged(object sender, EventArgs e)
         {
-            int scale = _resolutionComboBox.SelectedIndex;
+            var scale = _resolutionComboBox.SelectedIndex;
             _matrix = scale > 0 ? Matrix.CreateScale(scale, scale, 1f) : Matrix.CreateScale(1f);
             const int width = DareToEscape.ResolutionWidth;
             const int height = DareToEscape.ResolutionHeight;
@@ -58,27 +58,27 @@ namespace DareToEscape.Helpers
             if (scale == 0)
             {
                 _viewport = new Viewport
-                                {
-                                    X = (int) (_aspectRatio*height - width)/2,
-                                    Y = 0,
-                                    Width = width,
-                                    Height = height,
-                                    MinDepth = 0,
-                                    MaxDepth = 1
-                                };
-                _resolution = new Size((int) (_aspectRatio*height), height);
+                {
+                    X = (int) (_aspectRatio * height - width) / 2,
+                    Y = 0,
+                    Width = width,
+                    Height = height,
+                    MinDepth = 0,
+                    MaxDepth = 1
+                };
+                _resolution = new Size((int) (_aspectRatio * height), height);
             }
             else
             {
                 _viewport = new Viewport
-                                {
-                                    X = 0,
-                                    Y = 0,
-                                    Width = width*scale,
-                                    Height = height*scale,
-                                    MinDepth = 0,
-                                    MaxDepth = 1
-                                };
+                {
+                    X = 0,
+                    Y = 0,
+                    Width = width * scale,
+                    Height = height * scale,
+                    MinDepth = 0,
+                    MaxDepth = 1
+                };
                 _resolution = new Size(_viewport.Width, _viewport.Height);
             }
         }
@@ -98,6 +98,7 @@ namespace DareToEscape.Helpers
                 xmls.Serialize(fs, _resInfo);
                 fs.Close();
             }
+
             Hide();
             _parent.ResInfo = _resInfo;
             Close();

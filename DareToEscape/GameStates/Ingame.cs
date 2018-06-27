@@ -19,17 +19,22 @@ namespace DareToEscape.GameStates
             _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
         }
 
+        public static Ingame GetInstance()
+        {
+            return _instance ?? (_instance = new Ingame());
+        }
+
+        public void Activate()
+        {
+            VariableProvider.CurrentPlayer = Factory.CreatePlayer();
+            EntityManager.SetPlayer();
+        }
+
         #region IDrawableGameState Members
 
-        public bool DrawCondition
-        {
-            get
-            {
-                return GameStateManager.State == States.Ingame ||
-                       GameStateManager.State == States.Tutorial ||
-                       EngineState.GameState == EngineStates.Paused || GameStateManager.PlayerDead;
-            }
-        }
+        public bool DrawCondition => GameStateManager.State == States.Ingame ||
+                                     GameStateManager.State == States.Tutorial ||
+                                     EngineState.GameState == EngineStates.Paused || GameStateManager.PlayerDead;
 
         public void Draw()
         {
@@ -41,16 +46,10 @@ namespace DareToEscape.GameStates
 
         #region IUpdateableGameState Members
 
-        public bool UpdateCondition
-        {
-            get
-            {
-                return (GameStateManager.State == States.Ingame ||
-                        GameStateManager.State == States.Tutorial) &&
-                       EngineState.GameState == EngineStates.Running && !GameStateManager.PlayerDead &&
-                       EngineState.DialogState == DialogueStates.Inactive;
-            }
-        }
+        public bool UpdateCondition => (GameStateManager.State == States.Ingame ||
+                                        GameStateManager.State == States.Tutorial) &&
+                                       EngineState.GameState == EngineStates.Running && !GameStateManager.PlayerDead &&
+                                       EngineState.DialogState == DialogueStates.Inactive;
 
         public bool Update()
         {
@@ -61,22 +60,12 @@ namespace DareToEscape.GameStates
                 GameStateManager.State = States.Menu;
                 return false;
             }
+
             CodeManager<TileCode>.CheckPlayerCodes(_tileMap);
             EntityManager.Update();
             return true;
         }
 
         #endregion
-
-        public static Ingame GetInstance()
-        {
-            return _instance ?? (_instance = new Ingame());
-        }
-
-        public void Activate()
-        {
-            VariableProvider.CurrentPlayer = Factory.CreatePlayer();
-            EntityManager.SetPlayer();
-        }
     }
 }

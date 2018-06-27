@@ -17,19 +17,21 @@ namespace BlackDragonEngine.Managers
 
         public void AddGameState(object state)
         {
-            bool implementedInterface = false;
+            var implementedInterface = false;
             var drawableState = state as IDrawableGameState;
             if (drawableState != null)
             {
                 _drawableStates.Add(drawableState);
                 implementedInterface = true;
             }
+
             var updateableState = state as IUpdateableGameState;
             if (updateableState != null)
             {
                 _updateableStates.Add(updateableState);
                 implementedInterface = true;
             }
+
             if (!implementedInterface)
                 throw new ArgumentException("Object " + state + " didn't implement any of the required interfaces");
         }
@@ -37,19 +39,16 @@ namespace BlackDragonEngine.Managers
         public void Update()
         {
             foreach (var state in _updateableStates)
-            {
                 if (state.UpdateCondition)
-                    if (!state.Update()) return;
-            }
+                    if (!state.Update())
+                        return;
         }
 
         public void Draw()
         {
             foreach (var state in _drawableStates)
-            {
                 if (state.DrawCondition)
                     state.Draw();
-            }
         }
     }
 }

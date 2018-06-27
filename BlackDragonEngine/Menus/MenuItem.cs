@@ -6,8 +6,8 @@ namespace BlackDragonEngine.Menus
 {
     public class MenuItem
     {
-        protected readonly SpriteBatch SpriteBatch;
         private readonly SpriteFont _font;
+        protected readonly SpriteBatch SpriteBatch;
         private Color _itemColor;
 
         public MenuItem(string itemName, Vector2 itemPosition, bool isSelected, SpriteFont font)
@@ -77,7 +77,7 @@ namespace BlackDragonEngine.Menus
                 1,
                 SpriteEffects.None,
                 0.2f
-                );
+            );
         }
     }
 }

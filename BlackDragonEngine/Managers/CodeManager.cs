@@ -21,28 +21,23 @@ namespace BlackDragonEngine.Managers
 
         public static void CheckCodes<TMap>() where TMap : IMap<TCodes>, new()
         {
-            TileMap<TMap, TCodes> tileMap = TileMap<TMap, TCodes>.GetInstance();
+            var tileMap = TileMap<TMap, TCodes>.GetInstance();
             EntityManager.ClearEntities();
-            GameObject player = VariableProvider.CurrentPlayer;
+            var player = VariableProvider.CurrentPlayer;
             EntityManager.SetPlayer();
 
             if (OnMapCodeCheck != null)
-            {
                 foreach (var item in tileMap.Map.Codes)
                 {
-                    var location = new Vector2(item.Key.X*tileMap.TileWidth, item.Key.Y*tileMap.TileHeight);
-                    foreach (var code in item.Value)
-                    {
-                        OnMapCodeCheck(code, location, player);
-                    }
+                    var location = new Vector2(item.Key.X * tileMap.TileWidth, item.Key.Y * tileMap.TileHeight);
+                    foreach (var code in item.Value) OnMapCodeCheck(code, location, player);
                 }
-            }
         }
 
 
         public static void CheckPlayerCodes<TMap>(TileMap<TMap, TCodes> tileMap) where TMap : IMap<TCodes>, new()
         {
-            GameObject player = VariableProvider.CurrentPlayer;
+            var player = VariableProvider.CurrentPlayer;
             if (OnCodeInPlayerCenterCheck != null)
                 CheckCodesInPlayerCenter(player, tileMap);
             if (OnCodeUnderPlayerCheck != null)
@@ -52,58 +47,53 @@ namespace BlackDragonEngine.Managers
         private static void CheckCodesUnderPlayer<TMap>(GameObject player, TileMap<TMap, TCodes> tileMap)
             where TMap : IMap<TCodes>, new()
         {
-            Rectangle playerCollisionRectangle = player.CollisionRectangle;
+            var playerCollisionRectangle = player.CollisionRectangle;
             CheckCodesUnderPlayer(player, tileMap.GetCellCodes
-                                              (
-                                                  tileMap.GetCellByPixel(
-                                                      new Vector2(
-                                                          playerCollisionRectangle.Left,
-                                                          playerCollisionRectangle.Bottom
-                                                          )
-                                                      )
-                                              ));
+            (
+                tileMap.GetCellByPixel(
+                    new Vector2(
+                        playerCollisionRectangle.Left,
+                        playerCollisionRectangle.Bottom
+                    )
+                )
+            ));
             CheckCodesUnderPlayer(player, tileMap.GetCellCodes
-                                              (
-                                                  tileMap.GetCellByPixel(
-                                                      new Vector2(
-                                                          playerCollisionRectangle.Right,
-                                                          playerCollisionRectangle.Bottom
-                                                          )
-                                                      )
-                                              ));
+            (
+                tileMap.GetCellByPixel(
+                    new Vector2(
+                        playerCollisionRectangle.Right,
+                        playerCollisionRectangle.Bottom
+                    )
+                )
+            ));
             CheckCodesUnderPlayer(player, tileMap.GetCellCodes
-                                              (
-                                                  tileMap.GetCellByPixel(
-                                                      new Vector2(
-                                                          playerCollisionRectangle.Center.X,
-                                                          playerCollisionRectangle.Bottom
-                                                          )
-                                                      )
-                                              ));
+            (
+                tileMap.GetCellByPixel(
+                    new Vector2(
+                        playerCollisionRectangle.Center.X,
+                        playerCollisionRectangle.Bottom
+                    )
+                )
+            ));
         }
 
         private static void CheckCodesUnderPlayer(GameObject player, List<TCodes> codes)
         {
             if (codes == null)
                 return;
-            foreach (var code in codes)
-            {
-                OnCodeUnderPlayerCheck(code, player);
-            }
+            foreach (var code in codes) OnCodeUnderPlayerCheck(code, player);
         }
 
         private static void CheckCodesInPlayerCenter<TMap>(GameObject player, TileMap<TMap, TCodes> tileMap)
             where TMap : IMap<TCodes>, new()
         {
-            Vector2 collisionCenter = player.RectCollisionCenter;
+            var collisionCenter = player.RectCollisionCenter;
             collisionCenter /= tileMap.TileWidth;
 
-            List<TCodes> codes = tileMap.GetCellCodes(collisionCenter);
+            var codes = tileMap.GetCellCodes(collisionCenter);
 
-            for (int i = 0; i < codes.Count; ++i)
-            {
+            for (var i = 0; i < codes.Count; ++i)
                 i = OnCodeInPlayerCenterCheck(codes[i], codes, collisionCenter, i, player);
-            }
         }
     }
 }

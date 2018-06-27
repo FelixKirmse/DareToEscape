@@ -21,9 +21,10 @@ namespace DareToEscape.Menus
         public MainMenu()
         {
             MenuItems.Add(new MenuItem(Resume, FontName, File.Exists(GameVariableProvider.SaveManager.CurrentSaveFile),
-                                       new Color(255, 0, 0), new Color(0, 255, 0)));
-            MenuItems.Add(new MenuItem(NewGame, FontName, !File.Exists(GameVariableProvider.SaveManager.CurrentSaveFile),
-                                       new Color(255, 0, 0), new Color(0, 255, 0)));
+                new Color(255, 0, 0), new Color(0, 255, 0)));
+            MenuItems.Add(new MenuItem(NewGame, FontName,
+                !File.Exists(GameVariableProvider.SaveManager.CurrentSaveFile),
+                new Color(255, 0, 0), new Color(0, 255, 0)));
             MenuItems.Add(new MenuItem(Quit, FontName, false, new Color(255, 0, 0), new Color(0, 255, 0)));
 
             EnableMouseSelection = false;
@@ -34,7 +35,7 @@ namespace DareToEscape.Menus
         public override void Update()
         {
             if (InputMapper.StrictCancel)
-                VariableProvider.Game.Exit();
+                VariableProvider.Exit();
             base.Update();
         }
 
@@ -43,7 +44,7 @@ namespace DareToEscape.Menus
             string selectedItem;
             GetSelectedItem(out selectedItem);
 
-            Ingame ingameManager = Ingame.GetInstance();
+            var ingameManager = Ingame.GetInstance();
 
             switch (selectedItem)
             {
@@ -60,7 +61,7 @@ namespace DareToEscape.Menus
                     break;
 
                 case Quit:
-                    VariableProvider.Game.Exit();
+                    VariableProvider.Exit();
                     break;
             }
         }

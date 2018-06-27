@@ -18,7 +18,7 @@ namespace DareToEscape.Helpers
             Titlescreen.TitleTexture = content.Load<Texture2D>(@"textures/titlescreen");
 
             new TileMap<Map<TileCode>, TileCode>(8, 8, 0, FontProvider.GetFont("Mono8"),
-                                                 content.Load<Texture2D>(@"textures/spritesheets/tilesheet"), 3);
+                content.Load<Texture2D>(@"textures/spritesheets/tilesheet"), 3);
 
             BulletInformationProvider.LoadBulletData(content);
             AnimationDictionaryProvider.Content = content;

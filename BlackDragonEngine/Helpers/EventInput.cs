@@ -6,68 +6,39 @@ using Microsoft.Xna.Framework.Input;
 namespace BlackDragonEngine.Helpers
 {
     /// <summary>
-    ///   CREDITS INFINIMINER http://code.google.com/p/infiniminer/
+    ///     CREDITS INFINIMINER http://code.google.com/p/infiniminer/
     /// </summary>
     public sealed class CharacterEventArgs : EventArgs
     {
-        private readonly char character;
-        private readonly int lParam;
-
         public CharacterEventArgs(char character, int lParam)
         {
-            this.character = character;
-            this.lParam = lParam;
+            Character = character;
+            Param = lParam;
         }
 
-        public char Character
-        {
-            get { return character; }
-        }
+        public char Character { get; }
 
-        public int Param
-        {
-            get { return lParam; }
-        }
+        public int Param { get; }
 
-        public int RepeatCount
-        {
-            get { return lParam & 0xffff; }
-        }
+        public int RepeatCount => Param & 0xffff;
 
-        public bool ExtendedKey
-        {
-            get { return (lParam & (1 << 24)) > 0; }
-        }
+        public bool ExtendedKey => (Param & (1 << 24)) > 0;
 
-        public bool AltPressed
-        {
-            get { return (lParam & (1 << 29)) > 0; }
-        }
+        public bool AltPressed => (Param & (1 << 29)) > 0;
 
-        public bool PreviousState
-        {
-            get { return (lParam & (1 << 30)) > 0; }
-        }
+        public bool PreviousState => (Param & (1 << 30)) > 0;
 
-        public bool TransitionState
-        {
-            get { return (lParam & (1 << 31)) > 0; }
-        }
+        public bool TransitionState => (Param & (1 << 31)) > 0;
     }
 
     public class KeyEventArgs : EventArgs
     {
-        private readonly Keys keyCode;
-
         public KeyEventArgs(Keys keyCode)
         {
-            this.keyCode = keyCode;
+            KeyCode = keyCode;
         }
 
-        public Keys KeyCode
-        {
-            get { return keyCode; }
-        }
+        public Keys KeyCode { get; }
     }
 
     public delegate void CharEnteredHandler(object sender, CharacterEventArgs e);
@@ -92,17 +63,17 @@ namespace BlackDragonEngine.Helpers
         private static IntPtr hIMC;
 
         /// <summary>
-        ///   Event raised when a character has been entered.
+        ///     Event raised when a character has been entered.
         /// </summary>
         public static event CharEnteredHandler CharEntered;
 
         /// <summary>
-        ///   Event raised when a key has been pressed down. May fire multiple times due to keyboard repeat.
+        ///     Event raised when a key has been pressed down. May fire multiple times due to keyboard repeat.
         /// </summary>
         public static event KeyEventHandler KeyDown;
 
         /// <summary>
-        ///   Event raised when a key has been released.
+        ///     Event raised when a key has been released.
         /// </summary>
         public static event KeyEventHandler KeyUp;
 
@@ -115,13 +86,13 @@ namespace BlackDragonEngine.Helpers
 
         [DllImport("user32.dll")]
         private static extern IntPtr CallWindowProc(IntPtr lpPrevWndFunc, IntPtr hWnd, uint Msg, IntPtr wParam,
-                                                    IntPtr lParam);
+            IntPtr lParam);
 
         [DllImport("user32.dll")]
         private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
         /// <summary>
-        ///   Initialize the TextInput with the given GameWindow.
+        ///     Initialize the TextInput with the given GameWindow.
         /// </summary>
         /// <param name="window"> The XNA window to which text input should be linked. </param>
         public static void Initialize(GameWindow window)
@@ -131,7 +102,7 @@ namespace BlackDragonEngine.Helpers
 
             hookProcDelegate = HookProc;
             prevWndProc = (IntPtr) SetWindowLong(window.Handle, GWL_WNDPROC,
-                                                 (int) Marshal.GetFunctionPointerForDelegate(hookProcDelegate));
+                (int) Marshal.GetFunctionPointerForDelegate(hookProcDelegate));
 
             hIMC = ImmGetContext(window.Handle);
             initialized = true;
@@ -139,7 +110,7 @@ namespace BlackDragonEngine.Helpers
 
         private static IntPtr HookProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
         {
-            IntPtr returnCode = CallWindowProc(prevWndProc, hWnd, msg, wParam, lParam);
+            var returnCode = CallWindowProc(prevWndProc, hWnd, msg, wParam, lParam);
 
             switch (msg)
             {
@@ -148,15 +119,15 @@ namespace BlackDragonEngine.Helpers
                     break;
 
                 case WM_KEYDOWN:
-                    KeyDown?.Invoke(null, new KeyEventArgs((Keys)wParam));
+                    KeyDown?.Invoke(null, new KeyEventArgs((Keys) wParam));
                     break;
 
                 case WM_KEYUP:
-                    KeyUp?.Invoke(null, new KeyEventArgs((Keys)wParam));
+                    KeyUp?.Invoke(null, new KeyEventArgs((Keys) wParam));
                     break;
 
                 case WM_CHAR:
-                    CharEntered?.Invoke(null, new CharacterEventArgs((char)wParam, lParam.ToInt32()));
+                    CharEntered?.Invoke(null, new CharacterEventArgs((char) wParam, lParam.ToInt32()));
                     break;
 
                 case WM_IME_SETCONTEXT:

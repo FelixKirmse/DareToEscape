@@ -9,17 +9,18 @@ namespace DareToEscape.Components.Entities
     {
         public SmallTurretComponent()
         {
-            Texture = VariableProvider.Game.Content.Load<Texture2D>(@"textures/entities/smallturret");
+            Texture = VariableProvider.Content.Load<Texture2D>(@"textures/entities/smallturret");
         }
 
         protected override IEnumerator<int> ShootBehavior(params float[] parameters)
         {
-            for (int i = 0; i < 5; ++i)
+            for (var i = 0; i < 5; ++i)
             {
                 var newBullet = new Bullet(BulletOrigin, 1);
                 newBullet.Shoot(newBullet.DirectionAngleToPlayer, 2f);
                 yield return 10;
             }
+
             yield return 1;
         }
     }

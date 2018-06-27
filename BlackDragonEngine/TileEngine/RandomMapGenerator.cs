@@ -13,9 +13,9 @@ namespace BlackDragonEngine.TileEngine
     {
         public static int MaxDiggers;
         private readonly List<Digger> _diggers = new List<Digger>();
+        private TileMap<Map<string>, string> _tileMap;
         public int ProgressCounter;
         public int ProgressMax;
-        private TileMap<Map<string>, string> _tileMap;
         public int AddedDiggers { get; private set; }
 
         public void GenerateNewMap(int maxDiggers)
@@ -28,14 +28,16 @@ namespace BlackDragonEngine.TileEngine
             _tileMap.AddCodeToCell(0, 0, "START");
             do
             {
-                for (int i = 0; i < _diggers.Count; ++i)
+                for (var i = 0; i < _diggers.Count; ++i)
                 {
                     if (_diggers[i].Dig()) continue;
                     if (_diggers.Count > 1)
+                    {
                         _diggers.Remove(_diggers[i]);
+                    }
                     else
                     {
-                        Digger digger = _diggers[i];
+                        var digger = _diggers[i];
                         digger.LastManStanding = true;
                         _diggers[i] = digger;
                     }
@@ -52,9 +54,9 @@ namespace BlackDragonEngine.TileEngine
 
         public void InvertMap()
         {
-            Map<string> map = _tileMap.Map;
+            var map = _tileMap.Map;
             ProgressMax = _tileMap.Map.Codes.Count;
-            List<Coords> cells = _tileMap.Map.Codes.Keys.ToList();
+            var cells = _tileMap.Map.Codes.Keys.ToList();
             foreach (var cell in cells)
             {
                 ++ProgressCounter;
@@ -75,18 +77,18 @@ namespace BlackDragonEngine.TileEngine
                 _tileMap.AddCodeToCell(cell.DownLeft, "AddedByInvert");
                 _tileMap.AddCodeToCell(cell.DownRight, "AddedByInvert");
             }
+
             ProgressMax = map.MapData.Count;
             ProgressCounter = 0;
             RemoveCellsByCondition(cell =>
-                                       {
-                                           ++ProgressCounter;
-                                           return _tileMap.GetCellCodes(cell).Contains("OriginalPlaced");
-                                       });
-            List<Coords> codesToDelete =
+            {
+                ++ProgressCounter;
+                return _tileMap.GetCellCodes(cell).Contains("OriginalPlaced");
+            });
+            var codesToDelete =
                 (from cell in _tileMap.Map.Codes
-                 where _tileMap.Map.Codes[cell.Key].Contains("OriginalPlaced")
-                 select cell.Key).
-                    ToList();
+                    where _tileMap.Map.Codes[cell.Key].Contains("OriginalPlaced")
+                    select cell.Key).ToList();
             codesToDelete.ForEach(cell => map.Codes[cell].RemoveAll(s => s == "OriginalPlaced"));
         }
 
@@ -99,7 +101,7 @@ namespace BlackDragonEngine.TileEngine
         {
             ProgressMax = _tileMap.Map.MapData.Count;
             ProgressCounter = 0;
-            List<Coords> cellsToManipulate =
+            var cellsToManipulate =
                 (from cell in _tileMap.Map.MapData where condition(cell.Key) select cell.Key).ToList();
             cellsToManipulate.ForEach(cell => action(cell));
         }
@@ -132,7 +134,7 @@ namespace BlackDragonEngine.TileEngine
 
             private Coords Position
             {
-                get { return _positions[0]; }
+                get => _positions[0];
                 set
                 {
                     _positions[0] = value;
@@ -144,7 +146,7 @@ namespace BlackDragonEngine.TileEngine
 
             public bool Dig()
             {
-                List<Coords> diggableBlocks = GetBlocksToDig();
+                var diggableBlocks = GetBlocksToDig();
 
                 if (diggableBlocks.Count > 0)
                 {
@@ -154,51 +156,30 @@ namespace BlackDragonEngine.TileEngine
                         _tileMap.SetSolidTileAtCell(cell);
                         _tileMap.AddUniqueCodeToCell(cell, "OriginalPlaced");
                     }
+
                     if (_rand.Next(1, 101) < 4)
                     {
                         LastManStanding = false;
                         _mapGen.AddDigger(Position);
                     }
+
                     return true;
                 }
+
                 return false;
             }
 
             private List<Coords> GetBlocksToDig()
             {
                 var possibleBlocks = new List<Coords>();
-                if (BlockIsMineAble(_positions[0].Up))
-                {
-                    possibleBlocks.Add(_positions[0].Up);
-                }
-                if (BlockIsMineAble(_positions[1].Up))
-                {
-                    possibleBlocks.Add(_positions[0].Up);
-                }
-                if (BlockIsMineAble(_positions[2].Down))
-                {
-                    possibleBlocks.Add(_positions[0].Down);
-                }
-                if (BlockIsMineAble(_positions[3].Down))
-                {
-                    possibleBlocks.Add(_positions[0].Down);
-                }
-                if (BlockIsMineAble(_positions[0].Left))
-                {
-                    possibleBlocks.Add(_positions[0].Left);
-                }
-                if (BlockIsMineAble(_positions[2].Left))
-                {
-                    possibleBlocks.Add(_positions[0].Left);
-                }
-                if (BlockIsMineAble(_positions[1].Right))
-                {
-                    possibleBlocks.Add(_positions[0].Right);
-                }
-                if (BlockIsMineAble(_positions[3].Right))
-                {
-                    possibleBlocks.Add(_positions[0].Right);
-                }
+                if (BlockIsMineAble(_positions[0].Up)) possibleBlocks.Add(_positions[0].Up);
+                if (BlockIsMineAble(_positions[1].Up)) possibleBlocks.Add(_positions[0].Up);
+                if (BlockIsMineAble(_positions[2].Down)) possibleBlocks.Add(_positions[0].Down);
+                if (BlockIsMineAble(_positions[3].Down)) possibleBlocks.Add(_positions[0].Down);
+                if (BlockIsMineAble(_positions[0].Left)) possibleBlocks.Add(_positions[0].Left);
+                if (BlockIsMineAble(_positions[2].Left)) possibleBlocks.Add(_positions[0].Left);
+                if (BlockIsMineAble(_positions[1].Right)) possibleBlocks.Add(_positions[0].Right);
+                if (BlockIsMineAble(_positions[3].Right)) possibleBlocks.Add(_positions[0].Right);
                 return possibleBlocks;
             }
 

@@ -20,7 +20,7 @@ namespace DareToEscape.Helpers
                 GameVariableProvider.SaveManager.CurrentSaveState.CurrentLevel);
             VariableProvider.CurrentPlayer.Position =
                 new Vector2(GameVariableProvider.SaveManager.CurrentSaveState.PlayerPosition.X,
-                            GameVariableProvider.SaveManager.CurrentSaveState.PlayerPosition.Y - 8);
+                    GameVariableProvider.SaveManager.CurrentSaveState.PlayerPosition.Y - 8);
             if (GameVariableProvider.SaveManager.CurrentSaveState.BossDead)
                 foreach (var boss in GameVariableProvider.Bosses)
                     boss.Send("INACTIVE", "");

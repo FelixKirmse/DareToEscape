@@ -20,23 +20,21 @@ namespace DareToEscape.Components.Entities
         private CameraMoveComponent(string pointName, int frameCount)
         {
             foreach (var codes in TileMap<Map<TileCode>, TileCode>.GetInstance().Map.Codes)
-            {
-                foreach (var code in codes.Value)
-                {
-                    if (code.Code == TileCodes.CameraFocusPoint && code.Message.Equals(pointName))
-                    {
-                        _direction = (new Vector2(codes.Key.X*8, codes.Key.Y*8) - Camera.Position)/frameCount;
-                    }
-                }
-            }
+            foreach (var code in codes.Value)
+                if (code.Code == TileCodes.CameraFocusPoint && code.Message.Equals(pointName))
+                    _direction = (new Vector2(codes.Key.X * 8, codes.Key.Y * 8) - Camera.Position) / frameCount;
             _frameCount = frameCount;
             foreach (var component in VariableProvider.CurrentPlayer.Components)
-            {
                 if (component is PlayerGeneralComponent)
-                {
                     component.Receive("DISABLE", true);
-                }
-            }
+        }
+
+        public static CameraMoveComponent GetInstance(string pointName, int frameCount)
+        {
+            if (Instances.ContainsKey(pointName))
+                return Instances[pointName];
+            Instances.Add(pointName, new CameraMoveComponent(pointName, frameCount));
+            return Instances[pointName];
         }
 
         #region IComponent Members
@@ -55,13 +53,5 @@ namespace DareToEscape.Components.Entities
         }
 
         #endregion
-
-        public static CameraMoveComponent GetInstance(string pointName, int frameCount)
-        {
-            if (Instances.ContainsKey(pointName))
-                return Instances[pointName];
-            Instances.Add(pointName, new CameraMoveComponent(pointName, frameCount));
-            return Instances[pointName];
-        }
     }
 }

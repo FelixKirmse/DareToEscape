@@ -29,25 +29,13 @@ namespace DareToEscape.Entities
             _tileMap = TileMap<Map<TileCode>, TileCode>.GetInstance();
         }
 
-        public BCircle PlayerBulletCollisionCircle
-        {
-            get { return CollisionCircle; }
-        }
+        public BCircle PlayerBulletCollisionCircle => CollisionCircle;
 
-        public Vector2 PlayerBulletCollisionCircleCenter
-        {
-            get { return CollisionCircle.Position; }
-        }
+        public Vector2 PlayerBulletCollisionCircleCenter => CollisionCircle.Position;
 
-        public static float PlayerPosX
-        {
-            get { return ((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter.X; }
-        }
+        public static float PlayerPosX => ((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter.X;
 
-        public static float PlayerPosY
-        {
-            get { return ((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter.Y; }
-        }
+        public static float PlayerPosY => ((Player) VariableProvider.CurrentPlayer).PlayerBulletCollisionCircleCenter.Y;
 
         public override void Update()
         {
@@ -57,11 +45,13 @@ namespace DareToEscape.Entities
                 Velocity.X += MoveSpeed;
                 Send("GRAPHICS_SET_FLIPPED", false);
             }
+
             if (InputMapper.Left)
             {
                 Velocity.X -= MoveSpeed;
                 Send("GRAPHICS_SET_FLIPPED", true);
             }
+
             if (InputMapper.StrictJump && _jumpCount < MaxJumpCount)
             {
                 ++_jumpCount;
@@ -75,11 +65,11 @@ namespace DareToEscape.Entities
 
         private void CollisionChecks()
         {
-            Rectangle rect = CollisionRectangle;
+            var rect = CollisionRectangle;
             if (Velocity.Y > 0)
             {
                 int slopeTileCoordX, slopeTileCoordY;
-                int slopeCheckPointX = rect.Center.X + (int) Velocity.X;
+                var slopeCheckPointX = rect.Center.X + (int) Velocity.X;
                 if (SlopeCollision(slopeCheckPointX, rect.Bottom, out slopeTileCoordX, out slopeTileCoordY))
                 {
                     Position.X += Velocity.X;
@@ -92,20 +82,16 @@ namespace DareToEscape.Entities
                     _lastSlopeY = slopeTileCoordY;
                     return;
                 }
+
                 //we're not on a slope this frame - check if we left a slope
                 //-1 ... we didn't move from slope to slope
                 //0 ... we left a slope after moving down
                 //1 ... we left a slope after moving up
-                int moveType = -1;
-                List<TileCode> cellCodes = _tileMap.GetCellCodes(_lastSlopeX, _lastSlopeY);
+                var moveType = -1;
+                var cellCodes = _tileMap.GetCellCodes(_lastSlopeX, _lastSlopeY);
                 if (cellCodes.Contains(new TileCode(TileCodes.RightSlope)))
-                {
                     moveType = Velocity.X > 0 ? 0 : 1;
-                }
-                else if (cellCodes.Contains(new TileCode(TileCodes.LeftSlope)))
-                {
-                    moveType = Velocity.X < 0 ? 0 : 1;
-                }
+                else if (cellCodes.Contains(new TileCode(TileCodes.LeftSlope))) moveType = Velocity.X < 0 ? 0 : 1;
 
                 if (moveType != -1)
                 {
@@ -113,15 +99,16 @@ namespace DareToEscape.Entities
                     rect = CollisionRectangle;
                     if (moveType == 1)
                     {
-                        Position.Y = (slopeTileCoordY*_tileMap.TileHeight - rect.Height - 1) - collisionRectangle.Y;
+                        Position.Y = slopeTileCoordY * _tileMap.TileHeight - rect.Height - 1 - collisionRectangle.Y;
                         slopeCheckPointY = CollisionRectangle.Y + rect.Height;
                     }
                     else
                     {
-                        Position.Y = ((slopeTileCoordY + 1)*_tileMap.TileHeight - rect.Height - 1) -
+                        Position.Y = (slopeTileCoordY + 1) * _tileMap.TileHeight - rect.Height - 1 -
                                      collisionRectangle.Y;
                         slopeCheckPointY = CollisionRectangle.Y + rect.Height + _tileMap.TileHeight;
                     }
+
                     if (SlopeCollision(slopeCheckPointX, slopeCheckPointY, out slopeTileCoordX, out slopeTileCoordY))
                     {
                         Position.X += Velocity.X;
@@ -136,28 +123,32 @@ namespace DareToEscape.Entities
                     }
                 }
             }
+
             AxisAxisCollision();
         }
 
         private bool SlopeCollision(int checkX, int checkY, out int slopeTileCoordX, out int slopeTileCoordY)
         {
-            Rectangle rect = CollisionRectangle;
+            var rect = CollisionRectangle;
             slopeTileCoordX = _tileMap.GetCellByPixelX(checkX);
             slopeTileCoordY = _tileMap.GetCellByPixelY(checkY);
-            List<TileCode> cellCodes = _tileMap.GetCellCodes(slopeTileCoordX, slopeTileCoordY);
+            var cellCodes = _tileMap.GetCellCodes(slopeTileCoordX, slopeTileCoordY);
             if (cellCodes.Contains(new TileCode(TileCodes.RightSlope)))
             {
-                Position.Y = ((slopeTileCoordY + 1)*_tileMap.TileHeight -
-                              (_tileMap.TileWidth - (checkX%_tileMap.TileWidth)) - rect.Height - 1) -
+                Position.Y = (slopeTileCoordY + 1) * _tileMap.TileHeight -
+                             (_tileMap.TileWidth - checkX % _tileMap.TileWidth) - rect.Height - 1 -
                              collisionRectangle.Y;
                 return true;
             }
+
             if (cellCodes.Contains(new TileCode(TileCodes.LeftSlope)))
             {
-                Position.Y = ((slopeTileCoordY + 1)*_tileMap.TileHeight - (checkX%_tileMap.TileWidth) - rect.Height - 1) -
+                Position.Y = (slopeTileCoordY + 1) * _tileMap.TileHeight - checkX % _tileMap.TileWidth - rect.Height -
+                             1 -
                              collisionRectangle.Y;
                 return true;
             }
+
             return false;
         }
 
@@ -167,7 +158,7 @@ namespace DareToEscape.Entities
             if (Velocity.X > 0f)
             {
                 if (VerticalCollision(true, out tileCoord))
-                    Position.X = (tileCoord*_tileMap.TileWidth - collisionRectangle.Width - 1) - collisionRectangle.X;
+                    Position.X = tileCoord * _tileMap.TileWidth - collisionRectangle.Width - 1 - collisionRectangle.X;
                 else
                     Position.X += Velocity.X;
                 Send("GRAPHICS_PLAYANIMATION", "Walk");
@@ -175,7 +166,7 @@ namespace DareToEscape.Entities
             else if (Velocity.X < 0f)
             {
                 if (VerticalCollision(false, out tileCoord))
-                    Position.X = ((tileCoord + 1)*_tileMap.TileWidth + 1) - collisionRectangle.X;
+                    Position.X = (tileCoord + 1) * _tileMap.TileWidth + 1 - collisionRectangle.X;
                 else
                     Position.X += Velocity.X;
                 Send("GRAPHICS_PLAYANIMATION", "Walk");
@@ -184,25 +175,27 @@ namespace DareToEscape.Entities
             {
                 Send("GRAPHICS_PLAYANIMATION", "Idle");
             }
+
             if (Velocity.Y < 0f)
             {
                 if (HorizontalCollision(false, out tileCoord))
                 {
-                    Position.Y = ((tileCoord + 1)*_tileMap.TileHeight) - collisionRectangle.Y;
+                    Position.Y = (tileCoord + 1) * _tileMap.TileHeight - collisionRectangle.Y;
                     Velocity.Y = 0f;
                 }
                 else
                 {
                     Position.Y += Velocity.Y;
-                    Velocity.Y += Velocity.Y < Gravity ? InputMapper.Jump ? Gravity/2f : Gravity : 0f;
+                    Velocity.Y += Velocity.Y < Gravity ? InputMapper.Jump ? Gravity / 2f : Gravity : 0f;
                 }
+
                 Send("GRAPHICS_PLAYANIMATION", "JumpUp");
             }
             else
             {
                 if (HorizontalCollision(true, out tileCoord))
                 {
-                    Position.Y = (tileCoord*_tileMap.TileHeight - collisionRectangle.Height - 1) - collisionRectangle.Y;
+                    Position.Y = tileCoord * _tileMap.TileHeight - collisionRectangle.Height - 1 - collisionRectangle.Y;
                     Velocity.Y = 1f;
                     _jumpCount = 0;
                     Send("GRAPHICS_SET_ONGROUND", true);
@@ -214,6 +207,7 @@ namespace DareToEscape.Entities
                     Send("GRAPHICS_PLAYANIMATION", "JumpDown");
                 }
             }
+
             _lastSlopeX = _tileMap.GetCellByPixelX(CollisionRectangle.Center.X);
             _lastSlopeY = _tileMap.GetCellByPixelY(CollisionRectangle.Y + collisionRectangle.Height);
         }
@@ -222,10 +216,10 @@ namespace DareToEscape.Entities
         {
             float offset = movingRight ? collisionRectangle.Width : 0;
             offset += Velocity.X;
-            Rectangle rect = CollisionRectangle;
-            int tileYPixels = rect.Y - (rect.Y%_tileMap.TileHeight);
+            var rect = CollisionRectangle;
+            var tileYPixels = rect.Y - rect.Y % _tileMap.TileHeight;
             tileCoordX = _tileMap.GetCellByPixelX(rect.X + offset);
-            int tileCoordY = _tileMap.GetCellByPixelY(tileYPixels);
+            var tileCoordY = _tileMap.GetCellByPixelY(tileYPixels);
             while (tileYPixels <= rect.Bottom)
             {
                 if (!_tileMap.CellIsPassable(tileCoordX, tileCoordY))
@@ -233,6 +227,7 @@ namespace DareToEscape.Entities
                 ++tileCoordY;
                 tileYPixels += _tileMap.TileHeight;
             }
+
             return false;
         }
 
@@ -240,10 +235,10 @@ namespace DareToEscape.Entities
         {
             float offset = movingDown ? collisionRectangle.Height : 0;
             offset += Velocity.Y;
-            Rectangle rect = CollisionRectangle;
-            int tileXPixels = rect.X - (rect.X%_tileMap.TileWidth);
+            var rect = CollisionRectangle;
+            var tileXPixels = rect.X - rect.X % _tileMap.TileWidth;
             tileCoordY = _tileMap.GetCellByPixelY(rect.Y + offset);
-            int tileCoordX = _tileMap.GetCellByPixelX(tileXPixels);
+            var tileCoordX = _tileMap.GetCellByPixelX(tileXPixels);
             while (tileXPixels <= rect.Right)
             {
                 if (!_tileMap.CellIsPassable(tileCoordX, tileCoordY))
@@ -251,6 +246,7 @@ namespace DareToEscape.Entities
                 ++tileCoordX;
                 tileXPixels += _tileMap.TileWidth;
             }
+
             return false;
         }
     }

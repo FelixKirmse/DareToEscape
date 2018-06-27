@@ -20,15 +20,10 @@ namespace DareToEscape.Components.PlayerComponents
         public override void Update(GameObject obj)
         {
             if (ReceivedAnimation == "")
-            {
                 if (_onGround)
                     ReceivedAnimation = "Idle";
-            }
 
-            if (ReceivedAnimation != CurrentAnimation && ReceivedAnimation != "")
-            {
-                PlayAnimation(ReceivedAnimation);
-            }
+            if (ReceivedAnimation != CurrentAnimation && ReceivedAnimation != "") PlayAnimation(ReceivedAnimation);
 
             ReceivedAnimation = "";
 
@@ -37,25 +32,19 @@ namespace DareToEscape.Components.PlayerComponents
 
         public override void Receive<T>(string message, T obj)
         {
-            string[] messageParts = message.Split('_');
+            var messageParts = message.Split('_');
 
             if (messageParts[0] == "GRAPHICS")
-            {
                 if (messageParts[1] == "SET")
                 {
                     if (messageParts[2] == "ONGROUND")
-                    {
                         if (obj is bool)
                             _onGround = (bool) (object) obj;
-                    }
 
                     if (messageParts[2] == "FOCUSED")
-                    {
                         if (obj is bool)
                             _focused = (bool) (object) obj;
-                    }
                 }
-            }
 
             base.Receive(message, obj);
         }
